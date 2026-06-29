@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>French Practice — Choisissez la bonne réponse</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #FAF7F2;
+    --ink: #1A1410;
+    --rust: #C0392B;
+    --gold: #D4A017;
+    --sage: #3A7D44;
+    --mist: #E8E2D9;
+    --sky: #2980B9;
+    --light-sky: #EBF5FB;
+    --correct: #27AE60;
+    --wrong: #E74C3C;
+    --neutral: #7F8C8D;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.3);
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    letter-spacing: .02em;
+  }
+  header h1 span { color: var(--gold); }
+  .header-meta { font-size: .8rem; color: #aaa; }
+
+  /* ── TAB NAV ── */
+  nav.tabs {
+    display: flex;
+    background: var(--mist);
+    border-bottom: 2px solid #d0c9be;
+    overflow-x: auto;
+    gap: 0;
+  }
+  nav.tabs button {
+    flex: none;
+    padding: 12px 22px;
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: .85rem;
+    font-weight: 500;
+    color: var(--neutral);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  nav.tabs button.active {
+    color: var(--rust);
+    border-bottom-color: var(--rust);
+    background: var(--cream);
+  }
+  nav.tabs button:hover:not(.active) { color: var(--ink); }
+
+  /* ── MAIN LAYOUT ── */
+  main { max-width: 900px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  /* ── DASHBOARD ── */
+  .dashboard { display: none; }
+  .dashboard.visible { display: block; }
+
+  .dash-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border-left: 4px solid var(--mist);
+    box-shadow: 0 1px 6px rgba(0,0,0,.06);
+  }
+  .stat-card.correct { border-left-color: var(--correct); }
+  .stat-card.wrong { border-left-color: var(--wrong); }
+  .stat-card.total { border-left-color: var(--sky); }
+  .stat-card.score { border-left-color: var(--gold); }
+  .stat-card .val { font-size: 2rem; font-weight: 700; margin-bottom: 4px; }
+  .stat-card .label { font-size: .78rem; color: var(--neutral); text-transform: uppercase; letter-spacing: .06em; }
+  .stat-card.correct .val { color: var(--correct); }
+  .stat-card.wrong .val { color: var(--wrong); }
+  .stat-card.total .val { color: var(--sky); }
+  .stat-card.score .val { color: var(--gold); }
+
+  .progress-bar-wrap { margin-bottom: 28px; }
+  .progress-bar-wrap h3 { font-size: .9rem; font-weight: 600; margin-bottom: 8px; color: var(--neutral); text-transform: uppercase; letter-spacing: .05em; }
+  .progress-bar {
+    height: 12px;
+    background: var(--mist);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sage), var(--correct));
+    border-radius: 99px;
+    transition: width .5s ease;
+  }
+  .progress-pct { font-size: .8rem; color: var(--neutral); margin-top: 4px; text-align: right; }
+
+  .section-breakdown h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--mist);
+  }
+  .section-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0ece6;
+    font-size: .88rem;
+  }
+  .section-row .sname { flex: 1; font-weight: 500; }
+  .section-row .spct { width: 48px; text-align: right; font-weight: 600; }
+  .section-row .sbar {
+    flex: 2;
+    height: 8px;
+    background: var(--mist);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .section-row .sbar-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: var(--sky);
+  }
+  .section-row .sbadge {
+    font-size: .72rem;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-weight: 600;
+  }
+  .sbadge.done { background: #d5f5e3; color: var(--correct); }
+  .sbadge.partial { background: #fef9e7; color: var(--gold); }
+  .sbadge.untouched { background: var(--mist); color: var(--neutral); }
+
+  .dash-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+  .btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: .88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .btn-primary { background: var(--rust); color: white; }
+  .btn-primary:hover { background: #a93226; }
+  .btn-ghost { background: transparent; border: 1.5px solid var(--mist); color: var(--ink); }
+  .btn-ghost:hover { background: var(--mist); }
+
+  /* ── EXERCISE SECTION ── */
+  .exercise-section { display: none; }
+  .exercise-section.visible { display: block; }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+  }
+  .section-header p {
+    font-size: .82rem;
+    color: var(--neutral);
+    margin-top: 4px;
+  }
+
+  .q-count-badge {
+    background: var(--ink);
+    color: var(--cream);
+    font-size: .75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+
+  .question-block {
+    background: white;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 14px;
+    border: 1.5px solid var(--mist);
+    transition: border-color .2s;
+  }
+  .question-block:hover { border-color: #c8c0b4; }
+  .question-block.answered-correct { border-color: var(--correct); background: #f0faf4; }
+  .question-block.answered-wrong { border-color: var(--wrong); background: #fdf3f2; }
+
+  .q-stem {
+    font-size: .97rem;
+    font-weight: 600;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .q-num {
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: white;
+    font-size: .75rem;
+    font-weight: 700;
+    line-height: 26px;
+    text-align: center;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+  .q-stem-inner { display: flex; align-items: flex-start; gap: 0; }
+  .q-stem-text { flex: 1; padding-top: 3px; }
+
+  .hint {
+    display: inline-block;
+    font-size: .78rem;
+    color: var(--sky);
+    background: var(--light-sky);
+    border-radius: 4px;
+    padding: 1px 7px;
+    margin-left: 6px;
+    font-weight: 500;
+    vertical-align: middle;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 8px; padding-left: 34px; }
+  .option-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1.5px solid var(--mist);
+    background: var(--cream);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: .88rem;
+    text-align: left;
+    transition: all .15s;
+    font-weight: 500;
+  }
+  .option-btn:hover:not(:disabled) { background: #f0ece6; border-color: #bdb5a8; }
+  .option-btn .opt-label {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--mist);
+    color: var(--neutral);
+    font-size: .72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .option-btn.selected-correct {
+    background: #d5f5e3;
+    border-color: var(--correct);
+    color: var(--correct);
+  }
+  .option-btn.selected-correct .opt-label { background: var(--correct); color: white; }
+  .option-btn.selected-wrong {
+    background: #fde8e7;
+    border-color: var(--wrong);
+    color: var(--wrong);
+  }
+  .option-btn.selected-wrong .opt-label { background: var(--wrong); color: white; }
+  .option-btn.reveal-correct {
+    background: #eafaf1;
+    border-color: var(--correct);
+    color: var(--correct);
+  }
+  .option-btn.reveal-correct .opt-label { background: var(--correct); color: white; }
+  .option-btn:disabled { cursor: not-allowed; opacity: .8; }
+
+  .feedback {
+    margin-top: 10px;
+    padding-left: 34px;
+    font-size: .82rem;
+    font-weight: 600;
+    display: none;
+  }
+  .feedback.visible { display: block; }
+  .feedback.correct { color: var(--correct); }
+  .feedback.wrong { color: var(--wrong); }
+
+  .section-submit {
+    text-align: center;
+    margin: 28px 0 10px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── RESULT BANNER ── */
+  .result-banner {
+    display: none;
+    border-radius: 12px;
+    padding: 18px 24px;
+    margin-bottom: 24px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .result-banner.visible { display: block; }
+  .result-banner.good { background: #d5f5e3; color: var(--correct); }
+  .result-banner.ok { background: #fef9e7; color: #9a6f00; }
+  .result-banner.poor { background: #fde8e7; color: var(--wrong); }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--mist); }
+  ::-webkit-scrollbar-thumb { background: #bdb5a8; border-radius: 99px; }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.1rem; }
+    .dash-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>French Practice <span>·</span> Choisissez la bonne réponse</h1>
+    <div class="header-meta">Grammar &amp; Vocabulary — A1/A2 Level</div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabNav"></nav>
+
+<main>
+  <!-- DASHBOARD -->
+  <div class="dashboard" id="dashPanel">
+    <div class="dash-grid">
+      <div class="stat-card total">
+        <div class="val" id="statTotal">0</div>
+        <div class="label">Total Questions</div>
+      </div>
+      <div class="stat-card correct">
+        <div class="val" id="statCorrect">0</div>
+        <div class="label">Correct</div>
+      </div>
+      <div class="stat-card wrong">
+        <div class="val" id="statWrong">0</div>
+        <div class="label">Wrong</div>
+      </div>
+      <div class="stat-card score">
+        <div class="val" id="statScore">—</div>
+        <div class="label">Score</div>
+      </div>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <h3>Overall Progress</h3>
+      <div class="progress-bar">
+        <div class="progress-fill" id="overallBar" style="width:0%"></div>
+      </div>
+      <div class="progress-pct" id="overallPct">0 of 0 answered</div>
+    </div>
+
+    <div class="section-breakdown">
+      <h3>Section Overview</h3>
+      <div id="sectionRows"></div>
+    </div>
+
+    <div class="dash-actions">
+      <button class="btn btn-primary" onclick="goToFirstSection()">Start Practising →</button>
+      <button class="btn btn-ghost" onclick="resetAll()">Reset All Answers</button>
+    </div>
+  </div>
+
+  <!-- EXERCISE SECTIONS -->
+  <div id="exercisePanels"></div>
+</main>
+
+<script>
+// ═══════════════════════════════════════════════════
+// DATA — all questions from the book pages
+// ═══════════════════════════════════════════════════
+const sections = [
+  {
+    id: "grammar1",
+    title: "Grammaire — Section 3.2.2",
+    desc: "Articles, verbs, prepositions, pronouns",
+    questions: [
+      { stem: "Le musée est ___ la gare.", hint: "position/proximity", opts: ["devant de","à côté de","sous de"], ans: 1 },
+      { stem: "Sophie et moi, nous ___ le bus pour aller à l'école.", hint: "prendre – nous", opts: ["prends","prenons","prend"], ans: 1 },
+      { stem: "___ est ton acteur préféré ?", hint: "interrogative pronoun", opts: ["Quand","Qui","Quelle"], ans: 1 },
+      { stem: "Mes parents ___ très sympathiques.", hint: "être – ils/elles", opts: ["est","sont","êtes"], ans: 1 },
+      { stem: "Je vais ___ un gâteau pour ton anniversaire.", hint: "faire – je (futur proche)", opts: ["faire","fais","fait"], ans: 0 },
+      { stem: "Marie ___ ses devoirs tous les soirs.", hint: "faire – elle", opts: ["faire","fais","fait"], ans: 2 },
+      { stem: "Nous habitons ___ troisième étage.", hint: "floor / level preposition", opts: ["à","au","en"], ans: 1 },
+      { stem: "Il y a ___ pommes dans la cuisine.", hint: "partitive/plural article", opts: ["de","des","du"], ans: 1 },
+      { stem: "J'habite ___ Paris depuis deux ans.", hint: "city preposition", opts: ["à","dans","en"], ans: 0 },
+      { stem: "Elles ___ dans le parc près de l'école.", hint: "jouer – elles", opts: ["joue","jouent","jouons"], ans: 1 },
+      { stem: "Je vais ___ cinéma avec mes amis samedi.", hint: "place masculine article", opts: ["au","à la","aux"], ans: 0 },
+      { stem: "Nous allons ___ le musée demain.", hint: "infinitive verb phrase", opts: ["de visiter","à visiter","visiter"], ans: 2 },
+      { stem: "Tu veux regarder ___ film avec moi ?", hint: "demonstrative – masc sing", opts: ["ce","cette","cet"], ans: 0 },
+      { stem: "Je bois ___ eau tous les matins.", hint: "partitive – feminine", opts: ["de l'","du","de la"], ans: 0 },
+      { stem: "Je n'ai pas ___ chien, mais j'ai un chat.", hint: "negation article", opts: ["un","de","le"], ans: 1 },
+      { stem: "Ils habitent avec ___ grand-mère.", hint: "possessive – their", opts: ["leur","sa","leurs"], ans: 0 },
+    ]
+  },
+  {
+    id: "grammar2",
+    title: "Grammaire — Section 3.2.3",
+    desc: "More verbs, adjectives, prepositions",
+    questions: [
+      { stem: "Je n'ai pas ___ stylo dans mon sac.", hint: "négation article", opts: ["un","de","le"], ans: 1 },
+      { stem: "Je ___ un café s'il vous plaît.", hint: "vouloir – je", opts: ["veux","veut","voulez"], ans: 0 },
+      { stem: "Nous ___ la télé après le dîner.", hint: "regarder – nous", opts: ["regarde","regardent","regardons"], ans: 2 },
+      { stem: "Tu ___ du vélo aujourd'hui ?", hint: "faire – tu", opts: ["faire","fait","fais"], ans: 2 },
+      { stem: "Mes parents ___ au travail très tôt.", hint: "partir – ils", opts: ["partent","partez","pars"], ans: 0 },
+      { stem: "Il porte un pantalon ___.", hint: "adj agreement – masc", opts: ["bleue","bleu","blue"], ans: 1 },
+      { stem: "C'est le cahier de Sophie. C'est ___ cahier.", hint: "possessive – her / masc", opts: ["son","ses","sa"], ans: 0 },
+      { stem: "Nous ___ nos devoirs ensemble.", hint: "faire – nous", opts: ["font","fait","faisons"], ans: 2 },
+      { stem: "Luc et moi, ___ allons à l'école.", hint: "subject pronoun – we", opts: ["nous","vous","ils"], ans: 0 },
+      { stem: "Je vais partir ___ samedi matin.", hint: "day of week – no article", opts: ["à","le","en"], ans: 1 },
+      { stem: "Il ___ chaud aujourd'hui.", hint: "weather expression", opts: ["est","fait","a"], ans: 1 },
+      { stem: "___ est ta saison préférée ?", hint: "question word – feminine noun", opts: ["Quelle","Quel","Qui"], ans: 0 },
+      { stem: "Je voyage ___ avion.", hint: "transport preposition", opts: ["en","dans","à"], ans: 0 },
+      { stem: "Mes amis ___ du train à Lyon.", hint: "descendre – ils", opts: ["descend","descends","descendent"], ans: 2 },
+      { stem: "J'aime bien ___ fleur rouge.", hint: "demonstrative – fem sing", opts: ["cette","ce","ces"], ans: 0 },
+      { stem: "Elle est très ___.", hint: "adj agreement – fem", opts: ["sportif","sportive","sportife"], ans: 1 },
+      { stem: "Je ___ mon manteau parce qu'il fait froid.", hint: "mettre – je", opts: ["met","mets","mettez"], ans: 1 },
+      { stem: "Nous allons ___ États-Unis cet été.", hint: "country article – plural", opts: ["aux","au","en"], ans: 0 },
+      { stem: "Tu prends ___ confiture avec ton pain ?", hint: "partitive – feminine", opts: ["du","de la","de"], ans: 1 },
+      { stem: "Nous ___ tôt le matin pour prendre le train.", hint: "partir – nous", opts: ["part","pars","partons"], ans: 2 },
+      { stem: "Nous ___ notre chambre avant de sortir.", hint: "ranger – nous", opts: ["rangons","rangeons","rangent"], ans: 1 },
+      { stem: "Je ne ___ pas à la question.", hint: "répondre – je (négation)", opts: ["réponds","répond","répondez"], ans: 0 },
+      { stem: "Mon frère a ___ copains.", hint: "quantity expression", opts: ["beaucoup des","beaucoup de","beaucoup"], ans: 1 },
+      { stem: "Mes cousins ___ en Inde chaque hiver.", hint: "voyager – ils", opts: ["voyagent","voyage","voyageons"], ans: 0 },
+      { stem: "Nous ___ envie de regarder un film.", hint: "avoir – nous", opts: ["allons","sommes","avons"], ans: 2 },
+      { stem: "Tu ___ à quelle heure le matin ?", hint: "se lever – tu (réfléchi)", opts: ["te lèves","se lève","me lève"], ans: 0 },
+      { stem: "Il ne ___ pas venir avec nous.", hint: "pouvoir – il (négation)", opts: ["peux","peut","pouvez"], ans: 1 },
+      { stem: "Elles ___ leurs devoirs avant de jouer.", hint: "finir – elles", opts: ["finissent","finis","finit"], ans: 0 },
+      { stem: "J'écoute ___ musique tous les jours.", hint: "partitive – feminine", opts: ["de la","la","une"], ans: 0 },
+      { stem: "Nous allons ___ au parc cet après-midi.", hint: "infinitive walk/run", opts: ["cours","courir","court"], ans: 1 },
+      { stem: "Elle ___ sa valise pour le voyage.", hint: "préparer – elle", opts: ["prépare","prépares","préparer"], ans: 0 },
+    ]
+  },
+  {
+    id: "grammar3",
+    title: "Grammaire — Section 3.2.3 (suite)",
+    desc: "Verbs, demonstratives, partitives continued",
+    questions: [
+      { stem: "Nous n'allons pas ___ cinéma aujourd'hui.", hint: "négation + article", opts: ["de","en","au"], ans: 0 },
+      { stem: "Elles sont très ___.", hint: "adj agreement – fem pl", opts: ["mignons","mignones","mignonnes"], ans: 2 },
+      { stem: "Je ___ le bus tous les matins.", hint: "prendre – je", opts: ["vais","prends","appelle"], ans: 1 },
+      { stem: "Je vais ___ lit à 22h.", hint: "aller au lit", opts: ["dans","au","chez"], ans: 1 },
+      { stem: "On ___ souvent des photos pendant les vacances.", hint: "prendre – on", opts: ["prends","prend","prenons"], ans: 1 },
+      { stem: "Nous ___ dans un hôtel au bord de la mer.", hint: "dormir – nous", opts: ["dort","dormons","dors"], ans: 1 },
+      { stem: "Ce sont ___ parents.", hint: "possessive – our", opts: ["nos","votre","notre"], ans: 0 },
+      { stem: "Les enfants ___ dans le jardin.", hint: "jouer – ils", opts: ["joue","jouent","jouons"], ans: 1 },
+      { stem: "Je ___ mes clés sur la table.", hint: "poser – je", opts: ["pose","poses","posons"], ans: 0 },
+    ]
+  },
+  {
+    id: "vocab1",
+    title: "Vocabulaire — Section 3.3.2",
+    desc: "Everyday objects, places, family",
+    questions: [
+      { stem: "Dans ma classe, il y a vingt ___.", hint: "students", opts: ["étudiants","voitures","manteaux"], ans: 0 },
+      { stem: "Il fait beau et le ciel est ___.", hint: "colour of sky when sunny", opts: ["bleu","gris","noir"], ans: 0 },
+      { stem: "Pour mon anniversaire, je veux un ___ au chocolat.", hint: "birthday food", opts: ["gâteau","pain","fromage"], ans: 0 },
+      { stem: "Quand je suis fatigué, je vais au ___.", hint: "where you sleep", opts: ["lit","marché","bureau"], ans: 0 },
+      { stem: "Pour écouter de la musique, j'utilise des ___.", hint: "listening device", opts: ["écouteurs","lunettes","chaussures"], ans: 0 },
+    ]
+  },
+  {
+    id: "vocab2",
+    title: "Vocabulaire — Section 3.3.3",
+    desc: "Daily life vocabulary practice",
+    questions: [
+      { stem: "Ma mère travaille comme ___ dans une école.", hint: "school job", opts: ["médecin","professeur","boulanger"], ans: 1 },
+      { stem: "Pour acheter des légumes, je vais au ___.", hint: "outdoor market", opts: ["théâtre","marché","cinéma"], ans: 1 },
+      { stem: "Le frère de mon père est mon ___.", hint: "family relation", opts: ["cousin","oncle","grand-père"], ans: 1 },
+      { stem: "Quand il pleut, j'utilise un ___.", hint: "rain protection", opts: ["parapluie","vélo","soleil"], ans: 0 },
+      { stem: "Le dimanche, les enfants jouent au ___ dans le parc.", hint: "ball game", opts: ["football","cahier","fromage"], ans: 0 },
+      { stem: "On boit du jus dans un ___.", hint: "drinking vessel", opts: ["verre","stylo","sac"], ans: 0 },
+      { stem: "En hiver, il fait très ___.", hint: "winter temperature", opts: ["froid","chaud","beau"], ans: 0 },
+      { stem: "J'écris avec un ___.", hint: "writing tool", opts: ["stylo","livre","chaise"], ans: 0 },
+      { stem: "Le repas du matin s'appelle le ___.", hint: "morning meal", opts: ["petit déjeuner","dîner","déjeuner"], ans: 0 },
+      { stem: "La capitale de la France est ___.", hint: "French capital", opts: ["Lyon","Paris","Marseille"], ans: 1 },
+      { stem: "On met les livres dans le ___.", hint: "school bag", opts: ["sac à dos","pain","manteau"], ans: 0 },
+      { stem: "Mon animal préféré est le ___.", hint: "common pet", opts: ["chien","cahier","lit"], ans: 0 },
+      { stem: "En été, nous allons à la ___ pour nager.", hint: "swimming place", opts: ["piscine","gare","bibliothèque"], ans: 0 },
+      { stem: "On mange une pizza dans une ___.", hint: "plate", opts: ["assiette","règle","gomme"], ans: 0 },
+      { stem: "La couleur du ciel est souvent ___.", hint: "sky colour", opts: ["noir","bleu","jaune"], ans: 1 },
+      { stem: "Pour téléphoner, j'utilise un ___.", hint: "mobile phone", opts: ["portable","cahier","ballon"], ans: 0 },
+      { stem: "Le père de ma mère est mon ___.", hint: "family relation", opts: ["grand-père","cousin","oncle"], ans: 0 },
+      { stem: "On boit du café dans une ___.", hint: "cup type", opts: ["bouteille","assiette","tasse"], ans: 2 },
+      { stem: "Le professeur écrit au tableau avec une ___.", hint: "chalk", opts: ["craie","gomme","fenêtre"], ans: 0 },
+      { stem: "En décembre, on fête ___.", hint: "December holiday", opts: ["Noël","Pâques","Halloween"], ans: 0 },
+      { stem: "Pour dormir, j'ai besoin d'un ___.", hint: "sleeping furniture", opts: ["lit","stylo","cahier"], ans: 0 },
+      { stem: "J'aime manger des ___ en été.", hint: "summer fruit", opts: ["tapis","pommes","cahiers"], ans: 1 },
+      { stem: "Le fils de mon oncle est mon ___.", hint: "family relation", opts: ["cousin","frère","grand-père"], ans: 0 },
+      { stem: "On va à la ___ pour emprunter des livres.", hint: "library", opts: ["bibliothèque","gare","piscine"], ans: 0 },
+      { stem: "Pour écrire, on utilise une ___.", hint: "sheet of paper", opts: ["feuille","chaise","porte"], ans: 0 },
+      { stem: "On met les vêtements dans une ___.", hint: "wardrobe", opts: ["armoire","assiette","tasse"], ans: 0 },
+      { stem: "La maîtresse écrit sur le ___.", hint: "classroom board", opts: ["tableau","sac","stylo"], ans: 0 },
+      { stem: "On met l'argent dans un ___.", hint: "wallet", opts: ["porte-monnaie","cahier","crayon"], ans: 0 },
+      { stem: "Le contraire de « froid » est ___.", hint: "opposite of cold", opts: ["grand","froid","chaud"], ans: 2 },
+      { stem: "Pour écouter de la musique, j'utilise des ___.", hint: "audio device", opts: ["écouteurs","assiettes","fenêtres"], ans: 0 },
+      { stem: "Quand il fait chaud, je bois de l' ___.", hint: "cold drink", opts: ["eau","huile","soupe"], ans: 0 },
+      { stem: "On fête son anniversaire avec un ___.", hint: "birthday cake", opts: ["gâteau","ballon","sac"], ans: 0 },
+      { stem: "La mère de ma sœur est aussi ma ___.", hint: "same mother", opts: ["mère","tante","cousine"], ans: 0 },
+      { stem: "Pour regarder un film, je vais au ___.", hint: "movie place", opts: ["marché","cinéma","bureau"], ans: 1 },
+      { stem: "Le contraire de « triste » est ___.", hint: "opposite of sad", opts: ["content","fatigué","malade"], ans: 0 },
+      { stem: "On achète du pain à la ___.", hint: "bread shop", opts: ["boulangerie","poste","gare"], ans: 0 },
+      { stem: "On va à l'école pour ___.", hint: "purpose of school", opts: ["manger","dormir","apprendre"], ans: 2 },
+      { stem: "Les élèves écrivent dans un ___.", hint: "exercise book", opts: ["cahier","ballon","lit"], ans: 0 },
+      { stem: "Pour voir l'heure, je regarde ma ___.", hint: "time device", opts: ["montre","porte","chaise"], ans: 0 },
+      { stem: "On met les chaussures aux ___.", hint: "body part", opts: ["mains","pieds","yeux"], ans: 1 },
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+// answers[sectionId][questionIndex] = { chosen: number, correct: bool } | null
+const answers = {};
+sections.forEach(s => {
+  answers[s.id] = new Array(s.questions.length).fill(null);
+});
+
+// ═══════════════════════════════════════════════════
+// BUILD UI
+// ═══════════════════════════════════════════════════
+function buildTabs() {
+  const nav = document.getElementById('tabNav');
+  // Dashboard tab
+  const db = document.createElement('button');
+  db.textContent = '📊 Dashboard';
+  db.className = 'active';
+  db.dataset.target = 'dash';
+  db.onclick = () => showPanel('dash');
+  nav.appendChild(db);
+
+  sections.forEach(s => {
+    const btn = document.createElement('button');
+    btn.textContent = s.title.split('—')[0].trim();
+    btn.dataset.target = s.id;
+    btn.onclick = () => showPanel(s.id);
+    nav.appendChild(btn);
+  });
+}
+
+function buildExercises() {
+  const container = document.getElementById('exercisePanels');
+  sections.forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'exercise-section';
+    div.id = 'panel-' + s.id;
+
+    div.innerHTML = `
+      <div class="section-header">
+        <div>
+          <h2>${s.title}</h2>
+          <p>${s.desc}</p>
+        </div>
+        <span class="q-count-badge">${s.questions.length} questions</span>
+      </div>
+      <div class="result-banner" id="banner-${s.id}"></div>
+      <div id="questions-${s.id}"></div>
+      <div class="section-submit">
+        <button class="btn btn-primary" onclick="submitSection('${s.id}')">Check Answers</button>
+        <button class="btn btn-ghost" onclick="resetSection('${s.id}')">Reset Section</button>
+      </div>
+    `;
+    container.appendChild(div);
+    renderQuestions(s);
+  });
+}
+
+function renderQuestions(s) {
+  const container = document.getElementById('questions-' + s.id);
+  container.innerHTML = '';
+  s.questions.forEach((q, qi) => {
+    const block = document.createElement('div');
+    block.className = 'question-block';
+    block.id = `qblock-${s.id}-${qi}`;
+
+    const optLabels = ['a', 'b', 'c'];
+    const optsHTML = q.opts.map((opt, oi) => `
+      <button class="option-btn" id="opt-${s.id}-${qi}-${oi}"
+        onclick="selectOption('${s.id}', ${qi}, ${oi})">
+        <span class="opt-label">${optLabels[oi]}</span>
+        ${opt}
+      </button>
+    `).join('');
+
+    block.innerHTML = `
+      <div class="q-stem">
+        <div class="q-stem-inner">
+          <span class="q-num">${qi + 1}</span>
+          <span class="q-stem-text">${q.stem} <span class="hint">[${q.hint}]</span></span>
+        </div>
+      </div>
+      <div class="options">${optsHTML}</div>
+      <div class="feedback" id="fb-${s.id}-${qi}"></div>
+    `;
+    container.appendChild(block);
+
+    // Restore saved answer
+    const saved = answers[s.id][qi];
+    if (saved !== null) {
+      applyAnswerVisual(s.id, qi, saved.chosen, saved.correct, q.ans);
+    }
+  });
+}
+
+function selectOption(sid, qi, oi) {
+  // Don't re-select if already answered
+  if (answers[sid][qi] !== null) return;
+
+  const section = sections.find(s => s.id === sid);
+  const q = section.questions[qi];
+
+  // Mark as pending (not yet submitted — highlight selection only)
+  // Actually we do immediate feedback on select (like a quiz app)
+  const isCorrect = oi === q.ans;
+  answers[sid][qi] = { chosen: oi, correct: isCorrect };
+  applyAnswerVisual(sid, qi, oi, isCorrect, q.ans);
+  updateDashboard();
+}
+
+function applyAnswerVisual(sid, qi, chosen, isCorrect, correct) {
+  const section = sections.find(s => s.id === sid);
+  const q = section.questions[qi];
+  const optCount = q.opts.length;
+
+  for (let oi = 0; oi < optCount; oi++) {
+    const btn = document.getElementById(`opt-${sid}-${qi}-${oi}`);
+    if (!btn) continue;
+    btn.disabled = true;
+    btn.classList.remove('selected-correct','selected-wrong','reveal-correct');
+    if (oi === chosen && isCorrect) btn.classList.add('selected-correct');
+    else if (oi === chosen && !isCorrect) btn.classList.add('selected-wrong');
+    else if (!isCorrect && oi === correct) btn.classList.add('reveal-correct');
+  }
+
+  const block = document.getElementById(`qblock-${sid}-${qi}`);
+  if (block) {
+    block.classList.remove('answered-correct','answered-wrong');
+    block.classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
+  }
+
+  const fb = document.getElementById(`fb-${sid}-${qi}`);
+  if (fb) {
+    fb.className = 'feedback visible ' + (isCorrect ? 'correct' : 'wrong');
+    fb.textContent = isCorrect
+      ? '✓ Correct !'
+      : `✗ Incorrect — La bonne réponse : « ${q.opts[correct]} »`;
+  }
+}
+
+function submitSection(sid) {
+  const section = sections.find(s => s.id === sid);
+  const total = section.questions.length;
+  const answered = answers[sid].filter(a => a !== null).length;
+  const correct = answers[sid].filter(a => a && a.correct).length;
+
+  const banner = document.getElementById('banner-' + sid);
+  banner.classList.remove('good','ok','poor');
+  banner.classList.add('visible');
+
+  const pct = total > 0 ? Math.round(correct / total * 100) : 0;
+  if (pct >= 80) banner.classList.add('good');
+  else if (pct >= 50) banner.classList.add('ok');
+  else banner.classList.add('poor');
+
+  banner.innerHTML = `${correct} / ${total} correct (${pct}%) — ${answered < total ? `${total - answered} unanswered` : 'All answered'}`;
+  updateDashboard();
+}
+
+function resetSection(sid) {
+  answers[sid] = new Array(answers[sid].length).fill(null);
+  const banner = document.getElementById('banner-' + sid);
+  if (banner) { banner.classList.remove('visible'); }
+  renderQuestions(sections.find(s => s.id === sid));
+  updateDashboard();
+}
+
+function resetAll() {
+  sections.forEach(s => {
+    answers[s.id] = new Array(s.questions.length).fill(null);
+    const banner = document.getElementById('banner-' + s.id);
+    if (banner) banner.classList.remove('visible');
+    renderQuestions(s);
+  });
+  updateDashboard();
+}
+
+// ═══════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════
+function updateDashboard() {
+  let totalQ = 0, totalCorrect = 0, totalAnswered = 0;
+  sections.forEach(s => {
+    totalQ += s.questions.length;
+    const ans = answers[s.id];
+    totalAnswered += ans.filter(a => a !== null).length;
+    totalCorrect += ans.filter(a => a && a.correct).length;
+  });
+  const totalWrong = totalAnswered - totalCorrect;
+  const score = totalAnswered > 0 ? Math.round(totalCorrect / totalAnswered * 100) + '%' : '—';
+  const overallPct = totalQ > 0 ? Math.round(totalAnswered / totalQ * 100) : 0;
+
+  document.getElementById('statTotal').textContent = totalQ;
+  document.getElementById('statCorrect').textContent = totalCorrect;
+  document.getElementById('statWrong').textContent = totalWrong;
+  document.getElementById('statScore').textContent = score;
+  document.getElementById('overallBar').style.width = overallPct + '%';
+  document.getElementById('overallPct').textContent = `${totalAnswered} of ${totalQ} answered`;
+
+  // Section rows
+  const container = document.getElementById('sectionRows');
+  container.innerHTML = '';
+  sections.forEach(s => {
+    const ans = answers[s.id];
+    const total = s.questions.length;
+    const answered = ans.filter(a => a !== null).length;
+    const correct = ans.filter(a => a && a.correct).length;
+    const pct = total > 0 ? Math.round(answered / total * 100) : 0;
+    const scorePct = answered > 0 ? Math.round(correct / answered * 100) : 0;
+
+    let badgeClass = 'untouched', badgeText = 'Not started';
+    if (answered === total) { badgeClass = 'done'; badgeText = `${scorePct}% score`; }
+    else if (answered > 0) { badgeClass = 'partial'; badgeText = `${answered}/${total} done`; }
+
+    const row = document.createElement('div');
+    row.className = 'section-row';
+    row.innerHTML = `
+      <span class="sname">${s.title}</span>
+      <div class="sbar"><div class="sbar-fill" style="width:${pct}%"></div></div>
+      <span class="spct">${pct}%</span>
+      <span class="sbadge ${badgeClass}">${badgeText}</span>
+    `;
+    row.style.cursor = 'pointer';
+    row.onclick = () => showPanel(s.id);
+    container.appendChild(row);
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// PANEL SWITCHING
+// ═══════════════════════════════════════════════════
+function showPanel(target) {
+  // Tabs
+  document.querySelectorAll('#tabNav button').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.target === target);
+  });
+
+  // Dashboard
+  document.getElementById('dashPanel').classList.toggle('visible', target === 'dash');
+
+  // Exercise panels
+  document.querySelectorAll('.exercise-section').forEach(p => {
+    p.classList.remove('visible');
+  });
+  if (target !== 'dash') {
+    const panel = document.getElementById('panel-' + target);
+    if (panel) panel.classList.add('visible');
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goToFirstSection() {
+  showPanel(sections[0].id);
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+buildTabs();
+buildExercises();
+updateDashboard();
+showPanel('dash');
+</script>
+</body>
+</html>
