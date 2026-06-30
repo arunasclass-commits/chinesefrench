@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>Bao's Mandarin Adventure</title>
+<style>html,body{margin:0;padding:0;background:#FFE9C9;}#root{min-height:100vh;}</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+
+const { useState, useEffect, useRef, useCallback } = React;
+const Svg = (p) => React.createElement('svg', Object.assign({width:p.size||24,height:p.size||24,viewBox:'0 0 24 24',fill:p.fill||'none',stroke:'currentColor',strokeWidth:2,strokeLinecap:'round',strokeLinejoin:'round',className:p.className||''}, {dangerouslySetInnerHTML:{__html:p.inner}}));
+const I = (inner) => (props={}) => React.createElement('svg',{width:props.size||24,height:props.size||24,viewBox:'0 0 24 24',fill:props.fill||'none',stroke:'currentColor',strokeWidth:2.2,strokeLinecap:'round',strokeLinejoin:'round',className:props.className||'',dangerouslySetInnerHTML:{__html:inner}});
+const Star=I('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>');
+const Check=I('<polyline points="20 6 9 17 4 12"/>');
+const X=I('<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>');
+const Volume2=I('<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>');
+const Mic=I('<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>');
+const ChevronLeft=I('<polyline points="15 18 9 12 15 6"/>');
+const ArrowRight=I('<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>');
+const Play=I('<polygon points="5 3 19 12 5 21 5 3"/>');
+const Lock=I('<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>');
+const Heart=I('<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>');
+const Trophy=I('<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>');
+const Award=I('<circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>');
+const User=I('<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>');
+const Coins=I('<circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/>');
+const Sparkles=I('<path d="M12 3l1.9 5.8L20 10.7l-5.1 2.9L12 19l-2.9-5.4L4 10.7l6.1-1.9L12 3z"/>');
+const Gem=I('<polygon points="6 3 18 3 22 9 12 22 2 9 6 3"/><line x1="2" y1="9" x2="22" y2="9"/>');
+const Flame=I('<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>');
+const Lightbulb=I('<path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/>');
+const Eraser=I('<path d="M20 20H7l-4-4a2 2 0 0 1 0-3l9-9a2 2 0 0 1 3 0l5 5a2 2 0 0 1 0 3l-7 7"/>');
+
+/* ============================================================
+   Bao's Mandarin Adventure — Lesson 2
+   A playful learning game for kids 4–10.
+   Single-file React app. Audio via browser Speech Synthesis.
+   ============================================================ */
+
+/* ---------------- Lesson 2 content (from your worksheet) -------------- */
+
+const STROKES = [
+  { char: "丶", pinyin: "diǎn", meaning: "Dot" },
+  { char: "一", pinyin: "héng", meaning: "Horizontal" },
+  { char: "丨", pinyin: "shù", meaning: "Vertical" },
+  { char: "丿", pinyin: "piě", meaning: "Left-falling" },
+  { char: "㇏", pinyin: "nà", meaning: "Right-falling" },
+  { char: "㇀", pinyin: "tí", meaning: "Rising" },
+  { char: "𠃌", pinyin: "zhé", meaning: "Turning" },
+  { char: "亅", pinyin: "gōu", meaning: "Hook" },
+];
+
+const PRON = [
+  { hz: "爸爸", py: "bàba", en: "dad" },
+  { hz: "妈妈", py: "māma", en: "mom" },
+  { hz: "爷爷", py: "yéye", en: "grandpa" },
+  { hz: "弟弟", py: "dìdi", en: "little brother" },
+  { hz: "叔叔", py: "shūshu", en: "uncle" },
+  { hz: "姑姑", py: "gūgu", en: "aunt" },
+  { hz: "狮子", py: "shīzi", en: "lion" },
+  { hz: "笛子", py: "dízi", en: "flute" },
+  { hz: "梨子", py: "lízi", en: "pear" },
+  { hz: "鼻子", py: "bízi", en: "nose" },
+];
+
+const NUMBERS = [
+  { hz: "一", py: "yī", n: 1 },
+  { hz: "二", py: "èr", n: 2 },
+  { hz: "三", py: "sān", n: 3 },
+  { hz: "四", py: "sì", n: 4 },
+  { hz: "五", py: "wǔ", n: 5 },
+  { hz: "六", py: "liù", n: 6 },
+  { hz: "七", py: "qī", n: 7 },
+  { hz: "八", py: "bā", n: 8 },
+  { hz: "九", py: "jiǔ", n: 9 },
+  { hz: "十", py: "shí", n: 10 },
+];
+
+const RULES = [
+  { title: "Horizontal before vertical", char: "十", py: "shí", hint: "Draw the line lying down first, then the standing line." },
+  { title: "Top before bottom", char: "三", py: "sān", hint: "Start at the top line and work your way down." },
+  { title: "Left before right", char: "什", py: "shén", hint: "Write the left part first, then the right part." },
+  { title: "Middle before sides", char: "小", py: "xiǎo", hint: "The middle dot goes first, then the two wings." },
+  { title: "Outside before inside", char: "回", py: "huí", hint: "Build the outside box, fill the inside, then close it." },
+];
+
+const ORDER_CHARS = [
+  { hz: "大", py: "dà", en: "big" },
+  { hz: "主", py: "zhǔ", en: "master" },
+  { hz: "水", py: "shuǐ", en: "water" },
+  { hz: "回", py: "huí", en: "return" },
+];
+
+const GREETINGS = [
+  { hz: "你好", py: "nǐ hǎo", en: "Hello" },
+  { hz: "您好", py: "nín hǎo", en: "Hello (polite)" },
+  { hz: "再见", py: "zài jiàn", en: "Goodbye" },
+];
+
+const COUNT = [
+  { hz: "九", py: "jiǔ", strokes: 2 },
+  { hz: "五", py: "wǔ", strokes: 4 },
+  { hz: "见", py: "jiàn", strokes: 4 },
+  { hz: "四", py: "sì", strokes: 5 },
+  { hz: "好", py: "hǎo", strokes: 6 },
+  { hz: "再", py: "zài", strokes: 6 },
+  { hz: "你", py: "nǐ", strokes: 7 },
+];
+
+const DIALOGUE = {
+  ask: { hz: "你叫什么名字？", py: "Nǐ jiào shénme míngzi?", en: "What is your name?" },
+  answers: [
+    { hz: "我叫大生。", py: "Wǒ jiào Dàshēng.", en: "My name is Dasheng." },
+    { hz: "我叫小月。", py: "Wǒ jiào Xiǎoyuè.", en: "My name is Xiaoyue." },
+  ],
+};
+
+/* ---------------- Lesson map (linear activity path) -------------- */
+
+const ACTIVITIES = [
+  { key: "strokes", title: "Basic Strokes", emoji: "✏️", color: "#FF8FA3" },
+  { key: "strokeId", title: "Which Stroke?", emoji: "🔍", color: "#56CCF2" },
+  { key: "pron", title: "Say It!", emoji: "🗣️", color: "#FFC93C" },
+  { key: "numbers", title: "Number Match", emoji: "🔢", color: "#2EC4B6" },
+  { key: "rules", title: "Writing Rules", emoji: "📜", color: "#9B5DE5" },
+  { key: "order", title: "Trace It", emoji: "🖌️", color: "#FF8FA3" },
+  { key: "hands", title: "Finger Counts", emoji: "✋", color: "#56CCF2" },
+  { key: "greet", title: "Greetings", emoji: "👋", color: "#FFC93C" },
+  { key: "count", title: "Count Strokes", emoji: "🧮", color: "#2EC4B6" },
+  { key: "dialogue", title: "Talk to Mei", emoji: "💬", color: "#9B5DE5" },
+  { key: "mini", title: "Speed Match", emoji: "⚡", color: "#FF8FA3" },
+  { key: "quiz", title: "Quiz Time", emoji: "🧠", color: "#56CCF2" },
+  { key: "boss", title: "Final Boss", emoji: "🐉", color: "#FF5A5F" },
+];
+
+const LEVELS = [
+  { name: "Beginner Panda", emoji: "🐼", xp: 0 },
+  { name: "Little Dragon", emoji: "🐲", xp: 150 },
+  { name: "Bamboo Hero", emoji: "🎋", xp: 350 },
+  { name: "Mandarin Explorer", emoji: "🧭", xp: 600 },
+  { name: "Chinese Master", emoji: "🏯", xp: 900 },
+];
+
+const BADGES = [
+  { key: "strokes", name: "Stroke Master", emoji: "✏️" },
+  { key: "pron", name: "Voice Star", emoji: "🌟" },
+  { key: "numbers", name: "Number Hero", emoji: "🔢" },
+  { key: "dialogue", name: "Chatterbox", emoji: "💬" },
+  { key: "boss", name: "Golden Panda", emoji: "🏆" },
+];
+
+/* ---------------- Speech helpers -------------- */
+
+function pickZhVoice() {
+  try {
+    const vs = window.speechSynthesis.getVoices() || [];
+    return vs.find((v) => v.lang && v.lang.toLowerCase().startsWith("zh")) || null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function speak(text, rate = 0.75) {
+  try {
+    const synth = window.speechSynthesis;
+    if (!synth) return;
+    synth.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "zh-CN";
+    u.rate = rate;
+    u.pitch = 1.15;
+    const v = pickZhVoice();
+    if (v) u.voice = v;
+    synth.speak(u);
+  } catch (e) {}
+}
+
+/* ---------------- Small utilities -------------- */
+
+const shuffle = (arr) => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+const sample = (arr, n) => shuffle(arr).slice(0, n);
+const rand = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+/* ============================================================
+   Reusable bits
+   ============================================================ */
+
+function Confetti({ show }) {
+  if (!show) return null;
+  const colors = ["#FF5A5F", "#FFC93C", "#2EC4B6", "#56CCF2", "#9B5DE5", "#FF8FA3"];
+  const pieces = Array.from({ length: 36 });
+  return (
+    <div className="confetti-wrap">
+      {pieces.map((_, i) => (
+        <span
+          key={i}
+          className="confetti-piece"
+          style={{
+            left: `${Math.random() * 100}%`,
+            background: colors[i % colors.length],
+            animationDelay: `${Math.random() * 0.4}s`,
+            animationDuration: `${1.1 + Math.random() * 0.9}s`,
+            transform: `rotate(${Math.random() * 360}deg)`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function Mascot({ mood = "happy", size = 96 }) {
+  const face = mood === "cheer" ? "😄" : mood === "think" ? "🤔" : mood === "sad" ? "🥺" : "🐼";
+  return (
+    <div className="mascot" style={{ width: size, height: size, fontSize: size * 0.62 }}>
+      <span style={{ fontSize: size * 0.62, lineHeight: 1 }}>{face === "🐼" ? "🐼" : "🐼"}</span>
+      {mood === "cheer" && <span className="mascot-spark">✨</span>}
+    </div>
+  );
+}
+
+function SpeakBtn({ text, label, big }) {
+  return (
+    <button
+      className={big ? "speakbtn speakbtn-big" : "speakbtn"}
+      onClick={() => speak(text)}
+      aria-label={label || "Play sound"}
+    >
+      <Volume2 size={big ? 28 : 20} />
+    </button>
+  );
+}
+
+function HzCard({ hz, py, en, onSpeak }) {
+  return (
+    <div className="hzcard">
+      <button className="hzcard-glyph" onClick={() => speak(hz)} aria-label={`Say ${py}`}>
+        {hz}
+      </button>
+      <div className="hzcard-py">{py}</div>
+      {en && <div className="hzcard-en">{en}</div>}
+    </div>
+  );
+}
+
+/* ============================================================
+   Activity components
+   Each calls onDone({ stars, perfect }) when finished.
+   ============================================================ */
+
+/* 1. Basic Strokes — flashcards */
+function StrokesActivity({ onDone }) {
+  const [i, setI] = useState(0);
+  const [seen, setSeen] = useState(() => new Set());
+  const cur = STROKES[i];
+
+  useEffect(() => {
+    speak(cur.pinyin);
+    setSeen((s) => new Set(s).add(i));
+  }, [i]);
+
+  const next = () => {
+    if (i < STROKES.length - 1) setI(i + 1);
+    else onDone({ stars: 3, perfect: true });
+  };
+
+  return (
+    <div className="act">
+      <p className="act-instr">Meet the 8 basic strokes. Tap to hear each name!</p>
+      <div className="flash">
+        <div className="flash-glyph" onClick={() => speak(cur.pinyin)}>{cur.char}</div>
+        <div className="flash-py">{cur.pinyin}</div>
+        <div className="flash-en">{cur.meaning}</div>
+        <button className="speakbtn speakbtn-big" onClick={() => speak(cur.pinyin)}>
+          <Volume2 size={28} />
+        </button>
+      </div>
+      <div className="dots">
+        {STROKES.map((_, k) => (
+          <span key={k} className={`dot ${seen.has(k) ? "dot-on" : ""} ${k === i ? "dot-cur" : ""}`} />
+        ))}
+      </div>
+      <button className="bigbtn" onClick={next}>
+        {i < STROKES.length - 1 ? "Next stroke" : "I learned them!"} <ArrowRight size={22} />
+      </button>
+    </div>
+  );
+}
+
+/* 2. Which Stroke? — recognise an isolated stroke */
+function StrokeIdActivity({ onDone }) {
+  const [round, setRound] = useState(0);
+  const [q, setQ] = useState(() => makeQ());
+  const [picked, setPicked] = useState(null);
+  const [score, setScore] = useState(0);
+  const TOTAL = 5;
+
+  function makeQ() {
+    const correct = rand(STROKES);
+    const opts = shuffle([correct, ...sample(STROKES.filter((s) => s !== correct), 3)]);
+    return { correct, opts };
+  }
+  useEffect(() => { speak(q.correct.pinyin); }, [q]);
+
+  const choose = (s) => {
+    if (picked) return;
+    setPicked(s);
+    const right = s.char === q.correct.char;
+    if (right) setScore((x) => x + 1);
+    setTimeout(() => {
+      if (round + 1 >= TOTAL) {
+        const final = score + (right ? 1 : 0);
+        onDone({ stars: final >= 5 ? 3 : final >= 3 ? 2 : 1, perfect: final === TOTAL });
+      } else {
+        setRound((r) => r + 1);
+        setQ(makeQ());
+        setPicked(null);
+      }
+    }, 850);
+  };
+
+  return (
+    <div className="act">
+      <p className="act-instr">Which stroke is this? Round {round + 1} / {TOTAL}</p>
+      <div className="bigglyph" onClick={() => speak(q.correct.pinyin)}>{q.correct.char}</div>
+      <div className="choices">
+        {q.opts.map((s) => {
+          const state = picked ? (s.char === q.correct.char ? "ok" : s === picked ? "bad" : "") : "";
+          return (
+            <button key={s.char} className={`choice ${state}`} onClick={() => choose(s)}>
+              <span className="choice-py">{s.pinyin}</span>
+              <span className="choice-en">{s.meaning}</span>
+              {state === "ok" && <Check className="choice-ic" size={20} />}
+              {state === "bad" && <X className="choice-ic" size={20} />}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* 3. Say It! — pronunciation with optional mic */
+function PronActivity({ onDone }) {
+  const [i, setI] = useState(0);
+  const [phase, setPhase] = useState("listen"); // listen | rate
+  const [listening, setListening] = useState(false);
+  const [micOk, setMicOk] = useState(true);
+  const cur = PRON[i];
+  const recRef = useRef(null);
+
+  useEffect(() => {
+    speak(cur.hz);
+    setPhase("listen");
+  }, [i]);
+
+  const tryMic = () => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { setMicOk(false); setPhase("rate"); return; }
+    try {
+      const rec = new SR();
+      rec.lang = "zh-CN";
+      rec.interimResults = false;
+      rec.maxAlternatives = 1;
+      recRef.current = rec;
+      setListening(true);
+      rec.onresult = () => { setListening(false); setPhase("rate"); };
+      rec.onerror = () => { setListening(false); setMicOk(false); setPhase("rate"); };
+      rec.onend = () => { setListening(false); setPhase("rate"); };
+      rec.start();
+    } catch (e) { setMicOk(false); setPhase("rate"); }
+  };
+
+  const finishWord = () => {
+    if (i < PRON.length - 1) setI(i + 1);
+    else onDone({ stars: 3, perfect: true });
+  };
+
+  return (
+    <div className="act">
+      <p className="act-instr">Listen, then say it out loud! Word {i + 1} / {PRON.length}</p>
+      <div className="flash">
+        <div className="flash-glyph" onClick={() => speak(cur.hz)}>{cur.hz}</div>
+        <div className="flash-py">{cur.py}</div>
+        <div className="flash-en">{cur.en}</div>
+        <div className={`wave ${listening ? "wave-on" : ""}`}>
+          {Array.from({ length: 7 }).map((_, k) => <span key={k} style={{ animationDelay: `${k * 0.08}s` }} />)}
+        </div>
+      </div>
+
+      {phase === "listen" && (
+        <div className="row">
+          <button className="bigbtn ghost" onClick={() => speak(cur.hz)}><Volume2 size={20} /> Listen</button>
+          <button className="bigbtn" onClick={tryMic}><Mic size={20} /> My turn</button>
+        </div>
+      )}
+
+      {phase === "rate" && (
+        <div className="rate">
+          {micOk
+            ? <div className="rate-result">🎉 Excellent! <span>+15 XP for great speaking</span></div>
+            : <div className="rate-result soft">Great practice! <span>Say it once more with me</span></div>}
+          <button className="bigbtn" onClick={finishWord}>
+            {i < PRON.length - 1 ? "Next word" : "Finish"} <ArrowRight size={22} />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* 4. Number Match — memory pairs (character <-> pinyin) */
+function NumbersActivity({ onDone }) {
+  const pool = sample(NUMBERS, 5);
+  const [cards] = useState(() =>
+    shuffle(
+      pool.flatMap((p) => [
+        { id: p.hz + "-h", key: p.n, kind: "hz", label: p.hz, hz: p.hz },
+        { id: p.hz + "-p", key: p.n, kind: "py", label: p.py, hz: p.hz },
+      ])
+    )
+  );
+  const [open, setOpen] = useState([]);
+  const [matched, setMatched] = useState(() => new Set());
+  const [tries, setTries] = useState(0);
+  const lock = useRef(false);
+
+  const flip = (idx) => {
+    if (lock.current) return;
+    if (open.includes(idx) || matched.has(cards[idx].id)) return;
+    speak(cards[idx].hz);
+    const nextOpen = [...open, idx];
+    setOpen(nextOpen);
+    if (nextOpen.length === 2) {
+      setTries((t) => t + 1);
+      const [a, b] = nextOpen;
+      if (cards[a].key === cards[b].key) {
+        const m = new Set(matched); m.add(cards[a].id); m.add(cards[b].id);
+        setMatched(m); setOpen([]);
+        if (m.size === cards.length) {
+          setTimeout(() => onDone({ stars: tries <= 6 ? 3 : tries <= 9 ? 2 : 1, perfect: tries <= 5 }), 500);
+        }
+      } else {
+        lock.current = true;
+        setTimeout(() => { setOpen([]); lock.current = false; }, 750);
+      }
+    }
+  };
+
+  return (
+    <div className="act">
+      <p className="act-instr">Find the pairs — match the character to its sound!</p>
+      <div className="memgrid">
+        {cards.map((c, idx) => {
+          const faceUp = open.includes(idx) || matched.has(c.id);
+          return (
+            <button
+              key={c.id}
+              className={`memcard ${faceUp ? "up" : ""} ${matched.has(c.id) ? "done" : ""}`}
+              onClick={() => flip(idx)}
+            >
+              <span className="memcard-inner">
+                {faceUp ? <span className={c.kind === "hz" ? "mem-hz" : "mem-py"}>{c.label}</span> : <span className="mem-back">🀄</span>}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      <p className="act-meta">Tries: {tries}</p>
+    </div>
+  );
+}
+
+/* 5. Writing Rules — reveal cards */
+function RulesActivity({ onDone }) {
+  const [i, setI] = useState(0);
+  const cur = RULES[i];
+  useEffect(() => { speak(cur.char); }, [i]);
+  const next = () => { if (i < RULES.length - 1) setI(i + 1); else onDone({ stars: 3, perfect: true }); };
+  return (
+    <div className="act">
+      <p className="act-instr">5 rules for writing characters the right way. Rule {i + 1} / {RULES.length}</p>
+      <div className="rulecard">
+        <div className="rule-num">Rule {i + 1}</div>
+        <div className="rule-title">{cur.title}</div>
+        <div className="rule-glyph" onClick={() => speak(cur.char)}>{cur.char}</div>
+        <div className="rule-hint"><Lightbulb size={16} /> {cur.hint}</div>
+      </div>
+      <button className="bigbtn" onClick={next}>
+        {i < RULES.length - 1 ? "Got it, next" : "I know the rules!"} <ArrowRight size={22} />
+      </button>
+    </div>
+  );
+}
+
+/* 6. Trace It — simple tracing canvas (coverage based) */
+function OrderActivity({ onDone }) {
+  const [i, setI] = useState(0);
+  const cur = ORDER_CHARS[i];
+  const canvasRef = useRef(null);
+  const drawing = useRef(false);
+  const last = useRef(null);
+  const dist = useRef(0);
+  const [progress, setProgress] = useState(0);
+  const [done, setDone] = useState(false);
+  const NEED = 900;
+
+  const reset = useCallback(() => {
+    const c = canvasRef.current; if (!c) return;
+    const ctx = c.getContext("2d");
+    ctx.clearRect(0, 0, c.width, c.height);
+    dist.current = 0; setProgress(0); setDone(false);
+  }, []);
+
+  useEffect(() => { reset(); speak(cur.hz); }, [i, reset, cur.hz]);
+
+  const pos = (e) => {
+    const c = canvasRef.current;
+    const r = c.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return { x: (t.clientX - r.left) * (c.width / r.width), y: (t.clientY - r.top) * (c.height / r.height) };
+  };
+  const start = (e) => { e.preventDefault(); drawing.current = true; last.current = pos(e); };
+  const move = (e) => {
+    if (!drawing.current) return;
+    e.preventDefault();
+    const c = canvasRef.current; const ctx = c.getContext("2d");
+    const p = pos(e); const l = last.current;
+    ctx.strokeStyle = done ? "#2EC4B6" : "#FF5A5F";
+    ctx.lineWidth = 16; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.beginPath(); ctx.moveTo(l.x, l.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+    dist.current += Math.hypot(p.x - l.x, p.y - l.y);
+    last.current = p;
+    const pr = Math.min(100, Math.round((dist.current / NEED) * 100));
+    setProgress(pr);
+    if (pr >= 100 && !done) setDone(true);
+  };
+  const end = () => { drawing.current = false; };
+
+  const next = () => {
+    if (i < ORDER_CHARS.length - 1) setI(i + 1);
+    else onDone({ stars: 3, perfect: true });
+  };
+
+  return (
+    <div className="act">
+      <p className="act-instr">Trace over the character with your finger! {i + 1} / {ORDER_CHARS.length}</p>
+      <div className={`tracebox ${done ? "trace-done" : ""}`}>
+        <span className="trace-guide">{cur.hz}</span>
+        <canvas
+          ref={canvasRef} width={320} height={320} className="tracecanvas"
+          onMouseDown={start} onMouseMove={move} onMouseUp={end} onMouseLeave={end}
+          onTouchStart={start} onTouchMove={move} onTouchEnd={end}
+        />
+        {done && <span className="trace-tick"><Check size={48} /></span>}
+      </div>
+      <div className="tracebar"><span style={{ width: `${progress}%` }} /></div>
+      <div className="trace-meta">
+        <span className="trace-py">{cur.py} · {cur.en}</span>
+      </div>
+      <div className="row">
+        <button className="bigbtn ghost" onClick={reset}><Eraser size={18} /> Clear</button>
+        <button className="bigbtn ghost" onClick={() => speak(cur.hz)}><Volume2 size={18} /> Hear</button>
+        <button className="bigbtn" disabled={!done} onClick={next}>
+          {i < ORDER_CHARS.length - 1 ? "Next" : "Done"} <ArrowRight size={20} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* 7. Finger Counts — count the fingers / dots, pick the number */
+function HandsActivity({ onDone }) {
+  const [round, setRound] = useState(0);
+  const [target, setTarget] = useState(() => 1 + Math.floor(Math.random() * 10));
+  const [picked, setPicked] = useState(null);
+  const [score, setScore] = useState(0);
+  const TOTAL = 5;
+  const opts = NUMBERS;
+
+  useEffect(() => {
+    const num = NUMBERS.find((x) => x.n === target);
+    if (num) speak(num.hz);
+  }, [target]);
+
+  const choose = (n) => {
+    if (picked) return;
+    setPicked(n);
+    const right = n === target;
+    if (right) { setScore((s) => s + 1); const num = NUMBERS.find((x) => x.n === target); if (num) speak(num.hz); }
+    setTimeout(() => {
+      if (round + 1 >= TOTAL) {
+        const f = score + (right ? 1 : 0);
+        onDone({ stars: f >= 5 ? 3 : f >= 3 ? 2 : 1, perfect: f === TOTAL });
+      } else {
+        setRound((r) => r + 1);
+        setTarget(1 + Math.floor(Math.random() * 10));
+        setPicked(null);
+      }
+    }, 800);
+  };
+
+  return (
+    <div className="act">
+      <p className="act-instr">Count the dots, then tap the matching number! {round + 1} / {TOTAL}</p>
+      <div className="dotsbox">
+        {Array.from({ length: target }).map((_, k) => <span key={k} className="bigdot" />)}
+      </div>
+      <div className="numgrid">
+        {opts.map((o) => {
+          const state = picked ? (o.n === target ? "ok" : o.n === picked ? "bad" : "") : "";
+          return (
+            <button key={o.n} className={`numbtn ${state}`} onClick={() => choose(o.n)}>
+              <span className="numbtn-hz">{o.hz}</span>
+              <span className="numbtn-py">{o.py}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* 8. Greetings — pick the right thing to say */
+function GreetActivity({ onDone }) {
+  const scenes = [
+    { prompt: "Your friend waves and smiles. What do you say?", img: "👋😊", correct: "你好" },
+    { prompt: "You meet your teacher. Be polite!", img: "👩‍🏫", correct: "您好" },
+    { prompt: "Time to go home. What do you say?", img: "🚪👋", correct: "再见" },
+  ];
+  const [i, setI] = useState(0);
+  const [picked, setPicked] = useState(null);
+  const [score, setScore] = useState(0);
+  const cur = scenes[i];
+  const opts = GREETINGS;
+
+  const choose = (g) => {
+    if (picked) return;
+    setPicked(g.hz);
+    speak(g.hz);
+    const right = g.hz === cur.correct;
+    if (right) setScore((s) => s + 1);
+    setTimeout(() => {
+      if (i + 1 >= scenes.length) {
+        const f = score + (right ? 1 : 0);
+        onDone({ stars: f >= 3 ? 3 : f >= 2 ? 2 : 1, perfect: f === scenes.length });
+      } else { setI(i + 1); setPicked(null); }
+    }, 900);
+  };
+
+  return (
+    <div className="act">
+      <p className="act-instr">Scene {i + 1} / {scenes.length}</p>
+      <div className="scene">
+        <div className="scene-img">{cur.img}</div>
+        <div className="scene-text">{cur.prompt}</div>
+      </div>
+      <div className="choices">
+        {opts.map((g) => {
+          const state = picked ? (g.hz === cur.correct ? "ok" : g.hz === picked ? "bad" : "") : "";
+          return (
+            <button key={g.hz} className={`choice ${state}`} onClick={() => choose(g)}>
+              <span className="choice-hz">{g.hz}</span>
+              <span className="choice-py">{g.py} — {g.en}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* 9. Count Strokes — pick how many strokes */
+function CountActivity({ onDone }) {
+  const [round, setRound] = useState(0);
+  const order = useRef(shuffle(COUNT)).current;
+  const cur = order[round % order.length];
+  const [picked, setPicked] = useState(null);
+  const [score, setScore] = useState(0);
+  const TOTAL = 5;
+
+  useEffect(() => { speak(cur.hz); }, [round]);
+
+  const options = (() => {
+    const set = new Set([cur.strokes]);
+    while (set.size < 4) set.add(1 + Math.floor(Math.random() * 12));
+    return shuffle([...set]);
+  })();
+
+  const choose = (n) => {
+    if (picked != null) return;
+    setPicked(n);
+    const right = n === cur.strokes;
+    if (right) setScore((s) => s + 1);
+    setTimeout(() => {
+      if (round + 1 >= TOTAL) {
+        const f = score + (right ? 1 : 0);
+        onDone({ stars: f >= 5 ? 3 : f >= 3 ? 2 : 1, perfect: f === TOTAL });
+      } else { setRound((r) => r + 1); setPicked(null); }
+    }, 800);
+  };
+
+  return (
+    <div className="act">
+      <p className="act-instr">How many strokes? {round + 1} / {TOTAL}</p>
+      <div className="bigglyph" onClick={() => speak(cur.hz)}>{cur.hz}</div>
+      <div className="flash-py" style={{ marginBottom: 8 }}>{cur.py}</div>
+      <div className="numrow">
+        {options.map((n) => {
+          const state = picked != null ? (n === cur.strokes ? "ok" : n === picked ? "bad" : "") : "";
+          return (
+            <button key={n} className={`countbtn ${state}`} onClick={() => choose(n)}>{n}</button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* 10. Talk to Mei — dialogue */
+function DialogueActivity({ onDone }) {
+  const [step, setStep] = useState(0); // 0 ask, 1 answered
+  const [picked, setPicked] = useState(null);
+  useEffect(() => { if (step === 0) speak(DIALOGUE.ask.hz); }, [step]);
+
+  const answer = (a) => {
+    setPicked(a);
+    speak(a.hz);
+    setStep(1);
+  };
+
+  return (
+    <div className="act">
+      <p className="act-instr">Mei wants to know your name. Pick your answer!</p>
+      <div className="npc">
+        <div className="npc-face">👧</div>
+        <div className="bubble">
+          <button className="bubble-hz" onClick={() => speak(DIALOGUE.ask.hz)}>{DIALOGUE.ask.hz}</button>
+          <div className="bubble-py">{DIALOGUE.ask.py}</div>
+          <div className="bubble-en">{DIALOGUE.ask.en}</div>
+        </div>
+      </div>
+
+      {step === 0 && (
+        <div className="choices">
+          {DIALOGUE.answers.map((a) => (
+            <button key={a.hz} className="choice" onClick={() => answer(a)}>
+              <span className="choice-hz">{a.hz}</span>
+              <span className="choice-py">{a.py}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {step === 1 && (
+        <div className="dialog-end">
+          <div className="npc">
+            <div className="npc-face">😄</div>
+            <div className="bubble bubble-joy">
+              <div className="bubble-hz">很高兴认识你！</div>
+              <div className="bubble-py">Hěn gāoxìng rènshi nǐ!</div>
+              <div className="bubble-en">Nice to meet you!</div>
+            </div>
+          </div>
+          <p className="your-line">You said: <b>{picked.hz}</b> ({picked.py})</p>
+          <button className="bigbtn" onClick={() => onDone({ stars: 3, perfect: true })}>
+            <Heart size={20} /> Finish chat
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* 11. Speed Match — tap the pinyin for the shown character, beat the clock */
+function MiniActivity({ onDone }) {
+  const pool = [...NUMBERS, ...GREETINGS.map((g) => ({ hz: g.hz, py: g.py }))];
+  const [time, setTime] = useState(20);
+  const [score, setScore] = useState(0);
+  const [q, setQ] = useState(() => makeQ());
+  const [flash, setFlash] = useState("");
+
+  function makeQ() {
+    const correct = rand(pool);
+    const opts = shuffle([correct, ...sample(pool.filter((p) => p.py !== correct.py), 2)]);
+    return { correct, opts };
+  }
+  useEffect(() => { speak(q.correct.hz); }, [q]);
+  useEffect(() => {
+    if (time <= 0) {
+      onDone({ stars: score >= 10 ? 3 : score >= 6 ? 2 : 1, perfect: score >= 12 });
+      return;
+    }
+    const t = setTimeout(() => setTime((x) => x - 1), 1000);
+    return () => clearTimeout(t);
+  }, [time]);
+
+  const choose = (p) => {
+    if (p.py === q.correct.py) { setScore((s) => s + 1); setFlash("ok"); }
+    else { setFlash("bad"); }
+    setTimeout(() => { setFlash(""); setQ(makeQ()); }, 180);
+  };
+
+  return (
+    <div className="act">
+      <div className="speed-top">
+        <div className="speed-timer">⏱️ {time}s</div>
+        <div className="speed-score">⭐ {score}</div>
+      </div>
+      <div className={`bigglyph flashable ${flash}`} onClick={() => speak(q.correct.hz)}>{q.correct.hz}</div>
+      <div className="numrow">
+        {q.opts.map((p, k) => (
+          <button key={p.py + k} className="speedbtn" onClick={() => choose(p)}>{p.py}</button>
+        ))}
+      </div>
+      <p className="act-meta">Tap the matching sound — go fast!</p>
+    </div>
+  );
+}
+
+/* 12. Quiz — mixed multiple choice */
+function buildQuiz(n = 6) {
+  const qs = [];
+  const makers = [
+    () => { const s = rand(STROKES); return { q: `What is the stroke ${s.char} called?`, hz: s.char, correct: s.pinyin, opts: shuffle([s.pinyin, ...sample(STROKES.filter((x) => x !== s), 3).map((x) => x.pinyin)]) }; },
+    () => { const num = rand(NUMBERS); return { q: `Which character means "${num.n}"?`, correct: num.hz, opts: shuffle([num.hz, ...sample(NUMBERS.filter((x) => x !== num), 3).map((x) => x.hz)]), hz: null }; },
+    () => { const g = rand(GREETINGS); return { q: `Which one means "${g.en}"?`, correct: g.hz, opts: shuffle([g.hz, ...sample(GREETINGS.filter((x) => x !== g), 2).map((x) => x.hz)]), hz: null }; },
+    () => { const c = rand(COUNT); return { q: `How many strokes are in ${c.hz}?`, hz: c.hz, correct: String(c.strokes), opts: (() => { const set = new Set([c.strokes]); while (set.size < 4) set.add(1 + Math.floor(Math.random() * 12)); return shuffle([...set]).map(String); })() }; },
+  ];
+  for (let i = 0; i < n; i++) qs.push(rand(makers)());
+  return qs;
+}
+
+function QuizActivity({ onDone, count = 6, title = "Quiz Time", timed = false }) {
+  const [quiz] = useState(() => buildQuiz(count));
+  const [i, setI] = useState(0);
+  const [picked, setPicked] = useState(null);
+  const [score, setScore] = useState(0);
+  const [time, setTime] = useState(timed ? count * 8 : 0);
+  const cur = quiz[i];
+
+  useEffect(() => { if (cur && cur.hz) speak(cur.hz); }, [i]);
+  useEffect(() => {
+    if (!timed) return;
+    if (time <= 0) { onDone({ stars: 1, perfect: false, score: Math.round((score / count) * 100) }); return; }
+    const t = setTimeout(() => setTime((x) => x - 1), 1000);
+    return () => clearTimeout(t);
+  }, [time, timed]);
+
+  const choose = (o) => {
+    if (picked != null) return;
+    setPicked(o);
+    const right = o === cur.correct;
+    if (right) setScore((s) => s + 1);
+    setTimeout(() => {
+      if (i + 1 >= quiz.length) {
+        const f = score + (right ? 1 : 0);
+        const pct = Math.round((f / count) * 100);
+        onDone({ stars: pct >= 90 ? 3 : pct >= 60 ? 2 : 1, perfect: f === count, score: pct });
+      } else { setI(i + 1); setPicked(null); }
+    }, 850);
+  };
+
+  return (
+    <div className="act">
+      <div className="speed-top">
+        <p className="act-instr" style={{ margin: 0 }}>{title} · {i + 1} / {quiz.length}</p>
+        {timed && <div className="speed-timer">⏱️ {time}s</div>}
+      </div>
+      <div className="quizq">
+        {cur.hz && <div className="quiz-hz" onClick={() => speak(cur.hz)}>{cur.hz}</div>}
+        <div className="quiz-text">{cur.q}</div>
+      </div>
+      <div className="choices">
+        {cur.opts.map((o, k) => {
+          const state = picked != null ? (o === cur.correct ? "ok" : o === picked ? "bad" : "") : "";
+          return (
+            <button key={o + k} className={`choice center ${state}`} onClick={() => choose(o)}>
+              <span className="choice-big">{o}</span>
+              {state === "ok" && <Check className="choice-ic" size={20} />}
+              {state === "bad" && <X className="choice-ic" size={20} />}
+            </button>
+          );
+        })}
+      </div>
+      <p className="act-meta">Score: {score}</p>
+    </div>
+  );
+}
+
+/* 13. Final Boss — timed quiz + certificate */
+function BossActivity({ onDone, playerName }) {
+  const [stage, setStage] = useState("intro"); // intro | quiz | cert
+  const [result, setResult] = useState(null);
+
+  if (stage === "intro") {
+    return (
+      <div className="act boss-intro">
+        <div className="boss-dragon">🐉</div>
+        <h2 className="boss-title">The Dragon Challenge!</h2>
+        <p className="boss-sub">Answer fast and prove you are a Mandarin Master. Ready?</p>
+        <button className="bigbtn boss-btn" onClick={() => setStage("quiz")}>
+          <Play size={22} /> Start the battle
+        </button>
+      </div>
+    );
+  }
+  if (stage === "quiz") {
+    return (
+      <div className="act">
+        <div className="boss-banner"><span>🐉</span> Dragon Challenge</div>
+        <QuizActivity
+          count={8}
+          timed
+          title="Boss Quiz"
+          onDone={(r) => { setResult(r); setStage("cert"); }}
+        />
+      </div>
+    );
+  }
+  // certificate
+  const pct = result?.score ?? 0;
+  const stars = pct >= 90 ? 3 : pct >= 60 ? 2 : 1;
+  return (
+    <div className="act">
+      <div className="cert">
+        <div className="cert-seal">🏯</div>
+        <div className="cert-top">Certificate of Achievement</div>
+        <div className="cert-name">{playerName || "Little Learner"}</div>
+        <div className="cert-line">completed</div>
+        <div className="cert-lesson">Lesson 2 · Strokes, Numbers & Greetings</div>
+        <div className="cert-score">{pct}%</div>
+        <div className="cert-stars">{"⭐".repeat(stars)}</div>
+        <div className="cert-foot">🐼 Bao's Mandarin Adventure</div>
+      </div>
+      <button className="bigbtn boss-btn" onClick={() => onDone({ stars, perfect: pct === 100, score: pct })}>
+        <Trophy size={20} /> Claim my reward
+      </button>
+    </div>
+  );
+}
+
+/* ============================================================
+   Result overlay
+   ============================================================ */
+function ResultOverlay({ data, onNext }) {
+  useEffect(() => { speak(data.perfect ? "太棒了" : "好"); }, []);
+  return (
+    <div className="overlay">
+      <Confetti show />
+      <div className="result-card pop-in">
+        <Mascot mood="cheer" size={92} />
+        <h2 className="result-title">{data.perfect ? "Perfect!" : data.stars >= 2 ? "Great job!" : "Nice try!"}</h2>
+        <div className="result-stars">
+          {[1, 2, 3].map((s) => (
+            <Star key={s} size={44} className={s <= data.stars ? "star-on" : "star-off"} fill={s <= data.stars ? "#FFC93C" : "none"} />
+          ))}
+        </div>
+        <div className="reward-row">
+          <span className="reward-chip"><Sparkles size={16} /> +{data.xp} XP</span>
+          <span className="reward-chip"><Coins size={16} /> +{data.coins}</span>
+          {data.perfect && <span className="reward-chip"><Gem size={16} /> +1</span>}
+        </div>
+        <button className="bigbtn" onClick={onNext}>Continue <ArrowRight size={22} /></button>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   Top bar / HUD
+   ============================================================ */
+function TopBar({ stats, level }) {
+  return (
+    <div className="topbar">
+      <div className="lvl-badge">{LEVELS[level].emoji}<span>L{level + 1}</span></div>
+      <div className="stat"><Sparkles size={16} /> {stats.xp}</div>
+      <div className="stat"><Coins size={16} /> {stats.coins}</div>
+      <div className="stat"><Gem size={16} /> {stats.diamonds}</div>
+      <div className="stat"><Flame size={16} /> {stats.streak}</div>
+    </div>
+  );
+}
+
+/* ============================================================
+   Screens: Home, Map, Rewards, Avatar, Parent
+   ============================================================ */
+
+function HomeScreen({ go, stats, level, name, setName, progressPct }) {
+  return (
+    <div className="screen home">
+      <div className="home-hero">
+        <div className="floaty"><Mascot mood="happy" size={130} /></div>
+        <h1 className="home-title">Bao's Mandarin Adventure</h1>
+        <p className="home-sub">Lesson 2 · Strokes, Numbers & Greetings</p>
+      </div>
+
+      <div className="name-row">
+        <label>I am</label>
+        <input
+          className="name-input"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="your name"
+          maxLength={14}
+        />
+      </div>
+
+      <div className="progress-card">
+        <div className="progress-top"><span>{LEVELS[level].name}</span><span>{progressPct}% done</span></div>
+        <div className="pbar"><span style={{ width: `${progressPct}%` }} /></div>
+      </div>
+
+      <button className="bigbtn play-btn" onClick={() => go("map")}>
+        <Play size={26} /> Play Lesson 2
+      </button>
+
+      <div className="home-grid">
+        <button className="home-tile" onClick={() => go("rewards")}><Award size={26} /> Rewards</button>
+        <button className="home-tile" onClick={() => go("avatar")}><User size={26} /> Avatar</button>
+        <button className="home-tile" onClick={() => go("board")}><Trophy size={26} /> Leaders</button>
+        <button className="home-tile" onClick={() => go("parent")}><Heart size={26} /> Parents</button>
+      </div>
+    </div>
+  );
+}
+
+function MapScreen({ go, openAct, completed, unlockedIdx }) {
+  return (
+    <div className="screen mapscreen">
+      <div className="map-head">
+        <button className="back" onClick={() => go("home")}><ChevronLeft size={22} /></button>
+        <h2>Lesson 2 Trail</h2>
+        <div style={{ width: 40 }} />
+      </div>
+      <div className="trail">
+        {ACTIVITIES.map((a, idx) => {
+          const isDone = completed.has(a.key);
+          const isLocked = idx > unlockedIdx;
+          const side = idx % 2 === 0 ? "left" : "right";
+          return (
+            <div key={a.key} className={`node-row ${side}`}>
+              <button
+                className={`node ${isDone ? "node-done" : ""} ${isLocked ? "node-locked" : "node-open"}`}
+                style={{ background: isLocked ? "#D9D4CC" : a.color }}
+                disabled={isLocked}
+                onClick={() => openAct(a.key)}
+              >
+                {isLocked ? <Lock size={22} /> : <span className="node-emoji">{a.emoji}</span>}
+                {isDone && <span className="node-check"><Check size={16} /></span>}
+              </button>
+              <div className={`node-label ${isLocked ? "dim" : ""}`}>
+                {idx + 1}. {a.title}{a.key === "boss" ? " 🐉" : ""}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function RewardsScreen({ go, earnedBadges, stats }) {
+  return (
+    <div className="screen">
+      <div className="map-head">
+        <button className="back" onClick={() => go("home")}><ChevronLeft size={22} /></button>
+        <h2>My Rewards</h2><div style={{ width: 40 }} />
+      </div>
+      <div className="reward-banner">
+        <span><Coins size={20} /> {stats.coins} coins</span>
+        <span><Gem size={20} /> {stats.diamonds} diamonds</span>
+      </div>
+      <h3 className="sec-h">Badges</h3>
+      <div className="badgegrid">
+        {BADGES.map((b) => {
+          const got = earnedBadges.has(b.key);
+          return (
+            <div key={b.key} className={`badge ${got ? "got" : "locked"}`}>
+              <div className="badge-emoji">{got ? b.emoji : "🔒"}</div>
+              <div className="badge-name">{b.name}</div>
+            </div>
+          );
+        })}
+      </div>
+      <h3 className="sec-h">Pets you can unlock</h3>
+      <div className="petgrid">
+        {[
+          { e: "🐼", n: "Panda", cost: 0, owned: true },
+          { e: "🐲", n: "Dragon", cost: 100 },
+          { e: "🏮", n: "Lantern", cost: 60 },
+          { e: "🐯", n: "Tiger", cost: 120 },
+        ].map((p) => {
+          const owned = p.owned || stats.coins >= p.cost;
+          return (
+            <div key={p.n} className={`pet ${owned ? "" : "pet-locked"}`}>
+              <div className="pet-e">{p.e}</div>
+              <div className="pet-n">{p.n}</div>
+              <div className="pet-c">{p.owned ? "Yours" : `${p.cost} 🪙`}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function AvatarScreen({ go, avatar, setAvatar }) {
+  const faces = ["🐼", "🐯", "🐲", "🦊", "🐰", "🐨", "🐹", "🦁"];
+  const hats = ["none", "👑", "🎓", "🧢", "🎀"];
+  return (
+    <div className="screen">
+      <div className="map-head">
+        <button className="back" onClick={() => go("home")}><ChevronLeft size={22} /></button>
+        <h2>My Avatar</h2><div style={{ width: 40 }} />
+      </div>
+      <div className="avatar-preview">
+        <div className="avatar-face">
+          {avatar.hat !== "none" && <span className="avatar-hat">{avatar.hat}</span>}
+          <span className="avatar-base">{avatar.face}</span>
+        </div>
+      </div>
+      <h3 className="sec-h">Pick a friend</h3>
+      <div className="pickgrid">
+        {faces.map((f) => (
+          <button key={f} className={`pick ${avatar.face === f ? "sel" : ""}`} onClick={() => setAvatar({ ...avatar, face: f })}>{f}</button>
+        ))}
+      </div>
+      <h3 className="sec-h">Pick a hat</h3>
+      <div className="pickgrid">
+        {hats.map((h) => (
+          <button key={h} className={`pick ${avatar.hat === h ? "sel" : ""}`} onClick={() => setAvatar({ ...avatar, hat: h })}>{h === "none" ? "🚫" : h}</button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function BoardScreen({ go, name, stats }) {
+  const others = [
+    { n: "Mei", xp: 820, e: "🦊" },
+    { n: "Leo", xp: 640, e: "🐯" },
+    { n: "Ada", xp: 510, e: "🐰" },
+    { n: "Sam", xp: 300, e: "🐨" },
+  ];
+  const me = { n: name || "You", xp: stats.xp, e: "🐼", me: true };
+  const board = [...others, me].sort((a, b) => b.xp - a.xp);
+  return (
+    <div className="screen">
+      <div className="map-head">
+        <button className="back" onClick={() => go("home")}><ChevronLeft size={22} /></button>
+        <h2>Leaderboard</h2><div style={{ width: 40 }} />
+      </div>
+      <div className="board">
+        {board.map((p, idx) => (
+          <div key={p.n + idx} className={`board-row ${p.me ? "me" : ""}`}>
+            <span className="board-rank">{idx + 1}</span>
+            <span className="board-e">{p.e}</span>
+            <span className="board-n">{p.n}</span>
+            <span className="board-xp"><Sparkles size={14} /> {p.xp}</span>
+          </div>
+        ))}
+      </div>
+      <p className="act-meta center">Earn XP to climb the ranks!</p>
+    </div>
+  );
+}
+
+function ParentScreen({ go, stats, completed, name }) {
+  const done = completed.size;
+  const total = ACTIVITIES.length;
+  const accuracy = Math.min(100, 60 + done * 3);
+  return (
+    <div className="screen">
+      <div className="map-head">
+        <button className="back" onClick={() => go("home")}><ChevronLeft size={22} /></button>
+        <h2>Parent Dashboard</h2><div style={{ width: 40 }} />
+      </div>
+      <div className="pgrid">
+        <div className="pstat"><div className="pstat-n">{done}/{total}</div><div className="pstat-l">Activities done</div></div>
+        <div className="pstat"><div className="pstat-n">{stats.xp}</div><div className="pstat-l">Total XP</div></div>
+        <div className="pstat"><div className="pstat-n">{accuracy}%</div><div className="pstat-l">Est. accuracy</div></div>
+        <div className="pstat"><div className="pstat-n">{stats.streak}</div><div className="pstat-l">Day streak</div></div>
+      </div>
+      <h3 className="sec-h">What {name || "your child"} is learning</h3>
+      <ul className="plist">
+        <li>✏️ The 8 basic strokes and their names</li>
+        <li>🔢 Numbers 一 to 十 (1–10)</li>
+        <li>📜 The 5 stroke-order rules</li>
+        <li>👋 Greetings: 你好, 您好, 再见</li>
+        <li>💬 Saying their own name in a dialogue</li>
+      </ul>
+      <div className="pnote">
+        <b>Note:</b> A printable PDF report and saved progress need the full
+        version with a sign-in. This demo keeps progress for the current session.
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   Root App
+   ============================================================ */
+function App() {
+  const [view, setView] = useState("home");
+  const [activeAct, setActiveAct] = useState(null);
+  const [result, setResult] = useState(null);
+  const [name, setName] = useState("");
+  const [avatar, setAvatar] = useState({ face: "🐼", hat: "none" });
+
+  const [stats, setStats] = useState({ xp: 0, coins: 0, diamonds: 0, streak: 1, stars: 0 });
+  const [completed, setCompleted] = useState(() => new Set());
+  const [earnedBadges, setEarnedBadges] = useState(() => new Set());
+
+  // warm up speech voices
+  useEffect(() => {
+    try {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    } catch (e) {}
+  }, []);
+
+  const level = LEVELS.reduce((acc, l, idx) => (stats.xp >= l.xp ? idx : acc), 0);
+  const unlockedIdx = (() => {
+    let idx = 0;
+    for (let k = 0; k < ACTIVITIES.length; k++) {
+      if (completed.has(ACTIVITIES[k].key)) idx = k + 1;
+    }
+    return Math.min(idx, ACTIVITIES.length - 1);
+  })();
+  const progressPct = Math.round((completed.size / ACTIVITIES.length) * 100);
+
+  const go = (v) => { window.speechSynthesis && window.speechSynthesis.cancel(); setView(v); };
+
+  const openAct = (key) => { setActiveAct(key); setView("activity"); };
+
+  const finishAct = (key, data) => {
+    const xp = 40 + data.stars * 20 + (data.perfect ? 30 : 0) + (key === "boss" ? 100 : 0);
+    const coins = 10 + data.stars * 5;
+    const diamonds = data.perfect ? 1 : 0;
+    setStats((s) => ({
+      ...s,
+      xp: s.xp + xp,
+      coins: s.coins + coins,
+      diamonds: s.diamonds + diamonds,
+      stars: s.stars + data.stars,
+    }));
+    setCompleted((c) => new Set(c).add(key));
+    setEarnedBadges((b) => {
+      const nb = new Set(b);
+      if (BADGES.some((x) => x.key === key)) nb.add(key);
+      return nb;
+    });
+    setResult({ ...data, xp, coins, key });
+  };
+
+  const closeResult = () => {
+    const key = result.key;
+    setResult(null);
+    setActiveAct(null);
+    setView("map");
+  };
+
+  const renderActivity = () => {
+    const onDone = (data) => finishAct(activeAct, data);
+    switch (activeAct) {
+      case "strokes": return <StrokesActivity onDone={onDone} />;
+      case "strokeId": return <StrokeIdActivity onDone={onDone} />;
+      case "pron": return <PronActivity onDone={onDone} />;
+      case "numbers": return <NumbersActivity onDone={onDone} />;
+      case "rules": return <RulesActivity onDone={onDone} />;
+      case "order": return <OrderActivity onDone={onDone} />;
+      case "hands": return <HandsActivity onDone={onDone} />;
+      case "greet": return <GreetActivity onDone={onDone} />;
+      case "count": return <CountActivity onDone={onDone} />;
+      case "dialogue": return <DialogueActivity onDone={onDone} />;
+      case "mini": return <MiniActivity onDone={onDone} />;
+      case "quiz": return <QuizActivity onDone={onDone} />;
+      case "boss": return <BossActivity onDone={onDone} playerName={name} />;
+      default: return null;
+    }
+  };
+
+  const actMeta = ACTIVITIES.find((a) => a.key === activeAct);
+
+  return (
+    <div className="app">
+      <style>{CSS}</style>
+
+      {view !== "home" && <TopBar stats={stats} level={level} />}
+
+      {view === "home" && (
+        <HomeScreen go={go} stats={stats} level={level} name={name} setName={setName} progressPct={progressPct} />
+      )}
+      {view === "map" && (
+        <MapScreen go={go} openAct={openAct} completed={completed} unlockedIdx={unlockedIdx} />
+      )}
+      {view === "rewards" && <RewardsScreen go={go} earnedBadges={earnedBadges} stats={stats} />}
+      {view === "avatar" && <AvatarScreen go={go} avatar={avatar} setAvatar={setAvatar} />}
+      {view === "board" && <BoardScreen go={go} name={name} stats={stats} />}
+      {view === "parent" && <ParentScreen go={go} stats={stats} completed={completed} name={name} />}
+
+      {view === "activity" && (
+        <div className="screen actscreen">
+          <div className="act-head" style={{ background: actMeta?.color }}>
+            <button className="back light" onClick={() => go("map")}><ChevronLeft size={22} /></button>
+            <h2>{actMeta?.emoji} {actMeta?.title}</h2>
+            <div style={{ width: 40 }} />
+          </div>
+          {renderActivity()}
+        </div>
+      )}
+
+      {result && <ResultOverlay data={result} onNext={closeResult} />}
+    </div>
+  );
+}
+
+/* ============================================================
+   Styles (injected once)
+   ============================================================ */
+const CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+SC:wght@500;700;900&display=swap');
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+.app {
+  font-family: 'Baloo 2', 'Trebuchet MS', system-ui, sans-serif;
+  color: #2D2A32;
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  background:
+    radial-gradient(120% 90% at 50% -10%, #FFE9C9 0%, #FFD9E0 45%, #D9F2FF 100%);
+  overflow-x: hidden;
+}
+.app :lang(zh), .app .flash-glyph, .app .bigglyph, .app .hzcard-glyph,
+.app .rule-glyph, .app .trace-guide, .app .mem-hz, .app .numbtn-hz,
+.app .choice-hz, .app .bubble-hz, .app .quiz-hz, .app .cert-lesson {
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+}
+
+/* Top bar */
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(8px);
+  border-bottom: 3px solid #FFE0B2;
+}
+.lvl-badge { display:flex; align-items:center; gap:3px; font-size:20px; font-weight:800;
+  background:#FFC93C; color:#7a4d00; padding:3px 10px; border-radius:20px; }
+.lvl-badge span { font-size:13px; }
+.stat { display:flex; align-items:center; gap:4px; font-weight:700; font-size:14px;
+  background:#fff; padding:5px 9px; border-radius:16px; box-shadow:0 2px 0 #e7ddcf; }
+.stat svg { color:#FF7A45; }
+
+/* Screens */
+.screen { padding: 16px; padding-bottom: 40px; animation: fade .3s ease; }
+@keyframes fade { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+
+/* HOME */
+.home { text-align:center; padding-top: 26px; }
+.home-hero { margin-bottom: 8px; }
+.home-title { font-size: 30px; font-weight: 800; margin: 6px 0 2px; color:#E8455E;
+  text-shadow: 0 2px 0 #fff, 0 4px 0 rgba(0,0,0,.06); line-height:1.05; }
+.home-sub { color:#6b6470; font-weight:600; margin:0 0 14px; }
+.floaty { display:inline-block; animation: float 3s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-12px);} }
+
+.name-row { display:flex; align-items:center; justify-content:center; gap:8px; margin:10px 0; }
+.name-row label { font-weight:700; color:#6b6470; }
+.name-input { font-family:inherit; font-size:18px; font-weight:700; padding:8px 14px;
+  border:3px solid #FFC93C; border-radius:18px; outline:none; width:160px; text-align:center; background:#fff; }
+
+.progress-card { background:#fff; border-radius:20px; padding:12px 16px; margin:12px 4px;
+  box-shadow:0 4px 0 #ecdfce; }
+.progress-top { display:flex; justify-content:space-between; font-weight:700; font-size:14px; margin-bottom:8px; }
+.pbar { height:14px; background:#F0E7DA; border-radius:10px; overflow:hidden; }
+.pbar span { display:block; height:100%; background:linear-gradient(90deg,#2EC4B6,#56CCF2); transition:width .4s; }
+
+.home-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+.home-tile { font-family:inherit; font-size:17px; font-weight:700; padding:18px 10px;
+  border:none; border-radius:22px; background:#fff; box-shadow:0 5px 0 #e7ddcf; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:6px; color:#544f5b; transition:transform .1s; }
+.home-tile:active { transform:translateY(3px); box-shadow:0 2px 0 #e7ddcf; }
+.home-tile svg { color:#FF7A45; }
+
+/* Big buttons */
+.bigbtn { font-family:inherit; font-size:20px; font-weight:800; color:#fff;
+  background:linear-gradient(180deg,#FF7A8A,#FF5A6E); border:none; border-radius:24px;
+  padding:15px 22px; cursor:pointer; box-shadow:0 6px 0 #d83b54; display:inline-flex;
+  align-items:center; justify-content:center; gap:8px; transition:transform .08s; width:100%; }
+.bigbtn:active { transform:translateY(4px); box-shadow:0 2px 0 #d83b54; }
+.bigbtn:disabled { background:#cfc8c0; box-shadow:0 6px 0 #b3aca3; cursor:default; }
+.bigbtn.ghost { background:#fff; color:#544f5b; box-shadow:0 5px 0 #e2d8ca; }
+.bigbtn.ghost:active { box-shadow:0 2px 0 #e2d8ca; }
+.play-btn { background:linear-gradient(180deg,#FFD24A,#FFB000); box-shadow:0 6px 0 #d68f00; color:#5e3d00; margin-top:6px; }
+.play-btn:active { box-shadow:0 2px 0 #d68f00; }
+.row { display:flex; gap:10px; }
+.row .bigbtn { width:auto; flex:1; font-size:16px; padding:13px 12px; }
+
+/* Map */
+.map-head, .act-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.map-head h2 { margin:0; font-size:22px; color:#E8455E; }
+.act-head { color:#fff; padding:12px 12px; border-radius:20px; box-shadow:0 4px 0 rgba(0,0,0,.12); }
+.act-head h2 { margin:0; font-size:20px; color:#fff; text-shadow:0 1px 2px rgba(0,0,0,.18); }
+.back { width:40px; height:40px; border:none; border-radius:14px; background:#fff; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; box-shadow:0 3px 0 #e2d8ca; color:#544f5b; }
+.back.light { background:rgba(255,255,255,.25); color:#fff; box-shadow:none; }
+.back:active { transform:translateY(2px); }
+
+.trail { display:flex; flex-direction:column; gap:18px; padding:6px 8px 30px; }
+.node-row { display:flex; align-items:center; gap:14px; }
+.node-row.right { flex-direction:row-reverse; text-align:right; }
+.node { width:78px; height:78px; border:none; border-radius:50%; cursor:pointer; position:relative;
+  box-shadow:0 6px 0 rgba(0,0,0,.16); display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  transition:transform .1s; }
+.node-open { animation: bob 2.4s ease-in-out infinite; }
+@keyframes bob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
+.node:active.node-open { transform:translateY(3px); box-shadow:0 3px 0 rgba(0,0,0,.16); }
+.node-emoji { font-size:34px; }
+.node-locked { color:#9a948b; cursor:default; box-shadow:0 6px 0 #c4bdb3; }
+.node-check { position:absolute; bottom:-4px; right:-4px; background:#2EC4B6; color:#fff;
+  border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center;
+  border:3px solid #fff; }
+.node-label { font-weight:700; font-size:16px; color:#4b4651; }
+.node-label.dim { color:#a59f96; }
+
+/* Activity screen */
+.actscreen { padding-top: 10px; }
+.act { display:flex; flex-direction:column; align-items:center; gap:14px; padding-top:6px; }
+.act-instr { font-weight:700; font-size:16px; color:#5b5563; text-align:center; margin:4px 0 0; }
+.act-meta { font-weight:600; color:#8a8492; font-size:14px; }
+.act-meta.center { text-align:center; }
+
+/* Flash card */
+.flash { background:#fff; border-radius:28px; padding:20px 28px; box-shadow:0 8px 0 #ecdfce;
+  display:flex; flex-direction:column; align-items:center; gap:6px; min-width:230px; }
+.flash-glyph { font-size:120px; line-height:1; cursor:pointer; color:#2D2A32; }
+.flash-py { font-size:30px; font-weight:800; color:#FF5A6E; }
+.flash-en { font-size:18px; color:#8a8492; font-weight:600; }
+
+.bigglyph { font-size:130px; line-height:1; background:#fff; border-radius:28px; padding:8px 34px;
+  box-shadow:0 8px 0 #ecdfce; cursor:pointer; }
+.bigglyph.flashable.ok { box-shadow:0 0 0 6px #2EC4B6, 0 8px 0 #ecdfce; }
+.bigglyph.flashable.bad { box-shadow:0 0 0 6px #FF5A6E, 0 8px 0 #ecdfce; }
+
+.dots { display:flex; gap:7px; }
+.dot { width:11px; height:11px; border-radius:50%; background:#E4DACB; }
+.dot-on { background:#FFC93C; }
+.dot-cur { transform:scale(1.4); background:#FF7A45; }
+
+.speakbtn { border:none; background:#56CCF2; color:#fff; border-radius:50%; width:42px; height:42px;
+  cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 0 #2f9fc4; }
+.speakbtn-big { width:56px; height:56px; }
+.speakbtn:active { transform:translateY(3px); box-shadow:0 1px 0 #2f9fc4; }
+
+/* Choices */
+.choices { display:flex; flex-direction:column; gap:12px; width:100%; }
+.choice { font-family:inherit; border:none; background:#fff; border-radius:20px; padding:16px 18px;
+  cursor:pointer; box-shadow:0 5px 0 #e7ddcf; display:flex; align-items:center; gap:8px;
+  position:relative; transition:transform .08s; text-align:left; }
+.choice.center { justify-content:center; }
+.choice:active { transform:translateY(3px); box-shadow:0 2px 0 #e7ddcf; }
+.choice-py { font-size:20px; font-weight:800; color:#FF5A6E; }
+.choice-en { font-size:16px; color:#8a8492; font-weight:600; margin-left:auto; }
+.choice-hz { font-size:30px; font-weight:800; }
+.choice-big { font-size:30px; font-weight:800; color:#3a3640; }
+.choice.center .choice-py { margin:0 auto; }
+.choice .choice-ic { margin-left:auto; }
+.choice.ok { background:#D9F7E8; box-shadow:0 5px 0 #9fe0c4; color:#10805a; }
+.choice.ok .choice-ic { color:#10a06f; }
+.choice.bad { background:#FFE0E3; box-shadow:0 5px 0 #f3b6bc; }
+.choice.bad .choice-ic { color:#E8455E; }
+
+/* Pronunciation */
+.wave { display:flex; gap:4px; height:26px; align-items:flex-end; opacity:.3; }
+.wave span { width:5px; height:8px; background:#56CCF2; border-radius:3px; }
+.wave-on { opacity:1; }
+.wave-on span { animation: wv .6s ease-in-out infinite; }
+@keyframes wv { 0%,100%{height:8px;} 50%{height:24px;} }
+.rate { display:flex; flex-direction:column; gap:12px; width:100%; align-items:center; }
+.rate-result { font-size:18px; font-weight:800; color:#10805a; text-align:center; }
+.rate-result.soft { color:#7a6cb8; }
+.rate-result span { display:block; font-size:14px; font-weight:600; color:#8a8492; }
+
+/* Memory grid */
+.memgrid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; width:100%; }
+.memcard { aspect-ratio:3/4; border:none; border-radius:14px; cursor:pointer; padding:0;
+  background:transparent; perspective:600px; }
+.memcard-inner { width:100%; height:100%; border-radius:14px; display:flex; align-items:center;
+  justify-content:center; background:#9B5DE5; box-shadow:0 4px 0 #6f3eb0; transition:transform .2s; }
+.memcard.up .memcard-inner { background:#fff; box-shadow:0 4px 0 #e7ddcf; }
+.memcard.done .memcard-inner { background:#D9F7E8; box-shadow:0 4px 0 #9fe0c4; }
+.mem-back { font-size:26px; }
+.mem-hz { font-size:30px; font-weight:800; }
+.mem-py { font-size:16px; font-weight:800; color:#FF5A6E; }
+
+/* Rules */
+.rulecard { background:#fff; border-radius:26px; padding:18px 22px; box-shadow:0 8px 0 #ecdfce;
+  display:flex; flex-direction:column; align-items:center; gap:6px; width:100%; }
+.rule-num { background:#9B5DE5; color:#fff; font-weight:800; padding:3px 14px; border-radius:14px; font-size:14px; }
+.rule-title { font-size:21px; font-weight:800; text-align:center; color:#3a3640; }
+.rule-glyph { font-size:104px; line-height:1; cursor:pointer; }
+.rule-hint { display:flex; gap:6px; align-items:center; font-size:15px; color:#7a6cb8; font-weight:600;
+  background:#F3ECFF; padding:8px 12px; border-radius:14px; text-align:center; }
+
+/* Trace */
+.tracebox { position:relative; width:320px; height:320px; background:#fff; border-radius:26px;
+  box-shadow:0 8px 0 #ecdfce; overflow:hidden; }
+.tracebox.trace-done { box-shadow:0 0 0 6px #2EC4B6, 0 8px 0 #ecdfce; }
+.trace-guide { position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-size:240px; color:#EFEAE2; line-height:1; user-select:none; pointer-events:none; }
+.tracecanvas { position:relative; width:100%; height:100%; touch-action:none; cursor:crosshair; }
+.trace-tick { position:absolute; top:10px; right:10px; color:#2EC4B6; background:#fff; border-radius:50%;
+  width:60px; height:60px; display:flex; align-items:center; justify-content:center; box-shadow:0 3px 8px rgba(0,0,0,.12);
+  animation: pop .3s ease; }
+.tracebar { width:320px; height:12px; background:#F0E7DA; border-radius:8px; overflow:hidden; }
+.tracebar span { display:block; height:100%; background:linear-gradient(90deg,#FFC93C,#FF7A45); transition:width .1s; }
+.trace-meta .trace-py { font-weight:700; color:#7a6cb8; }
+.row .bigbtn[disabled] { width:auto; }
+
+/* Hands / numbers */
+.dotsbox { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; max-width:260px;
+  background:#fff; padding:18px; border-radius:24px; box-shadow:0 8px 0 #ecdfce; min-height:90px; align-items:center; }
+.bigdot { width:30px; height:30px; border-radius:50%; background:#FF7A45; box-shadow:0 3px 0 #d8550e; animation: pop .3s ease; }
+.numgrid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; width:100%; }
+.numbtn { font-family:inherit; border:none; background:#fff; border-radius:16px; padding:10px 4px; cursor:pointer;
+  box-shadow:0 4px 0 #e7ddcf; display:flex; flex-direction:column; align-items:center; gap:2px; }
+.numbtn:active { transform:translateY(2px); box-shadow:0 2px 0 #e7ddcf; }
+.numbtn-hz { font-size:26px; font-weight:800; }
+.numbtn-py { font-size:12px; color:#8a8492; font-weight:700; }
+.numbtn.ok { background:#D9F7E8; box-shadow:0 4px 0 #9fe0c4; }
+.numbtn.bad { background:#FFE0E3; box-shadow:0 4px 0 #f3b6bc; }
+
+.numrow { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+.countbtn, .speedbtn { font-family:inherit; border:none; background:#fff; border-radius:18px;
+  font-size:26px; font-weight:800; width:66px; height:66px; cursor:pointer; box-shadow:0 5px 0 #e7ddcf; color:#3a3640; }
+.countbtn:active, .speedbtn:active { transform:translateY(3px); box-shadow:0 2px 0 #e7ddcf; }
+.countbtn.ok { background:#D9F7E8; box-shadow:0 5px 0 #9fe0c4; }
+.countbtn.bad { background:#FFE0E3; box-shadow:0 5px 0 #f3b6bc; }
+.speedbtn { font-size:20px; min-width:90px; width:auto; padding:0 14px; }
+
+/* Scenes / greetings */
+.scene { background:#fff; border-radius:26px; padding:18px; box-shadow:0 8px 0 #ecdfce; text-align:center; width:100%; }
+.scene-img { font-size:60px; }
+.scene-text { font-weight:700; font-size:17px; color:#4b4651; margin-top:6px; }
+
+/* Dialogue */
+.npc { display:flex; align-items:flex-start; gap:10px; width:100%; }
+.npc-face { font-size:54px; flex-shrink:0; animation: bob 2.6s ease-in-out infinite; }
+.bubble { background:#fff; border-radius:8px 22px 22px 22px; padding:12px 16px; box-shadow:0 5px 0 #ecdfce; }
+.bubble-joy { background:#FFF6D6; box-shadow:0 5px 0 #f0e2a6; }
+.bubble-hz { font-size:24px; font-weight:800; border:none; background:none; cursor:pointer; padding:0; text-align:left; }
+.bubble-py { font-size:15px; color:#FF5A6E; font-weight:700; }
+.bubble-en { font-size:14px; color:#8a8492; font-weight:600; }
+.dialog-end { width:100%; display:flex; flex-direction:column; gap:12px; align-items:center; }
+.your-line { font-weight:700; color:#4b4651; }
+.your-line b { color:#FF5A6E; }
+
+/* Speed game */
+.speed-top { display:flex; justify-content:space-between; width:100%; align-items:center; }
+.speed-timer { background:#FF5A6E; color:#fff; font-weight:800; padding:6px 14px; border-radius:16px; }
+.speed-score { background:#FFC93C; color:#7a4d00; font-weight:800; padding:6px 14px; border-radius:16px; }
+
+/* Quiz */
+.quizq { background:#fff; border-radius:24px; padding:16px 18px; box-shadow:0 8px 0 #ecdfce;
+  text-align:center; width:100%; }
+.quiz-hz { font-size:90px; line-height:1; cursor:pointer; }
+.quiz-text { font-size:18px; font-weight:700; color:#4b4651; margin-top:6px; }
+
+/* Boss + cert */
+.boss-intro { text-align:center; gap:10px; padding-top:24px; }
+.boss-dragon { font-size:110px; animation: float 2.4s ease-in-out infinite; }
+.boss-title { font-size:28px; color:#E8455E; margin:0; }
+.boss-sub { color:#6b6470; font-weight:600; max-width:300px; }
+.boss-btn { background:linear-gradient(180deg,#FFB347,#FF7A45); box-shadow:0 6px 0 #d8550e; color:#fff; }
+.boss-btn:active { box-shadow:0 2px 0 #d8550e; }
+.boss-banner { background:#FF5A6E; color:#fff; font-weight:800; padding:8px 16px; border-radius:18px;
+  display:flex; gap:8px; align-items:center; }
+.boss-banner span { font-size:22px; }
+.cert { background:linear-gradient(180deg,#FFFDF5,#FFF3D6); border:4px solid #FFC93C; border-radius:24px;
+  padding:22px 20px; text-align:center; width:100%; box-shadow:0 8px 0 #ecdfce; }
+.cert-seal { font-size:60px; }
+.cert-top { font-size:14px; letter-spacing:2px; text-transform:uppercase; color:#b58a00; font-weight:800; }
+.cert-name { font-size:30px; font-weight:800; color:#E8455E; margin:6px 0; }
+.cert-line { color:#8a8492; font-weight:600; }
+.cert-lesson { font-weight:700; color:#4b4651; margin:2px 0 6px; }
+.cert-score { font-size:46px; font-weight:800; color:#2EC4B6; }
+.cert-stars { font-size:28px; }
+.cert-foot { margin-top:6px; font-weight:700; color:#b58a00; }
+
+/* Result overlay */
+.overlay { position:fixed; inset:0; z-index:60; display:flex; align-items:center; justify-content:center;
+  background:rgba(45,42,50,.45); padding:20px; }
+.result-card { background:#fff; border-radius:30px; padding:26px 24px; text-align:center; width:100%;
+  max-width:360px; box-shadow:0 14px 40px rgba(0,0,0,.25); display:flex; flex-direction:column;
+  align-items:center; gap:12px; }
+.pop-in { animation: pop .4s cubic-bezier(.2,1.4,.5,1); }
+@keyframes pop { from{transform:scale(.6); opacity:0;} to{transform:scale(1); opacity:1;} }
+.result-title { font-size:30px; color:#E8455E; margin:0; }
+.result-stars { display:flex; gap:6px; }
+.star-on { animation: pop .4s ease; }
+.star-off { color:#E4DACB; }
+.reward-row { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+.reward-chip { display:flex; align-items:center; gap:5px; background:#FFF3D6; color:#a37200; font-weight:800;
+  padding:7px 13px; border-radius:16px; font-size:15px; }
+
+/* Mascot */
+.mascot { position:relative; display:flex; align-items:center; justify-content:center; }
+.mascot-spark { position:absolute; top:-4px; right:-4px; font-size:26px; animation: pop .5s ease; }
+
+/* Rewards screen */
+.reward-banner { display:flex; justify-content:center; gap:18px; margin:6px 0 14px; }
+.reward-banner span { display:flex; align-items:center; gap:6px; font-weight:800; background:#fff;
+  padding:8px 16px; border-radius:18px; box-shadow:0 4px 0 #ecdfce; }
+.sec-h { font-size:18px; color:#5b5563; margin:16px 4px 8px; }
+.badgegrid, .petgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.badge, .pet { background:#fff; border-radius:18px; padding:12px 6px; text-align:center; box-shadow:0 4px 0 #ecdfce; }
+.badge.locked { opacity:.55; }
+.badge-emoji { font-size:34px; }
+.badge-name { font-size:12px; font-weight:700; color:#5b5563; margin-top:4px; }
+.pet-e { font-size:36px; }
+.pet-n { font-weight:800; }
+.pet-c { font-size:12px; color:#8a8492; font-weight:700; }
+.pet-locked { opacity:.6; }
+
+/* Avatar */
+.avatar-preview { display:flex; justify-content:center; margin:8px 0; }
+.avatar-face { position:relative; width:140px; height:140px; background:#fff; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; box-shadow:0 8px 0 #ecdfce; }
+.avatar-base { font-size:90px; }
+.avatar-hat { position:absolute; top:-6px; font-size:48px; }
+.pickgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.pick { font-size:38px; border:none; background:#fff; border-radius:18px; padding:8px 0; cursor:pointer;
+  box-shadow:0 4px 0 #ecdfce; }
+.pick.sel { background:#FFF3D6; box-shadow:0 4px 0 #f0d98a; outline:3px solid #FFC93C; }
+
+/* Leaderboard */
+.board { display:flex; flex-direction:column; gap:8px; }
+.board-row { display:flex; align-items:center; gap:12px; background:#fff; border-radius:16px; padding:12px 14px;
+  box-shadow:0 4px 0 #ecdfce; font-weight:700; }
+.board-row.me { background:#FFF3D6; box-shadow:0 4px 0 #f0d98a; }
+.board-rank { font-size:18px; font-weight:800; color:#FF7A45; width:22px; }
+.board-e { font-size:28px; }
+.board-n { flex:1; }
+.board-xp { display:flex; align-items:center; gap:4px; color:#9B5DE5; }
+
+/* Parent */
+.pgrid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.pstat { background:#fff; border-radius:18px; padding:16px; text-align:center; box-shadow:0 4px 0 #ecdfce; }
+.pstat-n { font-size:30px; font-weight:800; color:#2EC4B6; }
+.pstat-l { font-size:13px; color:#8a8492; font-weight:700; }
+.plist { list-style:none; padding:0; margin:4px; display:flex; flex-direction:column; gap:8px; }
+.plist li { background:#fff; border-radius:14px; padding:11px 14px; font-weight:600; box-shadow:0 3px 0 #ecdfce; }
+.pnote { background:#FFF3D6; border-radius:16px; padding:14px; margin-top:12px; font-size:14px; color:#6b5b2a; }
+
+/* Confetti */
+.confetti-wrap { position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:55; }
+.confetti-piece { position:absolute; top:-12px; width:11px; height:14px; border-radius:2px;
+  animation: confetti-fall linear forwards; }
+@keyframes confetti-fall { to { transform:translateY(110vh) rotate(540deg); opacity:.9; } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration:.001s !important; animation-iteration-count:1 !important; }
+}
+`;
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(App));
+</script>
+</body>
+</html>
