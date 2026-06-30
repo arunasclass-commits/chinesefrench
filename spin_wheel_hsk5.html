@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎡 HSK5 Spin the Wheel</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0F172A 0%,#1E1B4B 50%,#0F172A 100%);min-height:100vh;color:#fff;overflow-x:hidden}
+
+/* STARS BACKGROUND */
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d) infinite alternate}
+@keyframes twinkle{from{opacity:.2;transform:scale(1)}to{opacity:1;transform:scale(1.4)}}
+
+/* HEADER */
+.hdr{position:relative;z-index:10;text-align:center;padding:20px 16px 10px}
+.hdr h1{font-size:1.8rem;font-weight:900;background:linear-gradient(135deg,#F59E0B,#EF4444,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hdr p{font-size:.82rem;color:rgba(255,255,255,.6);font-weight:600;margin-top:3px}
+
+/* SCORE BAR */
+.scorebar{position:relative;z-index:10;display:flex;align-items:center;justify-content:center;gap:20px;padding:10px 20px;background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.1);flex-wrap:wrap}
+.schip{background:linear-gradient(135deg,#F59E0B,#F97316);color:#fff;font-weight:900;font-size:.9rem;padding:6px 18px;border-radius:999px;box-shadow:0 2px 10px rgba(245,158,11,.4)}
+.streak-chip{background:linear-gradient(135deg,#EF4444,#DC2626);color:#fff;font-weight:900;font-size:.9rem;padding:6px 18px;border-radius:999px}
+.level-chip{background:linear-gradient(135deg,#8B5CF6,#6D28D9);color:#fff;font-weight:800;font-size:.82rem;padding:6px 18px;border-radius:999px}
+
+/* MAIN LAYOUT */
+.main{position:relative;z-index:10;max-width:900px;margin:0 auto;padding:16px 14px 40px;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+
+/* WHEEL SECTION */
+.wheel-sec{display:flex;flex-direction:column;align-items:center;gap:14px}
+.wheel-wrap{position:relative;width:300px;height:300px}
+.wheel-pointer{position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-top:28px solid #F59E0B;z-index:20;filter:drop-shadow(0 2px 6px rgba(245,158,11,.6))}
+canvas#wheel{border-radius:50%;box-shadow:0 0 40px rgba(139,92,246,.5),0 0 80px rgba(139,92,246,.2);display:block}
+.spin-btn{padding:14px 36px;background:linear-gradient(135deg,#F59E0B,#EF4444);color:#fff;border:none;border-radius:999px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;cursor:pointer;box-shadow:0 4px 20px rgba(239,68,68,.4);transition:all .2s;letter-spacing:.02em}
+.spin-btn:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(239,68,68,.5)}
+.spin-btn:disabled{opacity:.5;cursor:default;transform:none}
+.wheel-hint{font-size:.75rem;color:rgba(255,255,255,.4);font-weight:600}
+
+/* QUESTION SECTION */
+.q-sec{display:flex;flex-direction:column;gap:12px}
+.q-card{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);border-radius:20px;padding:22px;min-height:320px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;transition:all .3s}
+.q-card.has-q{background:rgba(255,255,255,.08);border-color:rgba(139,92,246,.4)}
+.q-idle{font-size:3rem;margin-bottom:12px}
+.q-idle-txt{font-size:.88rem;color:rgba(255,255,255,.5);font-weight:600}
+.q-type-badge{font-size:.65rem;font-weight:800;padding:3px 12px;border-radius:999px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
+.q-zh{font-family:'Noto Sans SC',sans-serif;font-size:2.8rem;font-weight:700;line-height:1;margin-bottom:8px;text-shadow:0 0 20px rgba(139,92,246,.6)}
+.q-pin{font-size:.9rem;color:rgba(255,255,255,.55);font-weight:700;margin-bottom:16px}
+.q-prompt{font-size:.88rem;color:rgba(255,255,255,.7);font-weight:700;margin-bottom:14px}
+.opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.opt-btn{padding:10px 8px;border:2px solid rgba(255,255,255,.15);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:all .18s;text-align:center}
+.opt-btn:hover{border-color:rgba(139,92,246,.6);background:rgba(139,92,246,.15)}
+.opt-btn.correct{border-color:#3BBD6E!important;background:rgba(59,189,110,.2)!important;color:#6EE7B7!important}
+.opt-btn.wrong{border-color:#EF4444!important;background:rgba(239,68,68,.15)!important;color:#FCA5A5!important;animation:shk .3s}
+.opt-btn.reveal{border-color:#3BBD6E!important;background:rgba(59,189,110,.1)!important}
+.opt-btn:disabled{cursor:default}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* FEEDBACK OVERLAY */
+.fb-overlay{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;pointer-events:none}
+.fb-overlay.show{display:flex}
+.fb-box{background:rgba(0,0,0,.85);border-radius:24px;padding:30px 40px;text-align:center;border:2px solid;animation:popIn .4s ease;pointer-events:none}
+.fb-box.yay{border-color:#3BBD6E;box-shadow:0 0 40px rgba(59,189,110,.4)}
+.fb-box.nope{border-color:#EF4444;box-shadow:0 0 40px rgba(239,68,68,.3)}
+.fb-emoji{font-size:3.5rem;margin-bottom:8px}
+.fb-msg{font-size:1.2rem;font-weight:900}
+.fb-sub{font-size:.82rem;color:rgba(255,255,255,.7);font-weight:600;margin-top:4px}
+@keyframes popIn{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+
+/* CONFETTI */
+.confetti-piece{position:fixed;width:10px;height:10px;top:-20px;animation:confettiFall var(--dur) var(--del) ease-in forwards;border-radius:var(--br);z-index:300}
+@keyframes confettiFall{0%{transform:translateX(0) rotate(0deg);opacity:1}100%{transform:translateX(var(--dx)) translateY(110vh) rotate(720deg);opacity:0}}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat-card{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:13px;padding:12px;text-align:center}
+.stat-n{font-size:1.6rem;font-weight:900}
+.stat-l{font-size:.62rem;color:rgba(255,255,255,.5);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+
+/* HISTORY */
+.history{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;max-height:200px;overflow-y:auto}
+.history h3{font-size:.75rem;font-weight:800;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.hist-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.78rem;font-weight:700}
+.hist-item:last-child{border-bottom:none}
+.hist-zh{font-family:'Noto Sans SC',sans-serif;font-size:1rem;color:#A78BFA}
+.hist-ok{color:#6EE7B7}
+.hist-no{color:#FCA5A5}
+
+/* AUDIO */
+.audio-btn{display:inline-flex;align-items:center;gap:4px;background:rgba(139,92,246,.3);color:#C4B5FD;border:1.5px solid rgba(139,92,246,.4);border-radius:999px;padding:4px 12px;font-size:.72rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;margin-top:6px;transition:all .15s}
+.audio-btn:hover{background:rgba(139,92,246,.5)}
+
+/* COMBO */
+.combo-banner{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:400;display:none;background:linear-gradient(135deg,#F59E0B,#EF4444);color:#fff;font-weight:900;font-size:1.1rem;padding:10px 30px;border-radius:999px;box-shadow:0 4px 20px rgba(245,158,11,.5);animation:comboPop .5s ease}
+@keyframes comboPop{0%{transform:translateX(-50%) scale(.5);opacity:0}70%{transform:translateX(-50%) scale(1.1)}100%{transform:translateX(-50%) scale(1);opacity:1}}
+
+@media(max-width:640px){
+  .main{grid-template-columns:1fr}
+  .wheel-wrap{width:240px;height:240px}
+  .q-zh{font-size:2.2rem}
+  .scorebar{gap:10px}
+}
+</style>
+</head>
+<body>
+
+<!-- STARS -->
+<div class="stars" id="stars"></div>
+
+<!-- FEEDBACK OVERLAY -->
+<div class="fb-overlay" id="fbOverlay">
+  <div class="fb-box" id="fbBox">
+    <div class="fb-emoji" id="fbEmoji"></div>
+    <div class="fb-msg" id="fbMsg"></div>
+    <div class="fb-sub" id="fbSub"></div>
+  </div>
+</div>
+
+<!-- COMBO BANNER -->
+<div class="combo-banner" id="comboBanner"></div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <h1>🎡 HSK5 Spin the Wheel</h1>
+  <p>Spin to get a vocabulary challenge — answer to earn points!</p>
+</div>
+
+<!-- SCORE BAR -->
+<div class="scorebar">
+  <div class="schip">⭐ Score: <span id="scoreDisplay">0</span></div>
+  <div class="streak-chip">🔥 Streak: <span id="streakDisplay">0</span></div>
+  <div class="level-chip">🏅 <span id="levelDisplay">Beginner</span></div>
+</div>
+
+<div class="main">
+
+  <!-- LEFT: WHEEL -->
+  <div class="wheel-sec">
+    <div class="wheel-wrap">
+      <div class="wheel-pointer"></div>
+      <canvas id="wheel" width="300" height="300"></canvas>
+    </div>
+    <button class="spin-btn" id="spinBtn" onclick="spinWheel()">🎡 SPIN!</button>
+    <div class="wheel-hint">Spin to get a random question type!</div>
+
+    <!-- STATS -->
+    <div class="stats-row" style="width:100%">
+      <div class="stat-card"><div class="stat-n" id="s1" style="color:#F59E0B">0</div><div class="stat-l">Correct</div></div>
+      <div class="stat-card"><div class="stat-n" id="s2" style="color:#EF4444">0</div><div class="stat-l">Wrong</div></div>
+      <div class="stat-card"><div class="stat-n" id="s3" style="color:#3BBD6E">0%</div><div class="stat-l">Accuracy</div></div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="history" style="width:100%">
+      <h3>Recent Questions</h3>
+      <div id="histList"><div style="font-size:.78rem;color:rgba(255,255,255,.3);text-align:center;padding:10px">Spin to start!</div></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: QUESTION -->
+  <div class="q-sec">
+    <div class="q-card" id="qCard">
+      <div class="q-idle">🎡</div>
+      <div class="q-idle-txt">Spin the wheel to get<br>your vocabulary challenge!</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// STARS BACKGROUND
+// ============================================================
+const starsEl = document.getElementById('stars');
+for(let i=0;i<80;i++){
+  const s=document.createElement('div');
+  s.className='star';
+  const sz=Math.random()*3+1;
+  s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s`;
+  starsEl.appendChild(s);
+}
+
+// ============================================================
+// HSK5 VOCABULARY (30 words from project)
+// ============================================================
+const vocab = [
+  {w:'思想',p:'sīxiǎng',m:'thought / idea'},
+  {w:'特殊',p:'tèshū',m:'special'},
+  {w:'效率',p:'xiàolǜ',m:'efficiency'},
+  {w:'随时',p:'suíshí',m:'anytime'},
+  {w:'损失',p:'sǔnshī',m:'loss'},
+  {w:'宣布',p:'xuānbù',m:'announce'},
+  {w:'欣赏',p:'xīnshǎng',m:'appreciate'},
+  {w:'心态',p:'xīntài',m:'mentality'},
+  {w:'销售',p:'xiāoshòu',m:'sell / sales'},
+  {w:'消费',p:'xiāofèi',m:'consume / spend'},
+  {w:'信任',p:'xìnrèn',m:'trust'},
+  {w:'形象',p:'xíngxiàng',m:'image'},
+  {w:'行为',p:'xíngwéi',m:'behavior'},
+  {w:'修改',p:'xiūgǎi',m:'revise'},
+  {w:'需求',p:'xūqiú',m:'demand'},
+  {w:'相关',p:'xiāngguān',m:'related'},
+  {w:'享受',p:'xiǎngshòu',m:'enjoy'},
+  {w:'幸运',p:'xìngyùn',m:'lucky'},
+  {w:'虚心',p:'xūxīn',m:'modest / open-minded'},
+  {w:'想象',p:'xiǎngxiàng',m:'imagine'},
+  {w:'形成',p:'xíngchéng',m:'form / take shape'},
+  {w:'挑战',p:'tiǎozhàn',m:'challenge'},
+  {w:'调整',p:'tiáozhěng',m:'adjust'},
+  {w:'提升',p:'tíshēng',m:'improve / promote'},
+  {w:'体验',p:'tǐyàn',m:'experience'},
+  {w:'台阶',p:'táijiē',m:'steps / stairs'},
+  {w:'特征',p:'tèzhēng',m:'feature / characteristic'},
+  {w:'通常',p:'tōngcháng',m:'usually'},
+  {w:'搜索',p:'sōusuǒ',m:'search for'},
+  {w:'缩小',p:'suōxiǎo',m:'shrink / reduce'},
+];
+
+// WHEEL SEGMENTS — question types
+const segments = [
+  {label:'意思\nMeaning',color:'#8B5CF6',type:'meaning',desc:'What does this mean?'},
+  {label:'拼音\nPinyin',color:'#E8354A',type:'pinyin',desc:'Pick the correct pinyin!'},
+  {label:'汉字\nCharacter',color:'#0D9488',type:'char',desc:'Which character is this?'},
+  {label:'意思\nMeaning',color:'#F59E0B',type:'meaning',desc:'What does this mean?'},
+  {label:'拼音\nPinyin',color:'#3B82F6',type:'pinyin',desc:'Pick the correct pinyin!'},
+  {label:'汉字\nCharacter',color:'#EC4899',type:'char',desc:'Which character is this?'},
+  {label:'意思\nMeaning',color:'#10B981',type:'meaning',desc:'What does this mean?'},
+  {label:'2X\nBonus!',color:'#EF4444',type:'bonus',desc:'BONUS ROUND — double points!'},
+];
+
+// ============================================================
+// GAME STATE
+// ============================================================
+let score=0, streak=0, correct=0, wrong=0, spinning=false;
+let currentWord=null, currentType=null, comboCount=0;
+const levels=[
+  {min:0,name:'Beginner',color:'#6B7280'},
+  {min:50,name:'Learner',color:'#3B82F6'},
+  {min:150,name:'Explorer',color:'#10B981'},
+  {min:300,name:'Scholar',color:'#F59E0B'},
+  {min:500,name:'Expert',color:'#EF4444'},
+  {min:800,name:'Master',color:'#8B5CF6'},
+  {min:1200,name:'Champion',color:'#EC4899'},
+];
+
+function getLevel(){return levels.filter(l=>score>=l.min).pop();}
+
+function updateUI(){
+  document.getElementById('scoreDisplay').textContent=score;
+  document.getElementById('streakDisplay').textContent=streak;
+  const lv=getLevel();
+  document.getElementById('levelDisplay').textContent=lv.name;
+  document.getElementById('s1').textContent=correct;
+  document.getElementById('s2').textContent=wrong;
+  const acc=correct+wrong>0?Math.round(correct/(correct+wrong)*100):0;
+  document.getElementById('s3').textContent=acc+'%';
+}
+
+// ============================================================
+// AUDIO
+// ============================================================
+const synth=window.speechSynthesis;
+function speak(txt){
+  synth.cancel();
+  const u=new SpeechSynthesisUtterance(txt);
+  const v=synth.getVoices();
+  const zv=v.find(x=>x.lang==='zh-TW')||v.find(x=>x.lang==='zh-CN')||v.find(x=>x.lang.startsWith('zh'));
+  if(zv){u.voice=zv;u.lang=zv.lang;}else{u.lang='zh-CN';}
+  u.rate=0.75;u.pitch=1.1;synth.speak(u);
+}
+window.addEventListener('load',()=>setTimeout(()=>{
+  if(synth.getVoices().length===0) synth.onvoiceschanged=()=>{};
+},500));
+
+// ============================================================
+// WHEEL DRAWING
+// ============================================================
+const canvas=document.getElementById('wheel');
+const ctx=canvas.getContext('2d');
+let angle=0;
+
+function drawWheel(rot=0){
+  const cx=150,cy=150,r=145;
+  ctx.clearRect(0,0,300,300);
+  const n=segments.length;
+  const arc=Math.PI*2/n;
+  segments.forEach((seg,i)=>{
+    const start=rot+i*arc-Math.PI/2;
+    const end=start+arc;
+    // Segment fill
+    ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,start,end);ctx.closePath();
+    ctx.fillStyle=seg.color;ctx.fill();
+    // Border
+    ctx.strokeStyle='rgba(255,255,255,.2)';ctx.lineWidth=2;ctx.stroke();
+    // Text
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(start+arc/2);
+    ctx.textAlign='right';
+    ctx.fillStyle='#fff';
+    const lines=seg.label.split('\n');
+    lines.forEach((line,li)=>{
+      ctx.font=`bold ${li===0?'14px':'11px'} "Noto Sans SC", "Nunito", sans-serif`;
+      ctx.fillText(line,r-12,(li-0.5)*16);
+    });
+    ctx.restore();
+  });
+  // Center circle
+  ctx.beginPath();ctx.arc(cx,cy,28,0,Math.PI*2);
+  ctx.fillStyle='#0F172A';ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.3)';ctx.lineWidth=3;ctx.stroke();
+  // Center emoji
+  ctx.font='20px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('🎡',cx,cy);
+}
+drawWheel();
+
+// ============================================================
+// SPIN LOGIC
+// ============================================================
+function spinWheel(){
+  if(spinning) return;
+  spinning=true;
+  document.getElementById('spinBtn').disabled=true;
+  document.getElementById('spinBtn').textContent='🌀 Spinning...';
+
+  const extraSpins=(5+Math.floor(Math.random()*5))*Math.PI*2;
+  const randStop=Math.random()*Math.PI*2;
+  const totalAngle=extraSpins+randStop;
+  const duration=3000+Math.random()*1000;
+  const start=performance.now();
+  const startAngle=angle;
+
+  function frame(now){
+    const elapsed=now-start;
+    const progress=Math.min(elapsed/duration,1);
+    // Ease out cubic
+    const eased=1-Math.pow(1-progress,3);
+    angle=startAngle+totalAngle*eased;
+    drawWheel(angle);
+    if(progress<1){requestAnimationFrame(frame);}
+    else{
+      angle=angle%(Math.PI*2);
+      // Find which segment is at top (pointer)
+      const n=segments.length;
+      const arc=Math.PI*2/n;
+      // Pointer is at top = -PI/2 from start
+      // Normalize angle
+      let norm=((-angle%(Math.PI*2))+(Math.PI*2))%(Math.PI*2);
+      const idx=Math.floor(norm/arc)%n;
+      spinning=false;
+      document.getElementById('spinBtn').disabled=false;
+      document.getElementById('spinBtn').textContent='🎡 SPIN!';
+      showQuestion(segments[idx]);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+// ============================================================
+// QUESTION GENERATION
+// ============================================================
+function shuffle(arr){return [...arr].sort(()=>Math.random()-0.5);}
+function getRandExcept(arr,except,n){
+  return shuffle(arr.filter(x=>x.w!==except.w)).slice(0,n);
+}
+
+function showQuestion(seg){
+  currentType=seg.type==='bonus'?(['meaning','pinyin','char'][Math.floor(Math.random()*3)]):seg.type;
+  currentWord=vocab[Math.floor(Math.random()*vocab.length)];
+  const isBonus=seg.type==='bonus';
+
+  const card=document.getElementById('qCard');
+  card.classList.add('has-q');
+
+  let html='';
+  const badgeColor=seg.color;
+
+  if(currentType==='meaning'){
+    // Show Chinese character → pick English meaning
+    const distractors=getRandExcept(vocab,currentWord,3);
+    const opts=shuffle([currentWord,...distractors]);
+    html=`
+      <span class="q-type-badge" style="background:${badgeColor}20;color:${badgeColor};border:1.5px solid ${badgeColor}40">
+        ${isBonus?'⚡ BONUS — ':''}What does it mean?
+      </span>
+      <div class="q-zh">${currentWord.w}</div>
+      <button class="audio-btn" onclick="speak('${currentWord.w}')">🔊 Hear it</button>
+      <div class="q-pin" style="margin-top:10px">Pinyin: ${currentWord.p}</div>
+      <div class="q-prompt">Select the correct English meaning:</div>
+      <div class="opts-grid">
+        ${opts.map(o=>`<button class="opt-btn" onclick="checkAnswer(this,'${o.w}','${currentWord.w}',${isBonus})">${o.m}</button>`).join('')}
+      </div>
+      ${isBonus?'<div style="font-size:.72rem;color:#F59E0B;font-weight:800;margin-top:8px">⚡ Correct = DOUBLE POINTS!</div>':''}`;
+
+  } else if(currentType==='pinyin'){
+    // Show Chinese character → pick correct pinyin
+    const distractors=getRandExcept(vocab,currentWord,3);
+    const opts=shuffle([currentWord,...distractors]);
+    html=`
+      <span class="q-type-badge" style="background:${badgeColor}20;color:${badgeColor};border:1.5px solid ${badgeColor}40">
+        ${isBonus?'⚡ BONUS — ':''}Pick the Pinyin!
+      </span>
+      <div class="q-zh">${currentWord.w}</div>
+      <button class="audio-btn" onclick="speak('${currentWord.w}')">🔊 Hear it</button>
+      <div class="q-prompt" style="margin-top:14px">Which pinyin is correct?</div>
+      <div class="opts-grid">
+        ${opts.map(o=>`<button class="opt-btn" onclick="checkAnswer(this,'${o.w}','${currentWord.w}',${isBonus})">${o.p}</button>`).join('')}
+      </div>
+      ${isBonus?'<div style="font-size:.72rem;color:#F59E0B;font-weight:800;margin-top:8px">⚡ Correct = DOUBLE POINTS!</div>':''}`;
+
+  } else {
+    // Show English meaning → pick correct Chinese character
+    const distractors=getRandExcept(vocab,currentWord,3);
+    const opts=shuffle([currentWord,...distractors]);
+    html=`
+      <span class="q-type-badge" style="background:${badgeColor}20;color:${badgeColor};border:1.5px solid ${badgeColor}40">
+        ${isBonus?'⚡ BONUS — ':''}Which Character?
+      </span>
+      <div style="font-size:1rem;font-weight:800;color:rgba(255,255,255,.8);margin-bottom:6px">English meaning:</div>
+      <div style="font-size:1.4rem;font-weight:900;color:#A78BFA;margin-bottom:6px">${currentWord.m}</div>
+      <div style="font-size:.82rem;color:rgba(255,255,255,.5);margin-bottom:16px">Pinyin: ${currentWord.p}</div>
+      <div class="q-prompt">Which Chinese character matches?</div>
+      <div class="opts-grid">
+        ${opts.map(o=>`<button class="opt-btn" onclick="checkAnswer(this,'${o.w}','${currentWord.w}',${isBonus})" style="font-family:'Noto Sans SC',sans-serif;font-size:1.3rem">${o.w}</button>`).join('')}
+      </div>
+      ${isBonus?'<div style="font-size:.72rem;color:#F59E0B;font-weight:800;margin-top:8px">⚡ Correct = DOUBLE POINTS!</div>':''}`;
+  }
+
+  card.innerHTML=html;
+  // Auto-speak for meaning and pinyin questions
+  if(currentType==='meaning'||currentType==='pinyin'){
+    setTimeout(()=>speak(currentWord.w),600);
+  }
+}
+
+function checkAnswer(btn,chosen,correct,isBonus){
+  const allBtns=btn.closest('.opts-grid').querySelectorAll('.opt-btn');
+  allBtns.forEach(b=>b.disabled=true);
+
+  if(chosen===correct){
+    btn.classList.add('correct');
+    const pts=isBonus?20:10;
+    score+=pts;
+    streak++;
+    correct_count++;
+    comboCount++;
+    correct++;
+    speak(currentWord.w);
+    addToHistory(currentWord,true);
+    showFeedback(true,pts,isBonus);
+    if(comboCount>=3) showCombo(comboCount);
+    if(comboCount%5===0&&comboCount>0) launchConfetti();
+  } else {
+    btn.classList.add('wrong');
+    allBtns.forEach(b=>{if(b.onclick.toString().includes(`'${correct}'`))b.classList.add('reveal');});
+    streak=0; comboCount=0;
+    wrong_count++;
+    wrong++;
+    speak(currentWord.w);
+    addToHistory(currentWord,false);
+    showFeedback(false,0,false);
+  }
+  updateUI();
+}
+
+// Fix variable names
+let correct_count=0,wrong_count=0;
+// Override with closure-safe versions
+function checkAnswer(btn,chosen,correctWord,isBonus){
+  const allBtns=btn.closest('.opts-grid').querySelectorAll('.opt-btn');
+  allBtns.forEach(b=>b.disabled=true);
+  if(chosen===correctWord){
+    btn.classList.add('correct');
+    const pts=isBonus?20:10;
+    score+=pts; streak++; correct++; comboCount++;
+    speak(currentWord.w);
+    addToHistory(currentWord,true);
+    showFeedback(true,pts,isBonus);
+    if(comboCount>=3) showCombo(comboCount);
+    if(comboCount>=5) launchConfetti();
+  } else {
+    btn.classList.add('wrong');
+    allBtns.forEach(b=>{
+      try{if(b.getAttribute('onclick').includes("'"+correctWord+"'"))b.classList.add('reveal');}catch(e){}
+    });
+    streak=0; comboCount=0; wrong++;
+    speak(currentWord.w);
+    addToHistory(currentWord,false);
+    showFeedback(false,0,false);
+  }
+  updateUI();
+}
+
+// ============================================================
+// FEEDBACK
+// ============================================================
+const yayMsgs=['🌟 Excellent!','🎉 Amazing!','🔥 On Fire!','💎 Brilliant!','⭐ Perfect!','🚀 Outstanding!'];
+const nopeMsgs=['💪 Keep Going!','📚 Review it!','🔄 Try Again!','💡 Almost!'];
+
+function showFeedback(isCorrect,pts,isBonus){
+  const overlay=document.getElementById('fbOverlay');
+  const box=document.getElementById('fbBox');
+  const emoji=document.getElementById('fbEmoji');
+  const msg=document.getElementById('fbMsg');
+  const sub=document.getElementById('fbSub');
+  box.className='fb-box '+(isCorrect?'yay':'nope');
+  emoji.textContent=isCorrect?['🎉','⭐','🌟','🔥','💎','🚀'][Math.floor(Math.random()*6)]:'😅';
+  msg.textContent=isCorrect?yayMsgs[Math.floor(Math.random()*yayMsgs.length)]:nopeMsgs[Math.floor(Math.random()*nopeMsgs.length)];
+  sub.textContent=isCorrect?`+${pts} points${isBonus?' (BONUS x2!)':''}  |  Streak: ${streak}🔥`:`Correct: ${currentWord.w} (${currentWord.p}) = ${currentWord.m}`;
+  overlay.classList.add('show');
+  setTimeout(()=>overlay.classList.remove('show'),1800);
+}
+
+function showCombo(n){
+  const banner=document.getElementById('comboBanner');
+  banner.textContent=`🔥 ${n}x COMBO! Keep it up!`;
+  banner.style.display='block';
+  setTimeout(()=>banner.style.display='none',2000);
+}
+
+// ============================================================
+// CONFETTI
+// ============================================================
+function launchConfetti(){
+  const colors=['#F59E0B','#EF4444','#8B5CF6','#3BBD6E','#3B82F6','#EC4899','#fff'];
+  for(let i=0;i<60;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    const color=colors[Math.floor(Math.random()*colors.length)];
+    const x=Math.random()*100;
+    const dx=(Math.random()-0.5)*400+'px';
+    const dur=(2+Math.random()*2)+'s';
+    const del=(Math.random()*0.5)+'s';
+    const br=Math.random()>0.5?'50%':'2px';
+    el.style.cssText=`left:${x}%;background:${color};--dur:${dur};--del:${del};--dx:${dx};--br:${br}`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),(2500+Math.random()*2000));
+  }
+}
+
+// ============================================================
+// HISTORY
+// ============================================================
+const histItems=[];
+function addToHistory(word,isOk){
+  histItems.unshift({word,isOk});
+  if(histItems.length>8) histItems.pop();
+  const list=document.getElementById('histList');
+  list.innerHTML=histItems.map(h=>`
+    <div class="hist-item">
+      <span class="${h.isOk?'hist-ok':'hist-no'}">${h.isOk?'✅':'❌'}</span>
+      <span class="hist-zh">${h.word.w}</span>
+      <span style="color:rgba(255,255,255,.4);font-size:.7rem">${h.word.p}</span>
+      <span style="color:rgba(255,255,255,.5);font-size:.7rem;margin-left:auto">${h.word.m}</span>
+    </div>`).join('');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+updateUI();
+</script>
+</body>
+</html>
