@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🫧 Bubble Pop — HSK1 Lesson 6</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(160deg,#0C1445 0%,#1a237e 40%,#0C1445 100%);min-height:100vh;overflow:hidden;user-select:none}
+
+/* HEADER */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(0,0,0,.4);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.1)}
+.hdr-title{color:#fff;font-size:1rem;font-weight:900}
+.hdr-title span{font-size:.72rem;color:rgba(255,255,255,.5);display:block;font-weight:600}
+.hdr-right{display:flex;gap:10px;align-items:center}
+.chip{background:rgba(255,255,255,.12);color:#fff;font-weight:800;font-size:.82rem;padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.2)}
+.chip.score{background:linear-gradient(135deg,#F59E0B,#F97316)}
+.chip.streak{background:linear-gradient(135deg,#EF4444,#DC2626)}
+.chip.timer{background:linear-gradient(135deg,#3B82F6,#1D4ED8)}
+.chip.timer.urgent{background:linear-gradient(135deg,#EF4444,#DC2626);animation:pulse .5s infinite alternate}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.08)}}
+
+/* QUESTION BOX */
+.q-box{position:fixed;top:58px;left:50%;transform:translateX(-50%);z-index:90;background:rgba(0,0,0,.6);backdrop-filter:blur(12px);border:2px solid rgba(255,255,255,.15);border-radius:20px;padding:14px 24px;text-align:center;min-width:280px;max-width:90vw}
+.q-label{font-size:.65rem;font-weight:800;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.q-main{font-family:'Noto Sans SC',sans-serif;font-size:1.6rem;font-weight:700;color:#fff;line-height:1}
+.q-sub{font-size:.75rem;color:rgba(255,255,255,.5);font-weight:600;margin-top:3px}
+.q-mode{font-size:.7rem;background:rgba(139,92,246,.3);color:#C4B5FD;border:1px solid rgba(139,92,246,.4);padding:2px 10px;border-radius:999px;display:inline-block;margin-top:5px}
+.audio-mini{background:none;border:none;color:#C4B5FD;cursor:pointer;font-size:.9rem;vertical-align:middle;margin-left:6px}
+
+/* GAME AREA */
+.game-area{position:fixed;inset:0;top:170px;bottom:0}
+
+/* BUBBLE */
+.bubble{position:absolute;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform .1s;animation:floatUp var(--speed) linear forwards;will-change:transform}
+.bubble:hover{transform:scale(1.08)!important}
+@keyframes floatUp{0%{bottom:-120px;opacity:0}5%{opacity:1}90%{opacity:1}100%{bottom:calc(100% + 30px);opacity:0}}
+.bubble-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;border-radius:50%;border:3px solid rgba(255,255,255,.4);background:var(--bg);box-shadow:0 0 20px var(--glow),inset 0 0 15px rgba(255,255,255,.15),0 4px 15px rgba(0,0,0,.3)}
+.bubble-zh{font-family:'Noto Sans SC',sans-serif;font-weight:700;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.bubble-en{color:rgba(255,255,255,.7);font-weight:700;text-align:center;padding:0 6px;line-height:1.2}
+.bubble-pin{color:rgba(255,255,255,.55);font-weight:600;line-height:1}
+/* SHINE */
+.bubble-inner::after{content:'';position:absolute;top:12%;left:20%;width:30%;height:20%;background:rgba(255,255,255,.35);border-radius:50%;transform:rotate(-30deg)}
+
+/* POP EFFECT */
+.pop-ring{position:absolute;border-radius:50%;border:3px solid;pointer-events:none;animation:popRing .5s ease-out forwards}
+@keyframes popRing{0%{transform:scale(.5);opacity:1}100%{transform:scale(2.5);opacity:0}}
+.pop-particle{position:absolute;border-radius:50%;pointer-events:none;animation:popParticle .6s ease-out forwards}
+@keyframes popParticle{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}}
+.wrong-ring{position:absolute;border-radius:50%;border:3px solid #EF4444;pointer-events:none;animation:wrongRing .4s ease-out forwards}
+@keyframes wrongRing{0%{transform:scale(1);opacity:1}100%{transform:scale(1.8);opacity:0}}
+
+/* SCORE POPUP */
+.score-pop{position:absolute;font-size:1.2rem;font-weight:900;pointer-events:none;animation:scorePop .8s ease-out forwards;z-index:200;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+@keyframes scorePop{0%{transform:translateY(0) scale(.8);opacity:1}100%{transform:translateY(-80px) scale(1.2);opacity:0}}
+
+/* START SCREEN */
+.start-screen{position:fixed;inset:0;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#0C1445,#1a237e);text-align:center;padding:20px}
+.start-screen h1{font-size:2.2rem;font-weight:900;color:#fff;margin-bottom:6px}
+.start-screen h1 span{background:linear-gradient(135deg,#F59E0B,#EF4444,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.start-screen p{font-size:.9rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:24px;max-width:360px}
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:420px;margin-bottom:24px}
+.mode-card{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);border-radius:16px;padding:16px 10px;cursor:pointer;transition:all .2s;text-align:center}
+.mode-card:hover,.mode-card.selected{border-color:var(--c);background:rgba(255,255,255,.15);transform:scale(1.04)}
+.mode-card .emo{font-size:1.8rem;margin-bottom:6px}
+.mode-card .mname{font-size:.82rem;font-weight:800;color:#fff;margin-bottom:3px}
+.mode-card .mdesc{font-size:.65rem;color:rgba(255,255,255,.5);font-weight:600}
+.start-btn{padding:15px 50px;background:linear-gradient(135deg,#F59E0B,#EF4444);color:#fff;border:none;border-radius:999px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;cursor:pointer;box-shadow:0 4px 20px rgba(239,68,68,.4);transition:all .2s}
+.start-btn:hover{transform:scale(1.05)}
+
+/* END SCREEN */
+.end-screen{position:fixed;inset:0;z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);text-align:center;padding:20px}
+.end-screen h2{font-size:2rem;font-weight:900;color:#fff;margin-bottom:4px}
+.end-big{font-size:4rem;font-weight:900;background:linear-gradient(135deg,#F59E0B,#EF4444);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin:10px 0}
+.end-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0;width:100%;max-width:360px}
+.end-cell{background:rgba(255,255,255,.08);border-radius:13px;padding:12px}
+.end-cell-n{font-size:1.6rem;font-weight:900;color:#fff}
+.end-cell-l{font-size:.65rem;color:rgba(255,255,255,.5);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.play-again{padding:13px 40px;background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:#fff;border:none;border-radius:999px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;cursor:pointer;margin-top:6px;margin-right:10px}
+.menu-btn{padding:13px 40px;background:rgba(255,255,255,.1);color:#fff;border:2px solid rgba(255,255,255,.2);border-radius:999px;font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;margin-top:6px}
+
+/* LIVES */
+.lives{display:flex;gap:4px}
+.life{font-size:1rem;transition:all .3s}
+.life.lost{opacity:.2;transform:scale(.7)}
+
+/* COMBO */
+.combo-flash{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:400;font-size:2rem;font-weight:900;color:#F59E0B;text-shadow:0 0 30px rgba(245,158,11,.6);pointer-events:none;display:none;animation:comboFlash .7s ease-out forwards}
+@keyframes comboFlash{0%{transform:translate(-50%,-50%) scale(.5);opacity:1}100%{transform:translate(-50%,-60%) scale(1.5);opacity:0}}
+
+/* CONFETTI */
+.cp{position:fixed;pointer-events:none;border-radius:var(--br);width:10px;height:10px;animation:cpFall var(--dur) var(--del) ease-in forwards;z-index:300}
+@keyframes cpFall{0%{transform:translateX(0) rotate(0);opacity:1;top:var(--top)}100%{transform:translateX(var(--dx)) translateY(120vh) rotate(720deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- START SCREEN -->
+<div class="start-screen" id="startScreen">
+  <div style="font-size:3.5rem;margin-bottom:12px">🫧</div>
+  <h1>Bubble <span>Pop!</span></h1>
+  <p>Pop the correct bubble before it floats away! Based on HSK1 Lesson 6 — 你的手机号是多少？</p>
+
+  <div class="mode-grid">
+    <div class="mode-card selected" style="--c:#3B82F6" data-mode="zh-en" onclick="selectMode(this,'zh-en')">
+      <div class="emo">🀄</div>
+      <div class="mname">Chinese → English</div>
+      <div class="mdesc">See Chinese, pop English meaning</div>
+    </div>
+    <div class="mode-card" style="--c:#10B981" data-mode="en-zh" onclick="selectMode(this,'en-zh')">
+      <div class="emo">🔤</div>
+      <div class="mname">English → Chinese</div>
+      <div class="mdesc">See English, pop Chinese character</div>
+    </div>
+    <div class="mode-card" style="--c:#F59E0B" data-mode="pin-zh" onclick="selectMode(this,'pin-zh')">
+      <div class="emo">🎵</div>
+      <div class="mname">Pinyin → Chinese</div>
+      <div class="mdesc">See pinyin, pop Chinese character</div>
+    </div>
+  </div>
+
+  <div style="font-size:.82rem;color:rgba(255,255,255,.5);font-weight:700;margin-bottom:16px">
+    ⏱ 60 seconds &nbsp;|&nbsp; ❤️ 3 lives &nbsp;|&nbsp; 🔊 Mandarin audio
+  </div>
+
+  <button class="start-btn" onclick="startGame()">🫧 Start Popping!</button>
+</div>
+
+<!-- HEADER (in-game) -->
+<div class="hdr" id="gameHdr" style="display:none">
+  <div class="hdr-title">
+    🫧 Bubble Pop
+    <span>HSK1 · Lesson 6</span>
+  </div>
+  <div class="hdr-right">
+    <div class="chip score">⭐ <span id="scoreEl">0</span></div>
+    <div class="chip streak">🔥 <span id="streakEl">0</span></div>
+    <div class="chip timer" id="timerEl">⏱ <span id="timeEl">60</span>s</div>
+    <div class="lives" id="livesEl"></div>
+  </div>
+</div>
+
+<!-- QUESTION BOX -->
+<div class="q-box" id="qBox" style="display:none">
+  <div class="q-label" id="qLabel">Pop the correct bubble!</div>
+  <div class="q-main" id="qMain">—</div>
+  <div class="q-sub" id="qSub"></div>
+  <span class="q-mode" id="qMode"></span>
+  <button class="audio-mini" id="audioBtn" onclick="playAudio()">🔊</button>
+</div>
+
+<!-- GAME AREA -->
+<div class="game-area" id="gameArea"></div>
+
+<!-- COMBO FLASH -->
+<div class="combo-flash" id="comboFlash"></div>
+
+<!-- END SCREEN -->
+<div class="end-screen" id="endScreen">
+  <div style="font-size:2.5rem;margin-bottom:8px" id="endEmoji">🏆</div>
+  <h2 id="endTitle">Time's Up!</h2>
+  <div class="end-big" id="endScore">0</div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,.5);font-weight:700;margin-bottom:6px">points earned</div>
+  <div style="font-size:1.3rem;margin:8px 0" id="endStars">⭐⭐⭐</div>
+  <div style="font-size:.88rem;font-weight:800;color:rgba(255,255,255,.7);margin-bottom:14px" id="endMsg"></div>
+  <div class="end-grid">
+    <div class="end-cell"><div class="end-cell-n" id="e1" style="color:#3BBD6E">0</div><div class="end-cell-l">Correct</div></div>
+    <div class="end-cell"><div class="end-cell-n" id="e2" style="color:#EF4444">0</div><div class="end-cell-l">Missed</div></div>
+    <div class="end-cell"><div class="end-cell-n" id="e3" style="color:#F59E0B">0%</div><div class="end-cell-l">Accuracy</div></div>
+  </div>
+  <div>
+    <button class="play-again" onclick="startGame()">🔄 Play Again</button>
+    <button class="menu-btn" onclick="showMenu()">🏠 Menu</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// LESSON 6 VOCABULARY
+// ============================================================
+const vocab = [
+  {zh:'手机',  pin:'shǒujī',   en:'cell phone'},
+  {zh:'电话',  pin:'diànhuà',  en:'telephone'},
+  {zh:'号',    pin:'hào',      en:'number'},
+  {zh:'明天',  pin:'míngtiān', en:'tomorrow'},
+  {zh:'去',    pin:'qù',       en:'go'},
+  {zh:'哪儿',  pin:'nǎr',      en:'where'},
+  {zh:'想',    pin:'xiǎng',    en:'want / would like'},
+  {zh:'超市',  pin:'chāoshì',  en:'supermarket'},
+  {zh:'买',    pin:'mǎi',      en:'buy'},
+  {zh:'东西',  pin:'dōngxi',   en:'thing'},
+  {zh:'些',    pin:'xiē',      en:'some'},
+  {zh:'牛奶',  pin:'niúnǎi',   en:'milk'},
+  {zh:'吃',    pin:'chī',      en:'eat'},
+  {zh:'晚饭',  pin:'wǎnfàn',   en:'dinner'},
+  {zh:'那边',  pin:'nàbiān',   en:'there'},
+  {zh:'包子',  pin:'bāozi',    en:'steamed bun'},
+  {zh:'非常',  pin:'fēicháng', en:'very'},
+  {zh:'好吃',  pin:'hǎochī',   en:'delicious'},
+  {zh:'米饭',  pin:'mǐfàn',    en:'rice'},
+  {zh:'怎么',  pin:'zěnme',    en:'how'},
+  {zh:'坐',    pin:'zuò',      en:'take / ride'},
+  {zh:'出租车',pin:'chūzūchē', en:'taxi'},
+];
+
+// BUBBLE COLORS
+const bubbleColors = [
+  {bg:'radial-gradient(circle at 35% 35%, rgba(99,102,241,.9), rgba(67,56,202,.7))',glow:'rgba(99,102,241,.5)'},
+  {bg:'radial-gradient(circle at 35% 35%, rgba(236,72,153,.9), rgba(190,24,93,.7))',glow:'rgba(236,72,153,.5)'},
+  {bg:'radial-gradient(circle at 35% 35%, rgba(16,185,129,.9), rgba(5,150,105,.7))',glow:'rgba(16,185,129,.5)'},
+  {bg:'radial-gradient(circle at 35% 35%, rgba(245,158,11,.9), rgba(217,119,6,.7))',glow:'rgba(245,158,11,.5)'},
+  {bg:'radial-gradient(circle at 35% 35%, rgba(239,68,68,.9), rgba(185,28,28,.7))',glow:'rgba(239,68,68,.5)'},
+  {bg:'radial-gradient(circle at 35% 35%, rgba(59,130,246,.9), rgba(29,78,216,.7))',glow:'rgba(59,130,246,.5)'},
+  {bg:'radial-gradient(circle at 35% 35%, rgba(168,85,247,.9), rgba(109,40,217,.7))',glow:'rgba(168,85,247,.5)'},
+  {bg:'radial-gradient(circle at 35% 35%, rgba(20,184,166,.9), rgba(15,118,110,.7))',glow:'rgba(20,184,166,.5)'},
+];
+
+// ============================================================
+// AUDIO
+// ============================================================
+const synth = window.speechSynthesis;
+function getZhVoice(){const v=synth.getVoices();return v.find(x=>x.lang==='zh-TW')||v.find(x=>x.lang==='zh-CN')||v.find(x=>x.lang.startsWith('zh'))||null;}
+function speak(txt,rate=0.8){
+  synth.cancel();
+  const u=new SpeechSynthesisUtterance(txt);
+  const v=getZhVoice();
+  if(v){u.voice=v;u.lang=v.lang;}else{u.lang='zh-CN';}
+  u.rate=rate;u.pitch=1.1;synth.speak(u);
+}
+window.addEventListener('load',()=>setTimeout(()=>{if(synth.getVoices().length===0)synth.onvoiceschanged=()=>{};},500));
+
+// ============================================================
+// GAME STATE
+// ============================================================
+let score=0,streak=0,lives=3,timeLeft=60,correct=0,missed=0;
+let gameMode='zh-en',gameActive=false,gameTimer=null;
+let currentWord=null,bubbleInterval=null,activeBubbles=[];
+let questionQueue=[...vocab].sort(()=>Math.random()-0.5);
+let qIdx=0;
+
+function shuffle(arr){return [...arr].sort(()=>Math.random()-0.5);}
+
+// ============================================================
+// MODE SELECTION
+// ============================================================
+function selectMode(el,mode){
+  document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  gameMode=mode;
+}
+
+// ============================================================
+// GAME START
+// ============================================================
+function startGame(){
+  score=0;streak=0;lives=3;timeLeft=60;correct=0;missed=0;
+  gameActive=true;qIdx=0;
+  questionQueue=shuffle([...vocab]);
+  activeBubbles=[];
+
+  document.getElementById('startScreen').style.display='none';
+  document.getElementById('endScreen').style.display='none';
+  document.getElementById('gameHdr').style.display='flex';
+  document.getElementById('qBox').style.display='block';
+
+  // Clear game area
+  document.getElementById('gameArea').innerHTML='';
+
+  updateUI();
+  updateLives();
+  nextQuestion();
+  startTimer();
+
+  // Bubble spawn interval — starts slow, gets faster
+  spawnBubbles();
+}
+
+function startTimer(){
+  clearInterval(gameTimer);
+  gameTimer=setInterval(()=>{
+    timeLeft--;
+    document.getElementById('timeEl').textContent=timeLeft;
+    if(timeLeft<=10) document.getElementById('timerEl').classList.add('urgent');
+    if(timeLeft<=0) endGame();
+  },1000);
+}
+
+// ============================================================
+// QUESTION MANAGEMENT
+// ============================================================
+function nextQuestion(){
+  if(!gameActive) return;
+  currentWord=questionQueue[qIdx%questionQueue.length];
+  qIdx++;
+  if(qIdx>=questionQueue.length){qIdx=0;questionQueue=shuffle([...vocab]);}
+
+  let label,main,sub,modeLabel;
+  if(gameMode==='zh-en'){
+    label='What does this mean in English?';
+    main=currentWord.zh;
+    sub=currentWord.pin;
+    modeLabel='Chinese → English';
+  } else if(gameMode==='en-zh'){
+    label='Which Chinese character is this?';
+    main=currentWord.en;
+    sub=currentWord.pin;
+    modeLabel='English → Chinese';
+  } else {
+    label='Which Chinese character has this pinyin?';
+    main=currentWord.pin;
+    sub='';
+    modeLabel='Pinyin → Chinese';
+  }
+
+  document.getElementById('qLabel').textContent=label;
+  document.getElementById('qMain').textContent=main;
+  document.getElementById('qSub').textContent=sub;
+  document.getElementById('qMode').textContent=modeLabel;
+
+  // Auto-speak Chinese
+  speak(currentWord.zh);
+}
+
+function playAudio(){speak(currentWord.zh);}
+
+// ============================================================
+// BUBBLE SPAWNING
+// ============================================================
+function spawnBubbles(){
+  clearInterval(bubbleInterval);
+  // Always show correct + 3 wrong bubbles at a time
+  spawnRound();
+  bubbleInterval=setInterval(()=>{
+    if(!gameActive) return;
+    // Check if we still have enough bubbles
+    const existing=document.querySelectorAll('.bubble:not(.popped)').length;
+    if(existing<3) spawnRound();
+  },1200);
+}
+
+function spawnRound(){
+  if(!gameActive||!currentWord) return;
+  // Remove old bubbles that are off screen
+  document.querySelectorAll('.bubble.gone').forEach(b=>b.remove());
+
+  // Pick wrong answers
+  const wrongs=shuffle(vocab.filter(v=>v.zh!==currentWord.zh)).slice(0,3);
+  const allOpts=shuffle([currentWord,...wrongs]);
+
+  allOpts.forEach((word,i)=>{
+    setTimeout(()=>{
+      if(!gameActive) return;
+      spawnBubble(word,word.zh===currentWord.zh);
+    },i*200);
+  });
+}
+
+function spawnBubble(word,isCorrect){
+  const area=document.getElementById('gameArea');
+  const areaW=area.offsetWidth;
+  const size=Math.min(Math.max(areaW*0.18,80),120);
+
+  const bubble=document.createElement('div');
+  bubble.className='bubble';
+  const col=bubbleColors[Math.floor(Math.random()*bubbleColors.length)];
+  const speed=(8+Math.random()*6)+'s';
+  const left=Math.random()*(areaW-size-20)+10;
+
+  // Build label based on mode
+  let mainLabel,subLabel;
+  if(gameMode==='zh-en'){
+    mainLabel=`<div class="bubble-en" style="font-size:${size<100?'.65rem':'.72rem'}">${word.en}</div>`;
+    subLabel='';
+  } else if(gameMode==='en-zh'){
+    mainLabel=`<div class="bubble-zh" style="font-size:${size<100?'1.1rem':'1.4rem'}">${word.zh}</div>`;
+    subLabel=`<div class="bubble-pin" style="font-size:.6rem">${word.pin}</div>`;
+  } else {
+    mainLabel=`<div class="bubble-zh" style="font-size:${size<100?'1.1rem':'1.4rem'}">${word.zh}</div>`;
+    subLabel='';
+  }
+
+  bubble.style.cssText=`width:${size}px;height:${size}px;left:${left}px;--speed:${speed};--bg:${col.bg};--glow:${col.glow}`;
+  bubble.innerHTML=`<div class="bubble-inner">${mainLabel}${subLabel}</div>`;
+
+  bubble.addEventListener('click',()=>popBubble(bubble,word,isCorrect,left+size/2,area.offsetHeight));
+  area.appendChild(bubble);
+
+  // Mark as gone when animation ends
+  bubble.addEventListener('animationend',()=>{
+    if(!bubble.classList.contains('popped')){
+      bubble.classList.add('gone');
+      // If correct bubble floated away — lose a life
+      if(isCorrect){
+        missed++;
+        loseLife();
+      }
+    }
+  });
+}
+
+// ============================================================
+// POP LOGIC
+// ============================================================
+function popBubble(bubble,word,isCorrect,x,areaH){
+  if(bubble.classList.contains('popped')||bubble.classList.contains('gone')) return;
+  bubble.classList.add('popped');
+
+  const rect=bubble.getBoundingClientRect();
+  const cx=rect.left+rect.width/2;
+  const cy=rect.top+rect.height/2;
+
+  if(isCorrect){
+    // ✅ CORRECT!
+    score+=10+(streak>=3?5:0);
+    streak++;
+    correct++;
+    speak(currentWord.zh);
+    createPopEffect(cx,cy,'correct');
+    showScorePop(cx,cy,'+'+(10+(streak>3?5:0)));
+    if(streak%3===0&&streak>0) showCombo(streak);
+    if(streak>=5) confetti();
+    bubble.remove();
+    setTimeout(()=>nextQuestion(),300);
+    setTimeout(()=>spawnRound(),500);
+  } else {
+    // ❌ WRONG
+    streak=0;
+    missed++;
+    speak(currentWord.zh);
+    createPopEffect(cx,cy,'wrong');
+    bubble.style.animation='none';
+    bubble.style.opacity='0.3';
+    setTimeout(()=>bubble.remove(),600);
+    loseLife();
+  }
+  updateUI();
+}
+
+function loseLife(){
+  lives=Math.max(0,lives-1);
+  updateLives();
+  // Flash red
+  document.body.style.background='rgba(239,68,68,.3)';
+  setTimeout(()=>document.body.style.background='',400);
+  if(lives<=0) endGame();
+}
+
+// ============================================================
+// EFFECTS
+// ============================================================
+function createPopEffect(cx,cy,type){
+  const colors=type==='correct'
+    ?['#F59E0B','#3BBD6E','#fff','#A78BFA','#60A5FA']
+    :['#EF4444','#FCA5A5'];
+
+  // Ring
+  const ring=document.createElement('div');
+  ring.className=type==='correct'?'pop-ring':'wrong-ring';
+  ring.style.cssText=`left:${cx-30}px;top:${cy-30}px;width:60px;height:60px;border-color:${colors[0]}`;
+  document.body.appendChild(ring);
+  setTimeout(()=>ring.remove(),500);
+
+  if(type==='correct'){
+    // Particles
+    for(let i=0;i<12;i++){
+      const p=document.createElement('div');
+      p.className='pop-particle';
+      const angle=(i/12)*Math.PI*2;
+      const dist=60+Math.random()*40;
+      const tx=Math.cos(angle)*dist+'px';
+      const ty=Math.sin(angle)*dist+'px';
+      const color=colors[Math.floor(Math.random()*colors.length)];
+      const sz=6+Math.random()*8;
+      p.style.cssText=`left:${cx}px;top:${cy}px;width:${sz}px;height:${sz}px;background:${color};--tx:${tx};--ty:${ty}`;
+      document.body.appendChild(p);
+      setTimeout(()=>p.remove(),700);
+    }
+  }
+}
+
+function showScorePop(cx,cy,txt){
+  const el=document.createElement('div');
+  el.className='score-pop';
+  el.textContent=txt;
+  el.style.cssText=`left:${cx-20}px;top:${cy-20}px;color:#F59E0B`;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),900);
+}
+
+function showCombo(n){
+  const el=document.getElementById('comboFlash');
+  el.textContent=n+'x COMBO! 🔥';
+  el.style.display='block';
+  setTimeout(()=>el.style.display='none',800);
+}
+
+function confetti(){
+  const colors=['#F59E0B','#EF4444','#8B5CF6','#3BBD6E','#3B82F6','#EC4899','#fff'];
+  for(let i=0;i<50;i++){
+    const el=document.createElement('div');
+    el.className='cp';
+    const c=colors[Math.floor(Math.random()*colors.length)];
+    const x=Math.random()*100;
+    const dx=(Math.random()-0.5)*300+'px';
+    const dur=(1.5+Math.random()*2)+'s';
+    const del=(Math.random()*0.4)+'s';
+    const br=Math.random()>0.5?'50%':'2px';
+    el.style.cssText=`left:${x}%;top:-20px;background:${c};--dur:${dur};--del:${del};--dx:${dx};--br:${br}`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),2500);
+  }
+}
+
+// ============================================================
+// UI UPDATES
+// ============================================================
+function updateUI(){
+  document.getElementById('scoreEl').textContent=score;
+  document.getElementById('streakEl').textContent=streak;
+}
+
+function updateLives(){
+  const el=document.getElementById('livesEl');
+  el.innerHTML='';
+  for(let i=0;i<3;i++){
+    const h=document.createElement('div');
+    h.className='life'+(i>=lives?' lost':'');
+    h.textContent='❤️';
+    el.appendChild(h);
+  }
+}
+
+// ============================================================
+// END GAME
+// ============================================================
+function endGame(){
+  gameActive=false;
+  clearInterval(gameTimer);
+  clearInterval(bubbleInterval);
+  synth.cancel();
+
+  // Remove all bubbles
+  document.getElementById('gameArea').innerHTML='';
+  document.getElementById('gameHdr').style.display='none';
+  document.getElementById('qBox').style.display='none';
+
+  const acc=correct+missed>0?Math.round(correct/(correct+missed)*100):0;
+  const pct=Math.round(score/300*100);
+
+  document.getElementById('endScore').textContent=score;
+  document.getElementById('endStars').textContent=score>=200?'⭐⭐⭐':score>=100?'⭐⭐':'⭐';
+  document.getElementById('endTitle').textContent=score>=200?'Outstanding! 🏆':score>=100?'Great job! 🎉':'Keep practising! 💪';
+  document.getElementById('endMsg').textContent=score>=200?'You are a Lesson 6 master!':score>=100?'Excellent vocabulary skills!':'Review the words and try again!';
+  document.getElementById('endEmoji').textContent=score>=200?'🏆':score>=100?'🎉':'💪';
+  document.getElementById('e1').textContent=correct;
+  document.getElementById('e2').textContent=missed;
+  document.getElementById('e3').textContent=acc+'%';
+
+  document.getElementById('endScreen').style.display='flex';
+  if(score>=100) confetti();
+}
+
+function showMenu(){
+  document.getElementById('endScreen').style.display='none';
+  document.getElementById('startScreen').style.display='flex';
+}
+</script>
+</body>
+</html>
