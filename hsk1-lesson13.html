@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSK1 Lesson 13 — 我看了一个电影</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+:root{--ink:#1a1a2e;--red:#e63946;--gold:#ffd166;--teal:#06d6a0;--blue:#118ab2;--purple:#7b2d8b;--orange:#f4a261;--green:#2d6a4f;--light:#f0f4ff;--card:#fff;--border:#e2e8f0;--muted:#8892a4;--shadow:0 8px 32px rgba(0,0,0,0.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--ink);min-height:100vh}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#2d1f4e 60%,#6b3fa0 100%);color:#fff;padding:36px 24px 56px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'电影';position:absolute;font-family:'Noto Sans SC',sans-serif;font-size:200px;font-weight:700;color:rgba(255,255,255,0.04);top:-20px;left:50%;transform:translateX(-50%);pointer-events:none}
+.hero-badge{display:inline-block;background:rgba(255,209,102,0.2);border:1px solid rgba(255,209,102,0.5);color:var(--gold);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:14px}
+.hero h1{font-size:clamp(24px,6vw,50px);font-family:'Noto Sans SC',sans-serif;font-weight:700;line-height:1.1;margin-bottom:4px}
+.hero-py{font-size:18px;color:rgba(255,255,255,0.6);margin-bottom:6px;letter-spacing:1px}
+.hero-en{font-size:16px;color:rgba(255,255,255,0.8);font-weight:700;margin-bottom:28px}
+.score-overview{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.score-pill{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:8px 16px;text-align:center;min-width:90px}
+.score-pill .sp-val{font-size:20px;font-weight:900}
+.score-pill .sp-lbl{font-size:10px;opacity:0.7;text-transform:uppercase;letter-spacing:0.5px}
+.score-pill.overall{background:rgba(255,209,102,0.25);border-color:rgba(255,209,102,0.5)}
+.nav-tabs{display:flex;background:#fff;border-bottom:2px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.nav-tab{flex-shrink:0;padding:13px 14px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.2s;display:flex;align-items:center;gap:5px}
+.nav-tab:hover{color:var(--ink)}.nav-tab.active{color:var(--red);border-bottom-color:var(--red)}
+.nav-tab .done-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);display:none}
+.nav-tab.completed .done-dot{display:inline-block}
+.content{max-width:860px;margin:0 auto;padding:24px 18px 60px}
+.section{display:none}.section.active{display:block}
+.section-head{font-size:20px;font-weight:900;color:var(--ink);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:24px}
+.vocab-card{background:var(--card);border-radius:14px;padding:16px;box-shadow:var(--shadow);border:2px solid transparent;cursor:pointer;transition:transform 0.2s,border-color 0.2s;text-align:center;position:relative}
+.vocab-card:hover{transform:translateY(-2px);border-color:var(--red)}
+.vocab-card .zh{font-family:'Noto Sans SC',sans-serif;font-size:26px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.vocab-card .py{font-size:12px;color:var(--blue);font-weight:700;margin-bottom:4px}
+.vocab-card .en{font-size:11px;color:var(--muted);font-weight:600}
+.vocab-card .cat{position:absolute;top:8px;right:8px;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;text-transform:uppercase}
+.cat-action{background:#e8f0fe;color:#1a56db}.cat-lang{background:#e8f8f2;color:#0e9f6e}
+.cat-basic{background:#fff8e1;color:#d97706}.cat-travel{background:#fde8e8;color:#c0392b}
+.audio-btn{background:none;border:none;font-size:18px;cursor:pointer;margin-top:6px}
+.info-box{background:#e8f0fe;border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#1a3a6b;font-weight:600;line-height:1.6}
+.sep-table{width:100%;border-collapse:collapse;margin-bottom:16px;background:var(--card);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.sep-table th{background:var(--purple);color:#fff;padding:10px;font-size:13px;text-align:center}
+.sep-table td{padding:10px;border-bottom:1px solid var(--border);font-size:13px;text-align:center}
+.sep-table td:first-child{font-family:'Noto Sans SC',sans-serif;font-weight:700;font-size:16px}
+.dialogue-box{background:var(--card);border-radius:18px;padding:24px;box-shadow:var(--shadow);margin-bottom:18px}
+.dialogue-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:18px}
+.dialogue-line{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start}
+.dialogue-line:last-child{margin-bottom:0}
+.speaker-bubble{flex-shrink:0;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
+.sp-a{background:#fde8e8;color:var(--red)}.sp-b{background:#e8f0fe;color:var(--blue)}.sp-c{background:#e8f8f2;color:#0e9f6e}
+.dialogue-text .zh{font-family:'Noto Sans SC',sans-serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.dialogue-text .py{font-size:13px;color:var(--blue);font-weight:600;margin-bottom:2px}
+.dialogue-text .en{font-size:12px;color:var(--muted)}
+.play-btn{background:none;border:1.5px solid var(--border);border-radius:8px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:700;margin-top:4px}
+.play-btn:hover{border-color:var(--blue);color:var(--blue)}
+.grammar-block{background:var(--card);border-radius:14px;padding:22px;box-shadow:var(--shadow);margin-bottom:14px;border-left:4px solid var(--purple)}
+.grammar-block h3{font-size:16px;font-weight:900;color:var(--ink);margin-bottom:8px}
+.grammar-block p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px}
+.grammar-pattern{display:inline-block;background:#f3e8ff;color:var(--purple);font-size:13px;font-weight:800;padding:5px 12px;border-radius:8px;margin-bottom:10px;font-family:monospace}
+.grammar-eg{background:var(--light);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.grammar-eg .zh{font-family:'Noto Sans SC',sans-serif;font-size:18px;font-weight:700;color:var(--ink)}
+.grammar-eg .py{font-size:12px;color:var(--blue)}
+.grammar-eg .en{font-size:12px;color:var(--muted);margin-top:2px}
+.reading-passage{background:var(--card);border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:20px}
+.passage-text{font-family:'Noto Sans SC',sans-serif;font-size:22px;line-height:2.2;color:var(--ink);margin-bottom:16px}
+.passage-py{font-size:14px;color:var(--blue);line-height:2;margin-bottom:8px}
+.passage-en{font-size:13px;color:var(--muted);line-height:1.8}
+.reading-q{background:var(--light);border-radius:12px;padding:16px;margin-bottom:12px}
+.reading-q .q-text{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.reading-q .q-py{font-size:13px;color:var(--blue);font-style:italic;margin-bottom:10px}
+.reading-opts{display:flex;flex-direction:column;gap:8px}
+.reading-opt{background:#fff;border:2px solid var(--border);border-radius:10px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:all 0.15s;color:var(--ink)}
+.reading-opt:hover{border-color:var(--blue)}.reading-opt.correct{background:#d1fae5!important;border-color:#059669!important;color:#065f46!important}.reading-opt.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#991b1b!important}
+.listen-card{background:var(--card);border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:16px}
+.listen-play-btn{background:linear-gradient(135deg,var(--blue),#0c6fa8);color:#fff;border:none;border-radius:14px;padding:16px 32px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:10px;margin:0 auto 20px;transition:transform 0.2s}
+.listen-play-btn:hover{transform:scale(1.03)}
+.listen-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.listen-opt{background:#fff;border:2px solid var(--border);border-radius:12px;padding:14px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-align:center;transition:all 0.15s;color:var(--ink);line-height:1.5}
+.listen-opt:hover{border-color:var(--blue);background:var(--light)}.listen-opt.correct{background:#d1fae5!important;border-color:#059669!important;color:#065f46!important}.listen-opt.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#991b1b!important}
+.speaking-card{background:var(--card);border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:16px}
+.speak-phrase{text-align:center;margin-bottom:20px}
+.speak-zh{font-family:'Noto Sans SC',sans-serif;font-size:36px;font-weight:700;color:var(--ink)}
+.speak-py{font-size:17px;color:var(--blue);margin-top:6px;font-weight:700}
+.speak-en{font-size:14px;color:var(--muted);margin-top:4px}
+.speak-controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.speak-btn{padding:12px 24px;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer}
+.btn-listen{background:var(--blue);color:#fff}.btn-got-it{background:var(--teal);color:#fff}.btn-skip{background:#f1f5f9;color:var(--muted)}
+.speak-progress{display:flex;gap:6px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+.speak-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background 0.3s}
+.speak-dot.done{background:var(--teal)}.speak-dot.current{background:var(--red)}
+.writing-card{background:var(--card);border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:16px}
+.char-input{width:100%;border:2px solid var(--border);border-radius:12px;padding:14px 16px;font-family:'Nunito',sans-serif;font-size:20px;text-align:center;outline:none;margin-bottom:12px;transition:border-color 0.2s}
+.char-input:focus{border-color:var(--blue)}
+.write-check-btn{width:100%;padding:13px;background:var(--purple);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer}
+.write-result{margin-top:12px;padding:12px;border-radius:10px;text-align:center;font-size:14px;font-weight:700;display:none}
+.write-result.ok{background:#d1fae5;color:#065f46}.write-result.err{background:#fee2e2;color:#991b1b}
+.quiz-prog{background:var(--border);border-radius:6px;height:6px;margin-bottom:20px}
+.quiz-prog-fill{height:6px;border-radius:6px;background:linear-gradient(90deg,var(--red),var(--gold));transition:width 0.4s}
+.quiz-meta{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:14px}
+.quiz-box{background:var(--card);border-radius:18px;padding:28px;text-align:center;box-shadow:var(--shadow);margin-bottom:16px}
+.quiz-zh{font-family:'Noto Sans SC',sans-serif;font-size:46px;font-weight:700;color:var(--ink)}
+.quiz-py{font-size:16px;color:var(--blue);margin-top:6px}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quiz-opt{background:#fff;border:2px solid var(--border);border-radius:12px;padding:14px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;color:var(--ink)}
+.quiz-opt:hover{border-color:var(--ink);background:var(--light)}.quiz-opt.correct{background:#d1fae5!important;border-color:#059669!important;color:#065f46!important}.quiz-opt.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#991b1b!important}
+.culture-card{background:linear-gradient(135deg,#fff8e1,#fffde7);border:2px solid var(--gold);border-radius:16px;padding:22px 24px;margin-bottom:16px;display:flex;gap:14px;align-items:flex-start}
+.culture-icon{font-size:30px;flex-shrink:0}
+.culture-text h4{font-size:15px;font-weight:800;color:var(--ink);margin-bottom:6px}
+.culture-text p{font-size:13px;color:#666;line-height:1.7}
+.culture-quiz-box{background:var(--card);border-radius:18px;padding:28px;box-shadow:var(--shadow);margin-bottom:16px}
+.culture-q-text{font-size:17px;font-weight:800;color:var(--ink);margin-bottom:16px;text-align:center;line-height:1.5}
+.culture-opts{display:flex;flex-direction:column;gap:10px}
+.culture-opt{background:#fff;border:2px solid var(--border);border-radius:12px;padding:14px 18px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-align:left;color:var(--ink);transition:all 0.15s}
+.culture-opt:hover{border-color:var(--gold);background:#fffdf0}.culture-opt.correct{background:#d1fae5!important;border-color:#059669!important;color:#065f46!important}.culture-opt.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#991b1b!important}
+.scoreboard{background:var(--card);border-radius:20px;padding:28px;box-shadow:var(--shadow);max-width:520px;margin:0 auto}
+.sb-title{font-size:22px;font-weight:900;color:var(--ink);text-align:center;margin-bottom:20px}
+.sb-overall{text-align:center;margin-bottom:24px}
+.sb-pct{font-size:72px;font-weight:900;line-height:1}
+.sb-label{font-size:14px;color:var(--muted);font-weight:600;margin-top:4px}
+.sb-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.sb-row{display:flex;align-items:center;gap:12px}
+.sb-row-label{font-size:13px;font-weight:700;color:var(--ink);width:110px;flex-shrink:0}
+.sb-row-bar-wrap{flex:1;background:#f1f5f9;border-radius:6px;height:10px;overflow:hidden}
+.sb-row-bar{height:100%;border-radius:6px;transition:width 0.8s ease}
+.sb-row-score{font-size:13px;font-weight:800;width:40px;text-align:right}
+.sb-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.sb-actions button{padding:12px 22px;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer}
+.btn-retry{background:var(--ink);color:#fff}.btn-next{background:var(--teal);color:#fff}
+.saved-tag{display:block;width:fit-content;background:#d1fae5;color:#065f46;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin:12px auto}
+@media(max-width:600px){.vocab-grid{grid-template-columns:1fr 1fr}.quiz-opts,.listen-opts{grid-template-columns:1fr}.hero{padding:24px 14px 44px}.content{padding:16px 12px 48px}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">HSK1 · Lesson 13</div>
+  <h1>我看了一个电影</h1>
+  <div class="hero-py">Wǒ kàn le yí gè diànyǐng</div>
+  <div class="hero-en">I Watched a Movie</div>
+  <div class="score-overview">
+    <div class="score-pill"><div class="sp-val" id="spVocab">—</div><div class="sp-lbl">📖 Vocab</div></div>
+    <div class="score-pill"><div class="sp-val" id="spReading">—</div><div class="sp-lbl">📄 Reading</div></div>
+    <div class="score-pill"><div class="sp-val" id="spListening">—</div><div class="sp-lbl">🎧 Listen</div></div>
+    <div class="score-pill"><div class="sp-val" id="spSpeaking">—</div><div class="sp-lbl">🎤 Speak</div></div>
+    <div class="score-pill"><div class="sp-val" id="spWriting">—</div><div class="sp-lbl">✍️ Write</div></div>
+    <div class="score-pill"><div class="sp-val" id="spCulture">—</div><div class="sp-lbl">🏮 Culture</div></div>
+    <div class="score-pill overall"><div class="sp-val" id="spOverall">—</div><div class="sp-lbl">⭐ Overall</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showSec('vocab',this)">📖 Vocab <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('dialogue',this)">💬 Dialogue <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('grammar',this)">📝 Grammar <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('reading',this)">📄 Reading <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('listening',this)">🎧 Listening <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('speaking',this)">🎤 Speaking <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('writing',this)">✍️ Writing <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('culture',this)">🏮 Culture <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('culturequiz',this)">🎎 Culture Quiz <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('quiz',this)">🎯 Quiz (25) <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('scoreboard',this)">🏆 Scores <span class="done-dot"></span></button>
+</div>
+
+<div class="content">
+
+<!-- VOCAB -->
+<div class="section active" id="sec-vocab">
+  <div class="section-head">📖 Lesson 13 Vocabulary</div>
+  <div class="info-box">💡 Click any card to hear it. Completed actions, travel by train and classroom language!</div>
+  <div class="vocab-grid">
+    <div class="vocab-card" onclick="speak('了')"><span class="cat cat-action">Grammar</span><div class="zh">了</div><div class="py">le</div><div class="en">Completed action marker</div><button class="audio-btn" onclick="event.stopPropagation();speak('了')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('火车')"><span class="cat cat-travel">Travel</span><div class="zh">火车</div><div class="py">huǒchē</div><div class="en">Train</div><button class="audio-btn" onclick="event.stopPropagation();speak('火车')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('上')"><span class="cat cat-travel">Travel</span><div class="zh">上</div><div class="py">shàng</div><div class="en">Board / get on</div><button class="audio-btn" onclick="event.stopPropagation();speak('上')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('中午')"><span class="cat cat-basic">Time</span><div class="zh">中午</div><div class="py">zhōngwǔ</div><div class="en">Noon</div><button class="audio-btn" onclick="event.stopPropagation();speak('中午')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('开')"><span class="cat cat-travel">Travel</span><div class="zh">开</div><div class="py">kāi</div><div class="en">Depart / leave</div><button class="audio-btn" onclick="event.stopPropagation();speak('开')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('有些')"><span class="cat cat-basic">Basic</span><div class="zh">有些</div><div class="py">yǒuxiē</div><div class="en">Some</div><button class="audio-btn" onclick="event.stopPropagation();speak('有些')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('有的')"><span class="cat cat-basic">Basic</span><div class="zh">有的</div><div class="py">yǒude</div><div class="en">Some (of them)</div><button class="audio-btn" onclick="event.stopPropagation();speak('有的')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('写')"><span class="cat cat-lang">Language</span><div class="zh">写</div><div class="py">xiě</div><div class="en">Write</div><button class="audio-btn" onclick="event.stopPropagation();speak('写')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('都')"><span class="cat cat-basic">Basic</span><div class="zh">都</div><div class="py">dōu</div><div class="en">All / both</div><button class="audio-btn" onclick="event.stopPropagation();speak('都')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('听见')"><span class="cat cat-action">Action</span><div class="zh">听见</div><div class="py">tīngjiàn</div><div class="en">Hear</div><button class="audio-btn" onclick="event.stopPropagation();speak('听见')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('不要')"><span class="cat cat-basic">Basic</span><div class="zh">不要</div><div class="py">búyào</div><div class="en">Don't</div><button class="audio-btn" onclick="event.stopPropagation();speak('不要')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('说话')"><span class="cat cat-lang">Language</span><div class="zh">说话</div><div class="py">shuōhuà</div><div class="en">Speak / talk</div><button class="audio-btn" onclick="event.stopPropagation();speak('说话')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('听')"><span class="cat cat-lang">Language</span><div class="zh">听</div><div class="py">tīng</div><div class="en">Listen</div><button class="audio-btn" onclick="event.stopPropagation();speak('听')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('哪些')"><span class="cat cat-basic">Basic</span><div class="zh">哪些</div><div class="py">nǎxiē</div><div class="en">Which (ones)</div><button class="audio-btn" onclick="event.stopPropagation();speak('哪些')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('字')"><span class="cat cat-lang">Language</span><div class="zh">字</div><div class="py">zì</div><div class="en">Chinese character</div><button class="audio-btn" onclick="event.stopPropagation();speak('字')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('汉语')"><span class="cat cat-lang">Language</span><div class="zh">汉语</div><div class="py">Hànyǔ</div><div class="en">Chinese language</div><button class="audio-btn" onclick="event.stopPropagation();speak('汉语')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('汉字')"><span class="cat cat-lang">Language</span><div class="zh">汉字</div><div class="py">Hànzì</div><div class="en">Chinese characters</div><button class="audio-btn" onclick="event.stopPropagation();speak('汉字')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('看见')"><span class="cat cat-action">Action</span><div class="zh">看见</div><div class="py">kànjiàn</div><div class="en">See / catch sight of</div><button class="audio-btn" onclick="event.stopPropagation();speak('看见')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('没有')"><span class="cat cat-basic">Basic</span><div class="zh">没有</div><div class="py">méiyǒu</div><div class="en">Didn't / haven't</div><button class="audio-btn" onclick="event.stopPropagation();speak('没有')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('生病')"><span class="cat cat-action">Action</span><div class="zh">生病</div><div class="py">shēngbìng</div><div class="en">Be ill / get sick</div><button class="audio-btn" onclick="event.stopPropagation();speak('生病')">🔊</button></div>
+  </div>
+
+  <div class="section-head" style="margin-top:8px;font-size:17px">🔀 Separable Words (离合词)</div>
+  <table class="sep-table">
+    <tr><th>Word</th><th>Pinyin</th><th>Meaning</th><th>Separated example</th></tr>
+    <tr><td>睡觉</td><td>shuìjiào</td><td>sleep</td><td>睡了一觉 (slept)</td></tr>
+    <tr><td>上课</td><td>shàngkè</td><td>attend class</td><td>上了两节课 (attended 2 classes)</td></tr>
+    <tr><td>下班</td><td>xiàbān</td><td>finish work</td><td>他下班了 (he got off work)</td></tr>
+    <tr><td>生病</td><td>shēngbìng</td><td>be ill</td><td>我生病了 (I got sick)</td></tr>
+    <tr><td>说话</td><td>shuōhuà</td><td>speak</td><td>说了很多话 (spoke a lot)</td></tr>
+  </table>
+</div>
+
+<!-- DIALOGUE -->
+<div class="section" id="sec-dialogue">
+  <div class="section-head">💬 Dialogues</div>
+  <div class="dialogue-box">
+    <div class="dialogue-title">Scene 1 — After the train trip</div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">白</div><div class="dialogue-text"><div class="zh">你们上火车后看见王老师了吗？</div><div class="py">Nǐmen shàng huǒchē hòu kànjiàn Wáng lǎoshī le ma?</div><div class="en">Did you see Ms. Wang after getting on the train?</div><button class="play-btn" onclick="speak('你们上火车后看见王老师了吗')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">陈</div><div class="dialogue-text"><div class="zh">没有。有些人在看书，有些人睡觉了。</div><div class="py">Méiyǒu. Yǒuxiē rén zài kànshū, yǒuxiē rén shuìjiào le.</div><div class="en">No. Some people were reading, some people fell asleep.</div><button class="play-btn" onclick="speak('没有，有些人在看书，有些人睡觉了')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">白</div><div class="dialogue-text"><div class="zh">你做什么了？</div><div class="py">Nǐ zuò shénme le?</div><div class="en">What did you do?</div><button class="play-btn" onclick="speak('你做什么了')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">陈</div><div class="dialogue-text"><div class="zh">我看了一个电影。</div><div class="py">Wǒ kàn le yí gè diànyǐng.</div><div class="en">I watched a movie.</div><button class="play-btn" onclick="speak('我看了一个电影')">▶ Play</button></div></div>
+  </div>
+  <div class="dialogue-box">
+    <div class="dialogue-title">Scene 2 — In the classroom, Chinese lesson</div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-c">王</div><div class="dialogue-text"><div class="zh">你们会说汉语了，也会写汉字吗？</div><div class="py">Nǐmen huì shuō Hànyǔ le, yě huì xiě Hànzì ma?</div><div class="en">You can speak Chinese now — can you also write characters?</div><button class="play-btn" onclick="speak('你们会说汉语了，也会写汉字吗')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">生</div><div class="dialogue-text"><div class="zh">老师，我听不见。</div><div class="py">Lǎoshī, wǒ tīng bú jiàn.</div><div class="en">Teacher, I can't hear you.</div><button class="play-btn" onclick="speak('老师，我听不见')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-c">王</div><div class="dialogue-text"><div class="zh">不要说话！请听老师的问题。你们都会写哪些汉字？</div><div class="py">Búyào shuōhuà! Qǐng tīng lǎoshī de wèntí. Nǐmen dōu huì xiě nǎxiē Hànzì?</div><div class="en">Don't talk! Listen to the teacher's question. Which characters can all of you write?</div><button class="play-btn" onclick="speak('不要说话，请听老师的问题，你们都会写哪些汉字')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">生</div><div class="dialogue-text"><div class="zh">我会写这些字了。</div><div class="py">Wǒ huì xiě zhèxiē zì le.</div><div class="en">I can write these characters now.</div><button class="play-btn" onclick="speak('我会写这些字了')">▶ Play</button></div></div>
+  </div>
+  <div class="dialogue-box">
+    <div class="dialogue-title">Scene 3 — Talking about what you did</div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">A</div><div class="dialogue-text"><div class="zh">你昨天做什么了？</div><div class="py">Nǐ zuótiān zuò shénme le?</div><div class="en">What did you do yesterday?</div><button class="play-btn" onclick="speak('你昨天做什么了')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">B</div><div class="dialogue-text"><div class="zh">我买了苹果，也看了一个电影，很好看！</div><div class="py">Wǒ mǎi le píngguǒ, yě kàn le yí gè diànyǐng, hěn hǎokàn!</div><div class="en">I bought apples and watched a movie — it was great!</div><button class="play-btn" onclick="speak('我买了苹果，也看了一个电影，很好看')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">A</div><div class="dialogue-text"><div class="zh">我们都看了那个电影！</div><div class="py">Wǒmen dōu kàn le nàge diànyǐng!</div><div class="en">We all watched that movie!</div><button class="play-btn" onclick="speak('我们都看了那个电影')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">B</div><div class="dialogue-text"><div class="zh">你没买东西吗？</div><div class="py">Nǐ méi mǎi dōngxi ma?</div><div class="en">Didn't you buy anything?</div><button class="play-btn" onclick="speak('你没买东西吗')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">A</div><div class="dialogue-text"><div class="zh">没买，我昨天生病了。</div><div class="py">Méi mǎi, wǒ zuótiān shēngbìng le.</div><div class="en">No, I got sick yesterday.</div><button class="play-btn" onclick="speak('没买，我昨天生病了')">▶ Play</button></div></div>
+  </div>
+</div>
+
+<!-- GRAMMAR -->
+<div class="section" id="sec-grammar">
+  <div class="section-head">📝 Grammar Points</div>
+  <div class="grammar-block">
+    <h3>1. Aspect Particle 了 (le) — Completed Actions</h3>
+    <p>了 placed directly after a verb shows the action is completed. In negative sentences, use 没 — and 了 disappears.</p>
+    <div class="grammar-pattern">Subject + Verb + 了 + Object (positive) &nbsp;|&nbsp; Subject + 没 + Verb (negative)</div>
+    <div class="grammar-eg"><div class="zh">我看了一个电影。</div><div class="py">Wǒ kàn le yí gè diànyǐng.</div><div class="en">I watched a movie. ✅</div></div>
+    <div class="grammar-eg"><div class="zh">我买了苹果。</div><div class="py">Wǒ mǎi le píngguǒ.</div><div class="en">I bought apples. ✅</div></div>
+    <div class="grammar-eg"><div class="zh">我没看电影。</div><div class="py">Wǒ méi kàn diànyǐng.</div><div class="en">I didn't watch a movie. ❌ (no 了 in negatives)</div></div>
+  </div>
+  <div class="grammar-block">
+    <h3>2. 都 (dōu) — All / Both</h3>
+    <p>都 comes before the verb and refers to all members of the subject. It cannot start a sentence.</p>
+    <div class="grammar-pattern">Subject + 都 + Verb / Adjective</div>
+    <div class="grammar-eg"><div class="zh">我们都会说汉语。</div><div class="py">Wǒmen dōu huì shuō Hànyǔ.</div><div class="en">We all can speak Chinese.</div></div>
+    <div class="grammar-eg"><div class="zh">他们都是学生。</div><div class="py">Tāmen dōu shì xuésheng.</div><div class="en">They are all students.</div></div>
+    <div class="grammar-eg"><div class="zh">我们都看了那个电影！</div><div class="py">Wǒmen dōu kàn le nàge diànyǐng!</div><div class="en">We all watched that movie!</div></div>
+  </div>
+  <div class="grammar-block">
+    <h3>3. Separable Words 离合词 (lí hé cí)</h3>
+    <p>Some Chinese verbs are made of two parts that can split apart to insert other words — especially 了, time words, or objects.</p>
+    <div class="grammar-pattern">Verb Part 1 + [了 / other] + Verb Part 2</div>
+    <div class="grammar-eg"><div class="zh">睡觉 → 睡了一觉</div><div class="py">shuìjiào → shuì le yì jiào</div><div class="en">sleep → slept (a sleep)</div></div>
+    <div class="grammar-eg"><div class="zh">上课 → 上了两节课</div><div class="py">shàngkè → shàng le liǎng jié kè</div><div class="en">attend class → attended two classes</div></div>
+    <div class="grammar-eg"><div class="zh">生病 → 我生病了</div><div class="py">shēngbìng → wǒ shēngbìng le</div><div class="en">be ill → I got sick</div></div>
+  </div>
+</div>
+
+<!-- READING -->
+<div class="section" id="sec-reading">
+  <div class="section-head">📄 Reading Practice</div>
+  <div class="reading-passage">
+    <div class="passage-text">昨天我们坐火车去了上海。<br>有些人看书，有些人睡觉了，我看了一个电影。<br>我们都买了东西，也都吃了午饭。<br>今天我生病了，没去学校，没上课。</div>
+    <div class="passage-py">Zuótiān wǒmen zuò huǒchē qù le Shànghǎi.<br>Yǒuxiē rén kànshū, yǒuxiē rén shuìjiào le, wǒ kàn le yí gè diànyǐng.<br>Wǒmen dōu mǎi le dōngxi, yě dōu chī le wǔfàn.<br>Jīntiān wǒ shēngbìng le, méi qù xuéxiào, méi shàngkè.</div>
+    <div class="passage-en">Yesterday we took the train to Shanghai.<br>Some people read, some fell asleep, I watched a movie.<br>We all bought things and we all ate lunch.<br>Today I got sick, didn't go to school, didn't attend class.</div>
+    <button class="listen-play-btn" style="margin-top:14px" onclick="speak('昨天我们坐火车去了上海。有些人看书，有些人睡觉了，我看了一个电影。我们都买了东西，也都吃了午饭。今天我生病了，没去学校，没上课。')">🔊 Read Aloud</button>
+  </div>
+  <div id="readingQs"></div>
+  <button id="readingSubmitBtn" style="display:none;width:100%;padding:13px;background:var(--blue);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px" onclick="submitReading()">Submit Answers ✓</button>
+</div>
+
+<!-- LISTENING -->
+<div class="section" id="sec-listening">
+  <div class="section-head">🎧 Listening Practice</div>
+  <div class="info-box">🎧 Press Play, listen carefully, then choose the correct pinyin answer!</div>
+  <div id="listenContent"></div>
+</div>
+
+<!-- SPEAKING -->
+<div class="section" id="sec-speaking">
+  <div class="section-head">🎤 Speaking Practice</div>
+  <div class="info-box">🎤 Listen to the phrase, try to say it yourself, then click ✅ Got It!</div>
+  <div class="speak-progress" id="speakDots"></div>
+  <div id="speakContent"></div>
+</div>
+
+<!-- WRITING -->
+<div class="section" id="sec-writing">
+  <div class="section-head">✍️ Writing Practice</div>
+  <div class="info-box">✍️ Type the <strong>pinyin without tones</strong>. Example: type <strong>huoche</strong> for 火车</div>
+  <div id="writeContent"></div>
+</div>
+
+<!-- CULTURE -->
+<div class="section" id="sec-culture">
+  <div class="section-head">🏮 Culture Study — Travel, Language Learning & Chinese Characters</div>
+  <div class="culture-card">
+    <div class="culture-icon">🚄</div>
+    <div class="culture-text">
+      <h4>China's High-Speed Rail Network</h4>
+      <p>China has the world's largest high-speed rail (高铁, gāotiě) network, with trains travelling at up to 350 km/h. Taking the train (坐火车) is extremely common in China for inter-city travel — faster and more affordable than flying for most routes. Millions of passengers travel by rail every day.</p>
+    </div>
+  </div>
+  <div class="culture-card">
+    <div class="culture-icon">🎬</div>
+    <div class="culture-text">
+      <h4>Watching Movies on the Train</h4>
+      <p>On long train journeys, watching movies on phones, tablets or the train's entertainment system is very common. Many Chinese passengers also read (看书), sleep (睡觉), or chat — exactly as described in the lesson dialogue. Short naps on trains are completely normal!</p>
+    </div>
+  </div>
+  <div class="culture-card">
+    <div class="culture-icon">🖊️</div>
+    <div class="culture-text">
+      <h4>汉字 — Chinese Characters</h4>
+      <p>Chinese characters (汉字 Hànzì) are one of the oldest writing systems still in use, with over 3,000 years of history. While thousands exist, knowing about 2,000-3,000 characters is enough for everyday literacy. Learning to write (写) characters is an important part of Mandarin study.</p>
+    </div>
+  </div>
+  <div class="culture-card">
+    <div class="culture-icon">🗣️</div>
+    <div class="culture-text">
+      <h4>汉语 vs 中文 — Two Ways to Say "Chinese"</h4>
+      <p>汉语 (Hànyǔ) and 中文 (Zhōngwén) both mean "Chinese language." 汉语 refers specifically to the spoken Mandarin language, while 中文 refers more broadly to written Chinese. In everyday speech, both are used interchangeably — learners will encounter both terms.</p>
+    </div>
+  </div>
+  <div class="culture-card">
+    <div class="culture-icon">🏫</div>
+    <div class="culture-text">
+      <h4>Classroom Culture in China</h4>
+      <p>In Chinese classrooms, teachers are treated with great respect. "不要说话" (Don't talk!) is a common phrase used to maintain classroom order. Students are expected to listen attentively, and raising one's hand before speaking is standard etiquette in Chinese schools.</p>
+    </div>
+  </div>
+  <div class="culture-card">
+    <div class="culture-icon">🤒</div>
+    <div class="culture-text">
+      <h4>Health and 生病 (Getting Sick)</h4>
+      <p>In China, getting sick (生病) is often treated with traditional Chinese medicine (TCM) alongside Western medicine. 中药 (zhōngyào, herbal medicine) and 西药 (xīyào, Western medicine) are both commonly used. It's also very common to receive advice like 多喝热水 (drink more hot water!) when unwell.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CULTURE QUIZ -->
+<div class="section" id="sec-culturequiz">
+  <div class="section-head">🎎 Culture Quiz</div>
+  <div class="info-box">🏮 Test what you learned about Chinese trains, characters and classroom culture!</div>
+  <div id="cultureQuizContent"></div>
+</div>
+
+<!-- VOCAB QUIZ -->
+<div class="section" id="sec-quiz">
+  <div class="section-head">🎯 Vocabulary Quiz (25 Questions)</div>
+  <div id="quizContent"></div>
+</div>
+
+<!-- SCOREBOARD -->
+<div class="section" id="sec-scoreboard">
+  <div class="section-head">🏆 My Scoreboard</div>
+  <div id="scoreboardContent"></div>
+</div>
+
+</div>
+
+<script>
+const SHEET_URL='https://script.google.com/macros/s/AKfycbzGl-S5KLsstzX237AJ2Wc19vjB2S87m235iZehafLnrTU48BcGpnlCzL00FQwMFeRL9g/exec';
+const LESSON_ID='L13', LESSON_NAME='I Watched a Movie';
+const SCORE_KEY='cf_l13_scores';
+let scores=JSON.parse(localStorage.getItem(SCORE_KEY)||'{}');
+
+function saveScores(){
+  localStorage.setItem(SCORE_KEY,JSON.stringify(scores));
+  updatePills();
+  try{
+    const sid=localStorage.getItem('cf_student_id')||'anonymous';
+    const sname=localStorage.getItem('cf_student_name')||'Student';
+    const vals=Object.values(scores).filter(x=>x!==undefined);
+    const overall=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;
+    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({studentId:sid,studentName:sname,lessonId:LESSON_ID,lessonName:LESSON_NAME,score:overall,maxScore:100,pct:overall})});
+  }catch(e){}
+}
+function updatePills(){
+  const f=v=>v!==undefined?v+'%':'—';
+  document.getElementById('spVocab').textContent=f(scores.vocab);
+  document.getElementById('spReading').textContent=f(scores.reading);
+  document.getElementById('spListening').textContent=f(scores.listening);
+  document.getElementById('spSpeaking').textContent=f(scores.speaking);
+  document.getElementById('spWriting').textContent=f(scores.writing);
+  document.getElementById('spCulture').textContent=f(scores.culture);
+  const vals=Object.values(scores).filter(x=>x!==undefined);
+  const ov=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):undefined;
+  document.getElementById('spOverall').textContent=f(ov);
+}
+updatePills();
+
+function speak(t){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  u.lang='zh-CN';u.rate=0.75;u.pitch=1.1;
+  const v=speechSynthesis.getVoices().find(x=>x.lang.startsWith('zh'));
+  if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=()=>{};
+
+function showSec(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='reading')initReading();
+  if(id==='listening')initListening();
+  if(id==='speaking')initSpeaking();
+  if(id==='writing')initWriting();
+  if(id==='culturequiz')initCultureQuiz();
+  if(id==='quiz')initQuiz();
+  if(id==='scoreboard')renderScoreboard();
+}
+function markDone(id){
+  const ids=['vocab','dialogue','grammar','reading','listening','speaking','writing','culture','culturequiz','quiz','scoreboard'];
+  const i=ids.indexOf(id);
+  if(i>=0)document.querySelectorAll('.nav-tab')[i].classList.add('completed');
+}
+document.querySelectorAll('.nav-tab')[7].addEventListener('click',()=>markDone('culture'));
+
+// READING — pinyin only
+const readingQs=[
+  {q:"How did they travel to Shanghai?",qpy:"Tāmen zěnme qù Shànghǎi?",
+   opts:["zuò fēijī (by plane)","zuò huǒchē (by train)","kāichē (by car)","zǒulù (on foot)"],ans:1},
+  {q:"What did the narrator do on the train?",qpy:"Tā zài huǒchē shàng zuò shénme le?",
+   opts:["kàn shū (read)","shuìjiào le (fell asleep)","kàn le yí gè diànyǐng (watched a movie)","chī dōngxi (ate food)"],ans:2},
+  {q:"What did EVERYONE do? (两件事)",qpy:"Tāmen dōu zuò le shénme?",
+   opts:["dōu shuìjiào le (all slept)","dōu mǎi le dōngxi hé chī le wǔfàn (all bought things and ate lunch)","dōu kàn le diànyǐng (all watched movies)","dōu qù le shāngdiàn (all went to the shop)"],ans:1},
+  {q:"Why didn't the narrator go to school today?",qpy:"Tā jīntiān wèishénme méi qù xuéxiào?",
+   opts:["tā hěn máng (too busy)","tā shēngbìng le (got sick)","tā méiyǒu shíjiān (no time)","tā xiǎng xiūxi (wanted to rest)"],ans:1},
+];
+let readingAnswers={};
+function initReading(){
+  const wrap=document.getElementById('readingQs');
+  wrap.innerHTML=readingQs.map((q,i)=>`
+    <div class="reading-q" id="rq${i}">
+      <div class="q-text">${i+1}. ${q.q}</div>
+      <div class="q-py">${q.qpy}</div>
+      <div class="reading-opts">${q.opts.map((o,j)=>`<button class="reading-opt" id="ro${i}_${j}" onclick="pickReading(${i},${j})">${o}</button>`).join('')}</div>
+    </div>`).join('');
+  document.getElementById('readingSubmitBtn').style.display='block';
+}
+function pickReading(qi,oi){
+  readingAnswers[qi]=oi;
+  for(let j=0;j<4;j++){const b=document.getElementById(`ro${qi}_${j}`);if(b){b.style.borderColor='';b.style.background='';}}
+  const s=document.getElementById(`ro${qi}_${oi}`);s.style.borderColor='var(--blue)';s.style.background='#e8f0fe';
+}
+function submitReading(){
+  if(Object.keys(readingAnswers).length<readingQs.length){alert('Please answer all questions!');return;}
+  let correct=0;
+  readingQs.forEach((q,i)=>{
+    const ans=readingAnswers[i];
+    for(let j=0;j<q.opts.length;j++){
+      const b=document.getElementById(`ro${i}_${j}`);if(!b)continue;
+      b.disabled=true;
+      if(j===q.ans)b.classList.add('correct');
+      else if(j===ans&&ans!==q.ans)b.classList.add('wrong');
+    }
+    if(ans===q.ans)correct++;
+  });
+  scores.reading=Math.round(correct/readingQs.length*100);
+  saveScores();markDone('reading');
+  const btn=document.getElementById('readingSubmitBtn');
+  btn.textContent=`✅ Score: ${scores.reading}% (${correct}/${readingQs.length})`;
+  btn.style.background='var(--teal)';btn.disabled=true;
+}
+
+// LISTENING — pinyin only
+const listenQs=[
+  {audio:'我看了一个电影',q:'What does this mean?',qpy:'Zhè jù huà shì shénme yìsi?',
+   opts:["Wǒ xiǎng kàn diànyǐng. (I want to watch a movie.)","Wǒ kàn le yí gè diànyǐng. (I watched a movie.)","Wǒ méi kàn diànyǐng. (I didn't watch a movie.)","Wǒ zài kàn diànyǐng. (I'm watching a movie.)"],ans:1},
+  {audio:'我没买东西',q:'What does this mean?',qpy:'Zhè jù huà shì shénme yìsi?',
+   opts:["Wǒ mǎi le hěn duō dōngxi. (I bought a lot.)","Wǒ xiǎng mǎi dōngxi. (I want to buy things.)","Wǒ méi mǎi dōngxi. (I didn't buy anything.)","Wǒ qù mǎi dōngxi. (I'm going to buy things.)"],ans:2},
+  {audio:'我们都会说汉语',q:'What does this mean?',qpy:'Zhè jù huà shì shénme yìsi?',
+   opts:["Wǒmen dōu xǐhuan Hànyǔ. (We all like Chinese.)","Wǒmen dōu huì shuō Hànyǔ. (We all can speak Chinese.)","Wǒmen dōu zài xué Hànyǔ. (We are all studying Chinese.)","Wǒmen dōu bù huì shuō Hànyǔ. (None of us can speak Chinese.)"],ans:1},
+  {audio:'不要说话',q:'What is being said?',qpy:'Zhège zhǐshì shì shénme yìsi?',
+   opts:["Qǐng shuōhuà. (Please speak.)","Nǐ shuō de hǎo. (You speak well.)","Búyào shuōhuà. (Don't talk.)","Nǐmen dōu shuō. (Everyone speak.)"],ans:2},
+  {audio:'我今天生病了',q:'What happened?',qpy:'Zhège rén zěnme le?',
+   opts:["Tā hěn máng. (He is busy.)","Tā shēngbìng le. (He got sick.)","Tā qù yīyuàn le. (He went to hospital.)","Tā méiyǒu chī fàn. (He didn't eat.)"],ans:1},
+];
+let listenIdx=0,listenScore=0,listenDone=false;
+function initListening(){if(listenDone)return;listenIdx=0;listenScore=0;renderListenQ();}
+function renderListenQ(){
+  const q=listenQs[listenIdx];
+  document.getElementById('listenContent').innerHTML=`
+    <div class="listen-card">
+      <div style="text-align:center;margin-bottom:8px;font-size:13px;font-weight:700;color:var(--muted)">Question ${listenIdx+1} of ${listenQs.length} &nbsp;|&nbsp; Score: ${listenScore}/${listenIdx}</div>
+      <div class="quiz-prog"><div class="quiz-prog-fill" style="width:${listenIdx/listenQs.length*100}%"></div></div>
+      <button class="listen-play-btn" onclick="speak('${q.audio}')">🔊 Play Audio</button>
+      <div style="text-align:center;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px">${q.q}</div>
+      <div style="text-align:center;font-size:13px;color:var(--blue);font-style:italic;margin-bottom:14px">${q.qpy}</div>
+      <div class="listen-opts">${q.opts.map((o,i)=>`<button class="listen-opt" id="lo${i}" onclick="answerListen(${i})">${o}</button>`).join('')}</div>
+    </div>`;
+  setTimeout(()=>speak(q.audio),400);
+}
+function answerListen(idx){
+  const q=listenQs[listenIdx];
+  if(idx===q.ans)listenScore++;
+  for(let i=0;i<q.opts.length;i++){
+    const b=document.getElementById('lo'+i);if(!b)continue;
+    b.disabled=true;
+    if(i===q.ans)b.classList.add('correct');
+    else if(i===idx&&idx!==q.ans)b.classList.add('wrong');
+  }
+  setTimeout(()=>{
+    listenIdx++;
+    if(listenIdx>=listenQs.length){
+      listenDone=true;
+      scores.listening=Math.round(listenScore/listenQs.length*100);
+      saveScores();markDone('listening');
+      document.getElementById('listenContent').innerHTML=`
+        <div style="text-align:center;padding:32px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">
+          <div style="font-size:48px">🎧</div>
+          <div style="font-size:28px;font-weight:900;color:var(--teal);margin:8px 0">${scores.listening}%</div>
+          <div style="font-weight:700;color:var(--muted)">${listenScore}/${listenQs.length} correct</div>
+          <button onclick="listenDone=false;initListening()" style="margin-top:16px;padding:10px 24px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🔄 Try Again</button>
+        </div>`;
+    }else renderListenQ();
+  },900);
+}
+
+// SPEAKING
+const speakPhrases=[
+  {zh:'我看了一个电影。',py:'Wǒ kàn le yí gè diànyǐng.',en:'I watched a movie.'},
+  {zh:'你做什么了？',py:'Nǐ zuò shénme le?',en:'What did you do?'},
+  {zh:'我们都买了东西。',py:'Wǒmen dōu mǎi le dōngxi.',en:'We all bought things.'},
+  {zh:'我没买东西。',py:'Wǒ méi mǎi dōngxi.',en:"I didn't buy anything."},
+  {zh:'不要说话！',py:'Búyào shuōhuà!',en:"Don't talk!"},
+  {zh:'我会写这些字了。',py:'Wǒ huì xiě zhèxiē zì le.',en:'I can write these characters now.'},
+  {zh:'我今天生病了。',py:'Wǒ jīntiān shēngbìng le.',en:'I got sick today.'},
+];
+let speakIdx=0,speakDoneCount=0;
+function initSpeaking(){speakIdx=0;speakDoneCount=0;renderSpeakDots();renderSpeakPhrase();}
+function renderSpeakDots(){document.getElementById('speakDots').innerHTML=speakPhrases.map((_,i)=>`<div class="speak-dot ${i<speakDoneCount?'done':i===speakIdx?'current':''}"></div>`).join('');}
+function renderSpeakPhrase(){
+  const p=speakPhrases[speakIdx];
+  document.getElementById('speakContent').innerHTML=`
+    <div class="speaking-card">
+      <div class="speak-phrase"><div class="speak-zh">${p.zh}</div><div class="speak-py">${p.py}</div><div class="speak-en">${p.en}</div></div>
+      <div class="speak-controls">
+        <button class="speak-btn btn-listen" onclick="speak('${p.zh.replace(/[？！。]/g,'')}')">🔊 Listen</button>
+        <button class="speak-btn btn-got-it" onclick="gotIt()">✅ Got It!</button>
+        <button class="speak-btn btn-skip" onclick="skipSpeak()">⏭ Skip</button>
+      </div>
+      <div style="margin-top:14px;text-align:center;font-size:13px;color:var(--muted)">${speakIdx+1} / ${speakPhrases.length}</div>
+    </div>`;
+  setTimeout(()=>speak(p.zh.replace(/[？！。]/g,'')),300);
+}
+function gotIt(){speakDoneCount++;nextSpeak();}
+function skipSpeak(){nextSpeak();}
+function nextSpeak(){
+  speakIdx++;
+  if(speakIdx>=speakPhrases.length){
+    scores.speaking=Math.round(speakDoneCount/speakPhrases.length*100);
+    saveScores();markDone('speaking');
+    document.getElementById('speakContent').innerHTML=`
+      <div style="text-align:center;padding:32px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">
+        <div style="font-size:48px">🎤</div>
+        <div style="font-size:28px;font-weight:900;color:var(--teal);margin:8px 0">${scores.speaking}%</div>
+        <div style="font-weight:700;color:var(--muted)">${speakDoneCount}/${speakPhrases.length} phrases practised</div>
+        <button onclick="initSpeaking()" style="margin-top:16px;padding:10px 24px;background:var(--red);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🔄 Practise Again</button>
+      </div>`;
+    document.getElementById('speakDots').innerHTML='';
+    return;
+  }
+  renderSpeakDots();renderSpeakPhrase();
+}
+
+// WRITING
+const writeWords=[
+  {en:'Train',zh:'火车',py:'huoche',accept:['huoche','huo che']},
+  {en:'Write',zh:'写',py:'xie',accept:['xie']},
+  {en:'All / both',zh:'都',py:'dou',accept:['dou']},
+  {en:'Hear',zh:'听见',py:'tingjian',accept:['tingjian','ting jian']},
+  {en:'Chinese character',zh:'字',py:'zi',accept:['zi']},
+  {en:'Chinese language',zh:'汉语',py:'hanyu',accept:['hanyu','han yu']},
+  {en:'Listen',zh:'听',py:'ting',accept:['ting']},
+  {en:'Be ill / get sick',zh:'生病',py:'shengbing',accept:['shengbing','sheng bing']},
+  {en:'Some',zh:'有些',py:'youxie',accept:['youxie','you xie']},
+  {en:'See / catch sight of',zh:'看见',py:'kanjian',accept:['kanjian','kan jian']},
+];
+let writeIdx=0,writeScore=0,writeDone=false;
+function stripTones(s){return s.toLowerCase().replace(/[āáǎà]/g,'a').replace(/[ēéěè]/g,'e').replace(/[īíǐì]/g,'i').replace(/[ōóǒò]/g,'o').replace(/[ūúǔù]/g,'u').replace(/[ǖǘǚǜü]/g,'u').replace(/\s+/g,' ').trim();}
+function initWriting(){if(writeDone)return;writeIdx=0;writeScore=0;renderWriteQ();}
+function renderWriteQ(){
+  const w=writeWords[writeIdx];
+  document.getElementById('writeContent').innerHTML=`
+    <div class="writing-card">
+      <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px">
+        <span>Word ${writeIdx+1} of ${writeWords.length}</span><span style="color:var(--teal)">Score: ${writeScore}/${writeIdx}</span>
+      </div>
+      <div class="quiz-prog"><div class="quiz-prog-fill" style="width:${writeIdx/writeWords.length*100}%"></div></div>
+      <div style="text-align:center;margin-bottom:16px">
+        <div style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:8px">Type the pinyin for:</div>
+        <div style="font-size:28px;font-weight:900;color:var(--ink)">${w.en}</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:6px">(no tones needed — e.g. <strong>huoche</strong>)</div>
+      </div>
+      <input class="char-input" id="writeInput" placeholder="Type pinyin here…" onkeydown="if(event.key==='Enter')checkWrite()">
+      <button class="write-check-btn" onclick="checkWrite()">Check Answer ✓</button>
+      <div class="write-result" id="writeResult"></div>
+      <button id="writeNextBtn" style="display:none;width:100%;margin-top:10px;padding:13px;background:var(--teal);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer" onclick="nextWrite()">Next →</button>
+    </div>`;
+  document.getElementById('writeInput').focus();
+}
+function checkWrite(){
+  const raw=document.getElementById('writeInput').value.trim();
+  const input=stripTones(raw).replace(/\s+/g,'');
+  const w=writeWords[writeIdx];
+  const ok=w.accept.some(a=>stripTones(a).replace(/\s+/g,'')===input);
+  if(ok)writeScore++;
+  const res=document.getElementById('writeResult');
+  res.style.display='block';
+  res.className='write-result '+(ok?'ok':'err');
+  res.innerHTML=ok?`✅ Correct! <strong>${w.py}</strong> <span style="font-family:'Noto Sans SC',sans-serif">(${w.zh})</span>`:`❌ Answer: <strong>${w.py}</strong> <span style="font-family:'Noto Sans SC',sans-serif">(${w.zh})</span>`;
+  document.getElementById('writeInput').disabled=true;
+  document.querySelector('.write-check-btn').disabled=true;
+  document.getElementById('writeNextBtn').style.display='block';
+  speak(w.zh);
+}
+function nextWrite(){
+  writeIdx++;
+  if(writeIdx>=writeWords.length){
+    writeDone=true;
+    scores.writing=Math.round(writeScore/writeWords.length*100);
+    saveScores();markDone('writing');
+    document.getElementById('writeContent').innerHTML=`
+      <div style="text-align:center;padding:32px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">
+        <div style="font-size:48px">✍️</div>
+        <div style="font-size:28px;font-weight:900;color:var(--purple);margin:8px 0">${scores.writing}%</div>
+        <div style="font-weight:700;color:var(--muted)">${writeScore}/${writeWords.length} correct</div>
+        <button onclick="writeDone=false;initWriting()" style="margin-top:16px;padding:10px 24px;background:var(--purple);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🔄 Try Again</button>
+      </div>`;
+    return;
+  }
+  renderWriteQ();
+}
+
+// CULTURE QUIZ
+const cultureQs=[
+  {q:'What does China have the world\'s largest network of?',
+   opts:['Motorways','High-speed rail (高铁)','Bicycle lanes','Airports'],ans:1},
+  {q:'What is a very common activity on long train journeys in China?',
+   opts:['Swimming','Watching movies on phones or tablets','Working in offices','Playing football'],ans:1},
+  {q:'Approximately how many characters does someone need to know for everyday literacy in Chinese?',
+   opts:['200-300','500-800','2000-3000','Over 10,000'],ans:2},
+  {q:'What is the difference between 汉语 (Hànyǔ) and 中文 (Zhōngwén)?',
+   opts:['They are completely different languages','汉语 refers to spoken Mandarin; 中文 refers more broadly to written Chinese','汉语 is for advanced learners only','中文 is only used in Taiwan'],ans:1},
+  {q:'What do Chinese people often say when someone is sick?',
+   opts:['多吃糖 (eat more sugar)','多喝热水 (drink more hot water)','多睡觉 (sleep more)','多运动 (exercise more)'],ans:1},
+  {q:'What is 离合词 (lí hé cí)?',
+   opts:['A type of Chinese food','Separable words — verbs that can split apart','A grammar particle','A formal writing style'],ans:1},
+];
+let cqIdx=0,cqScore=0,cqDone=false;
+function initCultureQuiz(){if(cqDone)return;cqIdx=0;cqScore=0;renderCultureQ();}
+function renderCultureQ(){
+  const q=cultureQs[cqIdx];
+  document.getElementById('cultureQuizContent').innerHTML=`
+    <div class="quiz-meta"><span>Question ${cqIdx+1}/${cultureQs.length}</span><span style="color:var(--teal)">Score: ${cqScore}/${cqIdx}</span></div>
+    <div class="quiz-prog"><div class="quiz-prog-fill" style="width:${cqIdx/cultureQs.length*100}%;background:linear-gradient(90deg,var(--gold),var(--orange))"></div></div>
+    <div class="culture-quiz-box">
+      <div class="culture-q-text">🏮 ${q.q}</div>
+      <div class="culture-opts">${q.opts.map((o,i)=>`<button class="culture-opt" id="cqo${i}" onclick="answerCulture(${i})">${o}</button>`).join('')}</div>
+    </div>`;
+}
+function answerCulture(idx){
+  const q=cultureQs[cqIdx];
+  const correct=idx===q.ans;
+  if(correct)cqScore++;
+  for(let i=0;i<q.opts.length;i++){
+    const b=document.getElementById('cqo'+i);if(!b)continue;
+    b.disabled=true;
+    if(i===q.ans)b.classList.add('correct');
+    else if(i===idx&&!correct)b.classList.add('wrong');
+  }
+  setTimeout(()=>{
+    cqIdx++;
+    if(cqIdx>=cultureQs.length){
+      cqDone=true;
+      scores.culture=Math.round(cqScore/cultureQs.length*100);
+      saveScores();markDone('culturequiz');
+      document.getElementById('cultureQuizContent').innerHTML=`
+        <div style="text-align:center;padding:32px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">
+          <div style="font-size:48px">🏮</div>
+          <div style="font-size:28px;font-weight:900;color:var(--orange);margin:8px 0">${scores.culture}%</div>
+          <div style="font-weight:700;color:var(--muted)">${cqScore}/${cultureQs.length} correct</div>
+          <button onclick="cqDone=false;initCultureQuiz()" style="margin-top:16px;padding:10px 24px;background:var(--gold);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🔄 Try Again</button>
+        </div>`;
+    }else renderCultureQ();
+  },1000);
+}
+
+// VOCAB QUIZ — 25 QUESTIONS
+const vocabWords=[
+  {zh:'了',py:'le',en:'Completed action marker'},
+  {zh:'火车',py:'huǒchē',en:'Train'},
+  {zh:'上',py:'shàng',en:'Board / get on'},
+  {zh:'中午',py:'zhōngwǔ',en:'Noon'},
+  {zh:'开',py:'kāi',en:'Depart / leave'},
+  {zh:'有些',py:'yǒuxiē',en:'Some'},
+  {zh:'有的',py:'yǒude',en:'Some (of them)'},
+  {zh:'写',py:'xiě',en:'Write'},
+  {zh:'都',py:'dōu',en:'All / both'},
+  {zh:'听见',py:'tīngjiàn',en:'Hear'},
+  {zh:'不要',py:'búyào',en:"Don't"},
+  {zh:'说话',py:'shuōhuà',en:'Speak / talk'},
+  {zh:'听',py:'tīng',en:'Listen'},
+  {zh:'哪些',py:'nǎxiē',en:'Which (ones)'},
+  {zh:'字',py:'zì',en:'Chinese character'},
+  {zh:'汉语',py:'Hànyǔ',en:'Chinese language'},
+  {zh:'汉字',py:'Hànzì',en:'Chinese characters'},
+  {zh:'看见',py:'kànjiàn',en:'See / catch sight of'},
+  {zh:'没有',py:'méiyǒu',en:"Didn't / haven't"},
+  {zh:'生病',py:'shēngbìng',en:'Be ill / get sick'},
+  {zh:'买了',py:'mǎi le',en:'Bought (completed)'},
+  {zh:'看了',py:'kàn le',en:'Watched (completed)'},
+  {zh:'没买',py:'méi mǎi',en:"Didn't buy"},
+  {zh:'我们都',py:'wǒmen dōu',en:'We all'},
+  {zh:'睡觉了',py:'shuìjiào le',en:'Fell asleep'},
+];
+let qWords=[],qIdx=0,qScore=0,qDone=false;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function initQuiz(){if(qDone)return;qWords=shuffle(vocabWords);qIdx=0;qScore=0;renderQuizQ();}
+function renderQuizQ(){
+  const q=qWords[qIdx];
+  const others=vocabWords.filter(x=>x.zh!==q.zh);
+  const opts=shuffle([q,...shuffle(others).slice(0,3)]);
+  document.getElementById('quizContent').innerHTML=`
+    <div class="quiz-prog"><div class="quiz-prog-fill" style="width:${qIdx/qWords.length*100}%"></div></div>
+    <div class="quiz-meta"><span>Question ${qIdx+1}/${qWords.length}</span><span style="color:var(--teal)">Score: ${qScore}/${qIdx}</span></div>
+    <div class="quiz-box">
+      <div style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px">What does this mean?</div>
+      <div class="quiz-zh">${q.zh}</div>
+      <div class="quiz-py">${q.py}</div>
+    </div>
+    <div class="quiz-opts">${opts.map((o,i)=>`<button class="quiz-opt" id="qo${i}" onclick="answerQuiz(${i},'${o.zh.replace(/'/g,"\\'")}','${q.zh.replace(/'/g,"\\'")}')">${o.en}</button>`).join('')}</div>`;
+  speak(q.zh);
+}
+function answerQuiz(i,chosen,correct){
+  const correctWord=vocabWords.find(w=>w.zh===correct);
+  document.querySelectorAll('.quiz-opt').forEach((b,j)=>{
+    b.disabled=true;
+    if(b.textContent===correctWord?.en)b.classList.add('correct');
+    else if(j===i&&chosen!==correct)b.classList.add('wrong');
+  });
+  if(chosen===correct)qScore++;
+  setTimeout(()=>{
+    qIdx++;
+    if(qIdx>=qWords.length){
+      qDone=true;
+      scores.vocab=Math.round(qScore/qWords.length*100);
+      saveScores();markDone('quiz');
+      document.getElementById('quizContent').innerHTML=`
+        <div style="text-align:center;padding:32px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">
+          <div style="font-size:48px">🎯</div>
+          <div style="font-size:28px;font-weight:900;color:var(--red);margin:8px 0">${scores.vocab}%</div>
+          <div style="font-weight:700;color:var(--muted)">${qScore}/${qWords.length} correct</div>
+          <div style="display:flex;gap:10px;justify-content:center;margin-top:16px">
+            <button onclick="qDone=false;initQuiz()" style="padding:10px 20px;background:var(--ink);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🔄 Retry</button>
+            <button onclick="showSec('scoreboard',document.querySelectorAll('.nav-tab')[10])" style="padding:10px 20px;background:var(--teal);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🏆 Scores</button>
+          </div>
+        </div>`;
+    }else renderQuizQ();
+  },900);
+}
+
+// SCOREBOARD
+function renderScoreboard(){
+  const secs=[
+    {key:'vocab',label:'📖 Vocab (25)',color:'var(--red)'},
+    {key:'reading',label:'📄 Reading',color:'var(--blue)'},
+    {key:'listening',label:'🎧 Listening',color:'var(--orange)'},
+    {key:'speaking',label:'🎤 Speaking',color:'var(--purple)'},
+    {key:'writing',label:'✍️ Writing',color:'var(--teal)'},
+    {key:'culture',label:'🏮 Culture',color:'var(--gold)'},
+  ];
+  const vals=secs.map(s=>scores[s.key]).filter(x=>x!==undefined);
+  const overall=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;
+  const emoji=overall>=80?'🏆':overall>=60?'🌟':overall>=40?'📚':'🌱';
+  const col=overall>=80?'var(--teal)':overall>=60?'var(--gold)':overall>=40?'var(--blue)':'var(--muted)';
+  document.getElementById('scoreboardContent').innerHTML=`
+    <div class="scoreboard">
+      <div class="sb-title">Lesson 13 Report Card</div>
+      <div class="sb-overall">
+        <div class="sb-pct" style="color:${col}">${emoji} ${overall}%</div>
+        <div class="sb-label">Overall — ${vals.length}/6 sections done</div>
+      </div>
+      <div class="sb-rows">
+        ${secs.map(s=>{
+          const v=scores[s.key],pct=v!==undefined?v:0;
+          return`<div class="sb-row">
+            <div class="sb-row-label">${s.label}</div>
+            <div class="sb-row-bar-wrap"><div class="sb-row-bar" style="width:${pct}%;background:${s.color}"></div></div>
+            <div class="sb-row-score" style="color:${s.color}">${v!==undefined?v+'%':'—'}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="saved-tag">✅ Scores saved to your device</div>
+      <div class="sb-actions">
+        <button class="btn-retry" onclick="if(confirm('Reset all scores?')){scores={};saveScores();renderScoreboard();}">🔄 Reset</button>
+        <button class="btn-next" onclick="alert('Lesson 14 coming soon! 加油！💪')">Next Lesson →</button>
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
