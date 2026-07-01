@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSK1 Lesson 8 — 我爸爸也在医院工作</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+:root{--ink:#1a1a2e;--red:#e63946;--gold:#ffd166;--teal:#06d6a0;--blue:#118ab2;--purple:#7b2d8b;--orange:#f4a261;--green:#2d6a4f;--light:#f0f4ff;--card:#fff;--border:#e2e8f0;--muted:#8892a4;--shadow:0 8px 32px rgba(0,0,0,0.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--ink);min-height:100vh}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#1f4e5f 60%,#0f7a6c 100%);color:#fff;padding:36px 24px 56px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'医院';position:absolute;font-family:'Noto Sans SC',sans-serif;font-size:200px;font-weight:700;color:rgba(255,255,255,0.04);top:-20px;left:50%;transform:translateX(-50%);pointer-events:none}
+.hero-badge{display:inline-block;background:rgba(255,209,102,0.2);border:1px solid rgba(255,209,102,0.5);color:var(--gold);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:14px}
+.hero h1{font-size:clamp(24px,5.5vw,46px);font-family:'Noto Sans SC',sans-serif;font-weight:700;line-height:1.1;margin-bottom:4px}
+.hero-py{font-size:17px;color:rgba(255,255,255,0.6);margin-bottom:6px;letter-spacing:1px}
+.hero-en{font-size:16px;color:rgba(255,255,255,0.8);font-weight:700;margin-bottom:28px}
+.score-overview{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.score-pill{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:8px 16px;text-align:center;min-width:90px}
+.score-pill .sp-val{font-size:20px;font-weight:900}
+.score-pill .sp-lbl{font-size:10px;opacity:0.7;text-transform:uppercase;letter-spacing:0.5px}
+.score-pill.overall{background:rgba(255,209,102,0.25);border-color:rgba(255,209,102,0.5)}
+.nav-tabs{display:flex;background:#fff;border-bottom:2px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.nav-tab{flex-shrink:0;padding:13px 14px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.2s;display:flex;align-items:center;gap:5px}
+.nav-tab:hover{color:var(--ink)}
+.nav-tab.active{color:var(--red);border-bottom-color:var(--red)}
+.nav-tab .done-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);display:none}
+.nav-tab.completed .done-dot{display:inline-block}
+.content{max-width:860px;margin:0 auto;padding:24px 18px 60px}
+.section{display:none}
+.section.active{display:block}
+.section-head{font-size:20px;font-weight:900;color:var(--ink);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:24px}
+.vocab-card{background:var(--card);border-radius:14px;padding:16px;box-shadow:var(--shadow);border:2px solid transparent;cursor:pointer;transition:transform 0.2s,border-color 0.2s;text-align:center;position:relative}
+.vocab-card:hover{transform:translateY(-2px);border-color:var(--red)}
+.vocab-card .zh{font-family:'Noto Sans SC',sans-serif;font-size:26px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.vocab-card .py{font-size:12px;color:var(--blue);font-weight:700;margin-bottom:4px}
+.vocab-card .en{font-size:11px;color:var(--muted);font-weight:600}
+.vocab-card .cat{position:absolute;top:8px;right:8px;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;text-transform:uppercase}
+.cat-place{background:#e8f0fe;color:#1a56db}
+.cat-position{background:#e8f8f2;color:#0e9f6e}
+.cat-basic{background:#fff8e1;color:#d97706}
+.cat-people{background:#fde8e8;color:#c0392b}
+.audio-btn{background:none;border:none;font-size:18px;cursor:pointer;margin-top:6px}
+.info-box{background:#e8f0fe;border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#1a3a6b;font-weight:600;line-height:1.6}
+.dialogue-box{background:var(--card);border-radius:18px;padding:24px;box-shadow:var(--shadow);margin-bottom:18px}
+.dialogue-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:18px}
+.dialogue-line{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start}
+.dialogue-line:last-child{margin-bottom:0}
+.speaker-bubble{flex-shrink:0;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
+.sp-a{background:#fde8e8;color:var(--red)}
+.sp-b{background:#e8f0fe;color:var(--blue)}
+.dialogue-text .zh{font-family:'Noto Sans SC',sans-serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.dialogue-text .py{font-size:13px;color:var(--blue);font-weight:600;margin-bottom:2px}
+.dialogue-text .en{font-size:12px;color:var(--muted)}
+.play-btn{background:none;border:1.5px solid var(--border);border-radius:8px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:700;margin-top:4px}
+.play-btn:hover{border-color:var(--blue);color:var(--blue)}
+.grammar-block{background:var(--card);border-radius:14px;padding:22px;box-shadow:var(--shadow);margin-bottom:14px;border-left:4px solid var(--purple)}
+.grammar-block h3{font-size:16px;font-weight:900;color:var(--ink);margin-bottom:8px}
+.grammar-block p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px}
+.grammar-pattern{display:inline-block;background:#f3e8ff;color:var(--purple);font-size:13px;font-weight:800;padding:5px 12px;border-radius:8px;margin-bottom:10px;font-family:monospace}
+.grammar-eg{background:var(--light);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.grammar-eg .zh{font-family:'Noto Sans SC',sans-serif;font-size:18px;font-weight:700;color:var(--ink)}
+.grammar-eg .py{font-size:12px;color:var(--blue)}
+.grammar-eg .en{font-size:12px;color:var(--muted);margin-top:2px}
+.cal-table{width:100%;border-collapse:collapse;margin-bottom:8px}
+.cal-table td{padding:8px;text-align:center;font-size:13px;border:1px solid var(--border)}
+.cal-table .zh{font-family:'Noto Sans SC',sans-serif;font-weight:700}
+.reading-passage{background:var(--card);border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:20px}
+.passage-text{font-family:'Noto Sans SC',sans-serif;font-size:22px;line-height:2.2;color:var(--ink);margin-bottom:16px}
+.passage-py{font-size:14px;color:var(--blue);line-height:2;margin-bottom:8px}
+.passage-en{font-size:13px;color:var(--muted);line-height:1.8}
+.reading-q{background:var(--light);border-radius:12px;padding:16px;margin-bottom:12px}
+.reading-q .q-text{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.reading-q .q-py{font-size:13px;color:var(--blue);font-style:italic;margin-bottom:10px}
+.reading-opts{display:flex;flex-direction:column;gap:8px}
+.reading-opt{background:#fff;border:2px solid var(--border);border-radius:10px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:all 0.15s;color:var(--ink)}
+.reading-opt:hover{border-color:var(--blue)}
+.reading-opt.correct{background:#d1fae5!important;border-color:#059669!important;color:#065f46!important}
+.reading-opt.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#991b1b!important}
+.listen-card{background:var(--card);border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:16px}
+.listen-play-btn{background:linear-gradient(135deg,var(--blue),#0c6fa8);color:#fff;border:none;border-radius:14px;padding:16px 32px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:10px;margin:0 auto 20px;transition:transform 0.2s}
+.listen-play-btn:hover{transform:scale(1.03)}
+.listen-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.listen-opt{background:#fff;border:2px solid var(--border);border-radius:12px;padding:14px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-align:center;transition:all 0.15s;color:var(--ink);line-height:1.5}
+.listen-opt:hover{border-color:var(--blue);background:var(--light)}
+.listen-opt.correct{background:#d1fae5!important;border-color:#059669!important;color:#065f46!important}
+.listen-opt.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#991b1b!important}
+.speaking-card{background:var(--card);border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:16px}
+.speak-phrase{text-align:center;margin-bottom:20px}
+.speak-zh{font-family:'Noto Sans SC',sans-serif;font-size:38px;font-weight:700;color:var(--ink)}
+.speak-py{font-size:18px;color:var(--blue);margin-top:6px;font-weight:700}
+.speak-en{font-size:14px;color:var(--muted);margin-top:4px}
+.speak-controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.speak-btn{padding:12px 24px;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer}
+.btn-listen{background:var(--blue);color:#fff}
+.btn-got-it{background:var(--teal);color:#fff}
+.btn-skip{background:#f1f5f9;color:var(--muted)}
+.speak-progress{display:flex;gap:6px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+.speak-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background 0.3s}
+.speak-dot.done{background:var(--teal)}
+.speak-dot.current{background:var(--red)}
+.writing-card{background:var(--card);border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:16px}
+.char-input{width:100%;border:2px solid var(--border);border-radius:12px;padding:14px 16px;font-family:'Nunito',sans-serif;font-size:20px;text-align:center;outline:none;margin-bottom:12px;transition:border-color 0.2s}
+.char-input:focus{border-color:var(--blue)}
+.write-check-btn{width:100%;padding:13px;background:var(--purple);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer}
+.write-result{margin-top:12px;padding:12px;border-radius:10px;text-align:center;font-size:14px;font-weight:700;display:none}
+.write-result.ok{background:#d1fae5;color:#065f46}
+.write-result.err{background:#fee2e2;color:#991b1b}
+.quiz-prog{background:var(--border);border-radius:6px;height:6px;margin-bottom:20px}
+.quiz-prog-fill{height:6px;border-radius:6px;background:linear-gradient(90deg,var(--red),var(--gold));transition:width 0.4s}
+.quiz-meta{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:14px}
+.quiz-box{background:var(--card);border-radius:18px;padding:28px;text-align:center;box-shadow:var(--shadow);margin-bottom:16px}
+.quiz-zh{font-family:'Noto Sans SC',sans-serif;font-size:46px;font-weight:700;color:var(--ink)}
+.quiz-py{font-size:16px;color:var(--blue);margin-top:6px}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quiz-opt{background:#fff;border:2px solid var(--border);border-radius:12px;padding:14px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;color:var(--ink)}
+.quiz-opt:hover{border-color:var(--ink);background:var(--light)}
+.quiz-opt.correct{background:#d1fae5!important;border-color:#059669!important;color:#065f46!important}
+.quiz-opt.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#991b1b!important}
+.culture-card{background:linear-gradient(135deg,#fff8e1,#fffde7);border:2px solid var(--gold);border-radius:16px;padding:22px 24px;margin-bottom:16px;display:flex;gap:14px;align-items:flex-start}
+.culture-icon{font-size:30px;flex-shrink:0}
+.culture-text h4{font-size:15px;font-weight:800;color:var(--ink);margin-bottom:6px}
+.culture-text p{font-size:13px;color:#666;line-height:1.7}
+.culture-quiz-box{background:var(--card);border-radius:18px;padding:28px;box-shadow:var(--shadow);margin-bottom:16px}
+.culture-q-text{font-size:17px;font-weight:800;color:var(--ink);margin-bottom:16px;text-align:center;line-height:1.5}
+.culture-opts{display:flex;flex-direction:column;gap:10px}
+.culture-opt{background:#fff;border:2px solid var(--border);border-radius:12px;padding:14px 18px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-align:left;color:var(--ink);transition:all 0.15s}
+.culture-opt:hover{border-color:var(--gold);background:#fffdf0}
+.culture-opt.correct{background:#d1fae5!important;border-color:#059669!important;color:#065f46!important}
+.culture-opt.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#991b1b!important}
+.scoreboard{background:var(--card);border-radius:20px;padding:28px;box-shadow:var(--shadow);max-width:520px;margin:0 auto}
+.sb-title{font-size:22px;font-weight:900;color:var(--ink);text-align:center;margin-bottom:20px}
+.sb-overall{text-align:center;margin-bottom:24px}
+.sb-pct{font-size:72px;font-weight:900;line-height:1}
+.sb-label{font-size:14px;color:var(--muted);font-weight:600;margin-top:4px}
+.sb-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.sb-row{display:flex;align-items:center;gap:12px}
+.sb-row-label{font-size:13px;font-weight:700;color:var(--ink);width:110px;flex-shrink:0}
+.sb-row-bar-wrap{flex:1;background:#f1f5f9;border-radius:6px;height:10px;overflow:hidden}
+.sb-row-bar{height:100%;border-radius:6px;transition:width 0.8s ease}
+.sb-row-score{font-size:13px;font-weight:800;width:40px;text-align:right}
+.sb-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.sb-actions button{padding:12px 22px;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer}
+.btn-retry{background:var(--ink);color:#fff}
+.btn-next{background:var(--teal);color:#fff}
+.saved-tag{display:block;width:fit-content;background:#d1fae5;color:#065f46;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin:12px auto}
+@media(max-width:600px){.vocab-grid{grid-template-columns:1fr 1fr}.quiz-opts,.listen-opts{grid-template-columns:1fr}.hero{padding:24px 14px 44px}.content{padding:16px 12px 48px}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">HSK1 · Lesson 8</div>
+  <h1>我爸爸也在医院工作</h1>
+  <div class="hero-py">Wǒ bàba yě zài yīyuàn gōngzuò</div>
+  <div class="hero-en">My Father Also Works at a Hospital</div>
+  <div class="score-overview">
+    <div class="score-pill"><div class="sp-val" id="spVocab">—</div><div class="sp-lbl">📖 Vocab</div></div>
+    <div class="score-pill"><div class="sp-val" id="spReading">—</div><div class="sp-lbl">📄 Reading</div></div>
+    <div class="score-pill"><div class="sp-val" id="spListening">—</div><div class="sp-lbl">🎧 Listen</div></div>
+    <div class="score-pill"><div class="sp-val" id="spSpeaking">—</div><div class="sp-lbl">🎤 Speak</div></div>
+    <div class="score-pill"><div class="sp-val" id="spWriting">—</div><div class="sp-lbl">✍️ Write</div></div>
+    <div class="score-pill"><div class="sp-val" id="spCulture">—</div><div class="sp-lbl">🏮 Culture</div></div>
+    <div class="score-pill overall"><div class="sp-val" id="spOverall">—</div><div class="sp-lbl">⭐ Overall</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showSec('vocab',this)">📖 Vocab <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('dialogue',this)">💬 Dialogue <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('grammar',this)">📝 Grammar <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('reading',this)">📄 Reading <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('listening',this)">🎧 Listening <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('speaking',this)">🎤 Speaking <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('writing',this)">✍️ Writing <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('culture',this)">🏮 Culture <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('culturequiz',this)">🎎 Culture Quiz <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('quiz',this)">🎯 Quiz (25) <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('scoreboard',this)">🏆 Scores <span class="done-dot"></span></button>
+</div>
+
+<div class="content">
+
+<!-- VOCAB -->
+<div class="section active" id="sec-vocab">
+  <div class="section-head">📖 Lesson 8 Vocabulary</div>
+  <div class="info-box">💡 Click any card to hear it. Locations, positions and the workplace.</div>
+  <div class="vocab-grid">
+    <div class="vocab-card" onclick="speak('房间')"><span class="cat cat-place">Place</span><div class="zh">房间</div><div class="py">fángjiān</div><div class="en">Room</div><button class="audio-btn" onclick="event.stopPropagation();speak('房间')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('外')"><span class="cat cat-position">Position</span><div class="zh">外</div><div class="py">wài</div><div class="en">Outside</div><button class="audio-btn" onclick="event.stopPropagation();speak('外')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('只')"><span class="cat cat-basic">Measure</span><div class="zh">只</div><div class="py">zhī</div><div class="en">Measure word (animals)</div><button class="audio-btn" onclick="event.stopPropagation();speak('只')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('小')"><span class="cat cat-basic">Basic</span><div class="zh">小</div><div class="py">xiǎo</div><div class="en">Small</div><button class="audio-btn" onclick="event.stopPropagation();speak('小')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('猫')"><span class="cat cat-basic">Animal</span><div class="zh">猫</div><div class="py">māo</div><div class="en">Cat</div><button class="audio-btn" onclick="event.stopPropagation();speak('猫')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('没')"><span class="cat cat-basic">Basic</span><div class="zh">没</div><div class="py">méi</div><div class="en">Not / haven't</div><button class="audio-btn" onclick="event.stopPropagation();speak('没')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('在')"><span class="cat cat-basic">Basic</span><div class="zh">在</div><div class="py">zài</div><div class="en">At / in / on</div><button class="audio-btn" onclick="event.stopPropagation();speak('在')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('学校')"><span class="cat cat-place">Place</span><div class="zh">学校</div><div class="py">xuéxiào</div><div class="en">School</div><button class="audio-btn" onclick="event.stopPropagation();speak('学校')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('书店')"><span class="cat cat-place">Place</span><div class="zh">书店</div><div class="py">shūdiàn</div><div class="en">Bookstore</div><button class="audio-btn" onclick="event.stopPropagation();speak('书店')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('前')"><span class="cat cat-position">Position</span><div class="zh">前</div><div class="py">qián</div><div class="en">In front of</div><button class="audio-btn" onclick="event.stopPropagation();speak('前')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('能')"><span class="cat cat-basic">Basic</span><div class="zh">能</div><div class="py">néng</div><div class="en">Can / be able to</div><button class="audio-btn" onclick="event.stopPropagation();speak('能')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('到')"><span class="cat cat-basic">Basic</span><div class="zh">到</div><div class="py">dào</div><div class="en">Arrive / reach</div><button class="audio-btn" onclick="event.stopPropagation();speak('到')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('午饭')"><span class="cat cat-basic">Food</span><div class="zh">午饭</div><div class="py">wǔfàn</div><div class="en">Lunch</div><button class="audio-btn" onclick="event.stopPropagation();speak('午饭')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('饭')"><span class="cat cat-basic">Food</span><div class="zh">饭</div><div class="py">fàn</div><div class="en">Meal</div><button class="audio-btn" onclick="event.stopPropagation();speak('饭')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('大')"><span class="cat cat-basic">Basic</span><div class="zh">大</div><div class="py">dà</div><div class="en">Big</div><button class="audio-btn" onclick="event.stopPropagation();speak('大')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('病人')"><span class="cat cat-people">People</span><div class="zh">病人</div><div class="py">bìngrén</div><div class="en">Patient</div><button class="audio-btn" onclick="event.stopPropagation();speak('病人')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('多')"><span class="cat cat-basic">Basic</span><div class="zh">多</div><div class="py">duō</div><div class="en">Many / much</div><button class="audio-btn" onclick="event.stopPropagation();speak('多')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('医生')"><span class="cat cat-people">People</span><div class="zh">医生</div><div class="py">yīshēng</div><div class="en">Doctor</div><button class="audio-btn" onclick="event.stopPropagation();speak('医生')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('工作')"><span class="cat cat-basic">Work</span><div class="zh">工作</div><div class="py">gōngzuò</div><div class="en">Work</div><button class="audio-btn" onclick="event.stopPropagation();speak('工作')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('桌子')"><span class="cat cat-basic">Object</span><div class="zh">桌子</div><div class="py">zhuōzi</div><div class="en">Table</div><button class="audio-btn" onclick="event.stopPropagation();speak('桌子')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('上')"><span class="cat cat-position">Position</span><div class="zh">上</div><div class="py">shàng</div><div class="en">On / above</div><button class="audio-btn" onclick="event.stopPropagation();speak('上')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('下')"><span class="cat cat-position">Position</span><div class="zh">下</div><div class="py">xià</div><div class="en">Under</div><button class="audio-btn" onclick="event.stopPropagation();speak('下')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('里')"><span class="cat cat-position">Position</span><div class="zh">里</div><div class="py">lǐ</div><div class="en">Inside</div><button class="audio-btn" onclick="event.stopPropagation();speak('里')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('后')"><span class="cat cat-position">Position</span><div class="zh">后</div><div class="py">hòu</div><div class="en">Behind</div><button class="audio-btn" onclick="event.stopPropagation();speak('后')">🔊</button></div>
+  </div>
+</div>
+
+<!-- DIALOGUE -->
+<div class="section" id="sec-dialogue">
+  <div class="section-head">💬 Dialogues</div>
+  <div class="dialogue-box">
+    <div class="dialogue-title">Scene 1 — A kitten visit</div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">白</div><div class="dialogue-text"><div class="zh">房间外有一只小猫。</div><div class="py">Fángjiān wài yǒu yì zhī xiǎomāo.</div><div class="en">There is a kitten outside the room.</div><button class="play-btn" onclick="speak('房间外有一只小猫')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">陈</div><div class="dialogue-text"><div class="zh">我没看见，它在哪儿呢？</div><div class="py">Wǒ méi kànjiàn, tā zài nǎr ne?</div><div class="en">I didn't see it. Where is it?</div><button class="play-btn" onclick="speak('我没看见，它在哪儿呢')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">白</div><div class="dialogue-text"><div class="zh">它在桌子下呢。</div><div class="py">Tā zài zhuōzi xià ne.</div><div class="en">It is under the table.</div><button class="play-btn" onclick="speak('它在桌子下呢')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">陈</div><div class="dialogue-text"><div class="zh">这只小猫真漂亮！</div><div class="py">Zhè zhī xiǎomāo zhēn piàoliang!</div><div class="en">This kitten is really beautiful!</div><button class="play-btn" onclick="speak('这只小猫真漂亮')">▶ Play</button></div></div>
+  </div>
+  <div class="dialogue-box">
+    <div class="dialogue-title">Scene 2 — Making plans to meet</div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">白</div><div class="dialogue-text"><div class="zh">我们在哪儿见呢？</div><div class="py">Wǒmen zài nǎr jiàn ne?</div><div class="en">Where shall we meet?</div><button class="play-btn" onclick="speak('我们在哪儿见呢')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">李</div><div class="dialogue-text"><div class="zh">在学校书店前见吧。</div><div class="py">Zài xuéxiào shūdiàn qián jiàn ba.</div><div class="en">Let's meet in front of the school bookstore.</div><button class="play-btn" onclick="speak('在学校书店前见吧')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">白</div><div class="dialogue-text"><div class="zh">好的。下午两点你能到吗？</div><div class="py">Hǎo de. Xiàwǔ liǎng diǎn nǐ néng dào ma?</div><div class="en">Okay. Can you arrive at 2:00 in the afternoon?</div><button class="play-btn" onclick="speak('好的，下午两点你能到吗')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">李</div><div class="dialogue-text"><div class="zh">我能到。我在学校吃午饭。</div><div class="py">Wǒ néng dào. Wǒ zài xuéxiào chī wǔfàn.</div><div class="en">Yes. I'll have lunch at school.</div><button class="play-btn" onclick="speak('我能到，我在学校吃午饭')">▶ Play</button></div></div>
+  </div>
+  <div class="dialogue-box">
+    <div class="dialogue-title">Scene 3 — At the hospital with Dr. Hu</div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">刘</div><div class="dialogue-text"><div class="zh">小胡，还没吃饭呢？</div><div class="py">Xiǎo Hú, hái méi chī fàn ne?</div><div class="en">Xiao Hu, haven't you eaten yet?</div><button class="play-btn" onclick="speak('小胡，还没吃饭呢')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">胡</div><div class="dialogue-text"><div class="zh">没吃呢。大医院病人多，医生非常忙。</div><div class="py">Méi chī ne. Dà yīyuàn bìngrén duō, yīshēng fēicháng máng.</div><div class="en">Not yet. Large hospitals have many patients, doctors are very busy.</div><button class="play-btn" onclick="speak('没吃呢，大医院病人多，医生非常忙')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">刘</div><div class="dialogue-text"><div class="zh">我爸爸也在医院工作，他也非常忙。</div><div class="py">Wǒ bàba yě zài yīyuàn gōngzuò, tā yě fēicháng máng.</div><div class="en">My father also works at a hospital, he's also very busy.</div><button class="play-btn" onclick="speak('我爸爸也在医院工作，他也非常忙')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">胡</div><div class="dialogue-text"><div class="zh">你家有两个医生？</div><div class="py">Nǐ jiā yǒu liǎng gè yīshēng?</div><div class="en">There are two doctors in your family?</div><button class="play-btn" onclick="speak('你家有两个医生')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">刘</div><div class="dialogue-text"><div class="zh">对。</div><div class="py">Duì.</div><div class="en">Yes.</div><button class="play-btn" onclick="speak('对')">▶ Play</button></div></div>
+  </div>
+</div>
+
+<!-- GRAMMAR -->
+<div class="section" id="sec-grammar">
+  <div class="section-head">📝 Grammar Points</div>
+  <div class="grammar-block">
+    <h3>1. Positional Words (方位词)</h3>
+    <p>Chinese uses positional words to describe location: 上 (on), 下 (under), 里 (inside), 外 (outside), 前 (in front of), 后 (behind).</p>
+    <div class="grammar-pattern">Noun + Positional Word</div>
+    <div class="grammar-eg"><div class="zh">桌子上 / 桌子下</div><div class="py">zhuōzi shàng / zhuōzi xià</div><div class="en">on the table / under the table</div></div>
+    <div class="grammar-eg"><div class="zh">学校前 / 学校后</div><div class="py">xuéxiào qián / xuéxiào hòu</div><div class="en">in front of school / behind school</div></div>
+    <div class="grammar-eg"><div class="zh">房间里 / 房间外</div><div class="py">fángjiān lǐ / fángjiān wài</div><div class="en">inside the room / outside the room</div></div>
+  </div>
+  <div class="grammar-block">
+    <h3>2. Preposition 在 (zài) — Location of Action</h3>
+    <p>在 combines with a location word and is placed before the verb to show where an action happens.</p>
+    <div class="grammar-pattern">Subject + 在 + Place + Verb + Object</div>
+    <div class="grammar-eg"><div class="zh">我在学校吃午饭。</div><div class="py">Wǒ zài xuéxiào chī wǔfàn.</div><div class="en">I have lunch at school.</div></div>
+    <div class="grammar-eg"><div class="zh">他爸爸在医院工作。</div><div class="py">Tā bàba zài yīyuàn gōngzuò.</div><div class="en">His father works at a hospital.</div></div>
+  </div>
+  <div class="grammar-block">
+    <h3>3. Modal Verb 能 (néng) — Ability</h3>
+    <p>能 placed before a verb expresses ability, possibility, or permission.</p>
+    <div class="grammar-pattern">Subject + 能 + Verb</div>
+    <div class="grammar-eg"><div class="zh">下午两点你能到吗？</div><div class="py">Xiàwǔ liǎng diǎn nǐ néng dào ma?</div><div class="en">Can you arrive at 2:00 p.m.?</div></div>
+    <div class="grammar-eg"><div class="zh">我不能去学校吃午饭。</div><div class="py">Wǒ bù néng qù xuéxiào chī wǔfàn.</div><div class="en">I can't go to school for lunch. (negative: 不能)</div></div>
+  </div>
+  <div class="grammar-block">
+    <h3>4. Measure Words + Demonstratives</h3>
+    <p>Measure words can combine directly with demonstrative pronouns like 这 (this) and 那 (that).</p>
+    <div class="grammar-pattern">这/那 + Measure Word + Noun</div>
+    <div class="grammar-eg"><div class="zh">这只猫</div><div class="py">zhè zhī māo</div><div class="en">this cat</div></div>
+    <div class="grammar-eg"><div class="zh">那个人</div><div class="py">nà gè rén</div><div class="en">that person</div></div>
+  </div>
+</div>
+
+<!-- READING -->
+<div class="section" id="sec-reading">
+  <div class="section-head">📄 Reading Practice</div>
+  <div class="reading-passage">
+    <div class="passage-text">胡医生在医院工作，她爸爸也在医院工作。<br>大医院病人多，医生非常忙。<br>胡医生家有两个医生。<br>小猫在桌子下，房间外也有一只小猫。</div>
+    <div class="passage-py">Hú yīshēng zài yīyuàn gōngzuò, tā bàba yě zài yīyuàn gōngzuò.<br>Dà yīyuàn bìngrén duō, yīshēng fēicháng máng.<br>Hú yīshēng jiā yǒu liǎng gè yīshēng.<br>Xiǎomāo zài zhuōzi xià, fángjiān wài yě yǒu yì zhī xiǎomāo.</div>
+    <div class="passage-en">Dr. Hu works at a hospital, her father also works at a hospital.<br>Large hospitals have many patients, doctors are very busy.<br>Dr. Hu's family has two doctors.<br>The kitten is under the table, there's also a kitten outside the room.</div>
+    <button class="listen-play-btn" style="margin-top:14px" onclick="speak('胡医生在医院工作，她爸爸也在医院工作。大医院病人多，医生非常忙。胡医生家有两个医生。小猫在桌子下，房间外也有一只小猫。')">🔊 Read Aloud</button>
+  </div>
+  <div id="readingQs"></div>
+  <button id="readingSubmitBtn" style="display:none;width:100%;padding:13px;background:var(--blue);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px" onclick="submitReading()">Submit Answers ✓</button>
+</div>
+
+<!-- LISTENING -->
+<div class="section" id="sec-listening">
+  <div class="section-head">🎧 Listening Practice</div>
+  <div class="info-box">🎧 Press Play, listen carefully, then choose the correct pinyin answer!</div>
+  <div id="listenContent"></div>
+</div>
+
+<!-- SPEAKING -->
+<div class="section" id="sec-speaking">
+  <div class="section-head">🎤 Speaking Practice</div>
+  <div class="info-box">🎤 Listen to the phrase, try to say it yourself, then click ✅ Got It!</div>
+  <div class="speak-progress" id="speakDots"></div>
+  <div id="speakContent"></div>
+</div>
+
+<!-- WRITING -->
+<div class="section" id="sec-writing">
+  <div class="section-head">✍️ Writing Practice</div>
+  <div class="info-box">✍️ Type the <strong>pinyin without tones</strong> for each word. Example: type <strong>yiyuan</strong> for 医院</div>
+  <div id="writeContent"></div>
+</div>
+
+<!-- CULTURE -->
+<div class="section" id="sec-culture">
+  <div class="section-head">🏮 Culture Study — Hospitals, Locations & Friendly Names in China</div>
+
+  <div class="culture-card">
+    <div class="culture-icon">🏥</div>
+    <div class="culture-text">
+      <h4>China's Crowded Hospitals</h4>
+      <p>Large public hospitals (大医院) in China are often extremely busy due to the sheer population size — millions of patients visit major city hospitals each year. This is why the dialogue mentions "病人多，医生非常忙" (many patients, doctors very busy) — it reflects a very real daily reality.</p>
+    </div>
+  </div>
+
+  <div class="culture-card">
+    <div class="culture-icon">👨‍👩‍👧</div>
+    <div class="culture-text">
+      <h4>"小 + Surname" — A Sign of Closeness</h4>
+      <p>Adding 小 (xiǎo, "little") before someone's surname — like 小胡 (Xiao Hu) — is a warm, informal way to address younger colleagues or close friends. It signals familiarity and affection, similar to using a nickname in English.</p>
+    </div>
+  </div>
+
+  <div class="culture-card">
+    <div class="culture-icon">📍</div>
+    <div class="culture-text">
+      <h4>Meeting at Landmarks</h4>
+      <p>Because Chinese cities can be vast and addresses complex, people often arrange to meet at recognizable landmarks (like "in front of the bookstore") rather than precise street addresses — a practical habit that makes coordinating much easier.</p>
+    </div>
+  </div>
+
+  <div class="culture-card">
+    <div class="culture-icon">🐱</div>
+    <div class="culture-text">
+      <h4>Cats in Chinese Culture</h4>
+      <p>Cats are popular pets in modern China and are seen as symbols of independence and good fortune in some traditions. Stray cats are also commonly cared for by communities, especially around university campuses and residential complexes.</p>
+    </div>
+  </div>
+
+  <div class="culture-card">
+    <div class="culture-icon">👨‍⚕️</div>
+    <div class="culture-text">
+      <h4>Respect for the Medical Profession</h4>
+      <p>Doctors (医生) hold a position of high respect in Chinese society, similar to teachers. Many families take pride in having multiple generations work in medicine, as mentioned in the dialogue about two doctors in one family.</p>
+    </div>
+  </div>
+
+  <div class="culture-card">
+    <div class="culture-icon">🍱</div>
+    <div class="culture-text">
+      <h4>Lunch at School or Work</h4>
+      <p>Eating lunch (午饭) at school or work canteens is very common in China, rather than going out. Many schools and workplaces provide affordable cafeteria meals, making "I have lunch at school" (我在学校吃午饭) a very typical daily statement.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CULTURE QUIZ -->
+<div class="section" id="sec-culturequiz">
+  <div class="section-head">🎎 Culture Quiz</div>
+  <div class="info-box">🏮 Test what you learned about hospitals, friendly naming, and daily life in China!</div>
+  <div id="cultureQuizContent"></div>
+</div>
+
+<!-- VOCAB QUIZ -->
+<div class="section" id="sec-quiz">
+  <div class="section-head">🎯 Vocabulary Quiz (25 Questions)</div>
+  <div id="quizContent"></div>
+</div>
+
+<!-- SCOREBOARD -->
+<div class="section" id="sec-scoreboard">
+  <div class="section-head">🏆 My Scoreboard</div>
+  <div id="scoreboardContent"></div>
+</div>
+
+</div>
+
+<script>
+const SHEET_URL='https://script.google.com/macros/s/AKfycbzGl-S5KLsstzX237AJ2Wc19vjB2S87m235iZehafLnrTU48BcGpnlCzL00FQwMFeRL9g/exec';
+const LESSON_ID='L8', LESSON_NAME='My Father Works at a Hospital';
+const SCORE_KEY='cf_l8_scores';
+let scores=JSON.parse(localStorage.getItem(SCORE_KEY)||'{}');
+
+function saveScores(){
+  localStorage.setItem(SCORE_KEY,JSON.stringify(scores));
+  updatePills();
+  try{
+    const sid=localStorage.getItem('cf_student_id')||'anonymous';
+    const sname=localStorage.getItem('cf_student_name')||'Student';
+    const vals=Object.values(scores).filter(x=>x!==undefined);
+    const overall=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;
+    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({studentId:sid,studentName:sname,lessonId:LESSON_ID,lessonName:LESSON_NAME,score:overall,maxScore:100,pct:overall})});
+  }catch(e){}
+}
+
+function updatePills(){
+  const f=v=>v!==undefined?v+'%':'—';
+  document.getElementById('spVocab').textContent=f(scores.vocab);
+  document.getElementById('spReading').textContent=f(scores.reading);
+  document.getElementById('spListening').textContent=f(scores.listening);
+  document.getElementById('spSpeaking').textContent=f(scores.speaking);
+  document.getElementById('spWriting').textContent=f(scores.writing);
+  document.getElementById('spCulture').textContent=f(scores.culture);
+  const vals=Object.values(scores).filter(x=>x!==undefined);
+  const ov=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):undefined;
+  document.getElementById('spOverall').textContent=f(ov);
+}
+updatePills();
+
+function speak(t){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  u.lang='zh-CN';u.rate=0.75;u.pitch=1.1;
+  const v=speechSynthesis.getVoices().find(x=>x.lang.startsWith('zh'));
+  if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=()=>{};
+
+function showSec(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='reading')initReading();
+  if(id==='listening')initListening();
+  if(id==='speaking')initSpeaking();
+  if(id==='writing')initWriting();
+  if(id==='culturequiz')initCultureQuiz();
+  if(id==='quiz')initQuiz();
+  if(id==='scoreboard')renderScoreboard();
+}
+function markDone(id){
+  const ids=['vocab','dialogue','grammar','reading','listening','speaking','writing','culture','culturequiz','quiz','scoreboard'];
+  const i=ids.indexOf(id);
+  if(i>=0)document.querySelectorAll('.nav-tab')[i].classList.add('completed');
+}
+document.querySelectorAll('.nav-tab')[7].addEventListener('click',()=>markDone('culture'));
+
+// READING
+const readingQs=[
+  {q:"Where does Dr. Hu work?",qpy:"Hú Yīshēng zài nǎr gōngzuò?",
+   opts:["xuéxiào (school)","yīyuàn (hospital)","shūdiàn (bookstore)","chāoshì (supermarket)"],ans:1},
+  {q:"Why are doctors at the hospital very busy?",qpy:"Wèishénme yīshēng fēicháng máng?",
+   opts:["bìngrén shǎo (few patients)","bìngrén duō (many patients)","méiyǒu yīshēng (no doctors)","yīyuàn tài xiǎo (hospital too small)"],ans:1},
+  {q:"How many doctors are in Dr. Hu's family?",qpy:"Hú Yīshēng jiā yǒu jǐ gè yīshēng?",
+   opts:["yí gè (one)","liǎng gè (two)","sān gè (three)","méiyǒu (none)"],ans:1},
+  {q:"Where is the kitten?",qpy:"Xiǎomāo zài nǎr?",
+   opts:["zhuōzi shàng (on the table)","zhuōzi xià (under the table)","fángjiān lǐ (inside the room)","shūdiàn lǐ (in the bookstore)"],ans:1},
+];
+let readingAnswers={};
+function initReading(){
+  const wrap=document.getElementById('readingQs');
+  wrap.innerHTML=readingQs.map((q,i)=>`
+    <div class="reading-q" id="rq${i}">
+      <div class="q-text">${i+1}. ${q.q}</div>
+      <div class="q-py">${q.qpy}</div>
+      <div class="reading-opts">${q.opts.map((o,j)=>`<button class="reading-opt" id="ro${i}_${j}" onclick="pickReading(${i},${j})">${o}</button>`).join('')}</div>
+    </div>`).join('');
+  document.getElementById('readingSubmitBtn').style.display='block';
+}
+function pickReading(qi,oi){
+  readingAnswers[qi]=oi;
+  for(let j=0;j<4;j++){const b=document.getElementById(`ro${qi}_${j}`);if(b){b.style.borderColor='';b.style.background='';}}
+  const s=document.getElementById(`ro${qi}_${oi}`);s.style.borderColor='var(--blue)';s.style.background='#e8f0fe';
+}
+function submitReading(){
+  if(Object.keys(readingAnswers).length<readingQs.length){alert('Please answer all questions!');return;}
+  let correct=0;
+  readingQs.forEach((q,i)=>{
+    const ans=readingAnswers[i];
+    for(let j=0;j<q.opts.length;j++){
+      const b=document.getElementById(`ro${i}_${j}`);if(!b)continue;
+      b.disabled=true;
+      if(j===q.ans)b.classList.add('correct');
+      else if(j===ans&&ans!==q.ans)b.classList.add('wrong');
+    }
+    if(ans===q.ans)correct++;
+  });
+  scores.reading=Math.round(correct/readingQs.length*100);
+  saveScores();markDone('reading');
+  const btn=document.getElementById('readingSubmitBtn');
+  btn.textContent=`✅ Score: ${scores.reading}% (${correct}/${readingQs.length})`;
+  btn.style.background='var(--teal)';btn.disabled=true;
+}
+
+// LISTENING
+const listenQs=[
+  {audio:'它在桌子下呢',q:'Where is "it"?',qpy:'"Tā" zài nǎr?',
+   opts:['zhuōzi shàng (on the table)','zhuōzi xià (under the table)','fángjiān lǐ (in the room)','shūdiàn qián (in front of the bookstore)'],ans:1},
+  {audio:'我们在哪儿见呢',q:'What is being asked?',qpy:'Zhège wèntí shì shénme yìsi?',
+   opts:['Nǐ jiào shénme? (Your name?)','Wǒmen zài nǎr jiàn? (Where shall we meet?)','Nǐ qù nǎr? (Where are you going?)','Jǐ diǎn jiàn? (What time?)'],ans:1},
+  {audio:'我能到',q:'What does this mean?',qpy:'Zhè jù huà shì shénme yìsi?',
+   opts:['Wǒ bù néng dào. (I can\'t arrive.)','Wǒ néng dào. (I can arrive.)','Wǒ bù qù. (I won\'t go.)','Wǒ hái méi dào. (I haven\'t arrived yet.)'],ans:1},
+  {audio:'大医院病人多',q:'What does this mean?',qpy:'Zhè jù huà shì shénme yìsi?',
+   opts:['Dà yīyuàn bìngrén shǎo. (Big hospitals have few patients.)','Dà yīyuàn bìngrén duō. (Big hospitals have many patients.)','Xiǎo yīyuàn méiyǒu yīshēng. (Small hospitals have no doctors.)','Yīshēng bù máng. (Doctors are not busy.)'],ans:1},
+  {audio:'你家有两个医生',q:'What is being asked?',qpy:'Zhège wèntí shì shénme yìsi?',
+   opts:['Nǐ jiā yǒu jǐ kǒu rén? (How many family members?)','Nǐ jiā yǒu liǎng gè yīshēng ma? (Two doctors in your family?)','Nǐ shì yīshēng ma? (Are you a doctor?)','Nǐ zài nǎr gōngzuò? (Where do you work?)'],ans:1},
+];
+let listenIdx=0,listenScore=0,listenDone=false;
+function initListening(){if(listenDone)return;listenIdx=0;listenScore=0;renderListenQ();}
+function renderListenQ(){
+  const q=listenQs[listenIdx];
+  document.getElementById('listenContent').innerHTML=`
+    <div class="listen-card">
+      <div style="text-align:center;margin-bottom:8px;font-size:13px;font-weight:700;color:var(--muted)">Question ${listenIdx+1} of ${listenQs.length} &nbsp;|&nbsp; Score: ${listenScore}/${listenIdx}</div>
+      <div class="quiz-prog"><div class="quiz-prog-fill" style="width:${listenIdx/listenQs.length*100}%"></div></div>
+      <button class="listen-play-btn" onclick="speak('${q.audio}')">🔊 Play Audio</button>
+      <div style="text-align:center;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px">${q.q}</div>
+      <div style="text-align:center;font-size:13px;color:var(--blue);font-style:italic;margin-bottom:14px">${q.qpy}</div>
+      <div class="listen-opts">${q.opts.map((o,i)=>`<button class="listen-opt" id="lo${i}" onclick="answerListen(${i})">${o}</button>`).join('')}</div>
+    </div>`;
+  setTimeout(()=>speak(q.audio),400);
+}
+function answerListen(idx){
+  const q=listenQs[listenIdx];
+  if(idx===q.ans)listenScore++;
+  for(let i=0;i<q.opts.length;i++){
+    const b=document.getElementById('lo'+i);if(!b)continue;
+    b.disabled=true;
+    if(i===q.ans)b.classList.add('correct');
+    else if(i===idx&&idx!==q.ans)b.classList.add('wrong');
+  }
+  setTimeout(()=>{
+    listenIdx++;
+    if(listenIdx>=listenQs.length){
+      listenDone=true;
+      scores.listening=Math.round(listenScore/listenQs.length*100);
+      saveScores();markDone('listening');
+      document.getElementById('listenContent').innerHTML=`
+        <div style="text-align:center;padding:32px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">
+          <div style="font-size:48px">🎧</div>
+          <div style="font-size:28px;font-weight:900;color:var(--teal);margin:8px 0">${scores.listening}%</div>
+          <div style="font-weight:700;color:var(--muted)">${listenScore}/${listenQs.length} correct</div>
+          <button onclick="listenDone=false;initListening()" style="margin-top:16px;padding:10px 24px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🔄 Try Again</button>
+        </div>`;
+    }else renderListenQ();
+  },900);
+}
+
+// SPEAKING
+const speakPhrases=[
+  {zh:'它在桌子下呢。',py:'Tā zài zhuōzi xià ne.',en:'It is under the table.'},
+  {zh:'我们在哪儿见呢？',py:'Wǒmen zài nǎr jiàn ne?',en:'Where shall we meet?'},
+  {zh:'在学校书店前见吧。',py:'Zài xuéxiào shūdiàn qián jiàn ba.',en:"Let's meet in front of the school bookstore."},
+  {zh:'你能到吗？',py:'Nǐ néng dào ma?',en:'Can you arrive?'},
+  {zh:'我在学校吃午饭。',py:'Wǒ zài xuéxiào chī wǔfàn.',en:"I'll have lunch at school."},
+  {zh:'我爸爸也在医院工作。',py:'Wǒ bàba yě zài yīyuàn gōngzuò.',en:'My father also works at a hospital.'},
+  {zh:'你家有两个医生？',py:'Nǐ jiā yǒu liǎng gè yīshēng?',en:'Two doctors in your family?'},
+];
+let speakIdx=0,speakDoneCount=0;
+function initSpeaking(){speakIdx=0;speakDoneCount=0;renderSpeakDots();renderSpeakPhrase();}
+function renderSpeakDots(){document.getElementById('speakDots').innerHTML=speakPhrases.map((_,i)=>`<div class="speak-dot ${i<speakDoneCount?'done':i===speakIdx?'current':''}"></div>`).join('');}
+function renderSpeakPhrase(){
+  const p=speakPhrases[speakIdx];
+  document.getElementById('speakContent').innerHTML=`
+    <div class="speaking-card">
+      <div class="speak-phrase"><div class="speak-zh">${p.zh}</div><div class="speak-py">${p.py}</div><div class="speak-en">${p.en}</div></div>
+      <div class="speak-controls">
+        <button class="speak-btn btn-listen" onclick="speak('${p.zh.replace(/[？！。]/g,'')}')">🔊 Listen</button>
+        <button class="speak-btn btn-got-it" onclick="gotIt()">✅ Got It!</button>
+        <button class="speak-btn btn-skip" onclick="skipSpeak()">⏭ Skip</button>
+      </div>
+      <div style="margin-top:14px;text-align:center;font-size:13px;color:var(--muted)">${speakIdx+1} / ${speakPhrases.length}</div>
+    </div>`;
+  setTimeout(()=>speak(p.zh.replace(/[？！。]/g,'')),300);
+}
+function gotIt(){speakDoneCount++;nextSpeak();}
+function skipSpeak(){nextSpeak();}
+function nextSpeak(){
+  speakIdx++;
+  if(speakIdx>=speakPhrases.length){
+    scores.speaking=Math.round(speakDoneCount/speakPhrases.length*100);
+    saveScores();markDone('speaking');
+    document.getElementById('speakContent').innerHTML=`
+      <div style="text-align:center;padding:32px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">
+        <div style="font-size:48px">🎤</div>
+        <div style="font-size:28px;font-weight:900;color:var(--teal);margin:8px 0">${scores.speaking}%</div>
+        <div style="font-weight:700;color:var(--muted)">${speakDoneCount}/${speakPhrases.length} phrases practised</div>
+        <button onclick="initSpeaking()" style="margin-top:16px;padding:10px 24px;background:var(--red);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🔄 Practise Again</button>
+      </div>`;
+    document.getElementById('speakDots').innerHTML='';
+    return;
+  }
+  renderSpeakDots();renderSpeakPhrase();
+}
+
+// WRITING
+const writeWords=[
+  {en:'Room',zh:'房间',py:'fangjian',accept:['fangjian','fang jian']},
+  {en:'Outside',zh:'外',py:'wai',accept:['wai']},
+  {en:'Cat',zh:'猫',py:'mao',accept:['mao']},
+  {en:'School',zh:'学校',py:'xuexiao',accept:['xuexiao','xue xiao']},
+  {en:'Bookstore',zh:'书店',py:'shudian',accept:['shudian','shu dian']},
+  {en:'Can / be able to',zh:'能',py:'neng',accept:['neng']},
+  {en:'Lunch',zh:'午饭',py:'wufan',accept:['wufan','wu fan']},
+  {en:'Doctor',zh:'医生',py:'yisheng',accept:['yisheng','yi sheng']},
+  {en:'Work',zh:'工作',py:'gongzuo',accept:['gongzuo','gong zuo']},
+  {en:'Table',zh:'桌子',py:'zhuozi',accept:['zhuozi','zhuo zi']},
+];
+let writeIdx=0,writeScore=0,writeDone=false;
+function stripTones(s){return s.toLowerCase().replace(/[āáǎà]/g,'a').replace(/[ēéěè]/g,'e').replace(/[īíǐì]/g,'i').replace(/[ōóǒò]/g,'o').replace(/[ūúǔù]/g,'u').replace(/[ǖǘǚǜü]/g,'u').replace(/\s+/g,' ').trim();}
+function initWriting(){if(writeDone)return;writeIdx=0;writeScore=0;renderWriteQ();}
+function renderWriteQ(){
+  const w=writeWords[writeIdx];
+  document.getElementById('writeContent').innerHTML=`
+    <div class="writing-card">
+      <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px">
+        <span>Word ${writeIdx+1} of ${writeWords.length}</span><span style="color:var(--teal)">Score: ${writeScore}/${writeIdx}</span>
+      </div>
+      <div class="quiz-prog"><div class="quiz-prog-fill" style="width:${writeIdx/writeWords.length*100}%"></div></div>
+      <div style="text-align:center;margin-bottom:16px">
+        <div style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:8px">Type the pinyin for:</div>
+        <div style="font-size:28px;font-weight:900;color:var(--ink)">${w.en}</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:6px">(no tones needed — e.g. <strong>yisheng</strong>)</div>
+      </div>
+      <input class="char-input" id="writeInput" placeholder="Type pinyin here…" onkeydown="if(event.key==='Enter')checkWrite()">
+      <button class="write-check-btn" onclick="checkWrite()">Check Answer ✓</button>
+      <div class="write-result" id="writeResult"></div>
+      <button id="writeNextBtn" style="display:none;width:100%;margin-top:10px;padding:13px;background:var(--teal);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer" onclick="nextWrite()">Next →</button>
+    </div>`;
+  document.getElementById('writeInput').focus();
+}
+function checkWrite(){
+  const raw=document.getElementById('writeInput').value.trim();
+  const input=stripTones(raw).replace(/\s+/g,'');
+  const w=writeWords[writeIdx];
+  const ok=w.accept.some(a=>stripTones(a).replace(/\s+/g,'')===input);
+  if(ok)writeScore++;
+  const res=document.getElementById('writeResult');
+  res.style.display='block';
+  res.className='write-result '+(ok?'ok':'err');
+  res.innerHTML=ok?`✅ Correct! <strong>${w.py}</strong> <span style="font-family:'Noto Sans SC',sans-serif">(${w.zh})</span>`:`❌ Answer: <strong>${w.py}</strong> <span style="font-family:'Noto Sans SC',sans-serif">(${w.zh})</span>`;
+  document.getElementById('writeInput').disabled=true;
+  document.querySelector('.write-check-btn').disabled=true;
+  document.getElementById('writeNextBtn').style.display='block';
+  speak(w.zh);
+}
+function nextWrite(){
+  writeIdx++;
+  if(writeIdx>=writeWords.length){
+    writeDone=true;
+    scores.writing=Math.round(writeScore/writeWords.length*100);
+    saveScores();markDone('writing');
+    document.getElementById('writeContent').innerHTML=`
+      <div style="text-align:center;padding:32px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">
+        <div style="font-size:48px">✍️</div>
+        <div style="font-size:28px;font-weight:900;color:var(--purple);margin:8px 0">${scores.writing}%</div>
+        <div style="font-weight:700;color:var(--muted)">${writeScore}/${writeWords.length} correct</div>
+        <button onclick="writeDone=false;initWriting()" style="margin-top:16px;padding:10px 24px;background:var(--purple);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🔄 Try Again</button>
+      </div>`;
+    return;
+  }
+  renderWriteQ();
+}
+
+// CULTURE QUIZ
+const cultureQs=[
+  {q:'Why are large public hospitals in China often very busy?',
+   opts:['They have too few doctors','China\'s large population leads to many patients','They only open occasionally','Patients prefer waiting'],ans:1},
+  {q:'What does adding 小 before a surname (e.g. 小胡) signal?',
+   opts:['Formality and distance','Warmth and familiarity','Someone is unwell','Someone is a stranger'],ans:1},
+  {q:'Why do Chinese people often arrange to meet at landmarks instead of addresses?',
+   opts:['Addresses don\'t exist in China','Cities are vast and landmarks are easier to find','It is a legal requirement','Phones don\'t work well'],ans:1},
+  {q:'How are cats generally viewed in Chinese communities?',
+   opts:['As pests to avoid','As popular pets, sometimes symbols of fortune','As forbidden animals','As only for farms'],ans:1},
+  {q:'How is the medical profession viewed in Chinese society?',
+   opts:['With little regard','With high respect, similar to teachers','As a low-status job','Only women can be doctors'],ans:1},
+  {q:'Where do many Chinese students and workers typically eat lunch?',
+   opts:['Always at restaurants','School or workplace canteens','Never eat lunch','Only at home'],ans:1},
+];
+let cqIdx=0,cqScore=0,cqDone=false;
+function initCultureQuiz(){if(cqDone)return;cqIdx=0;cqScore=0;renderCultureQ();}
+function renderCultureQ(){
+  const q=cultureQs[cqIdx];
+  document.getElementById('cultureQuizContent').innerHTML=`
+    <div class="quiz-meta"><span>Question ${cqIdx+1}/${cultureQs.length}</span><span style="color:var(--teal)">Score: ${cqScore}/${cqIdx}</span></div>
+    <div class="quiz-prog"><div class="quiz-prog-fill" style="width:${cqIdx/cultureQs.length*100}%;background:linear-gradient(90deg,var(--gold),var(--orange))"></div></div>
+    <div class="culture-quiz-box">
+      <div class="culture-q-text">🏮 ${q.q}</div>
+      <div class="culture-opts">${q.opts.map((o,i)=>`<button class="culture-opt" id="cqo${i}" onclick="answerCulture(${i})">${o}</button>`).join('')}</div>
+    </div>`;
+}
+function answerCulture(idx){
+  const q=cultureQs[cqIdx];
+  const correct=idx===q.ans;
+  if(correct)cqScore++;
+  for(let i=0;i<q.opts.length;i++){
+    const b=document.getElementById('cqo'+i);if(!b)continue;
+    b.disabled=true;
+    if(i===q.ans)b.classList.add('correct');
+    else if(i===idx&&!correct)b.classList.add('wrong');
+  }
+  setTimeout(()=>{
+    cqIdx++;
+    if(cqIdx>=cultureQs.length){
+      cqDone=true;
+      scores.culture=Math.round(cqScore/cultureQs.length*100);
+      saveScores();markDone('culturequiz');
+      document.getElementById('cultureQuizContent').innerHTML=`
+        <div style="text-align:center;padding:32px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">
+          <div style="font-size:48px">🏮</div>
+          <div style="font-size:28px;font-weight:900;color:var(--orange);margin:8px 0">${scores.culture}%</div>
+          <div style="font-weight:700;color:var(--muted)">${cqScore}/${cultureQs.length} correct</div>
+          <button onclick="cqDone=false;initCultureQuiz()" style="margin-top:16px;padding:10px 24px;background:var(--gold);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🔄 Try Again</button>
+        </div>`;
+    }else renderCultureQ();
+  },1000);
+}
+
+// VOCAB QUIZ — 25 QUESTIONS
+const vocabWords=[
+  {zh:'房间',py:'fángjiān',en:'Room'},
+  {zh:'外',py:'wài',en:'Outside'},
+  {zh:'只',py:'zhī',en:'Measure word (animals)'},
+  {zh:'小',py:'xiǎo',en:'Small'},
+  {zh:'猫',py:'māo',en:'Cat'},
+  {zh:'没',py:'méi',en:'Not / haven\'t'},
+  {zh:'在',py:'zài',en:'At / in / on'},
+  {zh:'学校',py:'xuéxiào',en:'School'},
+  {zh:'书店',py:'shūdiàn',en:'Bookstore'},
+  {zh:'前',py:'qián',en:'In front of'},
+  {zh:'能',py:'néng',en:'Can / be able to'},
+  {zh:'到',py:'dào',en:'Arrive / reach'},
+  {zh:'午饭',py:'wǔfàn',en:'Lunch'},
+  {zh:'饭',py:'fàn',en:'Meal'},
+  {zh:'大',py:'dà',en:'Big'},
+  {zh:'病人',py:'bìngrén',en:'Patient'},
+  {zh:'多',py:'duō',en:'Many / much'},
+  {zh:'医生',py:'yīshēng',en:'Doctor'},
+  {zh:'工作',py:'gōngzuò',en:'Work'},
+  {zh:'桌子',py:'zhuōzi',en:'Table'},
+  {zh:'上',py:'shàng',en:'On / above'},
+  {zh:'下',py:'xià',en:'Under'},
+  {zh:'里',py:'lǐ',en:'Inside'},
+  {zh:'后',py:'hòu',en:'Behind'},
+  {zh:'医院',py:'yīyuàn',en:'Hospital'},
+];
+let qWords=[],qIdx=0,qScore=0,qDone=false;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function initQuiz(){if(qDone)return;qWords=shuffle(vocabWords);qIdx=0;qScore=0;renderQuizQ();}
+function renderQuizQ(){
+  const q=qWords[qIdx];
+  const others=vocabWords.filter(x=>x.zh!==q.zh);
+  const opts=shuffle([q,...shuffle(others).slice(0,3)]);
+  document.getElementById('quizContent').innerHTML=`
+    <div class="quiz-prog"><div class="quiz-prog-fill" style="width:${qIdx/qWords.length*100}%"></div></div>
+    <div class="quiz-meta"><span>Question ${qIdx+1}/${qWords.length}</span><span style="color:var(--teal)">Score: ${qScore}/${qIdx}</span></div>
+    <div class="quiz-box">
+      <div style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px">What does this mean?</div>
+      <div class="quiz-zh">${q.zh}</div>
+      <div class="quiz-py">${q.py}</div>
+    </div>
+    <div class="quiz-opts">${opts.map((o,i)=>`<button class="quiz-opt" id="qo${i}" onclick="answerQuiz(${i},'${o.zh}','${q.zh}')">${o.en}</button>`).join('')}</div>`;
+  speak(q.zh);
+}
+function answerQuiz(i,chosen,correct){
+  const correctWord=vocabWords.find(w=>w.zh===correct);
+  document.querySelectorAll('.quiz-opt').forEach((b,j)=>{
+    b.disabled=true;
+    if(b.textContent===correctWord?.en)b.classList.add('correct');
+    else if(j===i&&chosen!==correct)b.classList.add('wrong');
+  });
+  if(chosen===correct)qScore++;
+  setTimeout(()=>{
+    qIdx++;
+    if(qIdx>=qWords.length){
+      qDone=true;
+      scores.vocab=Math.round(qScore/qWords.length*100);
+      saveScores();markDone('quiz');
+      document.getElementById('quizContent').innerHTML=`
+        <div style="text-align:center;padding:32px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">
+          <div style="font-size:48px">🎯</div>
+          <div style="font-size:28px;font-weight:900;color:var(--red);margin:8px 0">${scores.vocab}%</div>
+          <div style="font-weight:700;color:var(--muted)">${qScore}/${qWords.length} correct</div>
+          <div style="display:flex;gap:10px;justify-content:center;margin-top:16px">
+            <button onclick="qDone=false;initQuiz()" style="padding:10px 20px;background:var(--ink);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🔄 Retry</button>
+            <button onclick="showSec('scoreboard',document.querySelectorAll('.nav-tab')[10])" style="padding:10px 20px;background:var(--teal);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🏆 Scores</button>
+          </div>
+        </div>`;
+    }else renderQuizQ();
+  },900);
+}
+
+// SCOREBOARD
+function renderScoreboard(){
+  const secs=[
+    {key:'vocab',label:'📖 Vocab (25)',color:'var(--red)'},
+    {key:'reading',label:'📄 Reading',color:'var(--blue)'},
+    {key:'listening',label:'🎧 Listening',color:'var(--orange)'},
+    {key:'speaking',label:'🎤 Speaking',color:'var(--purple)'},
+    {key:'writing',label:'✍️ Writing',color:'var(--teal)'},
+    {key:'culture',label:'🏮 Culture',color:'var(--gold)'},
+  ];
+  const vals=secs.map(s=>scores[s.key]).filter(x=>x!==undefined);
+  const overall=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;
+  const emoji=overall>=80?'🏆':overall>=60?'🌟':overall>=40?'📚':'🌱';
+  const col=overall>=80?'var(--teal)':overall>=60?'var(--gold)':overall>=40?'var(--blue)':'var(--muted)';
+  document.getElementById('scoreboardContent').innerHTML=`
+    <div class="scoreboard">
+      <div class="sb-title">Lesson 8 Report Card</div>
+      <div class="sb-overall">
+        <div class="sb-pct" style="color:${col}">${emoji} ${overall}%</div>
+        <div class="sb-label">Overall — ${vals.length}/6 sections done</div>
+      </div>
+      <div class="sb-rows">
+        ${secs.map(s=>{
+          const v=scores[s.key],pct=v!==undefined?v:0;
+          return`<div class="sb-row">
+            <div class="sb-row-label">${s.label}</div>
+            <div class="sb-row-bar-wrap"><div class="sb-row-bar" style="width:${pct}%;background:${s.color}"></div></div>
+            <div class="sb-row-score" style="color:${s.color}">${v!==undefined?v+'%':'—'}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="saved-tag">✅ Scores saved to your device</div>
+      <div class="sb-actions">
+        <button class="btn-retry" onclick="if(confirm('Reset all scores?')){scores={};saveScores();renderScoreboard();}">🔄 Reset</button>
+        <button class="btn-next" onclick="alert('Lesson 9 coming soon! 加油！💪')">Next Lesson →</button>
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
