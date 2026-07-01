@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSK1 Lesson 10 — 这儿的苹果真便宜！</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+:root{--ink:#1a1a2e;--red:#e63946;--gold:#ffd166;--teal:#06d6a0;--blue:#118ab2;--purple:#7b2d8b;--orange:#f4a261;--green:#2d6a4f;--light:#f0f4ff;--card:#fff;--border:#e2e8f0;--muted:#8892a4;--shadow:0 8px 32px rgba(0,0,0,0.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--ink);min-height:100vh}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#5c3d11 60%,#c75b12 100%);color:#fff;padding:36px 24px 56px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'苹果';position:absolute;font-family:'Noto Sans SC',sans-serif;font-size:200px;font-weight:700;color:rgba(255,255,255,0.04);top:-20px;left:50%;transform:translateX(-50%);pointer-events:none}
+.hero-badge{display:inline-block;background:rgba(255,209,102,0.2);border:1px solid rgba(255,209,102,0.5);color:var(--gold);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:14px}
+.hero h1{font-size:clamp(22px,5vw,44px);font-family:'Noto Sans SC',sans-serif;font-weight:700;line-height:1.1;margin-bottom:4px}
+.hero-py{font-size:17px;color:rgba(255,255,255,0.6);margin-bottom:6px;letter-spacing:1px}
+.hero-en{font-size:16px;color:rgba(255,255,255,0.8);font-weight:700;margin-bottom:28px}
+.score-overview{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.score-pill{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:8px 16px;text-align:center;min-width:90px}
+.score-pill .sp-val{font-size:20px;font-weight:900}
+.score-pill .sp-lbl{font-size:10px;opacity:0.7;text-transform:uppercase;letter-spacing:0.5px}
+.score-pill.overall{background:rgba(255,209,102,0.25);border-color:rgba(255,209,102,0.5)}
+.nav-tabs{display:flex;background:#fff;border-bottom:2px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.nav-tab{flex-shrink:0;padding:13px 14px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.2s;display:flex;align-items:center;gap:5px}
+.nav-tab:hover{color:var(--ink)}.nav-tab.active{color:var(--red);border-bottom-color:var(--red)}
+.nav-tab .done-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);display:none}
+.nav-tab.completed .done-dot{display:inline-block}
+.content{max-width:860px;margin:0 auto;padding:24px 18px 60px}
+.section{display:none}.section.active{display:block}
+.section-head{font-size:20px;font-weight:900;color:var(--ink);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:24px}
+.vocab-card{background:var(--card);border-radius:14px;padding:16px;box-shadow:var(--shadow);border:2px solid transparent;cursor:pointer;transition:transform 0.2s,border-color 0.2s;text-align:center;position:relative}
+.vocab-card:hover{transform:translateY(-2px);border-color:var(--red)}
+.vocab-card .zh{font-family:'Noto Sans SC',sans-serif;font-size:26px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.vocab-card .py{font-size:12px;color:var(--blue);font-weight:700;margin-bottom:4px}
+.vocab-card .en{font-size:11px;color:var(--muted);font-weight:600}
+.vocab-card .cat{position:absolute;top:8px;right:8px;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;text-transform:uppercase}
+.cat-money{background:#e8f0fe;color:#1a56db}.cat-shop{background:#e8f8f2;color:#0e9f6e}
+.cat-basic{background:#fff8e1;color:#d97706}.cat-cloth{background:#fde8e8;color:#c0392b}
+.audio-btn{background:none;border:none;font-size:18px;cursor:pointer;margin-top:6px}
+.info-box{background:#e8f0fe;border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#1a3a6b;font-weight:600;line-height:1.6}
+.money-table{width:100%;border-collapse:collapse;margin-bottom:16px;background:var(--card);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.money-table th{background:var(--navy,var(--ink));color:#fff;padding:10px;font-size:13px;text-align:center}
+.money-table td{padding:10px;border-bottom:1px solid var(--border);font-size:13px;text-align:center}
+.money-table td:first-child{font-family:'Noto Sans SC',sans-serif;font-weight:700;font-size:16px}
+.dialogue-box{background:var(--card);border-radius:18px;padding:24px;box-shadow:var(--shadow);margin-bottom:18px}
+.dialogue-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:18px}
+.dialogue-line{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start}
+.dialogue-line:last-child{margin-bottom:0}
+.speaker-bubble{flex-shrink:0;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
+.sp-a{background:#fde8e8;color:var(--red)}.sp-b{background:#e8f0fe;color:var(--blue)}.sp-c{background:#e8f8f2;color:#0e9f6e}
+.dialogue-text .zh{font-family:'Noto Sans SC',sans-serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.dialogue-text .py{font-size:13px;color:var(--blue);font-weight:600;margin-bottom:2px}
+.dialogue-text .en{font-size:12px;color:var(--muted)}
+.play-btn{background:none;border:1.5px solid var(--border);border-radius:8px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:700;margin-top:4px}
+.play-btn:hover{border-color:var(--blue);color:var(--blue)}
+.grammar-block{background:var(--card);border-radius:14px;padding:22px;box-shadow:var(--shadow);margin-bottom:14px;border-left:4px solid var(--purple)}
+.grammar-block h3{font-size:16px;font-weight:900;color:var(--ink);margin-bottom:8px}
+.grammar-block p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px}
+.grammar-pattern{display:inline-block;background:#f3e8ff;color:var(--purple);font-size:13px;font-weight:800;padding:5px 12px;border-radius:8px;margin-bottom:10px;font-family:monospace}
+.grammar-eg{background:var(--light);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.grammar-eg .zh{font-family:'Noto Sans SC',sans-serif;font-size:18px;font-weight:700;color:var(--ink)}
+.grammar-eg .py{font-size:12px;color:var(--blue)}
+.grammar-eg .en{font-size:12px;color:var(--muted);margin-top:2px}
+.reading-passage{background:var(--card);border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:20px}
+.passage-text{font-family:'Noto Sans SC',sans-serif;font-size:22px;line-height:2.2;color:var(--ink);margin-bottom:16px}
+.passage-py{font-size:14px;color:var(--blue);line-height:2;margin-bottom:8px}
+.passage-en{font-size:13px;color:var(--muted);line-height:1.8}
+.reading-q{background:var(--light);border-radius:12px;padding:16px;margin-bottom:12px}
+.reading-q .q-text{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.reading-q .q-py{font-size:13px;color:var(--blue);font-style:italic;margin-bottom:10px}
+.reading-opts{display:flex;flex-direction:column;gap:8px}
+.reading-opt{background:#fff;border:2px solid var(--border);border-radius:10px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:all 0.15s;color:var(--ink)}
+.reading-opt:hover{border-color:var(--blue)}.reading-opt.correct{background:#d1fae5!important;border-color:#059669!important;color:#065f46!important}.reading-opt.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#991b1b!important}
+.listen-card{background:var(--card);border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:16px}
+.listen-play-btn{background:linear-gradient(135deg,var(--blue),#0c6fa8);color:#fff;border:none;border-radius:14px;padding:16px 32px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:10px;margin:0 auto 20px;transition:transform 0.2s}
+.listen-play-btn:hover{transform:scale(1.03)}
+.listen-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.listen-opt{background:#fff;border:2px solid var(--border);border-radius:12px;padding:14px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-align:center;transition:all 0.15s;color:var(--ink);line-height:1.5}
+.listen-opt:hover{border-color:var(--blue);background:var(--light)}.listen-opt.correct{background:#d1fae5!important;border-color:#059669!important;color:#065f46!important}.listen-opt.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#991b1b!important}
+.speaking-card{background:var(--card);border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:16px}
+.speak-phrase{text-align:center;margin-bottom:20px}
+.speak-zh{font-family:'Noto Sans SC',sans-serif;font-size:36px;font-weight:700;color:var(--ink)}
+.speak-py{font-size:17px;color:var(--blue);margin-top:6px;font-weight:700}
+.speak-en{font-size:14px;color:var(--muted);margin-top:4px}
+.speak-controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.speak-btn{padding:12px 24px;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer}
+.btn-listen{background:var(--blue);color:#fff}.btn-got-it{background:var(--teal);color:#fff}.btn-skip{background:#f1f5f9;color:var(--muted)}
+.speak-progress{display:flex;gap:6px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+.speak-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background 0.3s}
+.speak-dot.done{background:var(--teal)}.speak-dot.current{background:var(--red)}
+.writing-card{background:var(--card);border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:16px}
+.char-input{width:100%;border:2px solid var(--border);border-radius:12px;padding:14px 16px;font-family:'Nunito',sans-serif;font-size:20px;text-align:center;outline:none;margin-bottom:12px;transition:border-color 0.2s}
+.char-input:focus{border-color:var(--blue)}
+.write-check-btn{width:100%;padding:13px;background:var(--purple);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer}
+.write-result{margin-top:12px;padding:12px;border-radius:10px;text-align:center;font-size:14px;font-weight:700;display:none}
+.write-result.ok{background:#d1fae5;color:#065f46}.write-result.err{background:#fee2e2;color:#991b1b}
+.quiz-prog{background:var(--border);border-radius:6px;height:6px;margin-bottom:20px}
+.quiz-prog-fill{height:6px;border-radius:6px;background:linear-gradient(90deg,var(--red),var(--gold));transition:width 0.4s}
+.quiz-meta{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:14px}
+.quiz-box{background:var(--card);border-radius:18px;padding:28px;text-align:center;box-shadow:var(--shadow);margin-bottom:16px}
+.quiz-zh{font-family:'Noto Sans SC',sans-serif;font-size:46px;font-weight:700;color:var(--ink)}
+.quiz-py{font-size:16px;color:var(--blue);margin-top:6px}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quiz-opt{background:#fff;border:2px solid var(--border);border-radius:12px;padding:14px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;color:var(--ink)}
+.quiz-opt:hover{border-color:var(--ink);background:var(--light)}.quiz-opt.correct{background:#d1fae5!important;border-color:#059669!important;color:#065f46!important}.quiz-opt.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#991b1b!important}
+.culture-card{background:linear-gradient(135deg,#fff8e1,#fffde7);border:2px solid var(--gold);border-radius:16px;padding:22px 24px;margin-bottom:16px;display:flex;gap:14px;align-items:flex-start}
+.culture-icon{font-size:30px;flex-shrink:0}
+.culture-text h4{font-size:15px;font-weight:800;color:var(--ink);margin-bottom:6px}
+.culture-text p{font-size:13px;color:#666;line-height:1.7}
+.culture-quiz-box{background:var(--card);border-radius:18px;padding:28px;box-shadow:var(--shadow);margin-bottom:16px}
+.culture-q-text{font-size:17px;font-weight:800;color:var(--ink);margin-bottom:16px;text-align:center;line-height:1.5}
+.culture-opts{display:flex;flex-direction:column;gap:10px}
+.culture-opt{background:#fff;border:2px solid var(--border);border-radius:12px;padding:14px 18px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-align:left;color:var(--ink);transition:all 0.15s}
+.culture-opt:hover{border-color:var(--gold);background:#fffdf0}.culture-opt.correct{background:#d1fae5!important;border-color:#059669!important;color:#065f46!important}.culture-opt.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#991b1b!important}
+.scoreboard{background:var(--card);border-radius:20px;padding:28px;box-shadow:var(--shadow);max-width:520px;margin:0 auto}
+.sb-title{font-size:22px;font-weight:900;color:var(--ink);text-align:center;margin-bottom:20px}
+.sb-overall{text-align:center;margin-bottom:24px}
+.sb-pct{font-size:72px;font-weight:900;line-height:1}
+.sb-label{font-size:14px;color:var(--muted);font-weight:600;margin-top:4px}
+.sb-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.sb-row{display:flex;align-items:center;gap:12px}
+.sb-row-label{font-size:13px;font-weight:700;color:var(--ink);width:110px;flex-shrink:0}
+.sb-row-bar-wrap{flex:1;background:#f1f5f9;border-radius:6px;height:10px;overflow:hidden}
+.sb-row-bar{height:100%;border-radius:6px;transition:width 0.8s ease}
+.sb-row-score{font-size:13px;font-weight:800;width:40px;text-align:right}
+.sb-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.sb-actions button{padding:12px 22px;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer}
+.btn-retry{background:var(--ink);color:#fff}.btn-next{background:var(--teal);color:#fff}
+.saved-tag{display:block;width:fit-content;background:#d1fae5;color:#065f46;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin:12px auto}
+@media(max-width:600px){.vocab-grid{grid-template-columns:1fr 1fr}.quiz-opts,.listen-opts{grid-template-columns:1fr}.hero{padding:24px 14px 44px}.content{padding:16px 12px 48px}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">HSK1 · Lesson 10</div>
+  <h1>这儿的苹果真便宜！</h1>
+  <div class="hero-py">Zhèr de píngguǒ zhēn piányi!</div>
+  <div class="hero-en">The Apples Here Are Really Affordable!</div>
+  <div class="score-overview">
+    <div class="score-pill"><div class="sp-val" id="spVocab">—</div><div class="sp-lbl">📖 Vocab</div></div>
+    <div class="score-pill"><div class="sp-val" id="spReading">—</div><div class="sp-lbl">📄 Reading</div></div>
+    <div class="score-pill"><div class="sp-val" id="spListening">—</div><div class="sp-lbl">🎧 Listen</div></div>
+    <div class="score-pill"><div class="sp-val" id="spSpeaking">—</div><div class="sp-lbl">🎤 Speak</div></div>
+    <div class="score-pill"><div class="sp-val" id="spWriting">—</div><div class="sp-lbl">✍️ Write</div></div>
+    <div class="score-pill"><div class="sp-val" id="spCulture">—</div><div class="sp-lbl">🏮 Culture</div></div>
+    <div class="score-pill overall"><div class="sp-val" id="spOverall">—</div><div class="sp-lbl">⭐ Overall</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showSec('vocab',this)">📖 Vocab <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('dialogue',this)">💬 Dialogue <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('grammar',this)">📝 Grammar <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('reading',this)">📄 Reading <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('listening',this)">🎧 Listening <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('speaking',this)">🎤 Speaking <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('writing',this)">✍️ Writing <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('culture',this)">🏮 Culture <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('culturequiz',this)">🎎 Culture Quiz <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('quiz',this)">🎯 Quiz (25) <span class="done-dot"></span></button>
+  <button class="nav-tab" onclick="showSec('scoreboard',this)">🏆 Scores <span class="done-dot"></span></button>
+</div>
+
+<div class="content">
+
+<!-- VOCAB -->
+<div class="section active" id="sec-vocab">
+  <div class="section-head">📖 Lesson 10 Vocabulary</div>
+  <div class="info-box">💡 Click any card to hear it. Shopping, prices and describing products!</div>
+  <div class="vocab-grid">
+    <div class="vocab-card" onclick="speak('杯子')"><span class="cat cat-shop">Shop</span><div class="zh">杯子</div><div class="py">bēizi</div><div class="en">Cup</div><button class="audio-btn" onclick="event.stopPropagation();speak('杯子')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('这边')"><span class="cat cat-basic">Place</span><div class="zh">这边</div><div class="py">zhèbiān</div><div class="en">This side / here</div><button class="audio-btn" onclick="event.stopPropagation();speak('这边')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('钱')"><span class="cat cat-money">Money</span><div class="zh">钱</div><div class="py">qián</div><div class="en">Money</div><button class="audio-btn" onclick="event.stopPropagation();speak('钱')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('这些')"><span class="cat cat-basic">Basic</span><div class="zh">这些</div><div class="py">zhèxiē</div><div class="en">These</div><button class="audio-btn" onclick="event.stopPropagation();speak('这些')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('块')"><span class="cat cat-money">Money</span><div class="zh">块</div><div class="py">kuài</div><div class="en">Yuan (colloquial)</div><button class="audio-btn" onclick="event.stopPropagation();speak('块')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('那些')"><span class="cat cat-basic">Basic</span><div class="zh">那些</div><div class="py">nàxiē</div><div class="en">Those</div><button class="audio-btn" onclick="event.stopPropagation();speak('那些')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('这儿')"><span class="cat cat-basic">Place</span><div class="zh">这儿</div><div class="py">zhèr</div><div class="en">Here</div><button class="audio-btn" onclick="event.stopPropagation();speak('这儿')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('水果')"><span class="cat cat-shop">Food</span><div class="zh">水果</div><div class="py">shuǐguǒ</div><div class="en">Fruit</div><button class="audio-btn" onclick="event.stopPropagation();speak('水果')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('少')"><span class="cat cat-basic">Basic</span><div class="zh">少</div><div class="py">shǎo</div><div class="en">Few / little</div><button class="audio-btn" onclick="event.stopPropagation();speak('少')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('斤')"><span class="cat cat-shop">Measure</span><div class="zh">斤</div><div class="py">jīn</div><div class="en">Jin (≈500g)</div><button class="audio-btn" onclick="event.stopPropagation();speak('斤')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('苹果')"><span class="cat cat-shop">Food</span><div class="zh">苹果</div><div class="py">píngguǒ</div><div class="en">Apple</div><button class="audio-btn" onclick="event.stopPropagation();speak('苹果')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('便宜')"><span class="cat cat-money">Price</span><div class="zh">便宜</div><div class="py">piányi</div><div class="en">Cheap / affordable</div><button class="audio-btn" onclick="event.stopPropagation();speak('便宜')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('商店')"><span class="cat cat-shop">Shop</span><div class="zh">商店</div><div class="py">shāngdiàn</div><div class="en">Shop / store</div><button class="audio-btn" onclick="event.stopPropagation();speak('商店')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('衣服')"><span class="cat cat-cloth">Clothes</span><div class="zh">衣服</div><div class="py">yīfu</div><div class="en">Clothes</div><button class="audio-btn" onclick="event.stopPropagation();speak('衣服')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('件')"><span class="cat cat-cloth">Measure</span><div class="zh">件</div><div class="py">jiàn</div><div class="en">Measure word (clothing)</div><button class="audio-btn" onclick="event.stopPropagation();speak('件')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('元')"><span class="cat cat-money">Money</span><div class="zh">元</div><div class="py">yuán</div><div class="en">Yuan (formal)</div><button class="audio-btn" onclick="event.stopPropagation();speak('元')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('怎么样')"><span class="cat cat-basic">Basic</span><div class="zh">怎么样</div><div class="py">zěnmeyàng</div><div class="en">What do you think?</div><button class="audio-btn" onclick="event.stopPropagation();speak('怎么样')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('贵')"><span class="cat cat-money">Price</span><div class="zh">贵</div><div class="py">guì</div><div class="en">Expensive</div><button class="audio-btn" onclick="event.stopPropagation();speak('贵')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('穿')"><span class="cat cat-cloth">Clothes</span><div class="zh">穿</div><div class="py">chuān</div><div class="en">Wear</div><button class="audio-btn" onclick="event.stopPropagation();speak('穿')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('女')"><span class="cat cat-basic">Basic</span><div class="zh">女</div><div class="py">nǚ</div><div class="en">Female</div><button class="audio-btn" onclick="event.stopPropagation();speak('女')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('男')"><span class="cat cat-basic">Basic</span><div class="zh">男</div><div class="py">nán</div><div class="en">Male</div><button class="audio-btn" onclick="event.stopPropagation();speak('男')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('那儿')"><span class="cat cat-basic">Place</span><div class="zh">那儿</div><div class="py">nàr</div><div class="en">There</div><button class="audio-btn" onclick="event.stopPropagation();speak('那儿')">🔊</button></div>
+    <div class="vocab-card" onclick="speak('多少钱')"><span class="cat cat-money">Money</span><div class="zh">多少钱</div><div class="py">duōshao qián</div><div class="en">How much money?</div><button class="audio-btn" onclick="event.stopPropagation();speak('多少钱')">🔊</button></div>
+  </div>
+
+  <div class="section-head" style="margin-top:8px;font-size:17px">💴 Chinese Money (RMB) — Spoken Forms</div>
+  <table class="money-table">
+    <tr><th>Chinese</th><th>Pinyin</th><th>Amount</th><th>Notes</th></tr>
+    <tr><td>五块</td><td>wǔ kuài</td><td>¥5.00</td><td>块 = colloquial for 元</td></tr>
+    <tr><td>三块五</td><td>sān kuài wǔ</td><td>¥3.50</td><td>Short for 三块五毛</td></tr>
+    <tr><td>两毛</td><td>liǎng máo</td><td>¥0.20</td><td>毛 = colloquial for 角</td></tr>
+    <tr><td>两分</td><td>liǎng fēn</td><td>¥0.02</td><td>分 = cent</td></tr>
+    <tr><td>一百元</td><td>yì bǎi yuán</td><td>¥100</td><td>元 = formal</td></tr>
+  </table>
+</div>
+
+<!-- DIALOGUE -->
+<div class="section" id="sec-dialogue">
+  <div class="section-head">💬 Dialogues</div>
+  <div class="dialogue-box">
+    <div class="dialogue-title">Scene 1 — Buying a cup in a shop</div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">客</div><div class="dialogue-text"><div class="zh">请问，有杯子吗？</div><div class="py">Qǐngwèn, yǒu bēizi ma?</div><div class="en">Excuse me, do you have cups?</div><button class="play-btn" onclick="speak('请问，有杯子吗')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">员</div><div class="dialogue-text"><div class="zh">有，杯子在这边。多少钱一个？</div><div class="py">Yǒu, bēizi zài zhèbiān. Duōshao qián yí gè?</div><div class="en">Yes, the cups are over here. How much is one?</div><button class="play-btn" onclick="speak('有，杯子在这边，多少钱一个')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">员</div><div class="dialogue-text"><div class="zh">这些五块钱一个，那些十块钱一个。</div><div class="py">Zhèxiē wǔ kuài qián yí gè, nàxiē shí kuài qián yí gè.</div><div class="en">These are 5 yuan each, those are 10 yuan each.</div><button class="play-btn" onclick="speak('这些五块钱一个，那些十块钱一个')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">客</div><div class="dialogue-text"><div class="zh">我买这个吧。</div><div class="py">Wǒ mǎi zhège ba.</div><div class="en">I'll take this one.</div><button class="play-btn" onclick="speak('我买这个吧')">▶ Play</button></div></div>
+  </div>
+  <div class="dialogue-box">
+    <div class="dialogue-title">Scene 2 — Buying apples at the fruit market</div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">客</div><div class="dialogue-text"><div class="zh">这儿的水果真不少！您想买什么？</div><div class="py">Zhèr de shuǐguǒ zhēn bù shǎo! Nín xiǎng mǎi shénme?</div><div class="en">There is so much fruit here! What would you like to buy?</div><button class="play-btn" onclick="speak('这儿的水果真不少，您想买什么')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">客</div><div class="dialogue-text"><div class="zh">我想买两斤苹果。</div><div class="py">Wǒ xiǎng mǎi liǎng jīn píngguǒ.</div><div class="en">I'd like to buy two jin of apples.</div><button class="play-btn" onclick="speak('我想买两斤苹果')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">员</div><div class="dialogue-text"><div class="zh">苹果三块五一斤。这些七块二，七块钱吧。</div><div class="py">Píngguǒ sān kuài wǔ yì jīn. Zhèxiē qī kuài èr, qī kuài qián ba.</div><div class="en">Apples are 3.5 yuan per jin. These come to 7.2, let's say 7 yuan.</div><button class="play-btn" onclick="speak('苹果三块五一斤，这些七块二，七块钱吧')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">客</div><div class="dialogue-text"><div class="zh">好的，这儿的苹果真便宜！</div><div class="py">Hǎo de, zhèr de píngguǒ zhēn piányi!</div><div class="en">Great! The apples here are really affordable!</div><button class="play-btn" onclick="speak('好的，这儿的苹果真便宜')">▶ Play</button></div></div>
+  </div>
+  <div class="dialogue-box">
+    <div class="dialogue-title">Scene 3 — Buying children's clothes</div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">王</div><div class="dialogue-text"><div class="zh">这家商店衣服真多！这件一百元，怎么样？</div><div class="py">Zhè jiā shāngdiàn yīfu zhēn duō! Zhè jiàn yì bǎi yuán, zěnmeyàng?</div><div class="en">So many clothes in this store! This one is 100 yuan, what do you think?</div><button class="play-btn" onclick="speak('这家商店衣服真多，这件一百元，怎么样')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">刘</div><div class="dialogue-text"><div class="zh">好看，也不贵。小雪能穿，买一件吧。</div><div class="py">Hǎokàn, yě bú guì. Xiǎoxuě néng chuān, mǎi yí jiàn ba.</div><div class="en">It looks nice and isn't expensive. Xiaoxue can wear it — let's buy one.</div><button class="play-btn" onclick="speak('好看，也不贵，小雪能穿，买一件吧')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-a">王</div><div class="dialogue-text"><div class="zh">小明能穿吗？</div><div class="py">Xiǎomíng néng chuān ma?</div><div class="en">Can Xiaoming wear it too?</div><button class="play-btn" onclick="speak('小明能穿吗')">▶ Play</button></div></div>
+    <div class="dialogue-line"><div class="speaker-bubble sp-b">刘</div><div class="dialogue-text"><div class="zh">不能。这些是女孩子穿的衣服。男孩子的衣服在那儿。</div><div class="py">Bù néng. Zhèxiē shì nǚháizi chuān de yīfu. Nánháizi de yīfu zài nàr.</div><div class="en">No. These are girls' clothes. The boys' clothes are over there.</div><button class="play-btn" onclick="speak('不能，这些是女孩子穿的衣服，男孩子的衣服在那儿')">▶ Play</button></div></div>
+  </div>
+</div>
+
+<!-- GRAMMAR -->
+<div class="section" id="sec-grammar">
+  <div class="section-head">📝 Grammar Points</div>
+  <div class="grammar-block">
+    <h3>1. Asking Prices — 多少钱？</h3>
+    <p>Use 多少钱 (duōshao qián) to ask "how much?" Place the item before or after.</p>
+    <div class="grammar-pattern">Item + 多少钱？ / 多少钱 + Measure + Item?</div>
+    <div class="grammar-eg"><div class="zh">这本书多少钱？</div><div class="py">Zhè běn shū duōshao qián?</div><div class="en">How much is this book?</div></div>
+    <div class="grammar-eg"><div class="zh">苹果多少钱一斤？</div><div class="py">Píngguǒ duōshao qián yì jīn?</div><div class="en">How much per jin for apples?</div></div>
+  </div>
+  <div class="grammar-block">
+    <h3>2. Chinese Money (RMB) — Spoken Forms</h3>
+    <p>Formal: 元 (yuán) / 角 (jiǎo) / 分 (fēn). Colloquial (more common): 块 (kuài) / 毛 (máo) / 分 (fēn).</p>
+    <div class="grammar-eg"><div class="zh">三块五</div><div class="py">sān kuài wǔ</div><div class="en">¥3.50 (short for 三块五毛)</div></div>
+    <div class="grammar-eg"><div class="zh">七块二</div><div class="py">qī kuài èr</div><div class="en">¥7.20 (short for 七块二毛)</div></div>
+  </div>
+  <div class="grammar-block">
+    <h3>3. Adjective-Predicate Sentences</h3>
+    <p>In Chinese, adjectives can be the predicate directly — no need for 是. Add 很/真/不 before the adjective.</p>
+    <div class="grammar-pattern">Subject + 很/真/不 + Adjective</div>
+    <div class="grammar-eg"><div class="zh">这儿的苹果真便宜！</div><div class="py">Zhèr de píngguǒ zhēn piányi!</div><div class="en">The apples here are really affordable!</div></div>
+    <div class="grammar-eg"><div class="zh">好看，也不贵。</div><div class="py">Hǎokàn, yě bú guì.</div><div class="en">Looks nice, and not expensive either.</div></div>
+  </div>
+  <div class="grammar-block">
+    <h3>4. 怎么样 (zěnmeyàng) — Asking for Opinions</h3>
+    <p>Use 怎么样 at the end of a sentence to ask "how is it?" or "what do you think?"</p>
+    <div class="grammar-pattern">Noun + 怎么样？</div>
+    <div class="grammar-eg"><div class="zh">这件衣服怎么样？</div><div class="py">Zhè jiàn yīfu zěnmeyàng?</div><div class="en">What do you think of this clothing?</div></div>
+    <div class="grammar-eg"><div class="zh">这个菜怎么样？</div><div class="py">Zhège cài zěnmeyàng?</div><div class="en">How is this dish?</div></div>
+  </div>
+</div>
+
+<!-- READING -->
+<div class="section" id="sec-reading">
+  <div class="section-head">📄 Reading Practice</div>
+  <div class="reading-passage">
+    <div class="passage-text">这家商店水果真多！苹果三块五一斤，真便宜。<br>我想买两斤苹果和一件衣服。<br>这件衣服一百元，好看，也不贵。<br>男孩子的衣服在那儿，女孩子的在这边。</div>
+    <div class="passage-py">Zhè jiā shāngdiàn shuǐguǒ zhēn duō! Píngguǒ sān kuài wǔ yì jīn, zhēn piányi.<br>Wǒ xiǎng mǎi liǎng jīn píngguǒ hé yí jiàn yīfu.<br>Zhè jiàn yīfu yì bǎi yuán, hǎokàn, yě bú guì.<br>Nánháizi de yīfu zài nàr, nǚháizi de zài zhèbiān.</div>
+    <div class="passage-en">There is so much fruit in this store! Apples are 3.5 yuan per jin — really affordable.<br>I want to buy two jin of apples and one item of clothing.<br>This clothing is 100 yuan, looks nice and isn't expensive.<br>The boys' clothes are over there, the girls' are on this side.</div>
+    <button class="listen-play-btn" style="margin-top:14px" onclick="speak('这家商店水果真多！苹果三块五一斤，真便宜。我想买两斤苹果和一件衣服。这件衣服一百元，好看，也不贵。男孩子的衣服在那儿，女孩子的在这边。')">🔊 Read Aloud</button>
+  </div>
+  <div id="readingQs"></div>
+  <button id="readingSubmitBtn" style="display:none;width:100%;padding:13px;background:var(--blue);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px" onclick="submitReading()">Submit Answers ✓</button>
+</div>
+
+<!-- LISTENING -->
+<div class="section" id="sec-listening">
+  <div class="section-head">🎧 Listening Practice</div>
+  <div class="info-box">🎧 Press Play, listen carefully, then choose the correct pinyin answer!</div>
+  <div id="listenContent"></div>
+</div>
+
+<!-- SPEAKING -->
+<div class="section" id="sec-speaking">
+  <div class="section-head">🎤 Speaking Practice</div>
+  <div class="info-box">🎤 Listen to the phrase, try to say it yourself, then click ✅ Got It!</div>
+  <div class="speak-progress" id="speakDots"></div>
+  <div id="speakContent"></div>
+</div>
+
+<!-- WRITING -->
+<div class="section" id="sec-writing">
+  <div class="section-head">✍️ Writing Practice</div>
+  <div class="info-box">✍️ Type the <strong>pinyin without tones</strong>. Example: type <strong>pingguo</strong> for 苹果</div>
+  <div id="writeContent"></div>
+</div>
+
+<!-- CULTURE -->
+<div class="section" id="sec-culture">
+  <div class="section-head">🏮 Culture Study — Shopping & Money in China</div>
+  <div class="culture-card">
+    <div class="culture-icon">💴</div>
+    <div class="culture-text">
+      <h4>Chinese Currency — 人民币 (Rénmínbì / RMB)</h4>
+      <p>China's currency is the Renminbi (人民币), commonly called 元 (yuán) formally or 块 (kuài) in everyday speech. The symbol is ¥. China uses a decimal system: 1 yuan = 10 jiao (角) = 100 fen (分), though fen are rarely used today due to their tiny value.</p>
+    </div>
+  </div>
+  <div class="culture-card">
+    <div class="culture-icon">🛒</div>
+    <div class="culture-text">
+      <h4>Wet Markets and Fresh Food Shopping</h4>
+      <p>In China, buying fresh fruit by the 斤 (jīn, ≈500g) at open-air markets or wet markets is a daily tradition for many families. Sellers often round prices down slightly as a sign of goodwill — just like in the dialogue where ¥7.20 becomes ¥7.00.</p>
+    </div>
+  </div>
+  <div class="culture-card">
+    <div class="culture-icon">🧧</div>
+    <div class="culture-text">
+      <h4>Bargaining (讨价还价, tǎojiàhángjià)</h4>
+      <p>Bargaining is expected and accepted in traditional markets, street stalls, and some shops in China. However, in modern supermarkets, department stores, and shopping malls, prices are fixed. Knowing when to bargain and when not to is a key part of Chinese shopping culture.</p>
+    </div>
+  </div>
+  <div class="culture-card">
+    <div class="culture-icon">📲</div>
+    <div class="culture-text">
+      <h4>Cashless Payments in China</h4>
+      <p>China is now one of the most cashless societies in the world. Most purchases — from street food to luxury goods — are paid for by scanning QR codes via WeChat Pay or Alipay. Many younger Chinese rarely carry physical 块 (kuài) at all.</p>
+    </div>
+  </div>
+  <div class="culture-card">
+    <div class="culture-icon">👗</div>
+    <div class="culture-text">
+      <h4>Children's Clothing Shopping</h4>
+      <p>Shopping for children's clothes (like in the dialogue) is a common family outing in China. Large clothing markets, such as those in Guangzhou, are famous worldwide for their variety and affordability, supplying clothes internationally as well as domestically.</p>
+    </div>
+  </div>
+  <div class="culture-card">
+    <div class="culture-icon">🍎</div>
+    <div class="culture-text">
+      <h4>Fruit as Gifts and Symbols</h4>
+      <p>Fruit plays a symbolic role in Chinese culture — apples (苹果) represent peace (平, píng sounds similar), while oranges and grapes symbolize wealth and prosperity. Giving a basket of premium fruit is a popular and respectful gift in China.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CULTURE QUIZ -->
+<div class="section" id="sec-culturequiz">
+  <div class="section-head">🎎 Culture Quiz</div>
+  <div class="info-box">🏮 Test what you learned about Chinese money, markets and shopping culture!</div>
+  <div id="cultureQuizContent"></div>
+</div>
+
+<!-- VOCAB QUIZ -->
+<div class="section" id="sec-quiz">
+  <div class="section-head">🎯 Vocabulary Quiz (25 Questions)</div>
+  <div id="quizContent"></div>
+</div>
+
+<!-- SCOREBOARD -->
+<div class="section" id="sec-scoreboard">
+  <div class="section-head">🏆 My Scoreboard</div>
+  <div id="scoreboardContent"></div>
+</div>
+
+</div>
+
+<script>
+const SHEET_URL='https://script.google.com/macros/s/AKfycbzGl-S5KLsstzX237AJ2Wc19vjB2S87m235iZehafLnrTU48BcGpnlCzL00FQwMFeRL9g/exec';
+const LESSON_ID='L10', LESSON_NAME='The Apples Here Are Really Affordable';
+const SCORE_KEY='cf_l10_scores';
+let scores=JSON.parse(localStorage.getItem(SCORE_KEY)||'{}');
+
+function saveScores(){
+  localStorage.setItem(SCORE_KEY,JSON.stringify(scores));
+  updatePills();
+  try{
+    const sid=localStorage.getItem('cf_student_id')||'anonymous';
+    const sname=localStorage.getItem('cf_student_name')||'Student';
+    const vals=Object.values(scores).filter(x=>x!==undefined);
+    const overall=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;
+    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({studentId:sid,studentName:sname,lessonId:LESSON_ID,lessonName:LESSON_NAME,score:overall,maxScore:100,pct:overall})});
+  }catch(e){}
+}
+
+function updatePills(){
+  const f=v=>v!==undefined?v+'%':'—';
+  document.getElementById('spVocab').textContent=f(scores.vocab);
+  document.getElementById('spReading').textContent=f(scores.reading);
+  document.getElementById('spListening').textContent=f(scores.listening);
+  document.getElementById('spSpeaking').textContent=f(scores.speaking);
+  document.getElementById('spWriting').textContent=f(scores.writing);
+  document.getElementById('spCulture').textContent=f(scores.culture);
+  const vals=Object.values(scores).filter(x=>x!==undefined);
+  const ov=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):undefined;
+  document.getElementById('spOverall').textContent=f(ov);
+}
+updatePills();
+
+function speak(t){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  u.lang='zh-CN';u.rate=0.75;u.pitch=1.1;
+  const v=speechSynthesis.getVoices().find(x=>x.lang.startsWith('zh'));
+  if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=()=>{};
+
+function showSec(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='reading')initReading();
+  if(id==='listening')initListening();
+  if(id==='speaking')initSpeaking();
+  if(id==='writing')initWriting();
+  if(id==='culturequiz')initCultureQuiz();
+  if(id==='quiz')initQuiz();
+  if(id==='scoreboard')renderScoreboard();
+}
+function markDone(id){
+  const ids=['vocab','dialogue','grammar','reading','listening','speaking','writing','culture','culturequiz','quiz','scoreboard'];
+  const i=ids.indexOf(id);
+  if(i>=0)document.querySelectorAll('.nav-tab')[i].classList.add('completed');
+}
+document.querySelectorAll('.nav-tab')[7].addEventListener('click',()=>markDone('culture'));
+
+// READING — pinyin only options
+const readingQs=[
+  {q:"How much are the apples per jin?",qpy:"Píngguǒ duōshao qián yì jīn?",
+   opts:["liǎng kuài (¥2)","sān kuài wǔ (¥3.50)","wǔ kuài (¥5)","shí kuài (¥10)"],ans:1},
+  {q:"How much is the clothing item?",qpy:"Zhè jiàn yīfu duōshao qián?",
+   opts:["wǔshí yuán (¥50)","qīshí yuán (¥70)","yì bǎi yuán (¥100)","liǎng bǎi yuán (¥200)"],ans:2},
+  {q:"What do they think of the clothing?",qpy:"Tāmen juéde zhè jiàn yīfu zěnmeyàng?",
+   opts:["tài guì (too expensive)","hǎokàn, yě bú guì (nice-looking, not expensive)","bù hǎokàn (not nice)","tài piányi (too cheap)"],ans:1},
+  {q:"Where are the boys' clothes?",qpy:"Nánháizi de yīfu zài nǎr?",
+   opts:["zài zhèbiān (on this side)","zài nàr (over there)","zài lóushàng (upstairs)","méiyǒu (not available)"],ans:1},
+];
+let readingAnswers={};
+function initReading(){
+  const wrap=document.getElementById('readingQs');
+  wrap.innerHTML=readingQs.map((q,i)=>`
+    <div class="reading-q" id="rq${i}">
+      <div class="q-text">${i+1}. ${q.q}</div>
+      <div class="q-py">${q.qpy}</div>
+      <div class="reading-opts">${q.opts.map((o,j)=>`<button class="reading-opt" id="ro${i}_${j}" onclick="pickReading(${i},${j})">${o}</button>`).join('')}</div>
+    </div>`).join('');
+  document.getElementById('readingSubmitBtn').style.display='block';
+}
+function pickReading(qi,oi){
+  readingAnswers[qi]=oi;
+  for(let j=0;j<4;j++){const b=document.getElementById(`ro${qi}_${j}`);if(b){b.style.borderColor='';b.style.background='';}}
+  const s=document.getElementById(`ro${qi}_${oi}`);s.style.borderColor='var(--blue)';s.style.background='#e8f0fe';
+}
+function submitReading(){
+  if(Object.keys(readingAnswers).length<readingQs.length){alert('Please answer all questions!');return;}
+  let correct=0;
+  readingQs.forEach((q,i)=>{
+    const ans=readingAnswers[i];
+    for(let j=0;j<q.opts.length;j++){
+      const b=document.getElementById(`ro${i}_${j}`);if(!b)continue;
+      b.disabled=true;
+      if(j===q.ans)b.classList.add('correct');
+      else if(j===ans&&ans!==q.ans)b.classList.add('wrong');
+    }
+    if(ans===q.ans)correct++;
+  });
+  scores.reading=Math.round(correct/readingQs.length*100);
+  saveScores();markDone('reading');
+  const btn=document.getElementById('readingSubmitBtn');
+  btn.textContent=`✅ Score: ${scores.reading}% (${correct}/${readingQs.length})`;
+  btn.style.background='var(--teal)';btn.disabled=true;
+}
+
+// LISTENING — pinyin only options
+const listenQs=[
+  {audio:'多少钱一个',q:'What is being asked?',qpy:'Zhège wèntí shì shénme yìsi?',
+   opts:['Nǐ yǒu jǐ gè? (How many do you have?)','Duōshao qián yí gè? (How much is one?)','Zhè shì shénme? (What is this?)','Nǐ xiǎng mǎi shénme? (What do you want to buy?)'],ans:1},
+  {audio:'这些五块钱一个，那些十块钱一个',q:'What are the two prices?',qpy:'Liǎng zhǒng de jiàgé shì duōshao?',
+   opts:['sān kuài hé bā kuài (¥3 and ¥8)','wǔ kuài hé shí kuài (¥5 and ¥10)','liǎng kuài hé wǔ kuài (¥2 and ¥5)','shí kuài hé èrshí kuài (¥10 and ¥20)'],ans:1},
+  {audio:'这儿的苹果真便宜',q:'What does this mean?',qpy:'Zhè jù huà shì shénme yìsi?',
+   opts:['Zhèr de píngguǒ hěn guì. (The apples here are very expensive.)','Zhèr de píngguǒ zhēn piányi. (The apples here are really affordable.)','Zhèr méiyǒu píngguǒ. (No apples here.)','Píngguǒ bù hǎochī. (The apples are not tasty.)'],ans:1},
+  {audio:'这件衣服怎么样',q:'What is being asked?',qpy:'Zhège wèntí shì shénme yìsi?',
+   opts:['Zhè jiàn yīfu duōshao qián? (How much is this clothing?)','Zhè jiàn yīfu zěnmeyàng? (What do you think of this clothing?)','Nǐ xiǎng chuān shénme? (What do you want to wear?)','Zhè shì shéi de yīfu? (Whose clothing is this?)'],ans:1},
+  {audio:'男孩子的衣服在那儿',q:'Where are the boys\' clothes?',qpy:'Nánháizi de yīfu zài nǎr?',
+   opts:['zài zhèbiān (on this side)','zài nàr (over there)','zài lóushàng (upstairs)','zài guìzi lǐ (in the cabinet)'],ans:1},
+];
+let listenIdx=0,listenScore=0,listenDone=false;
+function initListening(){if(listenDone)return;listenIdx=0;listenScore=0;renderListenQ();}
+function renderListenQ(){
+  const q=listenQs[listenIdx];
+  document.getElementById('listenContent').innerHTML=`
+    <div class="listen-card">
+      <div style="text-align:center;margin-bottom:8px;font-size:13px;font-weight:700;color:var(--muted)">Question ${listenIdx+1} of ${listenQs.length} &nbsp;|&nbsp; Score: ${listenScore}/${listenIdx}</div>
+      <div class="quiz-prog"><div class="quiz-prog-fill" style="width:${listenIdx/listenQs.length*100}%"></div></div>
+      <button class="listen-play-btn" onclick="speak('${q.audio}')">🔊 Play Audio</button>
+      <div style="text-align:center;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px">${q.q}</div>
+      <div style="text-align:center;font-size:13px;color:var(--blue);font-style:italic;margin-bottom:14px">${q.qpy}</div>
+      <div class="listen-opts">${q.opts.map((o,i)=>`<button class="listen-opt" id="lo${i}" onclick="answerListen(${i})">${o}</button>`).join('')}</div>
+    </div>`;
+  setTimeout(()=>speak(q.audio),400);
+}
+function answerListen(idx){
+  const q=listenQs[listenIdx];
+  if(idx===q.ans)listenScore++;
+  for(let i=0;i<q.opts.length;i++){
+    const b=document.getElementById('lo'+i);if(!b)continue;
+    b.disabled=true;
+    if(i===q.ans)b.classList.add('correct');
+    else if(i===idx&&idx!==q.ans)b.classList.add('wrong');
+  }
+  setTimeout(()=>{
+    listenIdx++;
+    if(listenIdx>=listenQs.length){
+      listenDone=true;
+      scores.listening=Math.round(listenScore/listenQs.length*100);
+      saveScores();markDone('listening');
+      document.getElementById('listenContent').innerHTML=`
+        <div style="text-align:center;padding:32px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">
+          <div style="font-size:48px">🎧</div>
+          <div style="font-size:28px;font-weight:900;color:var(--teal);margin:8px 0">${scores.listening}%</div>
+          <div style="font-weight:700;color:var(--muted)">${listenScore}/${listenQs.length} correct</div>
+          <button onclick="listenDone=false;initListening()" style="margin-top:16px;padding:10px 24px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🔄 Try Again</button>
+        </div>`;
+    }else renderListenQ();
+  },900);
+}
+
+// SPEAKING
+const speakPhrases=[
+  {zh:'请问，有杯子吗？',py:'Qǐngwèn, yǒu bēizi ma?',en:'Excuse me, do you have cups?'},
+  {zh:'多少钱一个？',py:'Duōshao qián yí gè?',en:'How much is one?'},
+  {zh:'我想买两斤苹果。',py:'Wǒ xiǎng mǎi liǎng jīn píngguǒ.',en:"I'd like to buy two jin of apples."},
+  {zh:'这儿的苹果真便宜！',py:'Zhèr de píngguǒ zhēn piányi!',en:'The apples here are really affordable!'},
+  {zh:'这件衣服怎么样？',py:'Zhè jiàn yīfu zěnmeyàng?',en:'What do you think of this clothing?'},
+  {zh:'好看，也不贵。',py:'Hǎokàn, yě bú guì.',en:"It's nice-looking and not expensive."},
+  {zh:'男孩子的衣服在那儿。',py:'Nánháizi de yīfu zài nàr.',en:"The boys' clothes are over there."},
+];
+let speakIdx=0,speakDoneCount=0;
+function initSpeaking(){speakIdx=0;speakDoneCount=0;renderSpeakDots();renderSpeakPhrase();}
+function renderSpeakDots(){document.getElementById('speakDots').innerHTML=speakPhrases.map((_,i)=>`<div class="speak-dot ${i<speakDoneCount?'done':i===speakIdx?'current':''}"></div>`).join('');}
+function renderSpeakPhrase(){
+  const p=speakPhrases[speakIdx];
+  document.getElementById('speakContent').innerHTML=`
+    <div class="speaking-card">
+      <div class="speak-phrase"><div class="speak-zh">${p.zh}</div><div class="speak-py">${p.py}</div><div class="speak-en">${p.en}</div></div>
+      <div class="speak-controls">
+        <button class="speak-btn btn-listen" onclick="speak('${p.zh.replace(/[？！。]/g,'')}')">🔊 Listen</button>
+        <button class="speak-btn btn-got-it" onclick="gotIt()">✅ Got It!</button>
+        <button class="speak-btn btn-skip" onclick="skipSpeak()">⏭ Skip</button>
+      </div>
+      <div style="margin-top:14px;text-align:center;font-size:13px;color:var(--muted)">${speakIdx+1} / ${speakPhrases.length}</div>
+    </div>`;
+  setTimeout(()=>speak(p.zh.replace(/[？！。]/g,'')),300);
+}
+function gotIt(){speakDoneCount++;nextSpeak();}
+function skipSpeak(){nextSpeak();}
+function nextSpeak(){
+  speakIdx++;
+  if(speakIdx>=speakPhrases.length){
+    scores.speaking=Math.round(speakDoneCount/speakPhrases.length*100);
+    saveScores();markDone('speaking');
+    document.getElementById('speakContent').innerHTML=`
+      <div style="text-align:center;padding:32px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">
+        <div style="font-size:48px">🎤</div>
+        <div style="font-size:28px;font-weight:900;color:var(--teal);margin:8px 0">${scores.speaking}%</div>
+        <div style="font-weight:700;color:var(--muted)">${speakDoneCount}/${speakPhrases.length} phrases practised</div>
+        <button onclick="initSpeaking()" style="margin-top:16px;padding:10px 24px;background:var(--red);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🔄 Practise Again</button>
+      </div>`;
+    document.getElementById('speakDots').innerHTML='';
+    return;
+  }
+  renderSpeakDots();renderSpeakPhrase();
+}
+
+// WRITING — pinyin without tones
+const writeWords=[
+  {en:'Apple',zh:'苹果',py:'pingguo',accept:['pingguo','ping guo']},
+  {en:'Cheap / affordable',zh:'便宜',py:'pianyi',accept:['pianyi','pian yi']},
+  {en:'Money',zh:'钱',py:'qian',accept:['qian']},
+  {en:'Clothes',zh:'衣服',py:'yifu',accept:['yifu','yi fu']},
+  {en:'Shop / store',zh:'商店',py:'shangdian',accept:['shangdian','shang dian']},
+  {en:'Expensive',zh:'贵',py:'gui',accept:['gui']},
+  {en:'Wear',zh:'穿',py:'chuan',accept:['chuan']},
+  {en:'Fruit',zh:'水果',py:'shuiguo',accept:['shuiguo','shui guo']},
+  {en:'Cup',zh:'杯子',py:'beizi',accept:['beizi','bei zi']},
+  {en:'What do you think?',zh:'怎么样',py:'zenmeyang',accept:['zenmeyang','zen me yang']},
+];
+let writeIdx=0,writeScore=0,writeDone=false;
+function stripTones(s){return s.toLowerCase().replace(/[āáǎà]/g,'a').replace(/[ēéěè]/g,'e').replace(/[īíǐì]/g,'i').replace(/[ōóǒò]/g,'o').replace(/[ūúǔù]/g,'u').replace(/[ǖǘǚǜü]/g,'u').replace(/\s+/g,' ').trim();}
+function initWriting(){if(writeDone)return;writeIdx=0;writeScore=0;renderWriteQ();}
+function renderWriteQ(){
+  const w=writeWords[writeIdx];
+  document.getElementById('writeContent').innerHTML=`
+    <div class="writing-card">
+      <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px">
+        <span>Word ${writeIdx+1} of ${writeWords.length}</span><span style="color:var(--teal)">Score: ${writeScore}/${writeIdx}</span>
+      </div>
+      <div class="quiz-prog"><div class="quiz-prog-fill" style="width:${writeIdx/writeWords.length*100}%"></div></div>
+      <div style="text-align:center;margin-bottom:16px">
+        <div style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:8px">Type the pinyin for:</div>
+        <div style="font-size:28px;font-weight:900;color:var(--ink)">${w.en}</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:6px">(no tones needed — e.g. <strong>pingguo</strong>)</div>
+      </div>
+      <input class="char-input" id="writeInput" placeholder="Type pinyin here…" onkeydown="if(event.key==='Enter')checkWrite()">
+      <button class="write-check-btn" onclick="checkWrite()">Check Answer ✓</button>
+      <div class="write-result" id="writeResult"></div>
+      <button id="writeNextBtn" style="display:none;width:100%;margin-top:10px;padding:13px;background:var(--teal);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer" onclick="nextWrite()">Next →</button>
+    </div>`;
+  document.getElementById('writeInput').focus();
+}
+function checkWrite(){
+  const raw=document.getElementById('writeInput').value.trim();
+  const input=stripTones(raw).replace(/\s+/g,'');
+  const w=writeWords[writeIdx];
+  const ok=w.accept.some(a=>stripTones(a).replace(/\s+/g,'')===input);
+  if(ok)writeScore++;
+  const res=document.getElementById('writeResult');
+  res.style.display='block';
+  res.className='write-result '+(ok?'ok':'err');
+  res.innerHTML=ok?`✅ Correct! <strong>${w.py}</strong> <span style="font-family:'Noto Sans SC',sans-serif">(${w.zh})</span>`:`❌ Answer: <strong>${w.py}</strong> <span style="font-family:'Noto Sans SC',sans-serif">(${w.zh})</span>`;
+  document.getElementById('writeInput').disabled=true;
+  document.querySelector('.write-check-btn').disabled=true;
+  document.getElementById('writeNextBtn').style.display='block';
+  speak(w.zh);
+}
+function nextWrite(){
+  writeIdx++;
+  if(writeIdx>=writeWords.length){
+    writeDone=true;
+    scores.writing=Math.round(writeScore/writeWords.length*100);
+    saveScores();markDone('writing');
+    document.getElementById('writeContent').innerHTML=`
+      <div style="text-align:center;padding:32px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">
+        <div style="font-size:48px">✍️</div>
+        <div style="font-size:28px;font-weight:900;color:var(--purple);margin:8px 0">${scores.writing}%</div>
+        <div style="font-weight:700;color:var(--muted)">${writeScore}/${writeWords.length} correct</div>
+        <button onclick="writeDone=false;initWriting()" style="margin-top:16px;padding:10px 24px;background:var(--purple);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🔄 Try Again</button>
+      </div>`;
+    return;
+  }
+  renderWriteQ();
+}
+
+// CULTURE QUIZ
+const cultureQs=[
+  {q:'What is the colloquial spoken word for 元 (yuan) in Chinese?',
+   opts:['máo','fēn','kuài','jiǎo'],ans:2},
+  {q:'What does 1 jīn (斤) equal in weight?',
+   opts:['100g','250g','500g','1 kilogram'],ans:2},
+  {q:'When is bargaining acceptable in China?',
+   opts:['Always, in any shop','In traditional markets and street stalls, but NOT in modern supermarkets or malls','Never, prices are always fixed','Only for fruit and vegetables'],ans:1},
+  {q:'Which payment methods have made China nearly cashless?',
+   opts:['Credit cards only','WeChat Pay and Alipay via QR codes','Cryptocurrency','Barter system'],ans:1},
+  {q:'What do apples (苹果) symbolize in Chinese culture?',
+   opts:['Wealth and gold','Peace (平, píng sounds like 苹)','Good luck','Long life'],ans:1},
+  {q:'Why might a market seller round ¥7.20 down to ¥7.00 as in the dialogue?',
+   opts:['They made a calculation error','It is a required law','It is a gesture of goodwill to the customer','They forgot how to add'],ans:1},
+];
+let cqIdx=0,cqScore=0,cqDone=false;
+function initCultureQuiz(){if(cqDone)return;cqIdx=0;cqScore=0;renderCultureQ();}
+function renderCultureQ(){
+  const q=cultureQs[cqIdx];
+  document.getElementById('cultureQuizContent').innerHTML=`
+    <div class="quiz-meta"><span>Question ${cqIdx+1}/${cultureQs.length}</span><span style="color:var(--teal)">Score: ${cqScore}/${cqIdx}</span></div>
+    <div class="quiz-prog"><div class="quiz-prog-fill" style="width:${cqIdx/cultureQs.length*100}%;background:linear-gradient(90deg,var(--gold),var(--orange))"></div></div>
+    <div class="culture-quiz-box">
+      <div class="culture-q-text">🏮 ${q.q}</div>
+      <div class="culture-opts">${q.opts.map((o,i)=>`<button class="culture-opt" id="cqo${i}" onclick="answerCulture(${i})">${o}</button>`).join('')}</div>
+    </div>`;
+}
+function answerCulture(idx){
+  const q=cultureQs[cqIdx];
+  const correct=idx===q.ans;
+  if(correct)cqScore++;
+  for(let i=0;i<q.opts.length;i++){
+    const b=document.getElementById('cqo'+i);if(!b)continue;
+    b.disabled=true;
+    if(i===q.ans)b.classList.add('correct');
+    else if(i===idx&&!correct)b.classList.add('wrong');
+  }
+  setTimeout(()=>{
+    cqIdx++;
+    if(cqIdx>=cultureQs.length){
+      cqDone=true;
+      scores.culture=Math.round(cqScore/cultureQs.length*100);
+      saveScores();markDone('culturequiz');
+      document.getElementById('cultureQuizContent').innerHTML=`
+        <div style="text-align:center;padding:32px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">
+          <div style="font-size:48px">🏮</div>
+          <div style="font-size:28px;font-weight:900;color:var(--orange);margin:8px 0">${scores.culture}%</div>
+          <div style="font-weight:700;color:var(--muted)">${cqScore}/${cultureQs.length} correct</div>
+          <button onclick="cqDone=false;initCultureQuiz()" style="margin-top:16px;padding:10px 24px;background:var(--gold);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🔄 Try Again</button>
+        </div>`;
+    }else renderCultureQ();
+  },1000);
+}
+
+// VOCAB QUIZ — 25 QUESTIONS
+const vocabWords=[
+  {zh:'杯子',py:'bēizi',en:'Cup'},
+  {zh:'这边',py:'zhèbiān',en:'This side / here'},
+  {zh:'钱',py:'qián',en:'Money'},
+  {zh:'这些',py:'zhèxiē',en:'These'},
+  {zh:'块',py:'kuài',en:'Yuan (colloquial)'},
+  {zh:'那些',py:'nàxiē',en:'Those'},
+  {zh:'这儿',py:'zhèr',en:'Here'},
+  {zh:'水果',py:'shuǐguǒ',en:'Fruit'},
+  {zh:'少',py:'shǎo',en:'Few / little'},
+  {zh:'斤',py:'jīn',en:'Jin (weight unit)'},
+  {zh:'苹果',py:'píngguǒ',en:'Apple'},
+  {zh:'便宜',py:'piányi',en:'Cheap / affordable'},
+  {zh:'商店',py:'shāngdiàn',en:'Shop / store'},
+  {zh:'衣服',py:'yīfu',en:'Clothes'},
+  {zh:'件',py:'jiàn',en:'Measure word (clothing)'},
+  {zh:'元',py:'yuán',en:'Yuan (formal)'},
+  {zh:'怎么样',py:'zěnmeyàng',en:'What do you think?'},
+  {zh:'贵',py:'guì',en:'Expensive'},
+  {zh:'穿',py:'chuān',en:'Wear'},
+  {zh:'女',py:'nǚ',en:'Female'},
+  {zh:'男',py:'nán',en:'Male'},
+  {zh:'那儿',py:'nàr',en:'There'},
+  {zh:'多少钱',py:'duōshao qián',en:'How much money?'},
+  {zh:'售货员',py:'shòuhuòyuán',en:'Shop assistant'},
+  {zh:'好看',py:'hǎokàn',en:'Nice-looking'},
+];
+let qWords=[],qIdx=0,qScore=0,qDone=false;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function initQuiz(){if(qDone)return;qWords=shuffle(vocabWords);qIdx=0;qScore=0;renderQuizQ();}
+function renderQuizQ(){
+  const q=qWords[qIdx];
+  const others=vocabWords.filter(x=>x.zh!==q.zh);
+  const opts=shuffle([q,...shuffle(others).slice(0,3)]);
+  document.getElementById('quizContent').innerHTML=`
+    <div class="quiz-prog"><div class="quiz-prog-fill" style="width:${qIdx/qWords.length*100}%"></div></div>
+    <div class="quiz-meta"><span>Question ${qIdx+1}/${qWords.length}</span><span style="color:var(--teal)">Score: ${qScore}/${qIdx}</span></div>
+    <div class="quiz-box">
+      <div style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px">What does this mean?</div>
+      <div class="quiz-zh">${q.zh}</div>
+      <div class="quiz-py">${q.py}</div>
+    </div>
+    <div class="quiz-opts">${opts.map((o,i)=>`<button class="quiz-opt" id="qo${i}" onclick="answerQuiz(${i},'${o.zh.replace(/'/g,"\\'")}','${q.zh.replace(/'/g,"\\'")}')">${o.en}</button>`).join('')}</div>`;
+  speak(q.zh);
+}
+function answerQuiz(i,chosen,correct){
+  const correctWord=vocabWords.find(w=>w.zh===correct);
+  document.querySelectorAll('.quiz-opt').forEach((b,j)=>{
+    b.disabled=true;
+    if(b.textContent===correctWord?.en)b.classList.add('correct');
+    else if(j===i&&chosen!==correct)b.classList.add('wrong');
+  });
+  if(chosen===correct)qScore++;
+  setTimeout(()=>{
+    qIdx++;
+    if(qIdx>=qWords.length){
+      qDone=true;
+      scores.vocab=Math.round(qScore/qWords.length*100);
+      saveScores();markDone('quiz');
+      document.getElementById('quizContent').innerHTML=`
+        <div style="text-align:center;padding:32px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">
+          <div style="font-size:48px">🎯</div>
+          <div style="font-size:28px;font-weight:900;color:var(--red);margin:8px 0">${scores.vocab}%</div>
+          <div style="font-weight:700;color:var(--muted)">${qScore}/${qWords.length} correct</div>
+          <div style="display:flex;gap:10px;justify-content:center;margin-top:16px">
+            <button onclick="qDone=false;initQuiz()" style="padding:10px 20px;background:var(--ink);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🔄 Retry</button>
+            <button onclick="showSec('scoreboard',document.querySelectorAll('.nav-tab')[10])" style="padding:10px 20px;background:var(--teal);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer">🏆 Scores</button>
+          </div>
+        </div>`;
+    }else renderQuizQ();
+  },900);
+}
+
+// SCOREBOARD
+function renderScoreboard(){
+  const secs=[
+    {key:'vocab',label:'📖 Vocab (25)',color:'var(--red)'},
+    {key:'reading',label:'📄 Reading',color:'var(--blue)'},
+    {key:'listening',label:'🎧 Listening',color:'var(--orange)'},
+    {key:'speaking',label:'🎤 Speaking',color:'var(--purple)'},
+    {key:'writing',label:'✍️ Writing',color:'var(--teal)'},
+    {key:'culture',label:'🏮 Culture',color:'var(--gold)'},
+  ];
+  const vals=secs.map(s=>scores[s.key]).filter(x=>x!==undefined);
+  const overall=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;
+  const emoji=overall>=80?'🏆':overall>=60?'🌟':overall>=40?'📚':'🌱';
+  const col=overall>=80?'var(--teal)':overall>=60?'var(--gold)':overall>=40?'var(--blue)':'var(--muted)';
+  document.getElementById('scoreboardContent').innerHTML=`
+    <div class="scoreboard">
+      <div class="sb-title">Lesson 10 Report Card</div>
+      <div class="sb-overall">
+        <div class="sb-pct" style="color:${col}">${emoji} ${overall}%</div>
+        <div class="sb-label">Overall — ${vals.length}/6 sections done</div>
+      </div>
+      <div class="sb-rows">
+        ${secs.map(s=>{
+          const v=scores[s.key],pct=v!==undefined?v:0;
+          return`<div class="sb-row">
+            <div class="sb-row-label">${s.label}</div>
+            <div class="sb-row-bar-wrap"><div class="sb-row-bar" style="width:${pct}%;background:${s.color}"></div></div>
+            <div class="sb-row-score" style="color:${s.color}">${v!==undefined?v+'%':'—'}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="saved-tag">✅ Scores saved to your device</div>
+      <div class="sb-actions">
+        <button class="btn-retry" onclick="if(confirm('Reset all scores?')){scores={};saveScores();renderScoreboard();}">🔄 Reset</button>
+        <button class="btn-next" onclick="alert('HSK1 complete! You are amazing! 你真棒！🎉')">🎓 Complete!</button>
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
