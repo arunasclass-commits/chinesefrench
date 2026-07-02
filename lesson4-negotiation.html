@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第四课 · 价格谈判 — Price Negotiation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --ink: #1a1a2e;
+    --red: #c0392b;
+    --gold: #d4a017;
+    --ivory: #f9f6f0;
+    --paper: #ede8df;
+    --muted: #8a7f72;
+    --line: #d8d0c4;
+    --active-bg: #fff8ee;
+    --active-border: #d4a017;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--ivory);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: var(--ink);
+    color: white;
+    padding: 24px 20px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '谈';
+    position: absolute;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 180px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.04);
+    top: -30px; right: -10px;
+    pointer-events: none;
+  }
+  .lesson-tag {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+  }
+  .header h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(20px, 5vw, 28px);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .header .subtitle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.06em;
+  }
+
+  /* Section headers */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 16px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* Line cards */
+  .lines-container {
+    padding: 0 12px 80px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .line-card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+  .line-card:hover { border-color: var(--gold); }
+  .line-card.active {
+    border-color: var(--active-border);
+    box-shadow: 0 2px 12px rgba(212,160,23,0.15);
+  }
+
+  .line-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 14px 12px;
+  }
+
+  .time-badge {
+    background: var(--paper);
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 3px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .chinese-text {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: var(--ink);
+    flex: 1;
+  }
+
+  .play-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    padding: 2px;
+    flex-shrink: 0;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: -2px;
+  }
+  .play-btn:hover { color: var(--red); background: #fef2f2; }
+  .play-btn.playing { color: var(--red); }
+
+  /* Expanded details */
+  .line-details {
+    display: none;
+    border-top: 1px solid var(--line);
+    background: var(--active-bg);
+  }
+  .line-card.active .line-details { display: block; }
+
+  .pinyin-row {
+    padding: 12px 14px 8px;
+    font-size: 13px;
+    color: var(--red);
+    letter-spacing: 0.04em;
+    font-style: italic;
+    line-height: 1.7;
+    border-bottom: 1px dashed var(--line);
+  }
+  .pinyin-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-style: normal;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .meaning-row {
+    padding: 10px 14px 14px;
+  }
+  .meaning-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+    display: block;
+  }
+  .meaning-text {
+    font-size: 14px;
+    line-height: 1.65;
+    color: #2d2d2d;
+  }
+
+  /* Key vocab chips */
+  .vocab-row {
+    padding: 0 14px 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .vocab-chip {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 12px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .vocab-chip .zh { font-family: 'Noto Sans SC', sans-serif; font-weight: 500; color: var(--ink); }
+  .vocab-chip .py { color: var(--red); font-style: italic; font-size: 11px; }
+  .vocab-chip .en { color: var(--muted); }
+
+  /* Controls */
+  .controls {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: white;
+    border-top: 1px solid var(--line);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .controls-wrap {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: white;
+    border-top: 1px solid var(--line);
+    z-index: 100;
+  }
+  .controls-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ctrl-btn {
+    background: var(--ink);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .ctrl-btn:hover { background: var(--red); }
+  .ctrl-btn.secondary {
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .ctrl-btn.secondary:hover { background: var(--line); }
+  .progress-text {
+    font-size: 12px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+  .progress-bar-wrap {
+    flex: 1;
+    height: 3px;
+    background: var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    transition: width 0.3s;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="lesson-tag">第四课 · Lesson 4</div>
+  <h1>价格谈判</h1>
+  <div class="subtitle">Negotiating with Chinese Clients · Key Points</div>
+</div>
+
+<div class="lines-container" id="linesContainer"></div>
+
+<div class="controls-wrap">
+  <div class="controls-inner">
+    <button class="ctrl-btn secondary" onclick="prevLine()">◀ Prev</button>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <span class="progress-text" id="progressText">1 / 18</span>
+    <button class="ctrl-btn" onclick="nextLine()">Next ▶</button>
+  </div>
+</div>
+
+<script>
+const lines = [
+  {
+    time: "0:01",
+    zh: "第四课 价格谈判和中国客户谈判要注意什么",
+    pinyin: "Dì sì kè jiàgé tánpàn hé Zhōngguó kèhù tánpàn yào zhùyì shénme",
+    en: "Lesson 4: What should you pay attention to when negotiating prices and dealing with Chinese clients?",
+    vocab: [
+      { zh: "谈判", py: "tánpàn", en: "negotiation" },
+      { zh: "注意", py: "zhùyì", en: "pay attention to" },
+      { zh: "价格", py: "jiàgé", en: "price" },
+    ]
+  },
+  {
+    time: "0:14",
+    zh: "你可能会问这些问题：第一，你要和谁谈判？第二，谈判时你应该坐在哪里？第三，怎么开始谈判？",
+    pinyin: "Nǐ kěnéng huì wèn zhèxiē wèntí: Dì yī, nǐ yào hé shuí tánpàn? Dì èr, tánpàn shí nǐ yīnggāi zuò zài nǎlǐ? Dì sān, zěnme kāishǐ tánpàn?",
+    en: "You may have these questions: First, who should you negotiate with? Second, where should you sit during negotiations? Third, how do you begin the negotiation?",
+    vocab: [
+      { zh: "第一", py: "dì yī", en: "first" },
+      { zh: "应该", py: "yīnggāi", en: "should" },
+    ]
+  },
+  {
+    time: "0:31",
+    zh: "如何明确谈判对象？每个公司里都有管理层和基层员工。",
+    pinyin: "Rúhé míngquè tánpàn duìxiàng? Měi gè gōngsī lǐ dōu yǒu guǎnlǐ céng hé jīcéng yuángōng.",
+    en: "How do you identify the right negotiation counterpart? Every company has management-level and ground-level employees.",
+    vocab: [
+      { zh: "明确", py: "míngquè", en: "clarify / identify clearly" },
+      { zh: "管理层", py: "guǎnlǐ céng", en: "management level" },
+      { zh: "基层员工", py: "jīcéng yuángōng", en: "ground-level / frontline staff" },
+    ]
+  },
+  {
+    time: "0:40",
+    zh: "所以，谈判前尽早联络有决策权的项目负责人，提高谈判成功率。",
+    pinyin: "Suǒyǐ, tánpàn qián jǐn zǎo liánluò yǒu juécè quán de xiàngmù fùzérén, tígāo tánpàn chénggōng lǜ.",
+    en: "Therefore, before negotiations, contact the project lead who has decision-making authority as early as possible — this increases the success rate.",
+    vocab: [
+      { zh: "决策权", py: "juécè quán", en: "decision-making authority" },
+      { zh: "项目负责人", py: "xiàngmù fùzérén", en: "project person in charge" },
+      { zh: "成功率", py: "chénggōng lǜ", en: "success rate" },
+    ]
+  },
+  {
+    time: "0:51",
+    zh: "同时和对方基层员工确定好谈判细节信息，这样你们的谈判会更有效率，参加谈判的人也应该和对方人员职级对等。",
+    pinyin: "Tóngshí hé duìfāng jīcéng yuángōng quèdìng hǎo tánpàn xìjié xìnxī, zhèyàng nǐmen de tánpàn huì gèng yǒu xiào lǜ, cānjiā tánpàn de rén yě yīnggāi hé duìfāng rényuán zhíjí duìděng.",
+    en: "At the same time, confirm the detailed negotiation information with the other party's ground-level staff. This makes negotiations more efficient. The people attending should also match the seniority level of the other party's representatives.",
+    vocab: [
+      { zh: "细节", py: "xìjié", en: "details" },
+      { zh: "有效率", py: "yǒu xiào lǜ", en: "efficient" },
+      { zh: "职级对等", py: "zhíjí duìděng", en: "equal rank / peer level" },
+    ]
+  },
+  {
+    time: "1:09",
+    zh: "比如对方公司的经理参加谈判，你的公司最好也请经理参加。",
+    pinyin: "Bǐrú duìfāng gōngsī de jīnglǐ cānjiā tánpàn, nǐ de gōngsī zuìhǎo yě qǐng jīnglǐ cānjiā.",
+    en: "For example, if the other company's manager attends the negotiation, it is best for your company to also have a manager present.",
+    vocab: [
+      { zh: "经理", py: "jīnglǐ", en: "manager" },
+      { zh: "最好", py: "zuìhǎo", en: "it is best / ideally" },
+    ]
+  },
+  {
+    time: "1:18",
+    zh: "职级不对等的谈判会让对方很不满意。",
+    pinyin: "Zhíjí bù duìděng de tánpàn huì ràng duìfāng hěn bù mǎnyì.",
+    en: "A negotiation where the seniority levels are mismatched will leave the other party very dissatisfied.",
+    vocab: [
+      { zh: "不满意", py: "bù mǎnyì", en: "dissatisfied" },
+      { zh: "对方", py: "duìfāng", en: "the other party" },
+    ]
+  },
+  {
+    time: "1:23",
+    zh: "谈判时你应该坐在哪里？一般来说，重要会议的桌子上会有姓名牌，找到自己的名字就一定不会错。",
+    pinyin: "Tánpàn shí nǐ yīnggāi zuò zài nǎlǐ? Yībān lái shuō, zhòngyào huìyì de zhuōzi shàng huì yǒu xìngmíng pái, zhǎodào zìjǐ de míngzì jiù yīdìng bú huì cuò.",
+    en: "Where should you sit during negotiations? Generally, important meetings will have name placards on the table — find your name and you won't go wrong.",
+    vocab: [
+      { zh: "姓名牌", py: "xìngmíng pái", en: "name placard / nameplate" },
+      { zh: "一定不会错", py: "yīdìng bú huì cuò", en: "definitely won't be wrong" },
+    ]
+  },
+  {
+    time: "1:38",
+    zh: "没有姓名牌的时候就要看情况了。",
+    pinyin: "Méiyǒu xìngmíng pái de shíhòu jiù yào kàn qíngkuàng le.",
+    en: "When there are no name placards, you need to read the situation.",
+    vocab: [
+      { zh: "看情况", py: "kàn qíngkuàng", en: "read the situation / see how things are" },
+    ]
+  },
+  {
+    time: "1:47",
+    zh: "如果门在这里，主人坐在左边，客人坐在右边。",
+    pinyin: "Rúguǒ mén zài zhèlǐ, zhǔrén zuò zài zuǒbiān, kèrén zuò zài yòubiān.",
+    en: "If the door is here [facing you as you enter], the host sits on the left and the guest sits on the right.",
+    vocab: [
+      { zh: "主人", py: "zhǔrén", en: "host" },
+      { zh: "客人", py: "kèrén", en: "guest" },
+      { zh: "左边 / 右边", py: "zuǒbiān / yòubiān", en: "left side / right side" },
+    ]
+  },
+  {
+    time: "1:54",
+    zh: "如果门在这里，客人坐在面对门的位置上。",
+    pinyin: "Rúguǒ mén zài zhèlǐ, kèrén zuò zài miànduì mén de wèizhì shàng.",
+    en: "If the door is here [to the side], the guest sits in the position facing the door.",
+    vocab: [
+      { zh: "面对", py: "miànduì", en: "facing" },
+      { zh: "位置", py: "wèizhì", en: "position / seat" },
+    ]
+  },
+  {
+    time: "1:59",
+    zh: "中间的位置一定给最重要的人坐的。",
+    pinyin: "Zhōngjiān de wèizhì yīdìng gěi zuì zhòngyào de rén zuò de.",
+    en: "The middle seat is always reserved for the most important person.",
+    vocab: [
+      { zh: "中间", py: "zhōngjiān", en: "middle / centre" },
+      { zh: "最重要", py: "zuì zhòngyào", en: "most important" },
+    ]
+  },
+  {
+    time: "2:02",
+    zh: "第三，如何开始谈判？开始谈判前最好不要直接开始主题。",
+    pinyin: "Dì sān, rúhé kāishǐ tánpàn? Kāishǐ tánpàn qián zuìhǎo bú yào zhíjiē kāishǐ zhǔtí.",
+    en: "Third, how do you begin a negotiation? Before starting, it is best not to jump directly into the main topic.",
+    vocab: [
+      { zh: "主题", py: "zhǔtí", en: "main topic / agenda" },
+      { zh: "直接", py: "zhíjiē", en: "directly" },
+    ]
+  },
+  {
+    time: "2:12",
+    zh: "可以先和对方寒暄，选一些轻松的话题。",
+    pinyin: "Kěyǐ xiān hé duìfāng hánxuān, xuǎn yīxiē qīngsōng de huàtí.",
+    en: "You can first exchange pleasantries with the other party and choose some light topics to talk about.",
+    vocab: [
+      { zh: "寒暄", py: "hánxuān", en: "exchange pleasantries / small talk" },
+      { zh: "轻松", py: "qīngsōng", en: "relaxed / light" },
+      { zh: "话题", py: "huàtí", en: "topic of conversation" },
+    ]
+  },
+  {
+    time: "2:19",
+    zh: "比如谈论办公室布置、共同兴趣、最近的新闻等等。",
+    pinyin: "Bǐrú tánlùn bàngōngshì bùzhì, gòngtóng xìngqù, zuìjìn de xīnwén děngděng.",
+    en: "For example, talk about the office décor, shared interests, or recent news, and so on.",
+    vocab: [
+      { zh: "办公室布置", py: "bàngōngshì bùzhì", en: "office décor / layout" },
+      { zh: "共同兴趣", py: "gòngtóng xìngqù", en: "shared interests" },
+      { zh: "新闻", py: "xīnwén", en: "news" },
+    ]
+  },
+  {
+    time: "2:25",
+    zh: "然后再开始谈判。",
+    pinyin: "Rán hòu zài kāishǐ tánpàn.",
+    en: "Then you can begin the negotiation.",
+    vocab: [
+      { zh: "然后", py: "rán hòu", en: "then / after that" },
+    ]
+  },
+  {
+    time: "2:27",
+    zh: "这就是和中国客户谈判时要注意的地方。",
+    pinyin: "Zhè jiùshì hé Zhōngguó kèhù tánpàn shí yào zhùyì de dìfāng.",
+    en: "These are the key points to keep in mind when negotiating with Chinese clients.",
+    vocab: [
+      { zh: "这就是", py: "zhè jiùshì", en: "this is exactly / these are" },
+      { zh: "地方", py: "dìfāng", en: "points / aspects (lit. 'places')" },
+    ]
+  },
+];
+
+let currentIndex = 0;
+let currentUtterance = null;
+
+function buildCards() {
+  const container = document.getElementById('linesContainer');
+
+  // Section groups
+  const sections = [
+    { label: "Introduction", range: [0, 1] },
+    { label: "Part 1 · Who to Negotiate With", range: [2, 6] },
+    { label: "Part 2 · Where to Sit", range: [7, 11] },
+    { label: "Part 3 · How to Begin", range: [12, 15] },
+    { label: "Closing", range: [16, 16] },
+  ];
+
+  let sectionIdx = 0;
+  lines.forEach((line, i) => {
+    // Check if new section
+    const sec = sections.find(s => s.range[0] === i);
+    if (sec) {
+      const label = document.createElement('div');
+      label.className = 'section-label';
+      label.textContent = sec.label;
+      container.appendChild(label);
+    }
+
+    const card = document.createElement('div');
+    card.className = 'line-card' + (i === 0 ? ' active' : '');
+    card.id = `card-${i}`;
+    card.onclick = () => toggleCard(i);
+
+    const vocabHtml = line.vocab.map(v =>
+      `<div class="vocab-chip"><span class="zh">${v.zh}</span><span class="py">${v.py}</span><span class="en">· ${v.en}</span></div>`
+    ).join('');
+
+    card.innerHTML = `
+      <div class="line-header">
+        <span class="time-badge">${line.time}</span>
+        <span class="chinese-text">${line.zh}</span>
+        <button class="play-btn" id="playBtn-${i}" onclick="event.stopPropagation(); speakLine(${i})" title="Listen">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="line-details">
+        <div class="pinyin-row">
+          <span class="pinyin-label">Pīnyīn</span>
+          ${line.pinyin}
+        </div>
+        <div class="meaning-row">
+          <span class="meaning-label">English Meaning</span>
+          <div class="meaning-text">${line.en}</div>
+        </div>
+        ${line.vocab.length ? `<div class="vocab-row">${vocabHtml}</div>` : ''}
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+
+  updateProgress();
+}
+
+function toggleCard(i) {
+  const prev = document.querySelector('.line-card.active');
+  if (prev) prev.classList.remove('active');
+  const card = document.getElementById(`card-${i}`);
+  if (card) {
+    card.classList.add('active');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  currentIndex = i;
+  updateProgress();
+}
+
+function nextLine() {
+  if (currentIndex < lines.length - 1) {
+    toggleCard(currentIndex + 1);
+  }
+}
+
+function prevLine() {
+  if (currentIndex > 0) {
+    toggleCard(currentIndex - 1);
+  }
+}
+
+function updateProgress() {
+  const fill = document.getElementById('progressFill');
+  const text = document.getElementById('progressText');
+  const pct = ((currentIndex + 1) / lines.length) * 100;
+  fill.style.width = pct + '%';
+  text.textContent = `${currentIndex + 1} / ${lines.length}`;
+}
+
+function speakLine(i) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const btn = document.getElementById(`playBtn-${i}`);
+
+  const utter = new SpeechSynthesisUtterance(lines[i].zh);
+  utter.lang = 'zh-CN';
+  utter.rate = 0.85;
+
+  // Try to find a Mandarin voice
+  const voices = window.speechSynthesis.getVoices();
+  const zhVoice = voices.find(v => v.lang.startsWith('zh'));
+  if (zhVoice) utter.voice = zhVoice;
+
+  btn.classList.add('playing');
+  utter.onend = () => btn.classList.remove('playing');
+  utter.onerror = () => btn.classList.remove('playing');
+
+  window.speechSynthesis.speak(utter);
+}
+
+// Init voices (some browsers need a trigger)
+window.speechSynthesis && window.speechSynthesis.getVoices();
+
+buildCards();
+</script>
+</body>
+</html>
