@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSK1 Hanzi Writing Practice</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Noto+Sans+SC:wght@400;700;900&display=swap');
+:root{--ink:#1a1a2e;--red:#c0392b;--gold:#d4af37;--teal:#0d9488;--blue:#1d6fa8;--purple:#6b21a8;--orange:#c05621;--light:#fafaf7;--card:#fff;--border:#e5e0d8;--muted:#7a8499;--paper:#f5f0e8;--shadow:0 4px 24px rgba(0,0,0,0.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--ink);min-height:100vh}
+.hero{background:var(--ink);color:#fff;padding:24px 20px 32px;text-align:center;border-bottom:3px solid var(--gold)}
+.badge{display:inline-block;background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);color:var(--gold);font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:4px;margin-bottom:10px}
+.hero h1{font-family:'Noto Sans SC',sans-serif;font-size:clamp(22px,5vw,36px);font-weight:900;margin-bottom:4px}
+.hero-sub{font-size:12px;color:rgba(255,255,255,0.5)}
+.set-bar{background:var(--paper);border-bottom:2px solid var(--border);padding:10px 14px;overflow-x:auto}
+.set-inner{display:flex;gap:6px;align-items:center;min-width:max-content}
+.set-lbl{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-right:4px}
+.sbtn{padding:5px 11px;border:1.5px solid var(--border);border-radius:4px;background:#fff;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;cursor:pointer;color:var(--muted);transition:all .15s}
+.sbtn:hover,.sbtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tabs{display:flex;background:#fff;border-bottom:2px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.tab{flex:1;padding:13px 6px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;text-align:center}
+.tab.on{color:var(--red);border-bottom-color:var(--red)}
+.content{max-width:960px;margin:0 auto;padding:20px 16px 60px}
+.pane{display:none}.pane.on{display:block}
+/* LEARN */
+.egrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.ec{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--gold);border-radius:6px;padding:16px;cursor:pointer;transition:all .2s}
+.ec:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.ec-zh{font-family:'Noto Sans SC',sans-serif;font-size:38px;font-weight:900;color:var(--ink);margin-bottom:4px}
+.ec-py{font-size:13px;color:var(--blue);font-weight:700;margin-bottom:2px}
+.ec-en{font-size:12px;font-weight:700;margin-bottom:8px}
+.ec-et{font-size:11px;color:var(--muted);line-height:1.6;font-style:italic}
+.ec-cta{margin-top:10px;font-size:11px;font-weight:800;color:var(--blue)}
+/* PRACTICE */
+.cstrip{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.csbtn{background:var(--card);border:2px solid var(--border);border-radius:6px;padding:10px 12px;text-align:center;cursor:pointer;transition:all .2s;min-width:66px;position:relative}
+.csbtn:hover{border-color:var(--blue)}
+.csbtn.on{border-color:var(--red);background:#fff5f5}
+.csbtn.done{border-color:var(--teal)}
+.csbtn-zh{font-family:'Noto Sans SC',sans-serif;font-size:24px;font-weight:700;color:var(--ink)}
+.csbtn-py{font-size:10px;color:var(--blue);font-weight:700}
+.csbtn-tk{position:absolute;top:3px;right:4px;font-size:11px}
+.panel{background:var(--card);border:2px solid var(--border);border-radius:8px;box-shadow:var(--shadow);overflow:hidden}
+.ph{background:var(--paper);border-bottom:2px solid var(--border);padding:16px 20px;display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.ph-zh{font-family:'Noto Sans SC',sans-serif;font-size:52px;font-weight:900;color:var(--ink);line-height:1;flex-shrink:0}
+.ph-right{flex:1;min-width:180px}
+.ph-py{font-size:19px;color:var(--blue);font-weight:800;margin-bottom:3px}
+.ph-en{font-size:14px;font-weight:700;margin-bottom:6px}
+.ph-tag{display:inline-block;font-size:10px;font-weight:800;background:#f3e8ff;color:var(--purple);padding:2px 8px;border-radius:3px;margin-bottom:8px}
+.ph-et{font-size:12px;color:var(--muted);line-height:1.6;border-left:3px solid var(--gold);padding-left:10px;font-style:italic}
+.ctrl{padding:14px 18px;border-bottom:2px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;background:#fafaf7;align-items:center}
+.cbtn{padding:10px 18px;border:none;border-radius:4px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;transition:all .15s}
+.cbtn:hover:not(:disabled){opacity:.85;transform:translateY(-1px)}
+.cbtn:disabled{opacity:.45;cursor:not-allowed}
+.cbtn-a{background:var(--blue);color:#fff}
+.cbtn-q{background:var(--red);color:#fff}
+.cbtn-h{background:var(--orange);color:#fff}
+.cbtn-r{background:#e2e8f0;color:var(--ink)}
+.cbtn-d{background:var(--teal);color:#fff}
+.cbtn-n{background:var(--ink);color:#fff}
+.sct{margin-left:auto;background:var(--paper);border:1px solid var(--border);border-radius:4px;padding:7px 12px;font-size:12px;font-weight:700;color:var(--muted)}
+.warea{padding:20px;display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
+.wunit{text-align:center}
+.wlbl{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.wbox{width:180px;height:180px;border:2px solid var(--border);border-radius:4px;background:var(--paper);position:relative;display:inline-flex;align-items:center;justify-content:center;overflow:hidden}
+.wbox::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(212,175,55,.5);z-index:1;pointer-events:none}
+.wbox::after{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(212,175,55,.5);z-index:1;pointer-events:none}
+.wmsg{font-size:11px;font-weight:700;margin-top:6px;padding:4px 10px;border-radius:4px}
+.wmsg.ok{background:#d1fae5;color:#065f46}
+.wmsg.bad{background:#fee2e2;color:#991b1b}
+.wmsg.tip{background:#fef3c7;color:#92400e}
+.wmsg.hide{display:none}
+.botrow{padding:14px 18px;background:#fafaf7;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* TEST */
+.tcard{background:var(--card);border:2px solid var(--border);border-radius:8px;padding:24px;box-shadow:var(--shadow);text-align:center}
+.tbar{background:var(--border);border-radius:4px;height:5px;margin-bottom:14px}
+.tbar-fill{height:5px;border-radius:4px;background:linear-gradient(90deg,var(--red),var(--gold));transition:width .4s}
+.tmeta{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:16px}
+.tinp{width:100%;max-width:260px;border:2px solid var(--border);border-radius:4px;padding:14px;font-family:'Noto Sans SC',sans-serif;font-size:28px;text-align:center;outline:none;margin:12px auto;display:block;background:var(--paper);transition:border-color .2s}
+.tinp:focus{border-color:var(--blue)}
+.tres{padding:12px;border-radius:6px;font-size:14px;font-weight:700;display:none;margin:8px 0}
+.tres.ok{background:#d1fae5;color:#065f46}
+.tres.bad{background:#fee2e2;color:#991b1b}
+.tres.peek{background:#fef3c7;color:#92400e}
+.loading-msg{text-align:center;padding:40px;color:var(--muted);font-weight:700;font-size:14px}
+@media(max-width:560px){.wbox{width:145px;height:145px}.ph-zh{font-size:40px}.egrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">HSK1 · Hanzi Writing Practice</div>
+  <h1>汉字书写练习</h1>
+  <div class="hero-sub">10 characters per set · Stroke animation · Etymology · Writing test</div>
+</div>
+
+<div class="set-bar">
+  <div class="set-inner">
+    <span class="set-lbl">Set:</span>
+    <div id="setRow"></div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="showPane('learn',this)">📖 Learn &amp; Etymology</button>
+  <button class="tab" onclick="showPane('practice',this)">✏️ Practice Writing</button>
+  <button class="tab" onclick="showPane('test',this)">📝 Test</button>
+</div>
+
+<div class="content">
+  <div class="pane on" id="pane-learn">
+    <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:14px">Learn the story behind each character — then click to practise:</div>
+    <div class="egrid" id="learnGrid"></div>
+  </div>
+  <div class="pane" id="pane-practice">
+    <div class="cstrip" id="charStrip"></div>
+    <div id="practiceArea"><div class="loading-msg">Select a character above to start.</div></div>
+  </div>
+  <div class="pane" id="pane-test">
+    <div id="testArea"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js" onerror="loadHWFallback()"></script>
+<script>
+function loadHWFallback(){
+  var s=document.createElement('script');
+  s.src='https://unpkg.com/hanzi-writer@3.5.0/dist/hanzi-writer.min.js';
+  document.head.appendChild(s);
+}
+
+// ── SETS DATA ──────────────────────────────────────────────────
+var SETS=[
+ {n:"Set 1 · Greetings",c:[
+  {zh:'你',py:'nǐ',en:'You',l:1,st:7,et:'Person 亻+ phonetic 尔. The left radical 亻is the "person" marker — this character is about people addressing each other.'},
+  {zh:'好',py:'hǎo',en:'Good',l:1,st:6,et:'Woman 女 + child 子. A woman and child together = goodness, harmony. The Chinese idea of "good" is fundamentally about a complete family.'},
+  {zh:'我',py:'wǒ',en:'I / Me',l:2,st:7,et:'Originally a hand holding a weapon (戈). The self holds its own weapon — one of the most ancient characters, over 3,000 years old.'},
+  {zh:'是',py:'shì',en:'To be',l:3,st:9,et:'Sun 日 above footsteps. Standing upright in the light = being present and real. Became the core "to be" verb in Chinese.'},
+  {zh:'不',py:'bù',en:'No / not',l:3,st:4,et:'Originally showed a bird flying upward and disappearing — gone, not there. The simplest and most essential negative.'},
+  {zh:'人',py:'rén',en:'Person',l:3,st:2,et:'A simple pictograph of a walking person — two strokes showing legs in motion. One of the oldest Chinese characters.'},
+  {zh:'大',py:'dà',en:'Big',l:3,st:3,et:'A person (人) with arms stretched wide. Spreading your arms shows vastness. Person + open arms = big.'},
+  {zh:'中',py:'zhōng',en:'Middle',l:3,st:4,et:'An arrow hitting the centre of a target — the bull\'s eye. The middle, the centre. 中国 = Middle Kingdom = China.'},
+  {zh:'国',py:'guó',en:'Country',l:3,st:8,et:'A precious jade 玉 within a boundary wall 囗. The treasured land protected within its borders = a nation.'},
+  {zh:'学',py:'xué',en:'Study',l:8,st:8,et:'Child 子 beneath teacher\'s hands and a roof. A child under instruction in a building — the architecture of learning.'},
+ ]},
+ {n:"Set 2 · Family",c:[
+  {zh:'爸',py:'bà',en:'Father',l:4,st:8,et:'Father 父 (a hand holding a rod = authority) + phonetic 巴. Father as the strong guiding hand of the family.'},
+  {zh:'妈',py:'mā',en:'Mother',l:4,st:6,et:'Woman 女 + phonetic 马. The female radical 女 marks it as feminine. "Mama" is one of the most universal sounds in all human languages.'},
+  {zh:'家',py:'jiā',en:'Home',l:4,st:10,et:'A pig 豕 under a roof 宀. Ancient Chinese homes had pigs = livestock and wealth. Home = roof + living creature.'},
+  {zh:'子',py:'zǐ',en:'Child',l:4,st:3,et:'One of the oldest pictographs — a baby with arms reaching up and legs swaddled. Also an honorific suffix for great scholars: 孔子 (Confucius).'},
+  {zh:'女',py:'nǚ',en:'Woman',l:3,st:3,et:'Originally showed a woman kneeling gracefully — a figure of dignity. The core female radical 女 appears in hundreds of Chinese characters.'},
+  {zh:'男',py:'nán',en:'Man',l:4,st:7,et:'Field 田 + strength 力. A man exerts strength in the fields. An agricultural society\'s definition of masculinity.'},
+  {zh:'有',py:'yǒu',en:'Have',l:4,st:6,et:'A hand 又 holding meat 月/肉. To hold meat = to possess food = wealth. Something in your grasp = to have.'},
+  {zh:'两',py:'liǎng',en:'Two (measure)',l:4,st:7,et:'Two people under a shelter. Used before measure words (两个 / 两本), unlike 二 which is used for counting.'},
+  {zh:'哥',py:'gē',en:'Elder brother',l:4,st:10,et:'Two 可 components stacked — authority passed down twice. The elder brother stands above in family hierarchy.'},
+  {zh:'妹',py:'mèi',en:'Younger sister',l:4,st:8,et:'Woman 女 + 未 (not yet). A young woman who has "not yet" fully grown — the younger sister who comes after.'},
+ ]},
+ {n:"Set 3 · Time",c:[
+  {zh:'今',py:'jīn',en:'Today',l:5,st:4,et:'A cover holding the present moment. The "now" is captured and contained. Simple and elegant.'},
+  {zh:'天',py:'tiān',en:'Sky / day',l:5,st:4,et:'A big person 大 with a stroke above the head. What is above us all? The sky. Big person + above = sky/day.'},
+  {zh:'年',py:'nián',en:'Year',l:5,st:6,et:'Originally showed a person carrying grain after harvest. One harvest cycle = one year. Deep agricultural roots.'},
+  {zh:'月',py:'yuè',en:'Moon / month',l:5,st:4,et:'A pictograph of the crescent moon. Since the moon cycles monthly, 月 means both "moon" and "month."'},
+  {zh:'日',py:'rì',en:'Sun / day',l:5,st:4,et:'A pictograph of the sun with a central dot of light. Essentially unchanged from oracle bone script over 3,200 years ago.'},
+  {zh:'早',py:'zǎo',en:'Early',l:5,st:6,et:'Sun 日 above grass shoots. The sun rising above early morning plants = dawn breaking = early morning.'},
+  {zh:'晚',py:'wǎn',en:'Evening',l:6,st:11,et:'Sun 日 + escape 免. The sun "escaping" or setting. Ancient Chinese believed the sun fled at dusk = evening.'},
+  {zh:'明',py:'míng',en:'Bright / tomorrow',l:6,st:8,et:'Sun 日 + Moon 月 side by side. Both great light sources = brilliant brightness. Also means "tomorrow" = next bright day.'},
+  {zh:'时',py:'shí',en:'Time / hour',l:7,st:7,et:'Sun 日 + measure 寸. Measuring the sun\'s movement gives us time. The sun measured in segments = hours.'},
+  {zh:'分',py:'fēn',en:'Minute',l:7,st:4,et:'Divide apart 八 + knife 刀. Using a knife to divide. A minute divides an hour. To divide = to allocate time.'},
+ ]},
+ {n:"Set 4 · Actions 1",c:[
+  {zh:'去',py:'qù',en:'Go',l:6,st:5,et:'Earth 土 + a person departing. Movement away from a fixed point = to go.'},
+  {zh:'来',py:'lái',en:'Come',l:5,st:7,et:'Originally a wheat plant pictograph. Wheat "comes" to ripen. Later borrowed for "to come/arrive."'},
+  {zh:'看',py:'kàn',en:'Look / watch',l:7,st:9,et:'Hand 手 above the eye 目. Shielding your eyes to look into the distance. Hand-over-eyes = to look/watch.'},
+  {zh:'听',py:'tīng',en:'Listen',l:7,st:7,et:'The traditional 聽 showed ear, virtue and heart — true listening requires your whole self. Simplified but still means to listen.'},
+  {zh:'说',py:'shuō',en:'Speak',l:3,st:9,et:'Speech radical 讠(言) + phonetic 兑. 言 is a mouth with sound waves — the essence of spoken language.'},
+  {zh:'吃',py:'chī',en:'Eat',l:6,st:6,et:'Mouth 口 + beg/request 乞. The mouth requesting/receiving food. A hungry mouth seeking nourishment = to eat.'},
+  {zh:'喝',py:'hē',en:'Drink',l:7,st:12,et:'Mouth 口 + phonetic 曷. The mouth open wide to receive liquid.'},
+  {zh:'买',py:'mǎi',en:'Buy',l:6,st:6,et:'Simplified from 買. A net over cowrie shells (ancient currency). Catching money to exchange for goods = to buy.'},
+  {zh:'写',py:'xiě',en:'Write',l:13,st:5,et:'Simplified from 寫. A bird carefully placing nest materials one by one, like a writer placing characters. To carefully arrange = write.'},
+  {zh:'做',py:'zuò',en:'Do / make',l:5,st:11,et:'Person 亻 + phonetic 故. A person taking deliberate action for a purpose. Making something happen intentionally.'},
+ ]},
+ {n:"Set 5 · Food & Nature",c:[
+  {zh:'水',py:'shuǐ',en:'Water',l:15,st:4,et:'One of the most ancient pictographs — shows flowing water with waves and current lines. The central stroke is the stream; side strokes are ripples.'},
+  {zh:'火',py:'huǒ',en:'Fire',l:15,st:4,et:'A direct pictograph of flames — outer strokes are leaping fire, center is the core. Ancient and universal. Appears as 灬 in characters involving heat.'},
+  {zh:'山',py:'shān',en:'Mountain',l:15,st:3,et:'Three peaks rising from earth — tallest in centre. A perfect pictograph of a mountain range. Essentially unchanged for 3,500 years.'},
+  {zh:'月',py:'yuè',en:'Moon',l:5,st:4,et:'Crescent moon pictograph. Also used as the "flesh/body" radical 月(肉) in many characters about the human body.'},
+  {zh:'木',py:'mù',en:'Tree / wood',l:5,st:4,et:'A tree with roots below and branches above. The most fundamental plant character. Appears in hundreds of characters involving wood, trees and plants.'},
+  {zh:'米',py:'mǐ',en:'Rice',l:6,st:6,et:'A pictograph of rice grains scattered around a central stalk. The cross-shape shows grains falling from the plant. China\'s most important staple.'},
+  {zh:'鱼',py:'yú',en:'Fish',l:9,st:8,et:'Once a detailed pictograph of a fish — head, body, fins and tail visible. Now simplified but the fish form is still recognizable.'},
+  {zh:'牛',py:'niú',en:'Cow',l:6,st:4,et:'A cow\'s head seen from the front — two horns, a face and ears. One of the ancient pictographic characters for domesticated animals.'},
+  {zh:'马',py:'mǎ',en:'Horse',l:4,st:3,et:'Simplified from 馬. Once a detailed side-view of a horse with mane, legs and tail. A key character in Chinese history and culture.'},
+  {zh:'羊',py:'yáng',en:'Sheep',l:4,st:6,et:'A sheep\'s head seen from the front — two curved horns and a face. 羊 symbolises goodness and auspiciousness in Chinese culture.'},
+ ]},
+ {n:"Set 6 · Weather & Feelings",c:[
+  {zh:'天气',py:'tiānqì',en:'Weather',l:15,st:8,et:'天 (sky/day) + 气 (air/energy). The energy of the sky = weather. 气 originally showed steam rising from cooked rice — invisible energy.'},
+  {zh:'冷',py:'lěng',en:'Cold',l:15,st:7,et:'Ice radical 冫+ 令 (command). As if cold has issued an order — everything freezes on its orders. The two-dot ice radical marks all cold characters.'},
+  {zh:'热',py:'rè',en:'Hot',l:15,st:10,et:'Fire 灬 at bottom + working hands above heat. Working over fire = hot. The four-dot fire radical 灬 always signals heat below in Chinese characters.'},
+  {zh:'雨',py:'yǔ',en:'Rain',l:15,st:8,et:'Sky at top, cloud line, and four drops falling. Raindrops falling from clouds beneath the sky. Essentially a pictograph even today.'},
+  {zh:'雪',py:'xuě',en:'Snow',l:15,st:11,et:'Rain 雨 + broom 彗. Snow is rain you must sweep away. Ancient Chinese saw snow as rain requiring cleanup — practical and poetic.'},
+  {zh:'爱',py:'ài',en:'Love',l:14,st:10,et:'Simplified from 愛. Shows a heart 心 at centre. The full traditional form showed a person giving their heart with both hands. Love = giving your heart.'},
+  {zh:'想',py:'xiǎng',en:'Think / want',l:6,st:13,et:'Heart 心 + mutual 相. The heart turned toward something = thinking, longing, wanting. Desire and thought share the same heart.'},
+  {zh:'高兴',py:'gāoxìng',en:'Happy',l:2,st:15,et:'高 (tall/high) + 兴 (rise/flourish). Your spirits rise up high. Happiness as elevation — feeling lifted above the ordinary.'},
+  {zh:'忙',py:'máng',en:'Busy',l:3,st:6,et:'Heart radical 忄+ lost 亡. Your heart is lost — scattered in all directions. So pulled many ways your heart forgets itself = busy.'},
+  {zh:'累',py:'lèi',en:'Tired',l:5,st:11,et:'Fields 田 stacked above silk thread 糸. Endless fields of work layered upon tedious thread work = exhaustion and fatigue.'},
+ ]},
+ {n:"Set 7 · Numbers",c:[
+  {zh:'一',py:'yī',en:'One',l:4,st:1,et:'The simplest character — one horizontal stroke. Unity, the beginning of all things. In Chinese philosophy, 一 is the origin from which everything emerges.'},
+  {zh:'二',py:'èr',en:'Two',l:4,st:2,et:'Two horizontal strokes. Duality — heaven and earth, yin and yang. The number two represents balance and opposition in Chinese philosophy.'},
+  {zh:'三',py:'sān',en:'Three',l:4,st:3,et:'Three strokes: heaven (top), earth (bottom), human (middle). Three is the number of harmony — the union of sky, earth and humankind.'},
+  {zh:'四',py:'sì',en:'Four',l:4,st:5,et:'Associated with four directions. Considered unlucky in Chinese as it sounds like 死 (sǐ, death). Buildings in China often skip floor 4.'},
+  {zh:'五',py:'wǔ',en:'Five',l:4,st:4,et:'An X between two lines — the five elements (wood, fire, earth, metal, water). The five elements are central to Chinese philosophy and medicine.'},
+  {zh:'六',py:'liù',en:'Six',l:4,st:4,et:'A shelter with two supports. Six directions: up, down, north, south, east, west. Also lucky — 六六大顺 means everything goes smoothly.'},
+  {zh:'七',py:'qī',en:'Seven',l:4,st:2,et:'Originally showed a cut or division. Seven days in a week, seven notes in music. Considered lucky for love and relationships in China.'},
+  {zh:'八',py:'bā',en:'Eight',l:4,st:2,et:'Two strokes spreading apart — expansion. Eight is the luckiest Chinese number (sounds like 发 fā = prosperity). Beijing 2008 Olympics opened on 08/08/08.'},
+  {zh:'十',py:'shí',en:'Ten',l:4,st:2,et:'A perfect cross — vertical and horizontal meeting at centre. Completeness. Ten directions = all possibilities. The meeting point of all.'},
+  {zh:'百',py:'bǎi',en:'Hundred',l:4,st:6,et:'One 一 above white 白. "One white" — purity and completeness. A perfect, full hundred units.'},
+ ]},
+ {n:"Set 8 · Body & Health",c:[
+  {zh:'口',py:'kǒu',en:'Mouth',l:4,st:3,et:'A simple square representing an open mouth. One of the most ancient pictographs. The radical 口 appears in hundreds of characters involving speech and eating.'},
+  {zh:'手',py:'shǒu',en:'Hand',l:8,st:4,et:'Five fingers spread from a palm. The hand radical 扌appears in hundreds of action characters. The Chinese saw the hand as the tool of human achievement.'},
+  {zh:'目',py:'mù',en:'Eye',l:8,st:5,et:'Originally a vertical eye shape — rotated horizontal over time. The eye radical 目 appears in characters for seeing, looking and watching.'},
+  {zh:'心',py:'xīn',en:'Heart / mind',l:8,st:4,et:'A pictograph of the heart with drops of blood. In Chinese philosophy the heart 心 is also the seat of the mind — one organ for both feeling and thinking.'},
+  {zh:'头',py:'tóu',en:'Head',l:8,st:5,et:'Simplified from 頭. The head as the topmost, most important part of the body. The radical appears in leadership and prominence characters.'},
+  {zh:'耳',py:'ěr',en:'Ear',l:8,st:6,et:'A pictograph of the outer ear — the curved auricle shape. Appears in characters for listening (聽). The receiver of the world\'s sounds.'},
+  {zh:'病',py:'bìng',en:'Sick',l:13,st:10,et:'Illness radical 疒 (person lying on bed at an angle) + phonetic 丙. 疒 shows the body laid low — the universal experience of sickness.'},
+  {zh:'医',py:'yī',en:'Doctor',l:7,st:7,et:'Simplified from 醫. Shows medical tools in a container + wine vessel 酉. Ancient doctors used wine as antiseptic and tools for treatment.'},
+  {zh:'药',py:'yào',en:'Medicine',l:5,st:9,et:'Grass/herb radical 艹 + bind/control 约. Herbs that bind and control disease. Traditional Chinese medicine is fundamentally herbal.'},
+  {zh:'脚',py:'jiǎo',en:'Foot / leg',l:8,st:11,et:'Flesh radical 月(肉) + phonetic 却. The body part for movement and standing. The foot that carries us through the world.'},
+ ]},
+ {n:"Set 9 · Places & Travel",c:[
+  {zh:'北',py:'běi',en:'North',l:14,st:5,et:'Two people sitting back to back. Ancient Chinese faced south toward the sun. Backs turned from south = north. The cold, shadowed direction.'},
+  {zh:'京',py:'jīng',en:'Capital',l:14,st:8,et:'A high watchtower on a raised platform. The elevated, prominent structure of a capital city standing above surrounding land.'},
+  {zh:'飞',py:'fēi',en:'Fly',l:14,st:3,et:'Simplified from 飛. Originally showed a bird with wings spread wide taking flight. The graceful arc of wings captured in just 3 strokes.'},
+  {zh:'路',py:'lù',en:'Road',l:14,st:13,et:'Foot radical 足 + various/each 各. Each foot\'s journey — the road worn down by many travellers. A shared path made by many feet.'},
+  {zh:'站',py:'zhàn',en:'Station',l:14,st:10,et:'Upright 立 + occupy 占. Standing and occupying a place. A station: where things stand and wait.'},
+  {zh:'到',py:'dào',en:'Arrive',l:8,st:8,et:'Shows a person arriving at their destination. To reach, arrive, achieve a goal. Also used as "to" in time expressions: 从9点到10点.'},
+  {zh:'从',py:'cóng',en:'From / follow',l:14,st:4,et:'Two people 人人 — one following the other. Walking behind someone = following from where they came. Origin, source = from.'},
+  {zh:'回',py:'huí',en:'Return',l:5,st:6,et:'A spiral shape — something that circles back to its origin. The circular motion of return. To come back around to the beginning.'},
+  {zh:'机',py:'jī',en:'Machine',l:14,st:6,et:'Wood 木 + mechanism 几. The wooden loom — one of China\'s earliest machines. Now extends to all machines. 飞机 = flying machine = airplane.'},
+  {zh:'场',py:'chǎng',en:'Field / venue',l:14,st:6,et:'Earth 土 + sunlight spreading 昜. Open sunlit ground. 机场 (jīchǎng) = machine field = airport.'},
+ ]},
+ {n:"Set 10 · Grammar Words",c:[
+  {zh:'的',py:'de',en:'Possessive particle',l:3,st:8,et:'White 白 + spoon 勺. Originally "bright/clear." Became the most-used character in Chinese — linking owner to thing: 我的书 = my book.'},
+  {zh:'了',py:'le',en:'Completed action',l:13,st:2,et:'Simplified child character suggesting something reaching completion, like a child growing up. Marks actions that have been completed.'},
+  {zh:'吧',py:'ba',en:'Suggestion particle',l:7,st:7,et:'Mouth 口 + phonetic 巴. A soft sound at sentence\'s end turning commands into gentle suggestions. 走吧 = let\'s go (gentle suggestion).'},
+  {zh:'呢',py:'ne',en:'Question particle',l:7,st:8,et:'Mouth 口 + phonetic 尼. A continuing or questioning sound at sentence end. Creates soft questions or confirms ongoing states.'},
+  {zh:'吗',py:'ma',en:'Yes/no question',l:3,st:6,et:'Mouth 口 + horse 马 (phonetic). The rising questioning sound "ma." Makes any statement into a yes/no question. The simplest question marker.'},
+  {zh:'都',py:'dōu',en:'All / both',l:13,st:10,et:'Person + phonetic 者 + city radical 阝. All people of a city = everyone. The collective gathering = all, both, every.'},
+  {zh:'也',py:'yě',en:'Also / too',l:3,st:3,et:'Originally a snake or curved line. Borrowed as the "also" connector. Links similar things: 我也是 (I am too).'},
+  {zh:'很',py:'hěn',en:'Very',l:2,st:9,et:'Step radical 彳 + firm 艮. Moving forward firmly and steadily = very, quite. Something that has gone quite far in degree.'},
+  {zh:'太',py:'tài',en:'Too / extremely',l:15,st:4,et:'Big 大 + one dot. The dot pushes "big" beyond its limit. Something exceeding its category = too much, extremely.'},
+  {zh:'对',py:'duì',en:'Correct',l:3,st:5,et:'Simplified from 對. A hand giving the correct measured response. The right answer. Also means "toward/to" in 对不起 (sorry = toward injustice).'},
+ ]},
+];
+
+// ── APP STATE (all in one object, no duplicate declarations) ──
+var APP={
+  curSet:0,
+  curChar:0,
+  writers:{},
+  quizOn:{},
+  testPool:[],
+  tIdx:0,
+  tScore:0,
+  saved:JSON.parse(localStorage.getItem('hw_done')||'{}')
+};
+
+function saveDone(){localStorage.setItem('hw_done',JSON.stringify(APP.saved));}
+
+// ── SET BUTTONS ─────────────────────────────────────────────────
+var setRow=document.getElementById('setRow');
+setRow.style.cssText='display:flex;gap:6px;flex-wrap:wrap';
+SETS.forEach(function(s,i){
+  var b=document.createElement('button');
+  b.className='sbtn'+(i===0?' on':'');
+  b.textContent=s.n.split('·')[0].trim();
+  b.onclick=function(){
+    document.querySelectorAll('.sbtn').forEach(function(x){x.classList.remove('on');});
+    b.classList.add('on');
+    APP.curSet=i; APP.curChar=0;
+    resetWriters();
+    var activePane=document.querySelector('.pane.on').id.replace('pane-','');
+    if(activePane==='learn') buildLearn();
+    else if(activePane==='practice'){buildStrip();buildPanel(0);}
+    else buildTest();
+  };
+  setRow.appendChild(b);
+});
+
+// ── TABS ────────────────────────────────────────────────────────
+function showPane(id,btn){
+  document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
+  document.getElementById('pane-'+id).classList.add('on');
+  btn.classList.add('on');
+  resetWriters();
+  if(id==='learn') buildLearn();
+  else if(id==='practice'){buildStrip();buildPanel(APP.curChar);}
+  else buildTest();
+}
+
+function resetWriters(){
+  APP.writers={}; APP.quizOn={};
+}
+
+// ── LEARN ────────────────────────────────────────────────────────
+function buildLearn(){
+  var g=document.getElementById('learnGrid');
+  var chars=SETS[APP.curSet].c;
+  g.innerHTML=chars.map(function(c,i){
+    return '<div class="ec" onclick="goLearnToPractice('+i+')">'
+      +'<div class="ec-zh">'+c.zh+'</div>'
+      +'<div class="ec-py">'+c.py+'</div>'
+      +'<div class="ec-en">'+c.en+' · '+c.st+' strokes · L'+c.l+'</div>'
+      +'<div class="ec-et">'+c.et+'</div>'
+      +'<div class="ec-cta">→ Click to practise writing</div>'
+      +'</div>';
+  }).join('');
+}
+
+function goLearnToPractice(i){
+  APP.curChar=i;
+  var tabs=document.querySelectorAll('.tab');
+  showPane('practice',tabs[1]);
+}
+
+// ── PRACTICE ─────────────────────────────────────────────────────
+function buildStrip(){
+  var chars=SETS[APP.curSet].c;
+  document.getElementById('charStrip').innerHTML=chars.map(function(c,i){
+    var done=APP.saved[APP.curSet+'_'+i]?'done':'';
+    var on=i===APP.curChar?'on':'';
+    return '<div class="csbtn '+on+' '+done+'" onclick="pickChar('+i+')">'
+      +'<div class="csbtn-tk">'+(APP.saved[APP.curSet+'_'+i]?'✅':'')+'</div>'
+      +'<div class="csbtn-zh">'+c.zh+'</div>'
+      +'<div class="csbtn-py">'+c.py+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function pickChar(i){
+  APP.curChar=i;
+  resetWriters();
+  buildStrip();
+  buildPanel(i);
+  document.getElementById('practiceArea').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function buildPanel(i){
+  var c=SETS[APP.curSet].c[i];
+  var chars=[...c.zh];
+  var total=SETS[APP.curSet].c.length;
+
+  var boxes=chars.map(function(ch,ci){
+    return '<div class="wunit">'
+      +'<div class="wlbl">'+(chars.length>1?'Char '+(ci+1)+': '+ch:c.zh)+'</div>'
+      +'<div class="wbox"><div id="hw'+ci+'"></div></div>'
+      +'<div class="wmsg hide" id="wm'+ci+'"></div>'
+      +'</div>';
+  }).join('');
+
+  document.getElementById('practiceArea').innerHTML=
+    '<div class="panel">'
+    +'<div class="ph">'
+      +'<div class="ph-zh">'+c.zh+'</div>'
+      +'<div class="ph-right">'
+        +'<div class="ph-py">'+c.py+'</div>'
+        +'<div class="ph-en">'+c.en+'</div>'
+        +'<div class="ph-tag">Lesson '+c.l+' · '+c.st+' strokes</div>'
+        +'<div class="ph-et">'+c.et+'</div>'
+      +'</div>'
+    +'</div>'
+    +'<div class="ctrl" id="ctrlRow">'
+      +'<button class="cbtn cbtn-a" id="btnA" disabled onclick="doAnim()">▶ Animate</button>'
+      +'<button class="cbtn cbtn-q" id="btnQ" disabled onclick="doQuiz()">✏️ Practice</button>'
+      +'<button class="cbtn cbtn-h" id="btnH" disabled onclick="doHint()">💡 Hint</button>'
+      +'<button class="cbtn cbtn-r" id="btnR" disabled onclick="doReset()">🔄 Reset</button>'
+      +'<div class="sct">✏️ '+c.st+' strokes</div>'
+    +'</div>'
+    +'<div class="warea">'+boxes+'</div>'
+    +'<div class="botrow">'
+      +'<button class="cbtn cbtn-d" onclick="markDone('+i+')">✅ Mark Done</button>'
+      +'<button class="cbtn cbtn-r" onclick="prevChar()">← Prev</button>'
+      +'<button class="cbtn cbtn-n" onclick="nextChar()">Next →</button>'
+      +'<span style="font-size:12px;font-weight:700;color:var(--muted);margin-left:auto">'+(i+1)+' / '+total+'</span>'
+    +'</div>'
+    +'</div>';
+
+  // Show loading state
+  Object.keys({}).concat([0,1,2,3]).slice(0,chars.length).forEach(function(ci){
+    setMsg(ci,'tip','⏳ Loading character data…');
+  });
+  // Create writers after DOM ready
+  setTimeout(function(){
+    createWriters(chars,c);
+  },400);
+}
+
+function createWriters(chars,c){
+  for(var _i=0;_i<chars.length;_i++){setMsg(_i,'tip','⏳ Loading stroke data…');}
+
+  var readyCount=0;
+  var total=chars.length;
+  var dataCache={};
+
+  function onCharReady(ci,ch,target){
+    readyCount++;
+    setMsg(ci,'hide','');
+    if(readyCount>=total) enableBtns();
+  }
+
+  function buildWriter(ci,ch,charData){
+    var target=document.getElementById('hw'+ci);
+    if(!target) return;
+    try{
+      var w=HanziWriter.create(target,ch,{
+        width:160,height:160,padding:16,
+        showOutline:true,
+        showCharacter:false,
+        strokeColor:'#1a1a2e',
+        radicalColor:'#c0392b',
+        outlineColor:'rgba(0,0,0,0.12)',
+        drawingColor:'#1d6fa8',
+        drawingWidth:4,
+        strokeAnimationSpeed:0.8,
+        delayBetweenStrokes:300,
+        highlightOnComplete:true,
+        highlightColor:'#0d9488',
+        charDataLoader:function(character,onLoad,onError){
+          if(charData){onLoad(charData);}
+          else{onError(new Error('no data'));}
+        }
+      });
+      APP.writers[ci]=w;
+      onCharReady(ci,ch,target);
+    }catch(e){
+      console.warn('writer error',ch,e);
+      showFallback(target,ch);
+      onCharReady(ci,ch,target);
+    }
+  }
+
+  chars.forEach(function(ch,ci){
+    var target=document.getElementById('hw'+ci);
+    if(!target||typeof HanziWriter==='undefined'){
+      readyCount++;
+      if(readyCount>=total) enableBtns();
+      return;
+    }
+    // Fetch stroke data manually
+    fetch('https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0.1/'+ch+'.json')
+      .then(function(r){
+        if(!r.ok) throw new Error('cdn 404');
+        return r.json();
+      })
+      .then(function(data){
+        buildWriter(ci,ch,data);
+      })
+      .catch(function(){
+        // Try unpkg fallback
+        fetch('https://unpkg.com/hanzi-writer-data@2.0/'+ch+'.json')
+          .then(function(r){return r.json();})
+          .then(function(data){
+            buildWriter(ci,ch,data);
+          })
+          .catch(function(){
+            console.warn('Both CDNs failed for',ch);
+            showFallback(target,ch);
+            readyCount++;
+            if(readyCount>=total) enableBtns();
+          });
+      });
+  });
+
+  // Hard fallback enable after 12s
+  setTimeout(enableBtns,12000);
+}
+function showFallback(el,ch){
+  el.innerHTML='<div style="width:160px;height:160px;display:flex;align-items:center;justify-content:center;font-family:\'Noto Sans SC\',sans-serif;font-size:88px;font-weight:900;color:rgba(26,26,46,0.12)">'+ch+'</div>';
+}
+
+function enableBtns(){
+  ['btnA','btnQ','btnH','btnR'].forEach(function(id){
+    var b=document.getElementById(id);
+    if(b){b.disabled=false;b.style.opacity='1';}
+  });
+}
+
+function disableBtns(){
+  ['btnA','btnQ','btnH','btnR'].forEach(function(id){
+    var b=document.getElementById(id);
+    if(b){b.disabled=true;b.style.opacity='0.45';}
+  });
+}
+
+function setMsg(ci,cls,txt){
+  var el=document.getElementById('wm'+ci);
+  if(!el)return;
+  el.className='wmsg '+cls;
+  el.textContent=txt;
+}
+
+function writerReady(){
+  return Object.keys(APP.writers).length>0;
+}
+
+function doAnim(){
+  if(!writerReady()){setMsg(0,'bad','⚠️ Still loading — please wait then try again.');return;}
+  APP.quizOn={};
+  Object.keys(APP.writers).forEach(function(ci){
+    var w=APP.writers[ci];
+    var cii=parseInt(ci);
+    try{
+      w.animateCharacter({
+        onComplete:function(){
+          setMsg(cii,'tip','✅ Done! Now click ✏️ Practice to try writing it.');
+        }
+      });
+      setMsg(cii,'tip','▶ Watch the stroke order carefully…');
+    }catch(e){
+      console.warn('animate error',e);
+      setMsg(cii,'bad','⚠️ Animation error. Try clicking Reset then Animate.');
+    }
+  });
+}
+
+function doQuiz(){
+  if(!writerReady()){setMsg(0,'bad','⚠️ Still loading — please wait then try again.');return;}
+  APP.quizOn={};
+  Object.keys(APP.writers).forEach(function(ci){
+    var w=APP.writers[ci];
+    var cii=parseInt(ci);
+    try{
+      APP.quizOn[cii]=true;
+      w.quiz({
+        onMistake:function(){setMsg(cii,'bad','❌ Wrong stroke! Click 💡 Hint for help.');},
+        onCorrectStroke:function(){setMsg(cii,'tip','✓ Correct! Keep going…');},
+        onComplete:function(){
+          APP.quizOn[cii]=false;
+          setMsg(cii,'ok','🎉 Perfect! All strokes correct!');
+          markDone(APP.curChar);
+        }
+      });
+      setMsg(cii,'tip','✏️ Draw the strokes in the correct order…');
+    }catch(e){
+      console.warn('quiz error',e);
+      setMsg(cii,'bad','⚠️ Quiz error. Click Reset then try again.');
+    }
+  });
+}
+
+function doHint(){
+  if(!writerReady()){setMsg(0,'bad','⚠️ Still loading — please wait then try again.');return;}
+  Object.keys(APP.writers).forEach(function(ci){
+    var w=APP.writers[ci];
+    var cii=parseInt(ci);
+    if(!APP.quizOn[cii]){
+      try{
+        APP.quizOn[cii]=true;
+        w.quiz({
+          onMistake:function(){setMsg(cii,'bad','❌ Wrong stroke — try again!');},
+          onCorrectStroke:function(){setMsg(cii,'tip','✓ Correct stroke!');},
+          onComplete:function(){
+            APP.quizOn[cii]=false;
+            setMsg(cii,'ok','🎉 Perfect!');
+            markDone(APP.curChar);
+          }
+        });
+        setTimeout(function(){
+          try{
+            w.showHint();
+            setMsg(cii,'tip','💡 Green stroke = next to draw. Trace it!');
+          }catch(e2){
+            setMsg(cii,'tip','💡 Quiz active — draw the highlighted stroke!');
+          }
+        },600);
+      }catch(e){
+        console.warn('hint error',e);
+        setMsg(cii,'bad','⚠️ Hint error. Click Reset then try again.');
+      }
+    }else{
+      try{
+        w.showHint();
+        setMsg(cii,'tip','💡 Green stroke = next to draw. Trace it!');
+      }catch(e){
+        setMsg(cii,'bad','⚠️ Hint failed. Click Reset → Practice → Hint.');
+      }
+    }
+  });
+}
+
+function doReset(){
+  APP.quizOn={};
+  APP.writers={};
+  var chars=[...SETS[APP.curSet].c[APP.curChar].zh];
+  chars.forEach(function(ch,ci){
+    setMsg(ci,'hide','');
+    var t=document.getElementById('hw'+ci);
+    if(t) t.innerHTML='';
+  });
+  disableBtns();
+  setTimeout(function(){
+    createWriters(chars, SETS[APP.curSet].c[APP.curChar]);
+  },200);
+}
+
+function markDone(i){
+  APP.saved[APP.curSet+'_'+i]=true;
+  saveDone();
+  buildStrip();
+}
+
+function prevChar(){if(APP.curChar>0){APP.curChar--;resetWriters();buildStrip();buildPanel(APP.curChar);}}
+function nextChar(){if(APP.curChar<SETS[APP.curSet].c.length-1){APP.curChar++;resetWriters();buildStrip();buildPanel(APP.curChar);}}
+
+// ── TEST ─────────────────────────────────────────────────────────
+function buildTest(){
+  APP.testPool=[...SETS[APP.curSet].c].sort(function(){return Math.random()-.5;});
+  APP.tIdx=0; APP.tScore=0;
+  renderTestQ();
+}
+
+function renderTestQ(){
+  var w=APP.testPool[APP.tIdx];
+  var pct=Math.round(APP.tIdx/APP.testPool.length*100);
+  document.getElementById('testArea').innerHTML=
+    '<div class="tcard">'
+    +'<div class="tmeta"><span>Q '+(APP.tIdx+1)+' / '+APP.testPool.length+'</span><span style="color:var(--teal)">✅ '+APP.tScore+' correct</span></div>'
+    +'<div class="tbar"><div class="tbar-fill" style="width:'+pct+'%"></div></div>'
+    +'<div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px">Type the Chinese character(s) for this pinyin + meaning:</div>'
+    +'<div style="font-size:34px;font-weight:700;color:var(--blue);margin-bottom:4px">'+w.py+'</div>'
+    +'<div style="font-size:14px;color:var(--muted);margin-bottom:4px">'+w.en+'</div>'
+    +'<div style="font-size:11px;color:var(--purple);margin-bottom:18px">Lesson '+w.l+' · '+w.st+' strokes</div>'
+    +'<input class="tinp" id="tinp" placeholder="Type 汉字 here…" onkeydown="if(event.key===\'Enter\')checkTest()">'
+    +'<div class="tres" id="tres"></div>'
+    +'<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px">'
+    +'<button class="cbtn cbtn-q" onclick="checkTest()">Check ✓</button>'
+    +'<button class="cbtn cbtn-h" onclick="peekTest()">👁 Peek Answer</button>'
+    +'</div>'
+    +'<button class="cbtn cbtn-n" id="tnxt" style="display:none;margin:12px auto 0" onclick="nextTest()">Next →</button>'
+    +'</div>';
+  setTimeout(function(){var el=document.getElementById('tinp');if(el)el.focus();},100);
+}
+
+function checkTest(){
+  var inp=(document.getElementById('tinp').value||'').trim();
+  var w=APP.testPool[APP.tIdx];
+  var ok=inp===w.zh;
+  if(ok)APP.tScore++;
+  var res=document.getElementById('tres');
+  res.style.display='block';
+  res.className='tres '+(ok?'ok':'bad');
+  res.innerHTML=ok
+    ?'✅ Correct! <span style="font-family:\'Noto Sans SC\',sans-serif;font-size:22px">'+w.zh+'</span>'
+    :'❌ Answer: <span style="font-family:\'Noto Sans SC\',sans-serif;font-size:24px;font-weight:900">'+w.zh+'</span> <em style="font-size:12px">('+w.py+')</em>';
+  document.getElementById('tinp').disabled=true;
+  document.querySelector('[onclick="checkTest()"]').disabled=true;
+  document.getElementById('tnxt').style.display='block';
+  if(ok){APP.saved[APP.curSet+'_'+APP.testPool.findIndex(function(x){return x.zh===w.zh;})]=true;saveDone();}
+}
+
+function peekTest(){
+  var w=APP.testPool[APP.tIdx];
+  var res=document.getElementById('tres');
+  res.style.display='block';res.className='tres peek';
+  res.innerHTML='👁 Answer: <span style="font-family:\'Noto Sans SC\',sans-serif;font-size:26px;font-weight:900">'+w.zh+'</span> ('+w.py+')';
+  document.getElementById('tnxt').style.display='block';
+}
+
+function nextTest(){
+  APP.tIdx++;
+  if(APP.tIdx>=APP.testPool.length){
+    var pct=Math.round(APP.tScore/APP.testPool.length*100);
+    var col=pct>=80?'var(--teal)':pct>=60?'var(--gold)':pct>=40?'var(--blue)':'var(--muted)';
+    var em=pct>=80?'🏆':pct>=60?'🌟':pct>=40?'📚':'🌱';
+    document.getElementById('testArea').innerHTML=
+      '<div class="tcard" style="padding:32px">'
+      +'<div style="font-size:52px">'+em+'</div>'
+      +'<div style="font-size:52px;font-weight:900;color:'+col+';margin:8px 0">'+pct+'%</div>'
+      +'<div style="font-size:14px;color:var(--muted);font-weight:600;margin-bottom:24px">'+APP.tScore+' / '+APP.testPool.length+' correct</div>'
+      +'<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">'
+      +'<button class="cbtn cbtn-r" onclick="buildTest()">🔄 Try Again</button>'
+      +'<button class="cbtn cbtn-a" onclick="showPane(\'practice\',document.querySelectorAll(\'.tab\')[1])">✏️ More Practice</button>'
+      +'</div></div>';
+    return;
+  }
+  renderTestQ();
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+buildLearn();
+</script>
+</body>
+</html>
