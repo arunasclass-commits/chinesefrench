@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSK2 Lesson 1 — Greetings</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+:root{--ink:#1a1a2e;--red:#c0392b;--gold:#d4af37;--teal:#0d9488;--blue:#1d6fa8;--purple:#6b21a8;--orange:#c05621;--light:#f0f4ff;--card:#fff;--border:#e2e8f0;--muted:#8892a4;--paper:#f5f0e8;--shadow:0 8px 32px rgba(0,0,0,0.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--ink);min-height:100vh}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#2c1a5c 60%,#c0392b 100%);color:#fff;padding:28px 20px 44px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'你好';position:absolute;font-family:'Noto Sans SC',sans-serif;font-size:200px;font-weight:700;color:rgba(255,255,255,0.04);top:-20px;left:50%;transform:translateX(-50%);pointer-events:none}
+.hero-badge{display:inline-block;background:rgba(212,175,55,0.2);border:1px solid rgba(212,175,55,0.5);color:var(--gold);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:12px}
+.hero h1{font-size:clamp(20px,5vw,40px);font-family:'Noto Sans SC',sans-serif;font-weight:700;margin-bottom:4px}
+.hero-sub{font-size:13px;color:rgba(255,255,255,0.65);margin-bottom:20px}
+.score-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.sp{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:16px;padding:6px 12px;text-align:center;min-width:72px}
+.sp .sv{font-size:16px;font-weight:900}.sp .sl{font-size:9px;opacity:.7;text-transform:uppercase;letter-spacing:.5px}
+.sp.ov{background:rgba(212,175,55,.25);border-color:rgba(212,175,55,.5)}
+.nav{display:flex;background:#fff;border-bottom:2px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.nt{flex-shrink:0;padding:11px 11px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:11.5px;font-weight:800;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap}
+.nt.on{color:var(--red);border-bottom-color:var(--red)}
+.nt.done::after{content:'✓';color:var(--teal);margin-left:3px;font-size:10px}
+.content{max-width:900px;margin:0 auto;padding:18px 14px 60px}
+.sec{display:none}.sec.on{display:block}
+.shead{font-size:17px;font-weight:900;margin-bottom:14px}
+.info{background:#e8f0fe;border-left:4px solid var(--blue);border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#1a3a6b;font-weight:600;line-height:1.6}
+/* VOCAB */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:9px;margin-bottom:18px}
+.vc{background:var(--card);border-radius:10px;padding:13px;box-shadow:var(--shadow);border:2px solid transparent;cursor:pointer;transition:transform .2s,border-color .2s;text-align:center;position:relative}
+.vc:hover{transform:translateY(-2px);border-color:var(--red)}
+.vc .zh{font-family:'Noto Sans SC',sans-serif;font-size:26px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.vc .py{font-size:11px;color:var(--blue);font-weight:700;margin-bottom:2px}
+.vc .en{font-size:10px;color:var(--muted);font-weight:600}
+.vc .cat{position:absolute;top:5px;right:5px;font-size:8px;font-weight:800;padding:1px 5px;border-radius:6px;text-transform:uppercase}
+.ct-g{background:#e8f8f2;color:#0e9f6e}.ct-p{background:#e8f0fe;color:#1a56db}.ct-n{background:#fff8e1;color:#d97706}.ct-e{background:#fde8e8;color:#c0392b}
+/* DIALOGUE */
+.dbox{background:var(--card);border-radius:14px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.dtitle{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px}
+.dl{display:flex;gap:8px;margin-bottom:12px;align-items:flex-start}
+.av{flex-shrink:0;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900}
+.av1{background:#fde8e8;color:var(--red)}.av2{background:#e8f0fe;color:var(--blue)}.av3{background:#e8f8f2;color:#0e9f6e}
+.dt .zh{font-family:'Noto Sans SC',sans-serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.dt .py{font-size:11px;color:var(--blue);font-weight:600;margin-bottom:1px}
+.dt .en{font-size:10px;color:var(--muted)}
+.pb{background:none;border:1.5px solid var(--border);border-radius:5px;padding:2px 7px;font-size:10px;cursor:pointer;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:700;margin-top:2px}
+.pb:hover{border-color:var(--blue);color:var(--blue)}
+/* GRAMMAR */
+.gb{background:var(--card);border-radius:10px;padding:18px;box-shadow:var(--shadow);margin-bottom:10px;border-left:4px solid var(--purple)}
+.gb h3{font-size:14px;font-weight:900;color:var(--ink);margin-bottom:5px}
+.gb p{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:6px}
+.gp{display:inline-block;background:#f3e8ff;color:var(--purple);font-size:12px;font-weight:800;padding:3px 9px;border-radius:5px;margin-bottom:6px;font-family:monospace}
+.ge{background:var(--light);border-radius:6px;padding:8px 11px;margin-bottom:5px}
+.ge .zh{font-family:'Noto Sans SC',sans-serif;font-size:16px;font-weight:700;color:var(--ink)}
+.ge .py{font-size:11px;color:var(--blue)}.ge .en{font-size:11px;color:var(--muted)}
+/* QUIZ/LISTEN */
+.qprog{background:var(--border);border-radius:4px;height:4px;margin-bottom:14px}
+.qpf{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--red),var(--gold));transition:width .4s}
+.qmeta{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px}
+.qcard{background:var(--card);border-radius:14px;padding:20px;box-shadow:var(--shadow);margin-bottom:12px}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{background:#fff;border:2px solid var(--border);border-radius:9px;padding:9px 12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-align:left;transition:all .15s;color:var(--ink)}
+.opt:hover{border-color:var(--blue)}.opt.correct{background:#d1fae5!important;border-color:#059669!important;color:#065f46!important}.opt.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#991b1b!important}
+.l2opts{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.lopt{background:#fff;border:2px solid var(--border);border-radius:9px;padding:10px 7px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all .15s;color:var(--ink);line-height:1.4}
+.lopt:hover{border-color:var(--blue)}.lopt.correct{background:#d1fae5!important;border-color:#059669!important;color:#065f46!important}.lopt.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#991b1b!important}
+.playbtn{background:linear-gradient(135deg,var(--blue),#0c6fa8);color:#fff;border:none;border-radius:10px;padding:12px 24px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px;margin:0 auto 16px;transition:transform .2s}
+.playbtn:hover{transform:scale(1.03)}
+/* SPEAKING */
+.spk-zh{font-family:'Noto Sans SC',sans-serif;font-size:36px;font-weight:700;color:var(--ink);text-align:center}
+.spk-py{font-size:16px;color:var(--blue);font-weight:700;text-align:center;margin-top:5px}
+.spk-en{font-size:12px;color:var(--muted);text-align:center;margin-top:3px}
+.spk-ctx{font-size:11px;color:var(--orange);font-weight:700;text-align:center;margin-top:5px;font-style:italic}
+.sdots{display:flex;gap:5px;justify-content:center;margin-bottom:12px;flex-wrap:wrap}
+.sd{width:9px;height:9px;border-radius:50%;background:var(--border);transition:background .3s}
+.sd.done{background:var(--teal)}.sd.cur{background:var(--red)}
+.btnrow{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.cbtn{padding:10px 20px;border:none;border-radius:9px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all .15s}
+.cbtn:hover:not(:disabled){transform:scale(1.03)}.cbtn:disabled{opacity:.5;cursor:not-allowed}
+.bl{background:var(--blue);color:#fff}.bg{background:var(--teal);color:#fff}.bs{background:#f1f5f9;color:var(--muted)}.br{background:var(--red);color:#fff}
+/* WRITING */
+.winp{width:100%;border:2px solid var(--border);border-radius:9px;padding:12px;font-family:'Nunito',sans-serif;font-size:18px;text-align:center;outline:none;margin-bottom:9px;transition:border-color .2s}
+.winp:focus{border-color:var(--purple)}
+.wbtn{width:100%;padding:11px;background:var(--purple);color:#fff;border:none;border-radius:9px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer}
+.wres{margin-top:9px;padding:10px;border-radius:7px;text-align:center;font-size:12px;font-weight:700;display:none}
+.wres.ok{background:#d1fae5;color:#065f46}.wres.err{background:#fee2e2;color:#991b1b}
+/* HANZI SECTION */
+.hstrip{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.hbtn{background:var(--card);border:2px solid var(--border);border-radius:8px;padding:9px 11px;text-align:center;cursor:pointer;transition:all .2s;min-width:58px;position:relative}
+.hbtn:hover{border-color:var(--gold)}.hbtn.hon{border-color:var(--red);background:#fff5f5}.hbtn.hdone{border-color:var(--teal)}
+.hbtn-zh{font-family:'Noto Sans SC',sans-serif;font-size:22px;font-weight:700;color:var(--ink)}
+.hbtn-py{font-size:9px;color:var(--blue);font-weight:700}
+.hbtn-tk{position:absolute;top:3px;right:4px;font-size:10px}
+/* HANZI WRITER PANEL */
+.hw-panel{background:var(--card);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:14px}
+.hw-head{background:var(--paper);border-bottom:2px solid var(--border);padding:14px 18px;display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start}
+.hw-zh{font-family:'Noto Sans SC',sans-serif;font-size:50px;font-weight:900;color:var(--ink);line-height:1;flex-shrink:0}
+.hw-info{flex:1;min-width:160px}
+.hw-py{font-size:18px;color:var(--blue);font-weight:800;margin-bottom:3px}
+.hw-en{font-size:13px;font-weight:700;margin-bottom:5px}
+.hw-tag{display:inline-block;font-size:9px;font-weight:800;background:#f3e8ff;color:var(--purple);padding:2px 7px;border-radius:3px;margin-bottom:6px}
+.hw-et{font-size:11px;color:var(--muted);line-height:1.6;border-left:3px solid var(--gold);padding-left:9px;font-style:italic}
+/* Writer box */
+.writer-area{padding:18px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.writer-unit{text-align:center}
+.wu-lbl{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.wu-box{width:170px;height:170px;border:2px solid var(--border);border-radius:4px;background:var(--paper);position:relative;display:inline-flex;align-items:center;justify-content:center;overflow:hidden}
+.wu-box::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(212,175,55,.5);z-index:1;pointer-events:none}
+.wu-box::after{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(212,175,55,.5);z-index:1;pointer-events:none}
+.wu-msg{font-size:10px;font-weight:700;margin-top:5px;padding:3px 9px;border-radius:4px}
+.wu-msg.ok{background:#d1fae5;color:#065f46}.wu-msg.bad{background:#fee2e2;color:#991b1b}.wu-msg.tip{background:#fef3c7;color:#92400e}.wu-msg.hide{display:none}
+/* Writer controls */
+.hw-ctrl{padding:12px 18px;border-top:2px solid var(--border);display:flex;gap:7px;flex-wrap:wrap;background:#fafaf7;align-items:center}
+.hcbtn{padding:9px 16px;border:none;border-radius:4px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all .15s}
+.hcbtn:hover:not(:disabled){opacity:.85;transform:translateY(-1px)}.hcbtn:disabled{opacity:.45;cursor:not-allowed}
+.hc-a{background:var(--blue);color:#fff}.hc-q{background:var(--red);color:#fff}.hc-h{background:var(--orange);color:#fff}.hc-r{background:#e2e8f0;color:var(--ink)}.hc-d{background:var(--teal);color:#fff}.hc-n{background:var(--ink);color:#fff}
+.hw-bot{padding:12px 18px;background:#fafaf7;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.stroke-ct{margin-left:auto;background:var(--paper);border:1px solid var(--border);border-radius:3px;padding:6px 11px;font-size:11px;font-weight:700;color:var(--muted)}
+/* HANZI TEST */
+.ht-input{width:100%;max-width:240px;border:2px solid var(--border);border-radius:6px;padding:12px;font-family:'Noto Sans SC',sans-serif;font-size:26px;text-align:center;outline:none;margin:10px auto;display:block;background:var(--paper);transition:border-color .2s}
+.ht-input:focus{border-color:var(--blue)}
+.ht-res{padding:10px;border-radius:6px;font-size:13px;font-weight:700;display:none;margin:6px 0}
+.ht-res.ok{background:#d1fae5;color:#065f46}.ht-res.err{background:#fee2e2;color:#991b1b}
+/* PHRASES */
+.phrase-grid{display:flex;flex-direction:column;gap:8px}
+.phrase-row{background:var(--card);border-radius:8px;padding:10px 14px;border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .15s}
+.phrase-row:hover{border-color:var(--blue);transform:translateX(2px)}
+.phrase-num{font-size:10px;font-weight:800;color:var(--muted);width:22px;flex-shrink:0}
+.phrase-zh{font-family:'Noto Sans SC',sans-serif;font-size:17px;font-weight:700;color:var(--ink);min-width:100px}
+.phrase-py{font-size:11px;color:var(--blue);font-weight:700;flex:1}
+.phrase-en{font-size:11px;color:var(--muted);flex:1}
+.phrase-play{flex-shrink:0;background:none;border:1.5px solid var(--border);border-radius:5px;padding:3px 8px;font-size:10px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;color:var(--muted)}
+.phrase-play:hover{border-color:var(--blue);color:var(--blue)}
+/* CULTURE */
+.ccard{background:linear-gradient(135deg,#fff8e1,#fffde7);border:2px solid var(--gold);border-radius:12px;padding:16px 18px;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start}
+.ci{font-size:26px;flex-shrink:0}
+.ct h4{font-size:13px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.ct p{font-size:11px;color:#555;line-height:1.7}
+/* SCORE */
+.sb-card{background:var(--card);border-radius:16px;padding:22px;box-shadow:var(--shadow);max-width:480px;margin:0 auto}
+.sb-row{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.sb-lbl{font-size:11px;font-weight:700;width:90px;flex-shrink:0}
+.sb-bar{flex:1;background:#f1f5f9;border-radius:3px;height:8px;overflow:hidden}
+.sb-fill{height:8px;border-radius:3px;transition:width .8s ease}
+.sb-sc{font-size:11px;font-weight:800;width:32px;text-align:right}
+/* TABS for hanzi section */
+.htabs{display:flex;gap:0;margin-bottom:14px;border:2px solid var(--border);border-radius:8px;overflow:hidden}
+.htab{flex:1;padding:9px 6px;border:none;background:#f8f9fa;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;color:var(--muted);transition:all .2s;text-align:center}
+.htab.hon{background:var(--red);color:#fff}
+@media(max-width:580px){.vgrid{grid-template-columns:1fr 1fr}.l2opts{grid-template-columns:1fr}.wu-box{width:140px;height:140px}.hw-zh{font-size:38px}.hgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">新HSK2 · Lesson 1</div>
+  <h1>你好，大家好！</h1>
+  <div class="hero-sub">Greetings · Respect · Classroom Language | Animated Hanzi · 30 Phrases</div>
+  <div class="score-row">
+    <div class="sp"><div class="sv" id="s1">—</div><div class="sl">📖 Vocab</div></div>
+    <div class="sp"><div class="sv" id="s2">—</div><div class="sl">🎧 Listen</div></div>
+    <div class="sp"><div class="sv" id="s3">—</div><div class="sl">📄 Read</div></div>
+    <div class="sp"><div class="sv" id="s4">—</div><div class="sl">🎤 Speak</div></div>
+    <div class="sp"><div class="sv" id="s5">—</div><div class="sl">✍️ Write</div></div>
+    <div class="sp ov"><div class="sv" id="s0">—</div><div class="sl">⭐ Overall</div></div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nt on" onclick="show('vocab',this)">📖 Vocab</button>
+  <button class="nt" onclick="show('dialogue',this)">💬 Dialogue</button>
+  <button class="nt" onclick="show('grammar',this)">📝 Grammar</button>
+  <button class="nt" onclick="show('listening',this)">🎧 Listening</button>
+  <button class="nt" onclick="show('reading',this)">📄 Reading</button>
+  <button class="nt" onclick="show('speaking',this)">🎤 Speaking</button>
+  <button class="nt" onclick="show('writing',this)">✍️ Writing</button>
+  <button class="nt" onclick="show('hanzi',this)">🖊️ Hanzi</button>
+  <button class="nt" onclick="show('culture',this)">🏮 Culture</button>
+  <button class="nt" onclick="show('quiz',this)">🎯 Quiz</button>
+  <button class="nt" onclick="show('scores',this)">🏆 Scores</button>
+</div>
+
+<div class="content">
+
+<!-- VOCAB -->
+<div class="sec on" id="s-vocab">
+  <div class="shead">📖 Vocabulary — 词汇</div>
+  <div class="info">💡 Click any card to hear it spoken. 12 essential Lesson 1 words.</div>
+  <div class="vgrid">
+    <div class="vc" onclick="sp('你好')"><span class="cat ct-g">Greeting</span><div class="zh">你好</div><div class="py">nǐ hǎo</div><div class="en">Hello (to one person)</div></div>
+    <div class="vc" onclick="sp('大家')"><span class="cat ct-p">Pronoun</span><div class="zh">大家</div><div class="py">dàjiā</div><div class="en">Everyone / everybody</div></div>
+    <div class="vc" onclick="sp('好')"><span class="cat ct-g">Adj.</span><div class="zh">好</div><div class="py">hǎo</div><div class="en">Good / fine / well</div></div>
+    <div class="vc" onclick="sp('学生')"><span class="cat ct-n">Noun</span><div class="zh">学生</div><div class="py">xuésheng</div><div class="en">Student</div></div>
+    <div class="vc" onclick="sp('们')"><span class="cat ct-p">Suffix</span><div class="zh">们</div><div class="py">men</div><div class="en">Plural suffix (people)</div></div>
+    <div class="vc" onclick="sp('老师')"><span class="cat ct-n">Noun</span><div class="zh">老师</div><div class="py">lǎoshī</div><div class="en">Teacher</div></div>
+    <div class="vc" onclick="sp('您')"><span class="cat ct-p">Pronoun</span><div class="zh">您</div><div class="py">nín</div><div class="en">You (respectful)</div></div>
+    <div class="vc" onclick="sp('你们')"><span class="cat ct-p">Pronoun</span><div class="zh">你们</div><div class="py">nǐmen</div><div class="en">You all (plural)</div></div>
+    <div class="vc" onclick="sp('谢谢')"><span class="cat ct-e">Expression</span><div class="zh">谢谢</div><div class="py">xièxie</div><div class="en">Thank you</div></div>
+    <div class="vc" onclick="sp('不客气')"><span class="cat ct-e">Expression</span><div class="zh">不客气</div><div class="py">bú kèqi</div><div class="en">You're welcome</div></div>
+    <div class="vc" onclick="sp('同学')"><span class="cat ct-n">Noun</span><div class="zh">同学</div><div class="py">tóngxué</div><div class="en">Classmate</div></div>
+    <div class="vc" onclick="sp('再见')"><span class="cat ct-g">Farewell</span><div class="zh">再见</div><div class="py">zàijiàn</div><div class="en">Goodbye</div></div>
+  </div>
+  <div class="info" style="background:#fff8e1;border-color:var(--gold);color:#7a5a00">🔑 <strong>Key rule:</strong> Use <strong>您 nín</strong> for teachers & elders. Use <strong>你 nǐ</strong> for friends. ❌ <strong>您们 WRONG</strong> — 您 has NO plural!</div>
+</div>
+
+<!-- DIALOGUE -->
+<div class="sec" id="s-dialogue">
+  <div class="shead">💬 Dialogues — 对话</div>
+  <div class="dbox">
+    <div class="dtitle">Scene 1 — First Day · 林梅 Lin Mei, 张老师 Teacher Zhang</div>
+    <div class="dl"><div class="av av1">张</div><div class="dt"><div class="zh">大家好！</div><div class="py">Dàjiā hǎo!</div><div class="en">Hello everyone!</div><button class="pb" onclick="sp('大家好')">▶</button></div></div>
+    <div class="dl"><div class="av av2">生</div><div class="dt"><div class="zh">老师好！</div><div class="py">Lǎoshī hǎo!</div><div class="en">Hello, Teacher!</div><button class="pb" onclick="sp('老师好')">▶</button></div></div>
+    <div class="dl"><div class="av av1">张</div><div class="dt"><div class="zh">你们好！我是张老师。</div><div class="py">Nǐmen hǎo! Wǒ shì Zhāng lǎoshī.</div><div class="en">Hello! I am Teacher Zhang.</div><button class="pb" onclick="sp('你们好，我是张老师')">▶</button></div></div>
+    <div class="dl"><div class="av av2">林</div><div class="dt"><div class="zh">张老师好！我叫林梅。</div><div class="py">Zhāng lǎoshī hǎo! Wǒ jiào Lín Méi.</div><div class="en">Hello Teacher Zhang! I'm Lin Mei.</div><button class="pb" onclick="sp('张老师好，我叫林梅')">▶</button></div></div>
+    <div class="dl"><div class="av av1">张</div><div class="dt"><div class="zh">林梅，欢迎你！</div><div class="py">Lín Méi, huānyíng nǐ!</div><div class="en">Lin Mei, welcome!</div><button class="pb" onclick="sp('林梅，欢迎你')">▶</button></div></div>
+    <div class="dl"><div class="av av2">林</div><div class="dt"><div class="zh">谢谢您！</div><div class="py">Xièxie nín!</div><div class="en">Thank you! (respectful)</div><button class="pb" onclick="sp('谢谢您')">▶</button></div></div>
+    <div class="dl"><div class="av av1">张</div><div class="dt"><div class="zh">不客气！</div><div class="py">Bú kèqi!</div><div class="en">You're welcome!</div><button class="pb" onclick="sp('不客气')">▶</button></div></div>
+  </div>
+  <div class="dbox">
+    <div class="dtitle">Scene 2 — End of Class</div>
+    <div class="dl"><div class="av av1">张</div><div class="dt"><div class="zh">好，同学们，再见！</div><div class="py">Hǎo, tóngxuémen, zàijiàn!</div><div class="en">Alright, classmates, goodbye!</div><button class="pb" onclick="sp('好，同学们，再见')">▶</button></div></div>
+    <div class="dl"><div class="av av2">生</div><div class="dt"><div class="zh">老师再见！</div><div class="py">Lǎoshī zàijiàn!</div><div class="en">Goodbye, Teacher!</div><button class="pb" onclick="sp('老师再见')">▶</button></div></div>
+    <div class="dl"><div class="av av3">陶</div><div class="dt"><div class="zh">林梅，再见！明天见！</div><div class="py">Lín Méi, zàijiàn! Míngtiān jiàn!</div><div class="en">Lin Mei, bye! See you tomorrow!</div><button class="pb" onclick="sp('林梅，再见，明天见')">▶</button></div></div>
+  </div>
+</div>
+
+<!-- GRAMMAR -->
+<div class="sec" id="s-grammar">
+  <div class="shead">📝 Grammar — 语法</div>
+  <div class="gb"><h3>1. Plural Suffix 们 (men)</h3><p>Add 们 to pronouns/people-nouns to make them plural. ONLY for people — never objects!</p>
+    <div class="gp">Person + 们</div>
+    <div class="ge"><div class="zh">你 → 你们</div><div class="py">nǐ → nǐmen</div><div class="en">you → you all</div></div>
+    <div class="ge"><div class="zh">同学 → 同学们</div><div class="py">tóngxué → tóngxuémen</div><div class="en">classmate → classmates</div></div>
+    <div class="ge"><div class="zh">学生 → 学生们</div><div class="py">xuésheng → xuéshengmen</div><div class="en">student → students</div></div>
+    <div style="background:#fee2e2;border-radius:6px;padding:8px 11px;font-size:11px;color:#991b1b;font-weight:700;margin-top:4px">❌ 您们 WRONG — 您 has no plural. Use 大家 or 老师们 instead.</div>
+  </div>
+  <div class="gb"><h3>2. 您 (nín) — Respectful "You"</h3><p>您 is the honorific form of 你. Use for teachers, elders, superiors.</p>
+    <div class="gp">你 → 您 (when showing respect)</div>
+    <div class="ge"><div class="zh">张老师，您好！</div><div class="py">Zhāng lǎoshī, nín hǎo!</div><div class="en">Hello, Teacher Zhang! (respectful)</div></div>
+    <div class="ge"><div class="zh">谢谢您！</div><div class="py">Xièxie nín!</div><div class="en">Thank you! (to teacher)</div></div>
+  </div>
+  <div class="gb"><h3>3. Greeting Pattern: [Person/Group] + 好！</h3><p>Combine who you're greeting + 好. Flexible and productive.</p>
+    <div class="ge"><div class="zh">大家好！</div><div class="py">Dàjiā hǎo!</div><div class="en">Hello everyone! (whole class)</div></div>
+    <div class="ge"><div class="zh">老师好！</div><div class="py">Lǎoshī hǎo!</div><div class="en">Hello, Teacher! (student to teacher)</div></div>
+    <div class="ge"><div class="zh">同学们好！</div><div class="py">Tóngxuémen hǎo!</div><div class="en">Hello, classmates! (teacher to class)</div></div>
+  </div>
+  <div class="gb"><h3>4. Thanks & Response: 谢谢 → 不客气</h3>
+    <div class="gp">谢谢 → 不客气</div>
+    <div class="ge"><div class="zh">谢谢！→ 不客气！</div><div class="py">Xièxie! → Bú kèqi!</div><div class="en">Thank you! → You're welcome!</div></div>
+    <div class="ge"><div class="zh">谢谢您！→ 没关系。</div><div class="py">Xièxie nín! → Méi guānxi.</div><div class="en">Thank you (polite)! → It's nothing.</div></div>
+  </div>
+</div>
+
+<!-- LISTENING -->
+<div class="sec" id="s-listening"><div class="shead">🎧 Listening — 听力</div><div class="info">🎧 Listen. Choose the best answer.</div><div id="listenArea"></div></div>
+
+<!-- READING -->
+<div class="sec" id="s-reading"><div class="shead">📄 Reading — 阅读</div><div class="info">📄 Read and choose. All Chinese with pinyin.</div><div id="readArea"></div></div>
+
+<!-- SPEAKING -->
+<div class="sec" id="s-speaking">
+  <div class="shead">🎤 Speaking Drills — 口语</div>
+  <div class="info">🎤 30 single-sentence drills. All from Lesson 1 vocabulary.</div>
+  <div class="sdots" id="spDots"></div>
+  <div id="spArea"></div>
+</div>
+
+<!-- WRITING -->
+<div class="sec" id="s-writing"><div class="shead">✍️ Pinyin Writing — 拼音</div><div class="info">✍️ Type the pinyin (no tones). e.g. type <strong>nihao</strong></div><div id="writeArea"></div></div>
+
+<!-- HANZI -->
+<div class="sec" id="s-hanzi">
+  <div class="shead">🖊️ Hanzi Practice — 汉字书写 (10 Characters)</div>
+  <div class="info">🖊️ Lesson 1 exclusive characters. Animated strokes · Practice writing · Test. These 10 will NOT repeat in other lessons.</div>
+  <div class="htabs">
+    <button class="htab hon" id="ht1" onclick="hshowTab('learn',this)">📖 Learn & Etymology</button>
+    <button class="htab" id="ht2" onclick="hshowTab('practice',this)">✏️ Practice Writing</button>
+    <button class="htab" id="ht3" onclick="hshowTab('test',this)">📝 Test</button>
+  </div>
+  <!-- LEARN -->
+  <div id="hpane-learn">
+    <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:12px">Click any character to practise it →</div>
+    <div id="etymGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:11px"></div>
+  </div>
+  <!-- PRACTICE -->
+  <div id="hpane-practice" style="display:none">
+    <div class="hstrip" id="charStrip"></div>
+    <div id="practicePanel"></div>
+  </div>
+  <!-- TEST -->
+  <div id="hpane-test" style="display:none">
+    <div id="hanziTestArea"></div>
+  </div>
+</div>
+
+<!-- CULTURE -->
+<div class="sec" id="s-culture">
+  <div class="shead">🏮 Culture Notes — 文化</div>
+  <div class="ccard"><div class="ci">🏫</div><div class="ct"><h4>Chinese Classroom Ritual</h4><p>In Chinese schools, when the teacher enters, the class monitor calls 起立！(Qǐlì! — Stand up!). Students stand and say 老师好！as a group. The teacher responds 同学们好！then says 请坐！(Qǐng zuò! — Please sit). This ritual still happens in schools across China daily.</p></div></div>
+  <div class="ccard"><div class="ci">🙏</div><div class="ct"><h4>您 — The Art of Respect</h4><p>Using 您 (nín) shows respect rooted in Confucian values of 礼 (lǐ — propriety). Students must always use 您 with teachers. Using 你 to a teacher is rude. Importantly, 您 cannot be pluralised — this keeps respect personal and deliberate.</p></div></div>
+  <div class="ccard"><div class="ci">🌏</div><div class="ct"><h4>不客气 — Chinese Hospitality</h4><p>不客气 literally means "don't be polite / don't stand on ceremony." Chinese culture values making guests feel at home — 不要客气！(don't be formal!). The exchange 谢谢 → 不客气 is as natural as "thank you" → "you're welcome" in English.</p></div></div>
+  <div class="ccard"><div class="ci">📛</div><div class="ct"><h4>Names in This Course</h4><p>Original copyright-safe names: 林梅 Lín Méi (female student), 陶伟 Táo Wèi (male student), 玛丽亚 Mǎlìyà (international student), 张老师 Zhāng lǎoshī (teacher). All are authentic, common modern Chinese names.</p></div></div>
+</div>
+
+<!-- QUIZ -->
+<div class="sec" id="s-quiz"><div class="shead">🎯 Vocabulary Quiz — 测验</div><div id="quizArea"></div></div>
+
+<!-- SCORES -->
+<div class="sec" id="s-scores"><div class="shead">🏆 My Scores</div><div id="scoresArea"></div></div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js" onerror="hwFallback()"></script>
+<script>
+function hwFallback(){var s=document.createElement('script');s.src='https://unpkg.com/hanzi-writer@3.5.0/dist/hanzi-writer.min.js';document.head.appendChild(s);}
+
+// ── CORE STATE ────────────────────────────────────────────────
+const SK='cf_hsk2_l1_v2';
+var SC=JSON.parse(localStorage.getItem(SK)||'{}');
+var APP={curHanzi:0,writers:{},quizOn:{},htDone:{},tPool:[],tIdx:0,tSc:0,tDone:false};
+
+function saveSC(){localStorage.setItem(SK,JSON.stringify(SC));updatePills();}
+function updatePills(){
+  const f=v=>v!==undefined?v+'%':'—';
+  document.getElementById('s1').textContent=f(SC.vocab);
+  document.getElementById('s2').textContent=f(SC.listen);
+  document.getElementById('s3').textContent=f(SC.read);
+  document.getElementById('s4').textContent=f(SC.speak);
+  document.getElementById('s5').textContent=f(SC.write);
+  const v=Object.values(SC).filter(x=>x!==undefined);
+  document.getElementById('s0').textContent=v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length)+'%':'—';
+}
+updatePills();
+
+function sp(t){
+  if(!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  u.lang='zh-CN';u.rate=0.78;u.pitch=1.05;
+  const v=speechSynthesis.getVoices().find(x=>x.lang.startsWith('zh'));
+  if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=()=>{};
+
+var navBtns=document.querySelectorAll('.nt');
+var navMap=['vocab','dialogue','grammar','listening','reading','speaking','writing','hanzi','culture','quiz','scores'];
+function show(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  navBtns.forEach(t=>t.classList.remove('on'));
+  document.getElementById('s-'+id).classList.add('on');
+  btn.classList.add('on');
+  if(id==='listening')initListen();
+  if(id==='reading')initRead();
+  if(id==='speaking')initSpeak();
+  if(id==='writing')initWrite();
+  if(id==='hanzi')initHanzi();
+  if(id==='quiz')initQuiz();
+  if(id==='scores')renderScores();
+  if(id==='culture'){SC.culture=100;saveSC();btn.classList.add('done');}
+}
+function markNav(id){const i=navMap.indexOf(id);if(i>=0)navBtns[i].classList.add('done');}
+
+// ── LISTENING ────────────────────────────────────────────────
+const LQS=[
+  {a:'老师好！',q:'What is being said?',opts:['Student greeting teacher','Goodbye to teacher','Thank you teacher','You\'re welcome'],ans:0},
+  {a:'大家好！',q:'Who is being greeted?',opts:['One friend only','The whole group/class','Only the teacher','Only one classmate'],ans:1},
+  {a:'谢谢你！',q:'What does this mean?',opts:['Goodbye!','You\'re welcome','Thank you!','Hello!'],ans:2},
+  {a:'再见！',q:'When do you say this?',opts:['When arriving','When saying goodbye','When thanking','When greeting teacher'],ans:1},
+  {a:'同学们好！',q:'Who is most likely speaking?',opts:['One student to a classmate','Teacher greeting the whole class','Student to teacher','Friend to friend'],ans:1},
+];
+var lIdx=0,lSc=0,lDone=false;
+function initListen(){if(lDone)return;lIdx=0;lSc=0;renderLQ();}
+function renderLQ(){
+  const q=LQS[lIdx];
+  document.getElementById('listenArea').innerHTML=`
+    <div class="qcard">
+      <div class="qmeta"><span>Q${lIdx+1}/${LQS.length}</span><span style="color:var(--teal)">✅${lSc}/${lIdx}</span></div>
+      <div class="qprog"><div class="qpf" style="width:${lIdx/LQS.length*100}%"></div></div>
+      <button class="playbtn" onclick="sp('${q.a}')">🔊 Play Audio</button>
+      <div style="text-align:center;font-size:13px;font-weight:700;margin-bottom:10px">${q.q}</div>
+      <div class="l2opts">${q.opts.map((o,i)=>`<button class="lopt" id="lo${i}" onclick="ansL(${i})">${o}</button>`).join('')}</div>
+    </div>`;
+  setTimeout(()=>sp(q.a),400);
+}
+function ansL(i){
+  const q=LQS[lIdx];
+  if(i===q.ans)lSc++;
+  for(var j=0;j<q.opts.length;j++){const b=document.getElementById('lo'+j);if(!b)continue;b.disabled=true;if(j===q.ans)b.classList.add('correct');else if(j===i&&i!==q.ans)b.classList.add('wrong');}
+  setTimeout(()=>{
+    lIdx++;
+    if(lIdx>=LQS.length){lDone=true;const pct=Math.round(lSc/LQS.length*100);SC.listen=pct;saveSC();markNav('listening');
+      document.getElementById('listenArea').innerHTML=`<div class="qcard" style="text-align:center;padding:28px"><div style="font-size:44px">🎧</div><div style="font-size:26px;font-weight:900;color:var(--teal);margin:8px 0">${pct}%</div><div style="color:var(--muted);font-weight:700">${lSc}/${LQS.length} correct</div><button onclick="lDone=false;initListen()" class="cbtn bl" style="margin-top:12px">🔄 Try Again</button></div>`;
+    }else renderLQ();
+  },900);
+}
+
+// ── READING ──────────────────────────────────────────────────
+const RQS=[
+  {q:'Which sentence correctly greets a teacher?',qp:'Nǎ jù huà yòng lái wèn hǎo lǎoshī?',opts:[
+    {zh:'A. 你好！',py:'nǐ hǎo',en:'Hello — for a friend/peer'},
+    {zh:'B. 您好！',py:'nín hǎo',en:'Hello — respectful form'},
+    {zh:'C. 他好！',py:'tā hǎo',en:'He is fine — not a greeting'},
+    {zh:'D. 大家好！',py:'dàjiā hǎo',en:'Hello everyone — for a group'},
+  ],ans:1},
+  {q:'What is the correct response to 谢谢？',qp:'Duì "xièxie" de zhèngquè huídá shì shénme?',opts:[
+    {zh:'A. 再见！',py:'zàijiàn',en:'Goodbye'},
+    {zh:'B. 你好！',py:'nǐ hǎo',en:'Hello'},
+    {zh:'C. 不客气！',py:'bú kèqi',en:"You're welcome"},
+    {zh:'D. 老师好！',py:'lǎoshī hǎo',en:'Hello Teacher'},
+  ],ans:2},
+  {q:'Which is the correct plural of 同学？',qp:'Tóngxué de zhèngquè fùshù xíngshì shì nǎ ge?',opts:[
+    {zh:'A. 您们',py:'nín men',en:'Incorrect — 您 has no plural'},
+    {zh:'B. 同学们',py:'tóngxuémen',en:'Classmates — correct plural'},
+    {zh:'C. 同学你',py:'tóngxué nǐ',en:'Incorrect structure'},
+    {zh:'D. 他们同学',py:'tāmen tóngxué',en:'Incorrect — they classmate'},
+  ],ans:1},
+  {q:'Fill in blank: 张___，您好！',qp:'Zhāng ___, nín hǎo! Tiánkòng.',opts:[
+    {zh:'A. 们',py:'men',en:'Plural suffix'},
+    {zh:'B. 同学',py:'tóngxué',en:'Classmate'},
+    {zh:'C. 老师',py:'lǎoshī',en:'Teacher — Teacher Zhang'},
+    {zh:'D. 学生',py:'xuésheng',en:'Student'},
+  ],ans:2},
+  {q:'Which sentence is said at the END of class?',qp:'Nǎ jù huà shì zài kè jiéshù shí shuō de?',opts:[
+    {zh:'A. 大家好！',py:'dàjiā hǎo',en:'Hello everyone — start of class'},
+    {zh:'B. 老师好！',py:'lǎoshī hǎo',en:'Hello Teacher — start of class'},
+    {zh:'C. 请坐！',py:'qǐng zuò',en:'Please sit — during class'},
+    {zh:'D. 老师再见！',py:'lǎoshī zàijiàn',en:'Goodbye Teacher — end of class'},
+  ],ans:3},
+];
+var rAns={};
+function initRead(){
+  document.getElementById('readArea').innerHTML=RQS.map((q,i)=>`
+    <div class="qcard" id="rq${i}">
+      <div style="font-size:14px;font-weight:800;color:var(--ink);margin-bottom:4px">${i+1}. ${q.q}</div>
+      <div style="font-size:12px;color:var(--blue);font-style:italic;font-weight:600;margin-bottom:12px">${q.qp}</div>
+      <div class="opts">${q.opts.map((o,j)=>`
+        <button class="opt r-opt" id="ro${i}_${j}" onclick="pickR(${i},${j})">
+          <div style="display:flex;align-items:flex-start;gap:8px">
+            <div style="flex:1">
+              <span style="font-family:'Noto Sans SC',sans-serif;font-size:16px;font-weight:700">${o.zh}</span>
+              <span style="margin-left:6px;font-size:12px;color:var(--blue);font-weight:700">${o.py}</span>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;padding-left:2px">${o.en}</div>
+        </button>`).join('')}
+      </div>
+    </div>`).join('')+
+    `<button id="rSub" style="width:100%;padding:11px;background:var(--blue);color:#fff;border:none;border-radius:9px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;margin-top:8px" onclick="submitR()">Submit All ✓</button>`;
+}
+function pickR(qi,oi){
+  rAns[qi]=oi;
+  for(var j=0;j<4;j++){const b=document.getElementById('ro'+qi+'_'+j);if(b){b.style.borderColor='';b.style.background='';}}
+  const s=document.getElementById('ro'+qi+'_'+oi);
+  if(s){s.style.borderColor='var(--blue)';s.style.background='#e8f0fe';}
+}
+function submitR(){
+  if(Object.keys(rAns).length<RQS.length){alert('Please answer all '+RQS.length+' questions!');return;}
+  var correct=0;
+  RQS.forEach((q,i)=>{
+    const ans=rAns[i];
+    for(var j=0;j<q.opts.length;j++){
+      const b=document.getElementById('ro'+i+'_'+j);if(!b)continue;
+      b.disabled=true;b.style.cursor='default';
+      if(j===q.ans){b.style.background='#d1fae5';b.style.borderColor='#059669';}
+      else if(j===ans&&ans!==q.ans){b.style.background='#fee2e2';b.style.borderColor='#dc2626';}
+    }
+    if(ans===q.ans)correct++;
+  });
+  const pct=Math.round(correct/RQS.length*100);SC.read=pct;saveSC();markNav('reading');
+  const btn=document.getElementById('rSub');
+  btn.textContent='✅ Score: '+pct+'% ('+correct+'/'+RQS.length+')';
+  btn.style.background='var(--teal)';btn.disabled=true;
+}
+
+// ── SPEAKING DRILLS (30 sentences from L1 vocab) ─────────────
+const DRILLS=[
+  {zh:'你好！',py:'Nǐ hǎo!',en:'Hello!',ctx:'Greeting a friend'},
+  {zh:'大家好！',py:'Dàjiā hǎo!',en:'Hello everyone!',ctx:'Greeting the whole class'},
+  {zh:'您好！',py:'Nín hǎo!',en:'Hello! (respectful)',ctx:'Greeting a teacher'},
+  {zh:'老师好！',py:'Lǎoshī hǎo!',en:'Hello, Teacher!',ctx:'Student greeting teacher'},
+  {zh:'谢谢！',py:'Xièxie!',en:'Thank you!',ctx:'Expressing gratitude'},
+  {zh:'谢谢您！',py:'Xièxie nín!',en:'Thank you! (respectful)',ctx:'Thanking teacher'},
+  {zh:'不客气！',py:'Bú kèqi!',en:"You're welcome!",ctx:'Responding to thanks'},
+  {zh:'再见！',py:'Zàijiàn!',en:'Goodbye!',ctx:'Saying farewell'},
+  {zh:'同学们好！',py:'Tóngxuémen hǎo!',en:'Hello, classmates!',ctx:'Greeting classmates'},
+  {zh:'你们好！',py:'Nǐmen hǎo!',en:'Hello, you all!',ctx:'Greeting a group (informal)'},
+  {zh:'学生们好！',py:'Xuéshengmen hǎo!',en:'Hello, students!',ctx:'Teacher greeting students'},
+  {zh:'大家再见！',py:'Dàjiā zàijiàn!',en:'Goodbye, everyone!',ctx:'Farewell to whole group'},
+  {zh:'老师再见！',py:'Lǎoshī zàijiàn!',en:'Goodbye, Teacher!',ctx:'Student leaving class'},
+  {zh:'同学再见！',py:'Tóngxué zàijiàn!',en:'Goodbye, classmate!',ctx:'Bidding farewell to classmate'},
+  {zh:'谢谢你！',py:'Xièxie nǐ!',en:'Thank you! (informal)',ctx:'Thanking a peer'},
+  {zh:'谢谢老师！',py:'Xièxie lǎoshī!',en:'Thank you, Teacher!',ctx:'Thanking teacher (standard)'},
+  {zh:'不客气，谢谢！',py:'Bú kèqi, xièxie!',en:"You're welcome, thanks!",ctx:'Polite exchange'},
+  {zh:'好，同学们！',py:'Hǎo, tóngxuémen!',en:'Alright, classmates!',ctx:'Teacher starting class'},
+  {zh:'好，大家好！',py:'Hǎo, dàjiā hǎo!',en:'Good, hello everyone!',ctx:'Warm class opening'},
+  {zh:'您好，老师！',py:'Nín hǎo, lǎoshī!',en:'Hello, Teacher! (very respectful)',ctx:'Formal student greeting'},
+  {zh:'同学们再见！',py:'Tóngxuémen zàijiàn!',en:'Goodbye, classmates!',ctx:'End of class farewell'},
+  {zh:'大家，谢谢！',py:'Dàjiā, xièxie!',en:'Everyone, thank you!',ctx:'Thanking the whole class'},
+  {zh:'学生好！',py:'Xuésheng hǎo!',en:'Hello, student!',ctx:'Teacher greeting one student'},
+  {zh:'好，再见！',py:'Hǎo, zàijiàn!',en:'Alright, goodbye!',ctx:'Quick farewell'},
+  {zh:'您再见！',py:'Nín zàijiàn!',en:'Goodbye! (respectful)',ctx:'Respectful farewell to teacher'},
+  {zh:'谢谢大家！',py:'Xièxie dàjiā!',en:'Thank you, everyone!',ctx:'Speaker thanking audience'},
+  {zh:'同学们，谢谢！',py:'Tóngxuémen, xièxie!',en:'Classmates, thank you!',ctx:'Student thanking classmates'},
+  {zh:'您好，同学！',py:'Nín hǎo, tóngxué!',en:'Hello, classmate! (very polite)',ctx:'Very polite greeting'},
+  {zh:'好，老师再见！',py:'Hǎo, lǎoshī zàijiàn!',en:'Alright, goodbye Teacher!',ctx:'Confirming and leaving'},
+  {zh:'大家，再见！',py:'Dàjiā, zàijiàn!',en:'Everyone, goodbye!',ctx:'Final farewell to all'},
+];
+var spIdx=0,spDone=0;
+function initSpeak(){spIdx=0;spDone=0;renderSpDots();renderDrill();}
+function renderSpDots(){
+  document.getElementById('spDots').innerHTML=DRILLS.map((_,i)=>`<div class="sd ${i<spDone?'done':i===spIdx?'cur':''}"></div>`).join('');
+}
+function renderDrill(){
+  const d=DRILLS[spIdx];
+  document.getElementById('spArea').innerHTML=`
+    <div class="qcard">
+      <div class="qmeta"><span>${spIdx+1}/${DRILLS.length}</span><span style="color:var(--teal)">✅${spDone} done</span></div>
+      <div class="qprog"><div class="qpf" style="width:${spIdx/DRILLS.length*100}%"></div></div>
+      <div class="spk-zh">${d.zh}</div>
+      <div class="spk-py">${d.py}</div>
+      <div class="spk-en">${d.en}</div>
+      <div class="spk-ctx">📌 ${d.ctx}</div>
+      <div class="btnrow">
+        <button class="cbtn bl" onclick="sp('${d.zh.replace(/[！？。]/g,'')}')">🔊 Listen</button>
+        <button class="cbtn bg" onclick="gotIt()">✅ Got It!</button>
+        <button class="cbtn bs" onclick="skipDrill()">⏭ Skip</button>
+      </div>
+    </div>`;
+  setTimeout(()=>sp(d.zh.replace(/[！？。]/g,'')),300);
+}
+function gotIt(){spDone++;nextDrill();}
+function skipDrill(){nextDrill();}
+function nextDrill(){
+  spIdx++;
+  if(spIdx>=DRILLS.length){
+    const pct=Math.round(spDone/DRILLS.length*100);SC.speak=pct;saveSC();markNav('speaking');
+    document.getElementById('spDots').innerHTML='';
+    document.getElementById('spArea').innerHTML=`<div class="qcard" style="text-align:center;padding:28px"><div style="font-size:44px">🎤</div><div style="font-size:26px;font-weight:900;color:var(--teal);margin:8px 0">${pct}%</div><div style="color:var(--muted);font-weight:700">${spDone}/${DRILLS.length} drills done</div><button onclick="initSpeak()" class="cbtn br" style="margin-top:12px">🔄 Again</button></div>`;
+    return;
+  }
+  renderSpDots();renderDrill();
+}
+
+// ── WRITING (Pinyin input) ─────────────────────────────────
+const WWORDS=[
+  {en:'Hello',zh:'你好',py:'nihao',accept:['nihao','ni hao']},
+  {en:'Everyone',zh:'大家',py:'dajia',accept:['dajia','da jia']},
+  {en:'Teacher',zh:'老师',py:'laoshi',accept:['laoshi','lao shi']},
+  {en:'You (respectful)',zh:'您',py:'nin',accept:['nin']},
+  {en:'Thank you',zh:'谢谢',py:'xiexie',accept:['xiexie','xie xie']},
+  {en:"You're welcome",zh:'不客气',py:'bukeqi',accept:['bukeqi','bu ke qi','bu keqi']},
+  {en:'Classmate',zh:'同学',py:'tongxue',accept:['tongxue','tong xue']},
+  {en:'Goodbye',zh:'再见',py:'zaijian',accept:['zaijian','zai jian']},
+  {en:'You all',zh:'你们',py:'nimen',accept:['nimen','ni men']},
+  {en:'Student',zh:'学生',py:'xuesheng',accept:['xuesheng','xue sheng']},
+];
+var wIdx=0,wSc=0,wDone=false;
+function stripT(s){return s.toLowerCase().replace(/[āáǎà]/g,'a').replace(/[ēéěè]/g,'e').replace(/[īíǐì]/g,'i').replace(/[ōóǒò]/g,'o').replace(/[ūúǔù]/g,'u').replace(/ü/g,'u').replace(/\s+/g,'').trim();}
+function initWrite(){if(wDone)return;wIdx=0;wSc=0;renderWQ();}
+function renderWQ(){
+  const w=WWORDS[wIdx];
+  document.getElementById('writeArea').innerHTML=`
+    <div class="qcard">
+      <div class="qmeta"><span>Q${wIdx+1}/${WWORDS.length}</span><span style="color:var(--teal)">✅${wSc}/${wIdx}</span></div>
+      <div class="qprog"><div class="qpf" style="width:${wIdx/WWORDS.length*100}%"></div></div>
+      <div style="text-align:center;margin-bottom:12px">
+        <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:7px">Type pinyin for:</div>
+        <div style="font-size:26px;font-weight:900">${w.en}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px">No tones needed — e.g. <strong>nihao</strong></div>
+      </div>
+      <input class="winp" id="wi" placeholder="Type pinyin…" onkeydown="if(event.key==='Enter')checkW()">
+      <div class="wres" id="wr"></div>
+      <button class="wbtn" onclick="checkW()">Check ✓</button>
+      <button id="wn" style="display:none;width:100%;margin-top:7px;padding:10px;background:var(--teal);color:#fff;border:none;border-radius:9px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer" onclick="nextW()">Next →</button>
+    </div>`;
+  document.getElementById('wi').focus();
+}
+function checkW(){
+  const inp=stripT(document.getElementById('wi').value.trim());
+  const w=WWORDS[wIdx];const ok=w.accept.some(a=>stripT(a)===inp);
+  if(ok)wSc++;
+  const res=document.getElementById('wr');res.style.display='block';res.className='wres '+(ok?'ok':'err');
+  res.innerHTML=ok?`✅ <strong>${w.py}</strong> <span style="font-family:'Noto Sans SC',sans-serif">(${w.zh})</span>`:`❌ Answer: <strong>${w.py}</strong> <span style="font-family:'Noto Sans SC',sans-serif">(${w.zh})</span>`;
+  document.getElementById('wi').disabled=true;document.querySelector('.wbtn').disabled=true;document.getElementById('wn').style.display='block';sp(w.zh);
+}
+function nextW(){
+  wIdx++;
+  if(wIdx>=WWORDS.length){wDone=true;const pct=Math.round(wSc/WWORDS.length*100);SC.write=pct;saveSC();markNav('writing');
+    document.getElementById('writeArea').innerHTML=`<div class="qcard" style="text-align:center;padding:28px"><div style="font-size:44px">✍️</div><div style="font-size:26px;font-weight:900;color:var(--purple);margin:8px 0">${pct}%</div><div style="color:var(--muted);font-weight:700">${wSc}/${WWORDS.length} correct</div><button onclick="wDone=false;initWrite()" class="cbtn" style="background:var(--purple);color:#fff;margin-top:12px">🔄 Retry</button></div>`;return;
+  }renderWQ();
+}
+
+// ── HANZI SECTION ─────────────────────────────────────────
+const HANZI=[
+  {zh:'你',py:'nǐ',en:'You',st:7,et:'Person radical 亻+ phonetic 尔. The left 亻(person) shows this is about human interaction — addressing another person.'},
+  {zh:'好',py:'hǎo',en:'Good',st:6,et:'Woman 女 + child 子. A woman and child together = goodness and harmony. Chinese concept of "good" is fundamentally relational.'},
+  {zh:'大',py:'dà',en:'Big / great',st:3,et:'A person (人) with arms stretched wide open showing vastness. Person + open arms = big. One of the simplest and oldest characters.'},
+  {zh:'家',py:'jiā',en:'Home / family',st:10,et:'A pig 豕 under a roof 宀. Ancient homes had pigs = wealth. Home = roof + livestock. Also in 大家 (everyone = big family).'},
+  {zh:'学',py:'xué',en:'Study / learn',st:8,et:'Child 子 beneath a teacher\'s guiding hands and a roof. The architecture of learning: institution + instruction + child.'},
+  {zh:'生',py:'shēng',en:'Born / student',st:5,et:'A plant 屮 growing from earth 土. Life emerging upward. 学生 = learning-life = student. Knowledge growth mirrors life growth.'},
+  {zh:'老',py:'lǎo',en:'Old / elder',st:6,et:'Old person with long white hair 耂 above earth 土. Age rooted in earth. In 老师 (teacher) — the wise elder who teaches.'},
+  {zh:'师',py:'shī',en:'Teacher / master',st:6,et:'Originally soldiers under a commander\'s flag. A master who leads and directs. The teacher as one who commands knowledge.'},
+  {zh:'谢',py:'xiè',en:'Thank / grateful',st:17,et:'Speech radical 讠(言) + 射 (bestow). Originally "to bestow with words" — verbal gratitude given as a gift.'},
+  {zh:'再',py:'zài',en:'Again / once more',st:6,et:'A cross structure above a horizontal base — repetition and continuation. 再见 = see again = goodbye. The optimistic farewell.'},
+];
+
+function hshowTab(t,btn){
+  ['learn','practice','test'].forEach(id=>{document.getElementById('hpane-'+id).style.display='none';});
+  document.querySelectorAll('.htab').forEach(b=>b.classList.remove('hon'));
+  document.getElementById('hpane-'+t).style.display='block';
+  btn.classList.add('hon');
+  if(t==='practice'){buildHanziStrip();buildPanel(APP.curHanzi);}
+  if(t==='test'){buildHanziTest();}
+}
+
+function initHanzi(){
+  buildEtymGrid();
+  buildHanziStrip();
+}
+
+function buildEtymGrid(){
+  document.getElementById('etymGrid').innerHTML=HANZI.map((h,i)=>`
+    <div style="background:var(--card);border:1px solid var(--border);border-top:3px solid var(--gold);border-radius:7px;padding:14px;cursor:pointer;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow)'" onmouseout="this.style.transform='';this.style.boxShadow=''" onclick="goToPractice(${i})">
+      <div style="font-family:'Noto Sans SC',sans-serif;font-size:38px;font-weight:900;color:var(--ink);margin-bottom:4px">${h.zh}</div>
+      <div style="font-size:12px;color:var(--blue);font-weight:700;margin-bottom:2px">${h.py}</div>
+      <div style="font-size:11px;font-weight:700;margin-bottom:7px">${h.en} · ${h.st} strokes</div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.5;font-style:italic">${h.et}</div>
+      <div style="margin-top:9px;font-size:10px;font-weight:800;color:var(--blue)">→ Click to practise writing</div>
+    </div>`).join('');
+}
+
+function goToPractice(i){
+  APP.curHanzi=i;
+  const tabs=document.querySelectorAll('.htab');
+  hshowTab('practice',tabs[1]);
+}
+
+function buildHanziStrip(){
+  document.getElementById('charStrip').innerHTML=HANZI.map((h,i)=>`
+    <div class="hbtn ${i===APP.curHanzi?'hon':''} ${APP.htDone[i]?'hdone':''}" onclick="selectChar(${i})">
+      <div class="hbtn-tk">${APP.htDone[i]?'✅':''}</div>
+      <div class="hbtn-zh">${h.zh}</div>
+      <div class="hbtn-py">${h.py}</div>
+    </div>`).join('');
+}
+
+function selectChar(i){
+  APP.curHanzi=i;
+  APP.writers={};APP.quizOn={};
+  buildHanziStrip();
+  buildPanel(i);
+  document.getElementById('practicePanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function buildPanel(i){
+  const h=HANZI[i];
+  const chars=[...h.zh];
+  const boxes=chars.map((ch,ci)=>`
+    <div class="writer-unit">
+      <div class="wu-lbl">${chars.length>1?'Char '+(ci+1)+': '+ch:h.zh}</div>
+      <div class="wu-box"><div id="hw${ci}"></div></div>
+      <div class="wu-msg hide" id="wm${ci}"></div>
+    </div>`).join('');
+
+  document.getElementById('practicePanel').innerHTML=`
+    <div class="hw-panel">
+      <div class="hw-head">
+        <div class="hw-zh">${h.zh}</div>
+        <div class="hw-info">
+          <div class="hw-py">${h.py}</div>
+          <div class="hw-en">${h.en}</div>
+          <div class="hw-tag">Lesson 1 · ${h.st} strokes</div>
+          <div class="hw-et">${h.et}</div>
+        </div>
+      </div>
+      <div class="hw-ctrl">
+        <button class="hcbtn hc-a" id="btnA" disabled onclick="doAnim()">▶ Animate</button>
+        <button class="hcbtn hc-q" id="btnQ" disabled onclick="doQuiz()">✏️ Practice</button>
+        <button class="hcbtn hc-h" id="btnH" disabled onclick="doHint()">💡 Hint</button>
+        <button class="hcbtn hc-r" id="btnR" disabled onclick="doReset()">🔄 Reset</button>
+        <div class="stroke-ct">✏️ ${h.st} strokes</div>
+      </div>
+      <div class="writer-area">${boxes}</div>
+      <div class="hw-bot">
+        <button class="hcbtn hc-d" onclick="setCharDone(${i})">✅ Mark Done</button>
+        <button class="hcbtn hc-r" onclick="prevChar()">← Prev</button>
+        <button class="hcbtn hc-n" onclick="nextChar()">Next →</button>
+        <span style="font-size:11px;font-weight:700;color:var(--muted);margin-left:auto">${i+1}/${HANZI.length}</span>
+      </div>
+    </div>`;
+
+  // Show loading
+  for(var _i=0;_i<chars.length;_i++) setMsg(_i,'tip','⏳ Loading stroke data…');
+
+  setTimeout(function(){createWriters(chars);},300);
+}
+
+function setMsg(ci,cls,txt){var el=document.getElementById('wm'+ci);if(!el)return;el.className='wu-msg '+cls;el.textContent=txt;}
+
+function createWriters(chars){
+  var done=0,total=chars.length;
+  function oneDone(){done++;if(done>=total)enableBtns();}
+  chars.forEach(function(ch,ci){
+    var target=document.getElementById('hw'+ci);
+    if(!target||typeof HanziWriter==='undefined'){oneDone();return;}
+    fetch('https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0.1/'+ch+'.json')
+      .then(function(r){if(!r.ok)throw new Error();return r.json();})
+      .catch(function(){return fetch('https://unpkg.com/hanzi-writer-data@2.0/'+ch+'.json').then(function(r){return r.json();});})
+      .then(function(charData){
+        try{
+          var w=HanziWriter.create(target,ch,{
+            width:150,height:150,padding:16,
+            showOutline:true,showCharacter:false,
+            strokeColor:'#1a1a2e',radicalColor:'#c0392b',
+            outlineColor:'rgba(0,0,0,0.08)',
+            drawingColor:'#1d6fa8',drawingWidth:4,
+            strokeAnimationSpeed:0.8,delayBetweenStrokes:300,
+            highlightOnComplete:true,highlightColor:'#0d9488',
+            charDataLoader:function(c,onLoad){onLoad(charData);}
+          });
+          APP.writers[ci]=w;
+          setMsg(ci,'hide','');
+          oneDone();
+        }catch(e){showFallback(target,ch);oneDone();}
+      })
+      .catch(function(){showFallback(target,ch);oneDone();});
+  });
+  setTimeout(enableBtns,8000);
+}
+
+function showFallback(el,ch){el.innerHTML='<div style="width:150px;height:150px;display:flex;align-items:center;justify-content:center;font-family:\'Noto Sans SC\',sans-serif;font-size:88px;font-weight:900;color:rgba(26,26,46,0.12)">'+ch+'</div>';}
+function enableBtns(){['btnA','btnQ','btnH','btnR'].forEach(function(id){var b=document.getElementById(id);if(b){b.disabled=false;}});}
+function disableBtns(){['btnA','btnQ','btnH','btnR'].forEach(function(id){var b=document.getElementById(id);if(b){b.disabled=true;}});}
+
+function doAnim(){
+  APP.quizOn={};
+  Object.keys(APP.writers).forEach(function(ci){
+    var w=APP.writers[ci];var cii=parseInt(ci);
+    try{w.animateCharacter({onComplete:function(){setMsg(cii,'tip','✅ Done! Click ✏️ Practice to write it yourself.');}});setMsg(cii,'tip','▶ Watch the stroke order carefully…');}
+    catch(e){setMsg(cii,'bad','⚠️ Error. Try Reset then Animate.');}
+  });
+}
+
+function doQuiz(){
+  APP.quizOn={};
+  Object.keys(APP.writers).forEach(function(ci){
+    var w=APP.writers[ci];var cii=parseInt(ci);
+    try{
+      APP.quizOn[cii]=true;
+      w.quiz({
+        onMistake:function(){setMsg(cii,'bad','❌ Wrong stroke! Click 💡 Hint for help.');},
+        onCorrectStroke:function(){setMsg(cii,'tip','✓ Correct! Keep going…');},
+        onComplete:function(){APP.quizOn[cii]=false;setMsg(cii,'ok','🎉 Perfect! All strokes correct!');setCharDone(APP.curHanzi);}
+      });
+      setMsg(cii,'tip','✏️ Draw the strokes in the correct order…');
+    }catch(e){setMsg(cii,'bad','⚠️ Error. Click Reset then try again.');}
+  });
+}
+
+function doHint(){
+  Object.keys(APP.writers).forEach(function(ci){
+    var w=APP.writers[ci];var cii=parseInt(ci);
+    if(!APP.quizOn[cii]){
+      try{
+        APP.quizOn[cii]=true;
+        w.quiz({
+          onMistake:function(){setMsg(cii,'bad','❌ Wrong stroke — try again!');},
+          onCorrectStroke:function(){setMsg(cii,'tip','✓ Correct stroke!');},
+          onComplete:function(){APP.quizOn[cii]=false;setMsg(cii,'ok','🎉 Perfect!');setCharDone(APP.curHanzi);}
+        });
+        setTimeout(function(){
+          try{w.showHint();setMsg(cii,'tip','💡 Green stroke = next to draw. Trace it!');}
+          catch(e2){setMsg(cii,'tip','💡 Quiz started — draw the first stroke!');}
+        },600);
+      }catch(e){setMsg(cii,'bad','⚠️ Error. Click Reset then try again.');}
+    }else{
+      try{w.showHint();setMsg(cii,'tip','💡 Green = next stroke. Trace it!');}
+      catch(e){setMsg(cii,'bad','⚠️ Hint failed. Reset → Practice → Hint.');}
+    }
+  });
+}
+
+function doReset(){
+  APP.quizOn={};APP.writers={};
+  var chars=[...HANZI[APP.curHanzi].zh];
+  chars.forEach(function(ch,ci){setMsg(ci,'hide','');var t=document.getElementById('hw'+ci);if(t)t.innerHTML='';});
+  disableBtns();
+  setTimeout(function(){createWriters(chars);},200);
+}
+
+function setCharDone(i){APP.htDone[i]=true;buildHanziStrip();}
+function prevChar(){if(APP.curHanzi>0){APP.curHanzi--;APP.writers={};APP.quizOn={};buildHanziStrip();buildPanel(APP.curHanzi);}}
+function nextChar(){if(APP.curHanzi<HANZI.length-1){APP.curHanzi++;APP.writers={};APP.quizOn={};buildHanziStrip();buildPanel(APP.curHanzi);}}
+
+// ── HANZI TEST ─────────────────────────────────────────────
+function buildHanziTest(){
+  if(APP.tDone)return;
+  APP.tPool=[...HANZI].sort(()=>Math.random()-.5);
+  APP.tIdx=0;APP.tSc=0;
+  renderHanziTestQ();
+}
+
+function renderHanziTestQ(){
+  const w=APP.tPool[APP.tIdx];
+  const pct=Math.round(APP.tIdx/APP.tPool.length*100);
+  document.getElementById('hanziTestArea').innerHTML=`
+    <div class="qcard">
+      <div class="qmeta"><span>Q${APP.tIdx+1}/${APP.tPool.length}</span><span style="color:var(--teal)">✅${APP.tSc} correct</span></div>
+      <div class="qprog"><div class="qpf" style="width:${pct}%"></div></div>
+      <div style="text-align:center;margin-bottom:14px">
+        <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:8px">Type the Chinese character(s) for:</div>
+        <div style="font-size:30px;font-weight:700;color:var(--blue)">${w.py}</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:3px">${w.en}</div>
+        <div style="font-size:10px;color:var(--purple);margin-top:3px">${w.st} strokes</div>
+      </div>
+      <input class="ht-input" id="hti" placeholder="Type 汉字 here…" onkeydown="if(event.key==='Enter')checkHTest()">
+      <div class="ht-res" id="htr"></div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px">
+        <button class="cbtn br" onclick="checkHTest()">Check ✓</button>
+        <button class="cbtn bs" onclick="peekHTest()">👁 Peek</button>
+      </div>
+      <button class="cbtn hc-n" id="htn" style="display:none;margin:10px auto 0;padding:9px 18px" onclick="nextHTest()">Next →</button>
+    </div>`;
+  setTimeout(()=>{const el=document.getElementById('hti');if(el)el.focus();},100);
+}
+
+function peekHTest(){
+  const w=APP.tPool[APP.tIdx];
+  const r=document.getElementById('htr');r.style.display='block';r.className='ht-res';r.style.background='#fef3c7';r.style.color='#92400e';
+  r.innerHTML=`👁 <span style="font-family:'Noto Sans SC',sans-serif;font-size:28px;font-weight:900">${w.zh}</span> (${w.py})`;
+  document.getElementById('htn').style.display='block';
+}
+
+function checkHTest(){
+  const inp=(document.getElementById('hti').value||'').trim();
+  const w=APP.tPool[APP.tIdx];const ok=inp===w.zh;
+  if(ok)APP.tSc++;
+  const r=document.getElementById('htr');r.style.display='block';r.className='ht-res '+(ok?'ok':'err');
+  r.innerHTML=ok?`✅ <span style="font-family:'Noto Sans SC',sans-serif;font-size:24px;font-weight:900">${w.zh}</span>`:`❌ <span style="font-family:'Noto Sans SC',sans-serif;font-size:24px;font-weight:900">${w.zh}</span> (${w.py})`;
+  document.getElementById('hti').disabled=true;
+  document.querySelector('[onclick="checkHTest()"]').disabled=true;
+  document.getElementById('htn').style.display='block';
+}
+
+function nextHTest(){
+  APP.tIdx++;
+  if(APP.tIdx>=APP.tPool.length){
+    APP.tDone=true;const pct=Math.round(APP.tSc/APP.tPool.length*100);
+    const col=pct>=80?'var(--teal)':pct>=60?'var(--gold)':pct>=40?'var(--blue)':'var(--muted)';
+    const em=pct>=80?'🏆':pct>=60?'🌟':pct>=40?'📚':'🌱';
+    document.getElementById('hanziTestArea').innerHTML=`<div class="qcard" style="text-align:center;padding:28px"><div style="font-size:44px">${em}</div><div style="font-size:28px;font-weight:900;color:${col};margin:8px 0">${pct}%</div><div style="color:var(--muted);font-weight:700">${APP.tSc}/${APP.tPool.length} correct</div><div style="display:flex;gap:8px;justify-content:center;margin-top:14px"><button onclick="APP.tDone=false;buildHanziTest()" class="cbtn bs">🔄 Retry</button><button onclick="hshowTab('practice',document.querySelectorAll('.htab')[1])" class="cbtn bg">✏️ More Practice</button></div></div>`;
+    return;
+  }
+  renderHanziTestQ();
+}
+
+// ── VOCAB QUIZ — 30 questions with L1 core + HSK2 teasers ─────
+const QWORDS=[
+  {zh:'你好',py:'nǐ hǎo',en:'Hello (to one person)',l1:true},
+  {zh:'大家',py:'dàjiā',en:'Everyone / everybody',l1:true},
+  {zh:'好',py:'hǎo',en:'Good / fine / well',l1:true},
+  {zh:'学生',py:'xuésheng',en:'Student',l1:true},
+  {zh:'们',py:'men',en:'Plural suffix for people',l1:true},
+  {zh:'老师',py:'lǎoshī',en:'Teacher',l1:true},
+  {zh:'您',py:'nín',en:'You (respectful / polite)',l1:true},
+  {zh:'你们',py:'nǐmen',en:'You all / you (plural)',l1:true},
+  {zh:'谢谢',py:'xièxie',en:'Thank you',l1:true},
+  {zh:'不客气',py:'bú kèqi',en:"You're welcome",l1:true},
+  {zh:'同学',py:'tóngxué',en:'Classmate / fellow student',l1:true},
+  {zh:'再见',py:'zàijiàn',en:'Goodbye / see you again',l1:true},
+  {zh:'大家好',py:'dàjiā hǎo',en:'Hello everyone!',l1:true},
+  {zh:'您好',py:'nín hǎo',en:'Hello (respectful)',l1:true},
+  {zh:'你们好',py:'nǐmen hǎo',en:'Hello to all of you',l1:true},
+  {zh:'老师好',py:'lǎoshī hǎo',en:'Hello, Teacher!',l1:true},
+  {zh:'同学们',py:'tóngxuémen',en:'Classmates (plural)',l1:true},
+  {zh:'学生们',py:'xuéshengmen',en:'Students (plural)',l1:true},
+  {zh:'名字',py:'míngzi',en:'Name',l1:false},
+  {zh:'叫',py:'jiào',en:'To be called / to call',l1:false},
+  {zh:'请问',py:'qǐngwèn',en:'Excuse me / may I ask?',l1:false},
+  {zh:'认识',py:'rènshi',en:'To know / to meet',l1:false},
+  {zh:'高兴',py:'gāoxìng',en:'Happy / glad',l1:false},
+  {zh:'欢迎',py:'huānyíng',en:'Welcome',l1:false},
+  {zh:'对不起',py:'duìbuqǐ',en:'Sorry / I apologise',l1:false},
+  {zh:'没关系',py:'méi guānxi',en:"It's OK / never mind",l1:false},
+  {zh:'是',py:'shì',en:'To be / is / am / are',l1:false},
+  {zh:'我',py:'wǒ',en:'I / me',l1:false},
+  {zh:'你',py:'nǐ',en:'You (informal)',l1:false},
+  {zh:'他',py:'tā',en:'He / him',l1:false},
+];
+
+var qPool=[],qIdx=0,qSc=0,qDone=false;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+function initQuiz(){
+  if(qDone)return;
+  qPool=shuffle(QWORDS);
+  qIdx=0;qSc=0;
+  renderQQ();
+}
+
+function renderQQ(){
+  const q=qPool[qIdx];
+  const others=shuffle(QWORDS.filter(x=>x.zh!==q.zh)).slice(0,3);
+  const opts=shuffle([q,...others]);
+  const teaser=!q.l1?'<span style="font-size:9px;background:#fff8e1;color:#d97706;font-weight:800;padding:1px 6px;border-radius:6px;margin-left:6px;text-transform:uppercase">HSK2 Teaser</span>':'';
+  document.getElementById('quizArea').innerHTML=`
+    <div class="qprog"><div class="qpf" style="width:${Math.round(qIdx/qPool.length*100)}%"></div></div>
+    <div class="qmeta"><span>Q${qIdx+1}/${qPool.length}</span><span style="color:var(--teal)">✅${qSc}/${qIdx}</span></div>
+    <div class="qcard" style="text-align:center">
+      <div style="font-size:10px;color:var(--muted);font-weight:700;margin-bottom:6px">What does this mean?${teaser}</div>
+      <div style="font-family:'Noto Sans SC',sans-serif;font-size:52px;font-weight:700;color:var(--ink);cursor:pointer;line-height:1.1" onclick="sp('${q.zh}')">
+        ${q.zh}
+      </div>
+      <div style="font-size:15px;color:var(--blue);font-weight:700;margin-top:5px">${q.py}</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:3px">🔊 tap to hear</div>
+    </div>
+    <div class="opts">
+      ${opts.map((o,i)=>`
+        <button class="opt q-opt" id="qo${i}" onclick="ansQ(${i},'${o.zh}','${q.zh}')">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span style="font-size:14px;font-weight:700;color:var(--ink)">${o.en}</span>
+            <span style="font-size:11px;color:var(--blue);font-weight:700">${o.py}</span>
+          </div>
+        </button>`).join('')}
+    </div>`;
+  sp(q.zh);
+}
+
+function ansQ(i,chosen,correct){
+  const cw=QWORDS.find(w=>w.zh===correct);
+  const correctEn=cw?cw.en:'';
+  const opts=document.querySelectorAll('.q-opt');
+  opts.forEach((b,j)=>{
+    b.disabled=true;b.style.cursor='default';
+    const bEn=b.querySelector('span').textContent.trim();
+    if(bEn===correctEn){b.style.background='#d1fae5';b.style.borderColor='#059669';}
+    else if(j===i&&chosen!==correct){b.style.background='#fee2e2';b.style.borderColor='#dc2626';}
+  });
+  if(chosen===correct)qSc++;
+  setTimeout(()=>{
+    qIdx++;
+    if(qIdx>=qPool.length){
+      qDone=true;
+      const pct=Math.round(qSc/qPool.length*100);
+      SC.vocab=pct;saveSC();markNav('quiz');
+      const col=pct>=80?'var(--teal)':pct>=60?'var(--gold)':pct>=40?'var(--blue)':'var(--muted)';
+      const em=pct>=80?'🏆':pct>=60?'🌟':pct>=40?'📚':'🌱';
+      document.getElementById('quizArea').innerHTML=`
+        <div class="qcard" style="text-align:center;padding:32px">
+          <div style="font-size:48px">${em}</div>
+          <div style="font-size:30px;font-weight:900;color:${col};margin:8px 0">${pct}%</div>
+          <div style="color:var(--muted);font-weight:700;margin-bottom:8px">${qSc}/${qPool.length} correct</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:16px">Includes 12 HSK2 teaser words to challenge you!</div>
+          <button onclick="qDone=false;initQuiz()" class="cbtn bl" style="margin:4px">🔄 Try Again</button>
+        </div>`;
+    }else renderQQ();
+  },1000);
+}
+
+// ── SCORES ────────────────────────────────────────────────
+function renderScores(){
+  const secs=[
+    {key:'vocab',label:'🎯 Vocab Quiz',color:'var(--red)'},
+    {key:'listen',label:'🎧 Listening',color:'var(--blue)'},
+    {key:'read',label:'📄 Reading',color:'var(--orange)'},
+    {key:'speak',label:'🎤 Speaking',color:'var(--purple)'},
+    {key:'write',label:'✍️ Writing',color:'var(--teal)'},
+    {key:'culture',label:'🏮 Culture',color:'var(--gold)'},
+  ];
+  const vals=secs.map(s=>SC[s.key]).filter(x=>x!==undefined);
+  const ov=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;
+  const col=ov>=80?'var(--teal)':ov>=60?'var(--gold)':ov>=40?'var(--blue)':'var(--muted)';
+  const em=ov>=80?'🏆':ov>=60?'🌟':ov>=40?'📚':'🌱';
+  document.getElementById('scoresArea').innerHTML=`
+    <div class="sb-card">
+      <div style="font-size:16px;font-weight:900;text-align:center;margin-bottom:14px">HSK2 Lesson 1 Report</div>
+      <div style="text-align:center;margin-bottom:18px">
+        <div style="font-size:58px;font-weight:900;color:${col}">${em} ${ov}%</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:600">${vals.length}/6 sections done</div>
+      </div>
+      ${secs.map(s=>{const v=SC[s.key],pct=v||0;return`
+        <div class="sb-row">
+          <div class="sb-lbl">${s.label}</div>
+          <div class="sb-bar"><div class="sb-fill" style="width:${pct}%;background:${s.color}"></div></div>
+          <div class="sb-sc" style="color:${s.color}">${v!==undefined?v+'%':'—'}</div>
+        </div>`;}).join('')}
+      <div style="display:flex;gap:7px;justify-content:center;margin-top:14px;flex-wrap:wrap">
+        <button onclick="if(confirm('Reset all scores?')){SC={};saveSC();renderScores();}" class="cbtn hc-n" style="font-size:11px">🔄 Reset</button>
+        <button onclick="alert('Lesson 2 coming soon! 加油！💪')" class="cbtn bg" style="font-size:11px">Lesson 2 →</button>
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
