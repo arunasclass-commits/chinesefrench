@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSK 5 · சொல் பயிற்சி · ChineseFrench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;600;700&family=Noto+Serif+SC:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cinnabar:#C8483A;
+    --cinnabar-deep:#A5342A;
+    --ink:#1E1A17;
+    --gold:#C99A3A;
+    --gold-soft:#E4C578;
+    --paper:#F5EFE0;
+    --paper-card:#FBF7EC;
+    --line:#E3D8C2;
+    --muted:#8A7E6A;
+    --green:#3C7A54;
+    --green-soft:#DCEBE0;
+    --red:#B5453B;
+    --red-soft:#F3DCD8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter','Noto Sans Tamil',sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:16px;
+  }
+  .app{width:100%;max-width:460px;}
+
+  .brand{display:flex;align-items:center;justify-content:space-between;padding:6px 4px 14px;}
+  .brand-name{font-weight:600;font-size:15px;letter-spacing:.3px;}
+  .brand-name span{color:var(--cinnabar);}
+  .level-tag{
+    background:var(--ink);color:var(--gold-soft);
+    font-size:12px;font-weight:600;letter-spacing:1px;
+    padding:5px 11px;border-radius:999px;
+  }
+
+  .status{display:flex;align-items:center;gap:12px;padding:0 4px 12px;}
+  .score{font-size:13px;color:var(--muted);font-weight:500;}
+  .score b{color:var(--ink);font-size:15px;}
+  .dots{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end;max-width:180px;}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--line);transition:.25s;}
+  .dot.done{background:var(--gold);}
+  .dot.now{background:var(--cinnabar);transform:scale(1.35);}
+
+  .toggle{
+    display:flex;background:var(--paper-card);border:1px solid var(--line);
+    border-radius:14px;padding:4px;margin-bottom:16px;
+  }
+  .toggle button{
+    flex:1;border:none;background:none;cursor:pointer;
+    font-family:inherit;font-size:14px;font-weight:600;color:var(--muted);
+    padding:9px 6px;border-radius:10px;transition:.2s;
+  }
+  .toggle button.active{background:var(--cinnabar);color:#fff;box-shadow:0 2px 8px rgba(200,72,58,.28);}
+
+  .card{
+    background:var(--paper-card);border:1px solid var(--line);
+    border-radius:20px;padding:26px 20px 22px;text-align:center;
+    box-shadow:0 4px 22px rgba(30,26,23,.05);
+  }
+  .prompt-label{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;font-weight:600;}
+  .prompt-hanzi{font-family:'Noto Serif SC',serif;font-size:56px;font-weight:700;line-height:1.1;color:var(--ink);}
+  .prompt-tamil{font-family:'Noto Sans Tamil',sans-serif;font-size:30px;font-weight:600;line-height:1.3;color:var(--ink);}
+  .prompt-sub{font-size:14px;color:var(--muted);margin-top:8px;min-height:18px;}
+
+  .options{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin:24px 0 8px;}
+  /* hanzi answers: a round ball with a pinyin caption beneath */
+  .options.hanzi .opt{display:flex;flex-direction:column;align-items:center;gap:7px;}
+  .ball{
+    border:2px solid var(--line);background:#fff;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    font-family:'Noto Serif SC',serif;transition:transform .12s, background .2s, border-color .2s, color .2s;
+    color:var(--ink);
+  }
+  .options.hanzi .ball{width:92px;height:92px;border-radius:50%;font-size:34px;font-weight:700;}
+  .ball-py{font-size:13px;font-weight:600;font-style:italic;color:var(--cinnabar);}
+  /* tamil answers: full-width pills */
+  .options.tamil{gap:11px;}
+  .options.tamil .ball{
+    width:100%;border-radius:14px;padding:15px 16px;font-size:19px;font-weight:600;
+    font-family:'Noto Sans Tamil',sans-serif;
+  }
+  .ball:active{transform:scale(.94);}
+  .ball.selected{border-color:var(--gold);background:var(--gold);color:var(--ink);box-shadow:0 4px 14px rgba(201,154,58,.4);}
+  .ball.correct{border-color:var(--green);background:var(--green);color:#fff;box-shadow:0 4px 14px rgba(60,122,84,.35);}
+  .ball.wrong{border-color:var(--red);background:var(--red-soft);color:var(--red);}
+  .ball.locked{pointer-events:none;opacity:.55;}
+  .ball.locked.correct,.ball.locked.wrong{opacity:1;}
+
+  .reveal{
+    margin-top:20px;border-radius:16px;padding:0 18px;text-align:left;
+    background:var(--paper);border:1px dashed var(--line);
+    opacity:0;max-height:0;overflow:hidden;transition:.3s;
+  }
+  .reveal.show{opacity:1;max-height:640px;padding:16px 18px;overflow:auto;}
+  .reveal.right{border-color:var(--green);background:var(--green-soft);}
+  .reveal.miss{border-color:var(--red);background:var(--red-soft);}
+  .rv-verdict{font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;}
+  .rv-verdict.right{color:var(--green);}
+  .rv-verdict.miss{color:var(--red);}
+
+  /* single-answer reveal (汉字 → தமிழ் mode) */
+  .rv-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .rv-hz{font-family:'Noto Serif SC',serif;font-size:30px;font-weight:700;}
+  .rv-py{font-size:16px;color:var(--cinnabar);font-weight:600;font-style:italic;}
+  .rv-ta{font-family:'Noto Sans Tamil',sans-serif;font-size:18px;font-weight:600;margin-top:6px;}
+  .rv-en{font-size:14px;color:var(--muted);margin-top:2px;}
+  .rv-ety{font-size:14px;line-height:1.55;color:var(--ink);margin-top:10px;padding-top:10px;border-top:1px solid var(--line);}
+  .rv-ety b{color:var(--cinnabar-deep);}
+
+  /* four-option etymology list (தமிழ் → 汉字 mode) */
+  .ety-list{display:flex;flex-direction:column;gap:10px;}
+  .ety-item{background:#fff;border:1px solid var(--line);border-left:4px solid var(--line);border-radius:10px;padding:10px 12px;}
+  .ety-item.ans{border-left-color:var(--green);background:#fff;}
+  .ety-head{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:4px;}
+  .ety-hz{font-family:'Noto Serif SC',serif;font-size:24px;font-weight:700;}
+  .ety-py{font-size:14px;color:var(--cinnabar);font-weight:600;font-style:italic;}
+  .ety-ta{font-family:'Noto Sans Tamil',sans-serif;font-size:15px;font-weight:600;color:var(--muted);margin-left:auto;}
+  .ety-txt{font-size:13.5px;line-height:1.5;color:var(--ink);}
+
+  .cta{
+    width:100%;margin-top:18px;border:none;cursor:pointer;
+    background:var(--cinnabar);color:#fff;font-family:inherit;
+    font-size:17px;font-weight:600;padding:16px;border-radius:16px;
+    box-shadow:0 6px 18px rgba(200,72,58,.3);transition:.2s;
+    display:none;
+  }
+  .cta.show{display:block;}
+  .cta:active{transform:translateY(1px);}
+  .cta.finish{background:var(--ink);box-shadow:0 6px 18px rgba(30,26,23,.3);}
+
+  .done{text-align:center;padding:40px 20px;}
+  .done .big{font-family:'Noto Serif SC',serif;font-size:52px;color:var(--cinnabar);font-weight:700;}
+  .done .msg{font-family:'Noto Sans Tamil',sans-serif;font-size:20px;margin:10px 0 4px;font-weight:600;}
+  .done .sub{color:var(--muted);font-size:15px;margin-bottom:24px;}
+
+  .foot{text-align:center;font-size:11px;color:var(--muted);margin-top:22px;letter-spacing:.3px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="brand">
+    <div class="brand-name">Chinese<span>French</span> · HSK 5</div>
+    <div class="level-tag">சொல் பயிற்சி</div>
+  </div>
+
+  <div class="status">
+    <div class="score">மதிப்பெண் <b id="scoreVal">0</b> / <span id="scoreTot">0</span></div>
+    <div class="dots" id="dots"></div>
+  </div>
+
+  <div class="toggle" id="toggle">
+    <button data-dir="ta2hz" class="active">தமிழ் → 汉字</button>
+    <button data-dir="hz2ta">汉字 → தமிழ்</button>
+  </div>
+
+  <div id="quiz"></div>
+
+  <div class="foot">28 HSK 5 competency tasks · Tamil-medium · ChineseFrench.in</div>
+</div>
+
+<script>
+/* ---------------------------------------------------------------
+   VOCAB DATA — edit freely.
+   ta  = Tamil gloss (a starting point; tune to your register)
+   ety = character-breakdown mnemonic (learner-friendly, not strict
+         paleography — pick the story that helps recall)
+   --------------------------------------------------------------- */
+const VOCAB = [
+  {hz:"保护", py:"bǎohù",   en:"to protect",          ta:"பாதுகாத்தல்",
+   ety:"<b>保</b> = person 亻carrying a child → to keep safe · <b>护</b> = hand 扌+ 户 door → to guard. Guard + shield."},
+  {hz:"环境", py:"huánjìng",en:"environment",         ta:"சூழல்",
+   ety:"<b>环</b> = jade 王 ring → to encircle · <b>境</b> = earth 土 + 竟 boundary → a bordered area. What surrounds you."},
+  {hz:"责任", py:"zérèn",   en:"responsibility",      ta:"பொறுப்பு",
+   ety:"<b>责</b> = 贝 money/demand → a debt owed · <b>任</b> = person 亻+ 壬 → to bear, to appoint. A duty you carry."},
+  {hz:"熟悉", py:"shúxī",   en:"familiar with",       ta:"பரிச்சயமான",
+   ety:"<b>熟</b> = fire 灬 → cooked, ripe, fully known · <b>悉</b> = heart 心 + 釆 to distinguish → known in detail."},
+  {hz:"骄傲", py:"jiāo'ào", en:"proud",               ta:"பெருமை",
+   ety:"<b>骄</b> = horse 马 → a proud, spirited steed · <b>傲</b> = person 亻+ 敖 → haughty. Proud, or arrogant."},
+  {hz:"效果", py:"xiàoguǒ", en:"effect / result",     ta:"விளைவு",
+   ety:"<b>效</b> = 攵 action + 交 → to bring about · <b>果</b> = tree bearing fruit → outcome. The fruit of an action."},
+  {hz:"表达", py:"biǎodá",  en:"to express",          ta:"வெளிப்படுத்துதல்",
+   ety:"<b>表</b> = the outer side of a garment 衣 → to show outwardly · <b>达</b> = 辶 move + 大 → to reach. Make it come out."},
+  {hz:"判断", py:"pànduàn", en:"to judge / determine",ta:"தீர்மானித்தல்",
+   ety:"<b>判</b> = knife 刂 + 半 half → to cut apart · <b>断</b> = axe 斤 cutting threads → to sever. Cut it and decide."},
+  {hz:"观念", py:"guānniàn",en:"concept / notion",    ta:"கருத்து",
+   ety:"<b>观</b> = 见 to see → to view · <b>念</b> = 今 now + 心 heart → the thought held now. A viewed thought."},
+  {hz:"经营", py:"jīngyíng",en:"to run (a business)", ta:"நிர்வகித்தல்",
+   ety:"<b>经</b> = silk 纟warp threads → to pass through, manage · <b>营</b> = a camp → to operate. To manage & run."},
+  {hz:"竞争", py:"jìngzhēng",en:"competition",        ta:"போட்டி",
+   ety:"<b>竞</b> = two people 立立 racing side by side · <b>争</b> = two hands pulling one thing → to contend over it."},
+  {hz:"结构", py:"jiégòu",  en:"structure",           ta:"கட்டமைப்பு",
+   ety:"<b>结</b> = silk 纟+ 吉 → to tie a knot, bind · <b>构</b> = wood 木 + 勾 → to frame a building. A bound framework."},
+  {hz:"精神", py:"jīngshén",en:"spirit / vigour",     ta:"மனவலிமை",
+   ety:"<b>精</b> = rice 米 refined 青 → the fine essence · <b>神</b> = 礻spirit + 申 lightning → a deity. Refined life-force."},
+  {hz:"专业", py:"zhuānyè", en:"profession / major",  ta:"தொழில்முறை",
+   ety:"<b>专</b> = a hand turning a spindle → focused, specialised · <b>业</b> = a hung bell-rack → work, trade. Specialised work."},
+  {hz:"总结", py:"zǒngjié", en:"to summarise",        ta:"சுருக்கமாகக் கூறுதல்",
+   ety:"<b>总</b> = silk 纟gathering all threads → overall · <b>结</b> = 纟+ 吉 → to tie up, conclude. Gather it & tie it off."}
+];
+
+const QUESTIONS = 10;
+const OPTIONS   = 4;
+
+let dir = "ta2hz";
+let deck = [], idx = 0, score = 0, locked = false;
+
+const $ = id => document.getElementById(id);
+const shuffle = a => a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+
+function buildDeck(){
+  const pool = shuffle(VOCAB).slice(0, Math.min(QUESTIONS, VOCAB.length));
+  deck = pool.map(ans=>{
+    const distract = shuffle(VOCAB.filter(v=>v.hz!==ans.hz)).slice(0, OPTIONS-1);
+    return {ans, opts: shuffle([ans, ...distract])};
+  });
+  idx = 0; score = 0;
+}
+
+function renderDots(){
+  $("dots").innerHTML = deck.map((_,i)=>{
+    const c = i<idx ? "done" : (i===idx ? "now" : "");
+    return `<div class="dot ${c}"></div>`;
+  }).join("");
+}
+
+function render(){
+  $("scoreVal").textContent = score;
+  $("scoreTot").textContent = deck.length;
+  renderDots();
+
+  if(idx >= deck.length){ renderDone(); return; }
+  locked = false;
+  const q = deck[idx];
+  const askHanzi = dir==="ta2hz";
+
+  const promptHTML = askHanzi
+    ? `<div class="prompt-tamil">${q.ans.ta}</div><div class="prompt-sub">${q.ans.en}</div>`
+    : `<div class="prompt-hanzi">${q.ans.hz}</div><div class="prompt-sub">${q.ans.py}</div>`;
+
+  const optClass = askHanzi ? "hanzi" : "tamil";
+  const optsHTML = askHanzi
+    ? q.opts.map((o,i)=>`<div class="opt"><button class="ball" data-i="${i}">${o.hz}</button><span class="ball-py">${o.py}</span></div>`).join("")
+    : q.opts.map((o,i)=>`<button class="ball" data-i="${i}">${o.ta}</button>`).join("");
+
+  $("quiz").innerHTML = `
+    <div class="card">
+      <div class="prompt-label">${askHanzi ? "எந்த 汉字?" : "இதன் பொருள்?"}</div>
+      ${promptHTML}
+      <div class="options ${optClass}" id="options">${optsHTML}</div>
+      <div class="reveal" id="reveal"></div>
+    </div>
+    <button class="cta" id="cta"></button>
+  `;
+
+  document.querySelectorAll(".ball").forEach(b=>{
+    b.addEventListener("click", ()=>choose(parseInt(b.dataset.i)));
+  });
+  $("cta").addEventListener("click", next);
+}
+
+function choose(i){
+  if(locked) return;
+  locked = true;
+  const q = deck[idx];
+  const askHanzi = dir==="ta2hz";
+  const chosen = q.opts[i];
+  const isRight = chosen.hz === q.ans.hz;
+  if(isRight) score++;
+
+  document.querySelectorAll(".ball").forEach((b,bi)=>{
+    b.classList.add("locked");
+    const o = q.opts[bi];
+    if(o.hz === q.ans.hz) b.classList.add("correct");
+    else if(bi===i)       b.classList.add("wrong");
+  });
+
+  const rv = $("reveal");
+  rv.className = "reveal show " + (isRight ? "right" : "miss");
+  const verdict = `<div class="rv-verdict ${isRight?"right":"miss"}">${isRight ? "✓ சரி!" : "✗ மீண்டும் பார்"}</div>`;
+
+  if(askHanzi){
+    // show pinyin + etymology for ALL four options
+    const list = q.opts.map(o=>{
+      const isAns = o.hz===q.ans.hz;
+      return `<div class="ety-item ${isAns?"ans":""}">
+        <div class="ety-head">
+          <span class="ety-hz">${o.hz}</span>
+          <span class="ety-py">${o.py}</span>
+          <span class="ety-ta">${o.ta}</span>
+        </div>
+        <div class="ety-txt">${o.ety}</div>
+      </div>`;
+    }).join("");
+    rv.innerHTML = verdict + `<div class="ety-list">${list}</div>`;
+  } else {
+    // single-answer reveal + its etymology
+    rv.innerHTML = verdict + `
+      <div class="rv-row"><span class="rv-hz">${q.ans.hz}</span><span class="rv-py">${q.ans.py}</span></div>
+      <div class="rv-ta">${q.ans.ta}</div>
+      <div class="rv-en">${q.ans.en}</div>
+      <div class="rv-ety">${q.ans.ety}</div>`;
+  }
+
+  const cta = $("cta");
+  const last = idx === deck.length-1;
+  cta.textContent = last ? "முடிவைப் பார் →" : "அடுத்து →";
+  cta.className = "cta show" + (last ? " finish" : "");
+  $("scoreVal").textContent = score;
+}
+
+function next(){ idx++; render(); }
+
+function renderDone(){
+  const pct = Math.round(score/deck.length*100);
+  const msg = pct>=80 ? "மிகச் சிறப்பு! 太棒了" : pct>=50 ? "நல்ல முயற்சி!" : "மீண்டும் பயிற்சி செய்வோம்";
+  $("quiz").innerHTML = `
+    <div class="card done">
+      <div class="big">${score}/${deck.length}</div>
+      <div class="msg">${msg}</div>
+      <div class="sub">${pct}% சரியாக</div>
+      <button class="cta finish show" id="again">மீண்டும் விளையாடு ↺</button>
+    </div>`;
+  $("again").addEventListener("click", ()=>{ buildDeck(); render(); });
+  renderDots();
+}
+
+$("toggle").addEventListener("click", e=>{
+  const btn = e.target.closest("button"); if(!btn) return;
+  dir = btn.dataset.dir;
+  document.querySelectorAll("#toggle button").forEach(b=>b.classList.toggle("active", b===btn));
+  buildDeck(); render();
+});
+
+buildDeck();
+render();
+</script>
+</body>
+</html>
