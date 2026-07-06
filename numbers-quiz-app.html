@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chinese Numbers 1–100 Quiz — Characters Only | ChineseFrench</title>
+<meta name="description" content="Test yourself on Chinese numbers 1–100: read the characters (no pinyin!) and pick the right number. Free quiz by ChineseFrench, Chennai.">
+<link rel="canonical" href="https://apps.chinesefrench.in/numbers/">
+<meta property="og:title" content="Chinese Numbers 1–100 Quiz — Characters Only">
+<meta property="og:description" content="Can you read 九十九 without pinyin? Free numbers quiz from ChineseFrench.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://apps.chinesefrench.in/numbers/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0F2027; --panel:#16323D; --line:#27495A;
+    --jade:#3DDC97; --gold:#FFC85C; --red:#FF6F61;
+    --txt:#F2F7F5; --mut:#8FAAB5;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; height:100%;}
+  body{background:var(--bg); color:var(--txt);
+    font-family:"Outfit","Segoe UI",system-ui,sans-serif;
+    display:flex; flex-direction:column; overflow:hidden;}
+
+  header{display:flex; align-items:center; justify-content:space-between;
+    padding:12px 16px; border-bottom:1px solid var(--line);}
+  header .t{font-weight:800; font-size:17px;}
+  header .t small{display:block; font-size:11px; color:var(--mut); font-weight:500;}
+  .hud{display:flex; gap:8px;}
+  .chipS{background:var(--panel); border:1px solid var(--line); border-radius:999px;
+    padding:5px 12px; font-weight:800; font-size:13px;}
+  .chipS.gold{color:var(--gold);} .chipS.jade{color:var(--jade);}
+
+  main{flex:1; overflow-y:auto; padding:18px 16px 30px; display:flex; flex-direction:column;}
+  .progress{height:6px; background:var(--panel); border-radius:99px; overflow:hidden; margin-bottom:16px;}
+  .progress div{height:100%; background:var(--jade); width:0%; transition:width .3s;}
+
+  .qcard{background:var(--panel); border:1px solid var(--line); border-radius:22px;
+    padding:30px 16px; text-align:center; margin-bottom:16px;}
+  .hz{font-size:60px; font-weight:700; line-height:1.2;}
+  .qcard .row{margin-top:14px;}
+
+  .row{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
+  .btn{border:none; border-radius:12px; padding:11px 16px; font-size:14px; font-weight:800;
+    font-family:inherit; cursor:pointer; color:#0F2027; background:var(--gold);}
+  .btn.ghost{background:transparent; color:var(--txt); border:1.5px solid var(--line);}
+  .btn:active{transform:translateY(1px);}
+
+  .opts{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .opt{background:var(--panel); border:2px solid var(--line); border-radius:16px;
+    padding:18px 8px; font-size:26px; font-weight:800; cursor:pointer; text-align:center;}
+  .opt.good{border-color:var(--jade); background:#143b2e; color:var(--jade);}
+  .opt.bad{border-color:var(--red); background:#3a2330; color:var(--red);}
+
+  .endcard{background:var(--panel); border:1px solid var(--line); border-radius:22px;
+    padding:30px 16px; text-align:center;}
+  .endcard .big{font-size:54px;}
+  .endcard .msg{font-size:16px; color:var(--mut); margin:8px 0 16px; font-weight:600;}
+  .endcard .scoreline{font-size:22px; font-weight:800; color:var(--gold);}
+
+  .toast{position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+    background:var(--jade); color:#0F2027; font-size:13px; font-weight:800;
+    padding:9px 16px; border-radius:999px; opacity:0; transition:opacity .25s;
+    pointer-events:none; max-width:88%; text-align:center; z-index:9;}
+  .toast.show{opacity:1;}
+  footer{padding:10px; text-align:center; font-size:11px; color:#5d7682;}
+  footer a{color:var(--jade); text-decoration:none; font-weight:700;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="t">数字 Numbers 1–100<small>ChineseFrench · characters only, no pinyin!</small></div>
+  <div class="hud">
+    <div class="chipS jade">🔥 <span id="streak">0</span></div>
+    <div class="chipS gold">⚡ <span id="pts">0</span></div>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<div class="toast" id="toast"></div>
+
+<footer>Made by <a href="https://chinesefrench.in">ChineseFrench</a> · Chinese, French &amp; German classes in Chennai &amp; online</footer>
+
+<script>
+/* number → Chinese characters, 1–100 */
+const DIG = ["零","一","二","三","四","五","六","七","八","九"];
+function numToCn(n){
+  if(n === 100) return "一百";
+  const t = Math.floor(n/10), o = n%10;
+  let s = "";
+  if(t >= 2) s += DIG[t] + "十";
+  else if(t === 1) s += "十";
+  if(o > 0) s += DIG[o];
+  if(n === 0) s = "零";
+  return s;
+}
+
+/* audio (guarded, Android-safe) */
+const SYNTH = ("speechSynthesis" in window) ? window.speechSynthesis : null;
+let zhVoice = null;
+function pickVoice(){
+  if(!SYNTH) return;
+  const vs = SYNTH.getVoices();
+  zhVoice = vs.find(v=>v.lang==="zh-CN") || vs.find(v=>v.lang && v.lang.toLowerCase().startsWith("zh")) || null;
+}
+if(SYNTH){ SYNTH.onvoiceschanged = pickVoice; pickVoice(); }
+function say(text){
+  if(!SYNTH || !("SpeechSynthesisUtterance" in window)) return;
+  SYNTH.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "zh-CN"; u.volume = 1; u.rate = 0.85;
+  pickVoice(); if(zhVoice) u.voice = zhVoice;
+  setTimeout(()=>{ SYNTH.speak(u); SYNTH.resume(); }, 150);
+}
+
+/* game state */
+const ROUND_LEN = 15;
+let order = [], qIdx = 0, pts = 0, streak = 0, best = 0, firstTry = true, correctCount = 0;
+const main = document.getElementById("main");
+
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove("show"), 1800);
+}
+function shuffle(a){ return a.slice().sort(()=>Math.random()-0.5); }
+
+function startRound(){
+  order = shuffle(Array.from({length:100}, (_,i)=>i+1)).slice(0, ROUND_LEN);
+  qIdx = 0; correctCount = 0; streak = 0;
+  document.getElementById("streak").textContent = streak;
+  nextQ();
+}
+
+function nextQ(){
+  if(qIdx >= ROUND_LEN){ endRound(); return; }
+  const n = order[qIdx];
+  const hz = numToCn(n);
+  /* distractors: близкие numbers so reading must be precise */
+  const wrongSet = new Set();
+  const tricks = [n%10===0? n+ (n>=90?-9:9) : (Math.floor(n/10)*10 + (n%10===0?5:0)) , n+10, n-10, n+1, n-1,
+                  (n%10)*10 + Math.floor(n/10)];
+  for(const w of shuffle(tricks)){
+    if(w >= 1 && w <= 100 && w !== n) wrongSet.add(w);
+    if(wrongSet.size === 3) break;
+  }
+  while(wrongSet.size < 3){
+    const w = 1 + Math.floor(Math.random()*100);
+    if(w !== n) wrongSet.add(w);
+  }
+  const opts = shuffle([n, ...wrongSet]);
+  firstTry = true;
+  main.innerHTML = `
+    <div class="progress"><div style="width:${(qIdx/ROUND_LEN)*100}%"></div></div>
+    <div class="qcard">
+      <div class="hz">${hz}</div>
+      <div class="row"><button class="btn ghost" id="hear">🔊 Listen</button></div>
+    </div>
+    <div class="opts" id="opts"></div>`;
+  const box = document.getElementById("opts");
+  opts.forEach(o=>{
+    const d = document.createElement("div");
+    d.className = "opt"; d.textContent = o;
+    d.onclick = ()=>{
+      if(o === n){
+        d.classList.add("good");
+        if(firstTry){
+          correctCount++; streak++; best = Math.max(best, streak);
+          pts += 2 + Math.min(streak, 5);
+          document.getElementById("pts").textContent = pts;
+          document.getElementById("streak").textContent = streak;
+          if(streak > 0 && streak % 5 === 0) toast("🔥 " + streak + " in a row!");
+        }
+        say(hz);
+        qIdx++;
+        setTimeout(nextQ, 850);
+      } else {
+        firstTry = false; streak = 0;
+        document.getElementById("streak").textContent = streak;
+        d.classList.add("bad");
+        setTimeout(()=>d.classList.remove("bad"), 600);
+      }
+    };
+    box.appendChild(d);
+  });
+  document.getElementById("hear").onclick = ()=>say(hz);
+}
+
+function endRound(){
+  const pct = Math.round((correctCount/ROUND_LEN)*100);
+  const msg = pct === 100 ? "满分! Perfect — you read every number!" :
+              pct >= 80 ? "很好! Excellent reading — almost perfect." :
+              pct >= 50 ? "不错! Good — the tens (十) still need a little practice." :
+              "加油! Keep going — try the round again and watch the 十!";
+  main.innerHTML = `
+    <div class="endcard">
+      <div class="big">${pct===100?"🏆":pct>=80?"🌟":"💪"}</div>
+      <div class="scoreline">${correctCount} / ${ROUND_LEN} first try · ${pct}%</div>
+      <div class="msg">${msg}<br>Best streak this round: 🔥 ${best}</div>
+      <div class="row"><button class="btn" id="again">Play 15 more 🔁</button></div>
+    </div>`;
+  document.getElementById("again").onclick = startRound;
+}
+
+startRound();
+</script>
+</body>
+</html>
