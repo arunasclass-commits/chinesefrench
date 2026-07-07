@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Seven-Stroke Radicals · ChineseFrench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rice:#F4EEE1; --rice-deep:#EBE3D2; --rice-card:#FBF7EE;
+    --ink:#211F1C; --ink-soft:#4A463F;
+    --cinnabar:#D8382A; --cinnabar-soft:#E85D50;
+    --gold:#C0912F; --gold-soft:#DABb6a;
+    --line:rgba(33,31,28,.12); --line-strong:rgba(33,31,28,.22);
+    --shadow:0 12px 40px rgba(33,31,28,.14);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--rice);
+    color:var(--ink);
+    font-family:'Spectral',Georgia,serif;
+    line-height:1.5;
+    min-height:100vh;
+    padding:24px 16px 64px;
+  }
+  .wrap{max-width:960px;margin:0 auto}
+
+  header{text-align:center;margin-bottom:8px}
+  .eyebrow{
+    font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--cinnabar);font-weight:600;margin:0 0 6px
+  }
+  h1{
+    font-family:'Noto Serif SC','Spectral',serif;
+    font-weight:700;font-size:2rem;margin:0;letter-spacing:.01em
+  }
+  h1 .cn{color:var(--cinnabar)}
+  .sub{color:var(--ink-soft);margin:6px 0 0;font-size:.95rem;font-style:italic}
+
+  .tabs{
+    display:flex;gap:6px;justify-content:center;margin:22px auto 26px;
+    background:var(--rice-deep);padding:5px;border-radius:999px;width:max-content;
+    border:1px solid var(--line)
+  }
+  .tab{
+    border:0;background:transparent;cursor:pointer;
+    font-family:inherit;font-size:.95rem;font-weight:600;color:var(--ink-soft);
+    padding:9px 26px;border-radius:999px;transition:.18s
+  }
+  .tab[aria-selected="true"]{background:var(--ink);color:var(--rice)}
+
+  .grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));
+    gap:12px
+  }
+  .tile{
+    position:relative;background:var(--rice-card);border:1px solid var(--line);
+    border-radius:14px;padding:14px 8px 12px;text-align:center;cursor:pointer;
+    transition:.16s;overflow:hidden
+  }
+  .tile:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--line-strong)}
+  .tile .num{position:absolute;top:7px;left:9px;font-size:.66rem;color:var(--ink-soft);opacity:.6}
+  .tile.done::after{
+    content:"✓";position:absolute;top:6px;right:9px;
+    color:var(--gold);font-weight:700;font-size:.85rem
+  }
+  .tile .glyph{
+    font-family:'Noto Serif SC',serif;font-size:2.5rem;line-height:1.1;
+    color:var(--ink);margin:6px 0 4px;display:block
+  }
+  .tile .py{color:var(--cinnabar);font-weight:600;font-size:.9rem}
+  .tile .en{color:var(--ink-soft);font-size:.72rem;margin-top:2px}
+
+  .progress-note{text-align:center;color:var(--ink-soft);font-size:.85rem;margin:0 0 18px;font-style:italic}
+
+  .overlay{
+    position:fixed;inset:0;background:rgba(33,31,28,.42);
+    display:none;align-items:center;justify-content:center;padding:18px;z-index:40
+  }
+  .overlay.open{display:flex}
+  .modal{
+    background:var(--rice-card);border-radius:22px;box-shadow:var(--shadow);
+    width:100%;max-width:380px;padding:20px 20px 22px;position:relative;
+    animation:pop .22s ease
+  }
+  @keyframes pop{from{transform:scale(.94);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal .top{display:flex;align-items:center;justify-content:center;gap:12px;position:relative}
+  .modal .rn{position:absolute;left:0;color:var(--ink-soft);font-size:.8rem}
+  .say{
+    border:0;cursor:pointer;background:var(--cinnabar);color:#fff;
+    font-family:inherit;font-weight:600;font-size:.9rem;
+    padding:6px 14px;border-radius:999px;display:inline-flex;align-items:center;gap:6px
+  }
+  .say:active{background:var(--cinnabar-soft)}
+  .close{
+    position:absolute;right:0;top:-2px;border:0;background:var(--rice-deep);
+    width:32px;height:32px;border-radius:50%;cursor:pointer;color:var(--ink);font-size:1rem
+  }
+  .meaning{text-align:center;margin:12px 0 2px}
+  .meaning .g{font-family:'Noto Serif SC',serif;font-size:1.5rem;vertical-align:middle}
+  .meaning .dash{color:var(--ink-soft);margin:0 8px}
+  .meaning .en{font-weight:600}
+  .meaning .ta{display:block;color:var(--cinnabar);font-size:.9rem;margin-top:3px}
+
+  .canvas-wrap{position:relative;margin:14px 0 6px;border-radius:16px;overflow:hidden;background:var(--rice)}
+  .trace{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:'Noto Serif SC',serif;font-size:180px;color:rgba(33,31,28,.07);
+    pointer-events:none;user-select:none
+  }
+  canvas{display:block;width:100%;height:280px;touch-action:none;position:relative;z-index:1}
+  .m-actions{display:flex;gap:10px;margin-top:10px}
+  .btn{
+    flex:1;border:0;cursor:pointer;font-family:inherit;font-weight:600;font-size:.95rem;
+    padding:12px;border-radius:12px;transition:.15s
+  }
+  .btn.ghost{background:var(--rice-deep);color:var(--ink)}
+  .btn.ghost:active{background:var(--line)}
+  .btn.solid{background:var(--cinnabar);color:#fff}
+  .btn.solid:active{background:var(--cinnabar-soft)}
+  .nav-row{display:flex;justify-content:space-between;margin-top:12px;font-size:.85rem}
+  .nav-row button{background:none;border:0;color:var(--ink-soft);cursor:pointer;font-family:inherit;font-size:.9rem}
+  .nav-row button:hover{color:var(--cinnabar)}
+
+  .test-card{
+    background:var(--rice-card);border:1px solid var(--line);border-radius:20px;
+    padding:26px 22px;max-width:520px;margin:0 auto;box-shadow:0 6px 22px rgba(33,31,28,.06)
+  }
+  .test-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;font-size:.85rem;color:var(--ink-soft)}
+  .barbg{height:6px;background:var(--rice-deep);border-radius:4px;overflow:hidden;margin-bottom:22px}
+  .bar{height:100%;background:var(--gold);width:0;transition:width .3s}
+  .q-prompt{text-align:center;margin-bottom:20px}
+  .q-prompt .big{
+    font-family:'Noto Serif SC',serif;font-size:4.5rem;line-height:1;color:var(--ink);display:block;margin:6px 0
+  }
+  .q-prompt .lbl{color:var(--ink-soft);font-size:.95rem}
+  .q-prompt .askword{font-weight:600;font-size:1.5rem;color:var(--cinnabar);display:block;margin:8px 0}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .opt{
+    border:1px solid var(--line);background:var(--rice);border-radius:14px;
+    padding:16px 12px;cursor:pointer;font-family:inherit;font-size:1.05rem;text-align:center;
+    transition:.14s;color:var(--ink)
+  }
+  .opt .oglyph{font-family:'Noto Serif SC',serif;font-size:2.4rem;display:block}
+  .opt:hover:not(.locked){border-color:var(--cinnabar);transform:translateY(-1px)}
+  .opt.correct{background:#E7F0E4;border-color:#5B8A4E;color:#2f5626}
+  .opt.wrong{background:#FBE4E1;border-color:var(--cinnabar);color:var(--cinnabar)}
+  .opt.locked{cursor:default}
+  .next-btn{margin-top:20px;width:100%}
+  .feedback{text-align:center;margin-top:14px;font-weight:600;min-height:1.4em}
+  .feedback.right{color:#4b7a3f}
+  .feedback.no{color:var(--cinnabar)}
+
+  .result{text-align:center;padding:8px 0}
+  .score-num{font-family:'Noto Serif SC',serif;font-size:4rem;color:var(--cinnabar);line-height:1;margin:4px 0}
+  .score-of{color:var(--ink-soft)}
+  .verdict{font-size:1.15rem;font-weight:600;margin:12px 0 4px}
+  .review{text-align:left;margin:20px 0 0;border-top:1px solid var(--line);padding-top:16px}
+  .review h4{margin:0 0 10px;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+  .rev-item{display:flex;align-items:center;gap:12px;padding:7px 0;border-bottom:1px solid var(--line)}
+  .rev-item .rg{font-family:'Noto Serif SC',serif;font-size:1.8rem;width:44px;text-align:center}
+  .rev-item .rt{font-size:.9rem}
+  .rev-item .rt b{color:var(--cinnabar)}
+
+  .setup{text-align:center}
+  .setup p{color:var(--ink-soft);margin:0 0 18px}
+  .len-row{display:flex;gap:10px;justify-content:center;margin-bottom:22px;flex-wrap:wrap}
+  .len-row button{
+    border:1px solid var(--line);background:var(--rice);border-radius:999px;
+    padding:9px 20px;cursor:pointer;font-family:inherit;font-weight:600;color:var(--ink);transition:.14s
+  }
+  .len-row button[aria-pressed="true"]{background:var(--ink);color:var(--rice);border-color:var(--ink)}
+
+  .hidden{display:none!important}
+  footer{text-align:center;margin-top:44px;color:var(--ink-soft);font-size:.78rem}
+  footer .cn{color:var(--cinnabar);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">ChineseFrench · Kangxi Radicals</p>
+    <h1>Seven-Stroke Radicals <span class="cn">七画部首</span></h1>
+    <p class="sub">The 20 building blocks with exactly seven strokes — trace them, then test yourself.</p>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" id="tab-practice">Practice</button>
+    <button class="tab" role="tab" aria-selected="false" id="tab-test">Test</button>
+  </div>
+
+  <section id="practice">
+    <p class="progress-note" id="progressNote">Tap any radical to trace it. Practised: 0 / 20</p>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="test" class="hidden">
+    <div class="test-card" id="testCard"></div>
+  </section>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="top">
+      <span class="rn" id="mNum">#00</span>
+      <button class="say" id="sayBtn" aria-label="Play pronunciation">🔊 <span id="mPy">pin</span></button>
+      <button class="close" id="closeBtn" aria-label="Close">✕</button>
+    </div>
+    <div class="meaning">
+      <span class="g" id="mGlyph">見</span><span class="dash">—</span><span class="en" id="mEn">meaning</span>
+      <span class="ta" id="mTa">தமிழ்</span>
+    </div>
+    <div class="canvas-wrap">
+      <div class="trace" id="trace">見</div>
+      <canvas id="pad"></canvas>
+    </div>
+    <div class="m-actions">
+      <button class="btn ghost" id="clearBtn">◇ Clear</button>
+      <button class="btn solid" id="wroteBtn">✓ I wrote it!</button>
+    </div>
+    <div class="nav-row">
+      <button id="prevBtn">← Previous</button>
+      <button id="nextBtn">Next →</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Built in-house by <span class="cn">ChineseFrench</span> · Tamil-medium Mandarin in Chennai
+</footer>
+
+<script>
+/* ---------- data: 20 seven-stroke Kangxi radicals (#147–166) ---------- */
+const RADS = [
+  {n:147, ch:'見', py:'jiàn', en:'see',                ta:'பார்'},
+  {n:148, ch:'角', py:'jiǎo', en:'horn / angle',       ta:'கொம்பு'},
+  {n:149, ch:'言', py:'yán',  en:'speech / words',     ta:'சொல்'},
+  {n:150, ch:'谷', py:'gǔ',   en:'valley',             ta:'பள்ளத்தாக்கு'},
+  {n:151, ch:'豆', py:'dòu',  en:'bean',               ta:'பயறு'},
+  {n:152, ch:'豕', py:'shǐ',  en:'pig / swine',        ta:'பன்றி'},
+  {n:153, ch:'豸', py:'zhì',  en:'clawed beast',       ta:'விலங்கு'},
+  {n:154, ch:'貝', py:'bèi',  en:'shell / money',      ta:'சிப்பி'},
+  {n:155, ch:'赤', py:'chì',  en:'red',                ta:'சிவப்பு'},
+  {n:156, ch:'走', py:'zǒu',  en:'walk / run',         ta:'நட'},
+  {n:157, ch:'足', py:'zú',   en:'foot',               ta:'கால்'},
+  {n:158, ch:'身', py:'shēn', en:'body',               ta:'உடல்'},
+  {n:159, ch:'車', py:'chē',  en:'cart / vehicle',     ta:'வண்டி'},
+  {n:160, ch:'辛', py:'xīn',  en:'bitter / pungent',   ta:'காரம்'},
+  {n:161, ch:'辰', py:'chén', en:'morning / time',     ta:'காலை'},
+  {n:162, ch:'辵', py:'chuò', en:'walk / movement',    ta:'நடை'},
+  {n:163, ch:'邑', py:'yì',   en:'city / town',        ta:'நகரம்'},
+  {n:164, ch:'酉', py:'yǒu',  en:'wine vessel',        ta:'மது'},
+  {n:165, ch:'釆', py:'biàn', en:'distinguish',        ta:'வேறுபடுத்து'},
+  {n:166, ch:'里', py:'lǐ',   en:'village / mile',     ta:'கிராமம்'},
+];
+
+const $ = s => document.querySelector(s);
+const done = new Set();
+let current = 0;
+
+const tP = $('#tab-practice'), tT = $('#tab-test');
+tP.onclick = () => switchTab('practice');
+tT.onclick = () => switchTab('test');
+function switchTab(which){
+  const isP = which === 'practice';
+  tP.setAttribute('aria-selected', isP);
+  tT.setAttribute('aria-selected', !isP);
+  $('#practice').classList.toggle('hidden', !isP);
+  $('#test').classList.toggle('hidden', isP);
+  if(!isP) renderTestSetup();
+}
+
+const grid = $('#grid');
+RADS.forEach((r, i) => {
+  const t = document.createElement('div');
+  t.className = 'tile';
+  t.dataset.i = i;
+  t.innerHTML = `<span class="num">#${r.n}</span>
+    <span class="glyph">${r.ch}</span>
+    <span class="py">${r.py}</span>
+    <span class="en">${r.en}</span>`;
+  t.onclick = () => openModal(i);
+  grid.appendChild(t);
+});
+function refreshTiles(){
+  document.querySelectorAll('.tile').forEach(t=>{
+    t.classList.toggle('done', done.has(+t.dataset.i));
+  });
+  $('#progressNote').textContent = `Tap any radical to trace it. Practised: ${done.size} / 20`;
+}
+
+const overlay = $('#overlay'), pad = $('#pad'), ctx = pad.getContext('2d');
+let drawing = false;
+
+function sizeCanvas(){
+  const rect = pad.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  pad.width = rect.width * dpr;
+  pad.height = rect.height * dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.lineJoin = ctx.lineCap = 'round';
+  ctx.lineWidth = 12;
+  ctx.strokeStyle = '#211F1C';
+}
+function openModal(i){
+  current = i;
+  const r = RADS[i];
+  $('#mNum').textContent = '#'+r.n;
+  $('#mPy').textContent = r.py;
+  $('#mGlyph').textContent = r.ch;
+  $('#mEn').textContent = r.en;
+  $('#mTa').textContent = r.ta;
+  $('#trace').textContent = r.ch;
+  overlay.classList.add('open');
+  requestAnimationFrame(()=>{ sizeCanvas(); clearPad(); });
+}
+function closeModal(){ overlay.classList.remove('open'); }
+function clearPad(){ ctx.clearRect(0,0,pad.width,pad.height); }
+
+function pos(e){
+  const rect = pad.getBoundingClientRect();
+  const p = e.touches ? e.touches[0] : e;
+  return {x:p.clientX-rect.left, y:p.clientY-rect.top};
+}
+function start(e){ drawing=true; const {x,y}=pos(e); ctx.beginPath(); ctx.moveTo(x,y); e.preventDefault(); }
+function move(e){ if(!drawing)return; const {x,y}=pos(e); ctx.lineTo(x,y); ctx.stroke(); e.preventDefault(); }
+function end(){ drawing=false; }
+pad.addEventListener('pointerdown', start);
+pad.addEventListener('pointermove', move);
+window.addEventListener('pointerup', end);
+
+$('#clearBtn').onclick = clearPad;
+$('#closeBtn').onclick = closeModal;
+$('#wroteBtn').onclick = () => { done.add(current); refreshTiles();
+  if(current < RADS.length-1){ openModal(current+1); } else { closeModal(); } };
+$('#prevBtn').onclick = () => openModal((current-1+RADS.length)%RADS.length);
+$('#nextBtn').onclick = () => openModal((current+1)%RADS.length);
+overlay.onclick = e => { if(e.target===overlay) closeModal(); };
+window.addEventListener('resize', ()=>{ if(overlay.classList.contains('open')) sizeCanvas(); });
+
+$('#sayBtn').onclick = () => {
+  const r = RADS[current];
+  if(!('speechSynthesis' in window)) return;
+  const u = new SpeechSynthesisUtterance(r.ch);
+  u.lang = 'zh-CN'; u.rate = .8;
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
+};
+
+refreshTiles();
+
+/* ===================== TEST ===================== */
+let quizLen = 10, quiz = [], qi = 0, score = 0, wrongList = [];
+
+function renderTestSetup(){
+  $('#testCard').innerHTML = `
+    <div class="setup">
+      <h3 style="font-family:'Noto Serif SC',serif;margin:0 0 6px">Radical Test</h3>
+      <p>All 20 seven-stroke radicals. Choose your length:</p>
+      <div class="len-row" id="lenRow">
+        <button data-l="10" aria-pressed="true">10 questions</button>
+        <button data-l="15" aria-pressed="false">15 questions</button>
+        <button data-l="20" aria-pressed="false">All 20</button>
+      </div>
+      <button class="btn solid" style="max-width:220px;margin:0 auto;padding:13px 30px" id="startBtn">Start test</button>
+    </div>`;
+  document.querySelectorAll('#lenRow button').forEach(b=>{
+    b.onclick = () => { quizLen=+b.dataset.l;
+      document.querySelectorAll('#lenRow button').forEach(x=>x.setAttribute('aria-pressed', x===b)); };
+  });
+  $('#startBtn').onclick = startQuiz;
+}
+
+function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function startQuiz(){
+  const pool = shuffle(RADS).slice(0, quizLen);
+  quiz = pool.map(r => {
+    const mode = ['meaning','pinyin','pickRad'][Math.random()*3|0];
+    return buildQuestion(r, mode);
+  });
+  qi=0; score=0; wrongList=[];
+  renderQuestion();
+}
+
+function buildQuestion(r, mode){
+  const others = shuffle(RADS.filter(x=>x.n!==r.n));
+  if(mode==='meaning'){
+    const opts = shuffle([r, ...others.slice(0,3)]);
+    return {mode, r, ask:`What does this radical mean?`, show:r.ch, big:true,
+      options:opts.map(o=>({label:o.en, correct:o.n===r.n}))};
+  }
+  if(mode==='pinyin'){
+    const opts = shuffle([r, ...others.slice(0,3)]);
+    return {mode, r, ask:`What is the pinyin of this radical?`, show:r.ch, big:true,
+      options:opts.map(o=>({label:o.py, correct:o.n===r.n}))};
+  }
+  const opts = shuffle([r, ...others.slice(0,3)]);
+  return {mode, r, ask:`Which radical means`, askword:r.en, show:null, big:false,
+    options:opts.map(o=>({glyph:o.ch, correct:o.n===r.n}))};
+}
+
+function renderQuestion(){
+  const q = quiz[qi];
+  const pct = Math.round((qi)/quiz.length*100);
+  let promptHtml = `<div class="q-prompt"><span class="lbl">${q.ask}</span>`;
+  if(q.show) promptHtml += `<span class="big">${q.show}</span>`;
+  if(q.askword) promptHtml += `<span class="askword">"${q.askword}"</span>`;
+  promptHtml += `</div>`;
+
+  const optsHtml = q.options.map((o,idx)=>{
+    const inner = o.glyph ? `<span class="oglyph">${o.glyph}</span>` : o.label;
+    return `<button class="opt" data-idx="${idx}">${inner}</button>`;
+  }).join('');
+
+  $('#testCard').innerHTML = `
+    <div class="test-head"><span>Question ${qi+1} of ${quiz.length}</span><span>Score ${score}</span></div>
+    <div class="barbg"><div class="bar" style="width:${pct}%"></div></div>
+    ${promptHtml}
+    <div class="options">${optsHtml}</div>
+    <div class="feedback" id="fb"></div>
+    <button class="btn solid next-btn hidden" id="nextQ">Next →</button>`;
+
+  document.querySelectorAll('.opt').forEach(btn=>{
+    btn.onclick = () => choose(btn, q);
+  });
+}
+
+function choose(btn, q){
+  const idx = +btn.dataset.idx;
+  const chosen = q.options[idx];
+  document.querySelectorAll('.opt').forEach((b,i)=>{
+    b.classList.add('locked');
+    if(q.options[i].correct) b.classList.add('correct');
+  });
+  const fb = $('#fb');
+  if(chosen.correct){
+    score++; fb.textContent = '✓ Correct'; fb.className='feedback right';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = '✕ Not quite'; fb.className='feedback no';
+    wrongList.push(q.r);
+  }
+  $('.test-head').firstElementChild.nextElementSibling.textContent = 'Score '+score;
+  const nq = $('#nextQ'); nq.classList.remove('hidden');
+  nq.onclick = () => { qi++; if(qi<quiz.length) renderQuestion(); else renderResult(); };
+}
+
+function renderResult(){
+  const pct = Math.round(score/quiz.length*100);
+  let verdict = '';
+  if(pct===100) verdict='Perfect! 满分!';
+  else if(pct>=80) verdict='Excellent work! 很好!';
+  else if(pct>=60) verdict='Good — a little more practice. 加油!';
+  else verdict='Keep practising — trace them again. 加油!';
+
+  let reviewHtml = '';
+  if(wrongList.length){
+    const seen = new Set();
+    const uniq = wrongList.filter(r=>!seen.has(r.n)&&seen.add(r.n));
+    reviewHtml = `<div class="review"><h4>Review these</h4>` +
+      uniq.map(r=>`<div class="rev-item"><span class="rg">${r.ch}</span>
+        <span class="rt"><b>${r.py}</b> — ${r.en} · ${r.ta}</span></div>`).join('') +
+      `</div>`;
+  }
+
+  $('#testCard').innerHTML = `
+    <div class="result">
+      <p class="score-of">You scored</p>
+      <div class="score-num">${score}<span style="font-size:2rem;color:var(--ink-soft)">/${quiz.length}</span></div>
+      <p class="verdict">${verdict}</p>
+      ${reviewHtml}
+      <button class="btn solid" style="max-width:220px;margin:22px auto 0;padding:13px 30px" id="againBtn">Test again</button>
+    </div>`;
+  $('#againBtn').onclick = renderTestSetup;
+}
+</script>
+</body>
+</html>
