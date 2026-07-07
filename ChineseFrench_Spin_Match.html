@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+<title>ChineseFrench · Spin &amp; Match</title>
+<style>
+  :root{
+    --paper:#EDEEE8; --ink:#22302B; --cinnabar:#C8483A; --jade:#4E8A78; --gold:#B08A2C;
+    --card:#FFFFFF; --line:#D7D9CF; --muted:#6B7268;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:520px;margin:0 auto;padding:16px 16px 40px;min-height:100vh}
+  header{text-align:center;padding:8px 0 4px}
+  .brand{font-size:22px;font-weight:800;letter-spacing:.5px}
+  .brand .cn{color:var(--cinnabar)} .brand .fr{color:var(--jade)}
+  header .sub{color:var(--muted);font-size:13px;margin-top:2px}
+  .scorebar{display:flex;gap:8px;justify-content:center;margin:12px 0}
+  .pill{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700}
+  .pill b{color:var(--jade)} .pill.streak b{color:var(--gold)}
+  .wheelbox{position:relative;width:320px;max-width:88vw;margin:6px auto;aspect-ratio:1}
+  #wheel{width:100%;height:100%;display:block;filter:drop-shadow(0 4px 10px rgba(34,48,43,.15))}
+  .pointer{position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:0;height:0;
+    border-left:13px solid transparent;border-right:13px solid transparent;border-top:22px solid var(--cinnabar);z-index:3}
+  .btn{border:0;border-radius:999px;padding:14px 22px;font-size:16px;font-weight:800;font-family:var(--font);cursor:pointer;min-height:52px}
+  .btn.red{background:var(--cinnabar);color:#fff} .btn.jade{background:var(--jade);color:#fff}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn[disabled]{opacity:.5;pointer-events:none}
+  .center{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+  /* Question card */
+  .qcard{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;margin-top:16px;
+    box-shadow:0 3px 12px rgba(34,48,43,.08);text-align:center}
+  .qcard[hidden]{display:none}
+  .prompt .hz{font-size:52px;line-height:1.1}
+  .prompt .py{font-size:22px;color:var(--jade);font-weight:700;margin-top:2px}
+  .prompt .speak{margin-top:6px;background:var(--gold);color:#fff;border:0;border-radius:999px;width:42px;height:42px;font-size:18px;cursor:pointer}
+  .qtext{color:var(--muted);font-size:14px;margin:14px 0 10px}
+  .options{display:grid;gap:10px}
+  .opt{background:var(--paper);border:2px solid var(--line);border-radius:14px;padding:14px;font-size:16px;
+    font-weight:600;font-family:var(--font);cursor:pointer;text-align:left;min-height:52px}
+  .opt.correct{background:#e7f2ec;border-color:var(--jade);color:#1f5f4d}
+  .opt.wrong{background:#fbe9e7;border-color:var(--cinnabar);color:#8f2f24}
+  .opt[disabled]{cursor:default}
+  .feedback{margin-top:14px;font-weight:800;font-size:16px;min-height:22px}
+  .feedback.ok{color:var(--jade)} .feedback.no{color:var(--cinnabar)}
+  .idle{color:var(--muted);text-align:center;margin-top:16px;font-size:15px}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:26px}
+  footer b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><span class="cn">Chinese</span><span class="fr">French</span></div>
+    <div class="sub">Spin &amp; Match · Mandarin Vocabulary Quiz</div>
+  </header>
+
+  <div class="scorebar">
+    <span class="pill">Score <b id="score">0</b></span>
+    <span class="pill">Asked <b id="asked">0</b></span>
+    <span class="pill streak">Streak <b id="streak">0</b></span>
+    <span class="pill streak">Best <b id="best">0</b></span>
+  </div>
+
+  <div class="wheelbox"><div class="pointer"></div><canvas id="wheel" width="640" height="640"></canvas></div>
+  <div class="center"><button class="btn red" id="spinBtn">🎡 Spin the wheel</button></div>
+
+  <div class="idle" id="idle">Spin to get a word, then choose its meaning in English.</div>
+
+  <div class="qcard" id="qcard" hidden>
+    <div class="prompt">
+      <div class="hz" id="pHz"></div>
+      <div class="py" id="pPy"></div>
+      <button class="speak" id="pSpeak" aria-label="Hear the word">🔊</button>
+    </div>
+    <div class="qtext">What does this word mean?</div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="center" style="margin-top:14px"><button class="btn jade" id="againBtn" hidden>Spin again ›</button></div>
+  </div>
+
+  <footer><b>ChineseFrench</b> — Aruna Sathish · works offline ✈️</footer>
+</div>
+
+<script>
+"use strict";
+
+/* ---- Lesson 5 vocabulary (word · pinyin · English meaning) ---- */
+var WORDS = [
+  {hz:"他们",py:"tāmen",en:"they"},
+  {hz:"朋友",py:"péngyou",en:"friend"},
+  {hz:"苹果",py:"píngguǒ",en:"apple"},
+  {hz:"中国",py:"Zhōngguó",en:"China"},
+  {hz:"北京",py:"Běijīng",en:"Beijing"},
+  {hz:"杯子",py:"bēizi",en:"cup"},
+  {hz:"手机",py:"shǒujī",en:"mobile phone"},
+  {hz:"家",py:"jiā",en:"home; family"},
+  {hz:"你",py:"nǐ",en:"you"},
+  {hz:"我们",py:"wǒmen",en:"we; us"},
+  {hz:"上海",py:"Shànghǎi",en:"Shanghai"},
+  {hz:"谁",py:"shéi",en:"who"},
+  {hz:"中国人",py:"Zhōngguórén",en:"Chinese person"},
+  {hz:"哪儿",py:"nǎr",en:"where"}
+];
+
+/* ---- Text-to-speech (tap only) ---- */
+var zhVoice=null;
+function pickVoice(){var vs=window.speechSynthesis?speechSynthesis.getVoices():[];
+  zhVoice=vs.find(function(v){return /zh(-|_)?CN/i.test(v.lang)})||vs.find(function(v){return /^zh/i.test(v.lang)})||null;}
+if(window.speechSynthesis){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function speak(t){if(!window.speechSynthesis)return;try{speechSynthesis.cancel()}catch(e){}
+  var u=new SpeechSynthesisUtterance(t);u.lang="zh-CN";if(zhVoice)u.voice=zhVoice;u.rate=.85;speechSynthesis.speak(u);}
+
+/* ---- State ---- */
+var score=0,asked=0,streak=0,best=0,spinning=false,wheelAngle=0,current=null;
+function setStat(){document.getElementById("score").textContent=score;
+  document.getElementById("asked").textContent=asked;
+  document.getElementById("streak").textContent=streak;
+  document.getElementById("best").textContent=best;}
+
+/* ---- Wheel drawing ---- */
+var cv=document.getElementById("wheel"),ctx=cv.getContext("2d");
+var COLORS=["#4E8A78","#C8483A","#B08A2C","#3f6f5f","#a5372c","#8f6f22"];
+function drawWheel(){
+  var N=WORDS.length,R=300;
+  ctx.clearRect(0,0,640,640);ctx.save();ctx.translate(320,320);ctx.rotate(wheelAngle);
+  for(var i=0;i<N;i++){
+    var a0=i*2*Math.PI/N,a1=(i+1)*2*Math.PI/N;
+    ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,R,a0,a1);ctx.closePath();
+    ctx.fillStyle=COLORS[i%COLORS.length];ctx.fill();
+    ctx.strokeStyle="rgba(255,255,255,.25)";ctx.lineWidth=2;ctx.stroke();
+    ctx.save();ctx.rotate((a0+a1)/2);ctx.textAlign="right";ctx.fillStyle="#fff";
+    ctx.font="bold 30px sans-serif";ctx.fillText(WORDS[i].hz,R-18,10);ctx.restore();
+  }
+  ctx.restore();
+  ctx.beginPath();ctx.arc(320,320,34,0,2*Math.PI);ctx.fillStyle="#EDEEE8";ctx.fill();
+  ctx.lineWidth=3;ctx.strokeStyle="#22302B";ctx.stroke();
+  ctx.fillStyle="#22302B";ctx.font="bold 20px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";
+  ctx.fillText("汉",320,320);
+}
+drawWheel();
+
+/* ---- Spin ---- */
+function spin(){
+  if(spinning)return;spinning=true;
+  document.getElementById("qcard").hidden=true;
+  document.getElementById("idle").textContent="Spinning…";
+  document.getElementById("spinBtn").disabled=true;
+  var N=WORDS.length,target=Math.floor(Math.random()*N);
+  var spins=5+Math.random()*2,segCenter=(target+0.5)*2*Math.PI/N;
+  var finalAngle=spins*2*Math.PI+(-Math.PI/2-segCenter),start=wheelAngle,dur=3400,t0=performance.now();
+  function frame(t){var p=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-p,3);
+    wheelAngle=start+(finalAngle-start)*e;drawWheel();
+    if(p<1)requestAnimationFrame(frame);
+    else{spinning=false;wheelAngle%=(2*Math.PI);document.getElementById("spinBtn").disabled=false;askQuestion(WORDS[target]);}
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ---- Build MCQ (English options) ---- */
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function askQuestion(w){
+  current=w;
+  document.getElementById("idle").textContent="";
+  document.getElementById("pHz").textContent=w.hz;
+  document.getElementById("pPy").textContent=w.py;
+  document.getElementById("feedback").textContent="";document.getElementById("feedback").className="feedback";
+  document.getElementById("againBtn").hidden=true;
+  // options: correct + 3 distinct distractors
+  var pool=WORDS.filter(function(x){return x.en!==w.en;});shuffle(pool);
+  var opts=[w.en,pool[0].en,pool[1].en,pool[2].en];shuffle(opts);
+  var box=document.getElementById("options");box.innerHTML="";
+  opts.forEach(function(en){
+    var b=document.createElement("button");b.className="opt";b.textContent=en;
+    b.addEventListener("click",function(){answer(b,en,w);});
+    box.appendChild(b);
+  });
+  document.getElementById("qcard").hidden=false;
+}
+function answer(btn,chosen,w){
+  var buttons=document.querySelectorAll(".opt");
+  buttons.forEach(function(b){b.disabled=true;
+    if(b.textContent===w.en)b.classList.add("correct");});
+  asked++;
+  var fb=document.getElementById("feedback");
+  if(chosen===w.en){score++;streak++;if(streak>best)best=streak;fb.textContent="✓ Correct! "+w.hz+" = "+w.en;fb.className="feedback ok";}
+  else{streak=0;btn.classList.add("wrong");fb.textContent="✗ "+w.hz+" ("+w.py+") means \u201C"+w.en+"\u201D";fb.className="feedback no";}
+  setStat();
+  document.getElementById("againBtn").hidden=false;
+}
+
+document.getElementById("spinBtn").addEventListener("click",spin);
+document.getElementById("againBtn").addEventListener("click",spin);
+document.getElementById("pSpeak").addEventListener("click",function(){if(current)speak(current.hz);});
+setStat();
+</script>
+</body>
+</html>
