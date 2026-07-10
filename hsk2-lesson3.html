@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSK2 Lesson 3 — Picture Vocabulary</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+:root{
+  --ink:#1a1a2e;--red:#c0392b;--gold:#d4af37;--teal:#0d9488;
+  --blue:#1d6fa8;--purple:#6b21a8;--orange:#c05621;
+  --light:#f0f4ff;--card:#fff;--border:#e2e8f0;--muted:#8892a4;
+  --paper:#f5f0e8;--shadow:0 6px 24px rgba(0,0,0,0.10)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--ink);min-height:100vh}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#0d7377 60%,#c0392b 100%);color:#fff;padding:24px 20px 36px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'看';position:absolute;font-family:'Noto Sans SC',sans-serif;font-size:180px;font-weight:700;color:rgba(255,255,255,0.04);top:-10px;right:10%;pointer-events:none}
+.badge{display:inline-block;background:rgba(212,175,55,.2);border:1px solid rgba(212,175,55,.5);color:var(--gold);font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:10px}
+.hero h1{font-family:'Noto Sans SC',sans-serif;font-size:clamp(18px,4vw,32px);font-weight:700;margin-bottom:4px}
+.hero-sub{font-size:12px;color:rgba(255,255,255,.7);margin-bottom:18px}
+.score-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.sp-pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:6px 10px;text-align:center;min-width:70px}
+.sp-pill .sv{font-size:15px;font-weight:900}.sp-pill .sl{font-size:8px;opacity:.7;text-transform:uppercase;letter-spacing:.5px}
+.sp-pill.ov{background:rgba(212,175,55,.25);border-color:rgba(212,175,55,.5)}
+
+/* NAV */
+.nav{display:flex;background:#fff;border-bottom:2px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.nt{flex-shrink:0;padding:10px 11px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap}
+.nt.on{color:var(--red);border-bottom-color:var(--red)}
+.nt.done::after{content:'✓';color:var(--teal);margin-left:3px;font-size:10px}
+
+.content{max-width:860px;margin:0 auto;padding:18px 14px 60px}
+.sec{display:none}.sec.on{display:block}
+.shead{font-size:17px;font-weight:900;margin-bottom:5px}
+.shead2{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:14px}
+.info{background:#e8f0fe;border-left:4px solid var(--blue);border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#1a3a6b;font-weight:600;line-height:1.6}
+
+/* VOCAB CARDS */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.vc{background:var(--card);border-radius:14px;padding:16px;box-shadow:var(--shadow);border:2px solid transparent;cursor:pointer;transition:all .2s;text-align:center;position:relative}
+.vc:hover{transform:translateY(-3px);border-color:var(--blue);box-shadow:0 10px 32px rgba(0,0,0,.14)}
+.vc-emoji{font-size:36px;margin-bottom:8px}
+.vc-zh{font-family:'Noto Sans SC',sans-serif;font-size:30px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.vc-py{font-size:12px;color:var(--blue);font-weight:700;margin-bottom:3px}
+.vc-en{font-size:11px;color:var(--muted);font-weight:600;margin-bottom:8px}
+.vc-et{font-size:10px;color:var(--orange);font-style:italic;line-height:1.5;border-top:1px solid var(--border);padding-top:7px;text-align:left}
+.vc-memory{font-size:10px;color:var(--purple);font-weight:700;margin-top:5px;text-align:left}
+.vc-play{background:none;border:1.5px solid var(--border);border-radius:5px;padding:3px 9px;font-size:10px;cursor:pointer;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:700;margin-top:7px}
+.vc-play:hover{border-color:var(--blue);color:var(--blue)}
+
+/* SCRIPT SECTION */
+.script-line{background:var(--card);border-radius:10px;padding:14px 16px;margin-bottom:8px;box-shadow:var(--shadow);border-left:4px solid var(--teal);cursor:pointer;transition:all .2s}
+.script-line:hover{transform:translateX(3px)}
+.script-line.active-line{border-left-color:var(--red);background:#fff5f5}
+.sl-zh{font-family:'Noto Sans SC',sans-serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.sl-py{font-size:11px;color:var(--blue);font-weight:700;margin-bottom:2px}
+.sl-en{font-size:11px;color:var(--muted)}
+.script-controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.scbtn{padding:9px 16px;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all .15s}
+.scbtn:hover{transform:scale(1.03)}.scbtn.bl{background:var(--blue);color:#fff}.scbtn.br{background:var(--red);color:#fff}.scbtn.bs{background:#f1f5f9;color:var(--muted)}
+.autoplay-bar{background:#fff;border-radius:8px;padding:10px 14px;box-shadow:var(--shadow);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.ap-label{font-size:11px;font-weight:800;color:var(--muted)}
+.ap-progress{flex:1;background:var(--border);border-radius:3px;height:5px;overflow:hidden}
+.ap-fill{height:5px;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:3px;transition:width .5s}
+
+/* WRITING PRACTICE */
+.write-word-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.write-word-btn{background:var(--card);border:2px solid var(--border);border-radius:8px;padding:8px 14px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;transition:all .2s;text-align:center}
+.write-word-btn:hover{border-color:var(--gold)}.write-word-btn.wsel{border-color:var(--red);background:#fff5f5}
+.write-word-btn .wz{font-family:'Noto Sans SC',sans-serif;font-size:18px;font-weight:700;display:block}
+.write-word-btn .wp{font-size:9px;color:var(--blue);display:block}
+.write-panel{background:var(--card);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:14px}
+.write-head{background:var(--paper);border-bottom:2px solid var(--border);padding:14px 18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.wh-zh{font-family:'Noto Sans SC',sans-serif;font-size:44px;font-weight:900;color:var(--ink);flex-shrink:0;cursor:pointer}
+.wh-info{flex:1}
+.wh-py{font-size:16px;color:var(--blue);font-weight:800}
+.wh-en{font-size:12px;font-weight:700;margin:3px 0}
+.wh-et{font-size:10px;color:var(--muted);font-style:italic;line-height:1.5}
+.write-rounds{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px 18px}
+.round-box{text-align:center}
+.round-label{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.writer-box{width:100%;aspect-ratio:1;max-width:150px;margin:0 auto;border:2px solid var(--border);border-radius:4px;background:var(--paper);position:relative;display:block;overflow:hidden}
+.writer-box::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(212,175,55,.4);z-index:1;pointer-events:none}
+.writer-box::after{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(212,175,55,.4);z-index:1;pointer-events:none}
+.round-msg{font-size:9px;font-weight:700;margin-top:5px;padding:2px 6px;border-radius:4px;display:inline-block}
+.round-msg.ok{background:#d1fae5;color:#065f46}.round-msg.bad{background:#fee2e2;color:#991b1b}
+.round-msg.tip{background:#fef3c7;color:#92400e}.round-msg.hide{display:none}
+.write-ctrl{padding:10px 18px;border-top:2px solid var(--border);background:#fafaf7;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.wctrl-btn{padding:8px 14px;border:none;border-radius:5px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;cursor:pointer;transition:all .15s}
+.wctrl-btn:hover:not(:disabled){opacity:.85;transform:translateY(-1px)}.wctrl-btn:disabled{opacity:.45;cursor:not-allowed}
+.wc-a{background:var(--blue);color:#fff}.wc-q{background:var(--red);color:#fff}
+.wc-h{background:var(--orange);color:#fff}.wc-r{background:#e2e8f0;color:var(--ink)}
+.wc-d{background:var(--teal);color:#fff}.wc-n{background:var(--ink);color:#fff}
+.write-score-row{padding:10px 18px;background:#fafaf7;display:flex;align-items:center;gap:10px;border-top:2px solid var(--border)}
+.ws-label{font-size:11px;font-weight:700;color:var(--muted)}
+.ws-dots{display:flex;gap:4px;flex:1}
+.ws-dot{width:14px;height:14px;border-radius:50%;background:var(--border);border:1.5px solid var(--border);transition:all .3s}
+.ws-dot.done{background:var(--teal);border-color:var(--teal)}
+.ws-dot.active{background:var(--gold);border-color:var(--gold)}
+.ws-pct{font-size:13px;font-weight:900;color:var(--teal)}
+
+/* QUIZ */
+.qprog{background:var(--border);border-radius:3px;height:4px;margin-bottom:12px}
+.qpf{height:4px;border-radius:3px;background:linear-gradient(90deg,var(--red),var(--gold));transition:width .4s}
+.qmeta{display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:10px}
+.qcard{background:var(--card);border-radius:14px;padding:20px;box-shadow:var(--shadow);margin-bottom:12px}
+.opts2{display:flex;flex-direction:column;gap:7px}
+.opt2{background:#fff;border:2px solid var(--border);border-radius:9px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;text-align:left;transition:all .15s;color:var(--ink);display:flex;align-items:center;gap:10px}
+.opt2:hover{border-color:var(--blue)}.opt2 .oz{font-family:'Noto Sans SC',sans-serif;font-size:20px;font-weight:700;min-width:36px}
+
+/* SCORES */
+.sb-card{background:var(--card);border-radius:16px;padding:22px;box-shadow:var(--shadow);max-width:480px;margin:0 auto}
+.sb-row{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.sb-lbl{font-size:11px;font-weight:700;width:100px;flex-shrink:0}
+.sb-bar{flex:1;background:#f1f5f9;border-radius:3px;height:8px;overflow:hidden}
+.sb-fill{height:8px;border-radius:3px;transition:width .8s}
+.sb-sc{font-size:11px;font-weight:800;width:36px;text-align:right}
+.cbtn{padding:9px 18px;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all .15s;margin:3px}
+.cbtn:hover{transform:scale(1.03)}
+.bl{background:var(--blue);color:#fff}.bg{background:var(--teal);color:#fff}
+.br{background:var(--red);color:#fff}
+
+@media(max-width:540px){.write-rounds{grid-template-columns:repeat(3,1fr)}.vgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">新HSK2 · Lesson 3 · Picture Vocabulary</div>
+  <h1>图片词汇 — Picture Vocabulary</h1>
+  <div class="hero-sub">洗 · 累 · 拿 · 不错 · 送 · 做 · 吃 · 看 · Animated Writing · Auto-play Script · Scored Quiz</div>
+  <div class="score-row">
+    <div class="sp-pill"><div class="sv" id="sv1">—</div><div class="sl">📖 Study</div></div>
+    <div class="sp-pill"><div class="sv" id="sv2">—</div><div class="sl">🎬 Script</div></div>
+    <div class="sp-pill"><div class="sv" id="sv3">—</div><div class="sl">✍️ Write</div></div>
+    <div class="sp-pill"><div class="sv" id="sv4">—</div><div class="sl">🎯 Quiz</div></div>
+    <div class="sp-pill ov"><div class="sv" id="sv0">—</div><div class="sl">⭐ Overall</div></div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nt on" onclick="show('study',this)">📖 Study</button>
+  <button class="nt" onclick="show('script',this)">🎬 Script</button>
+  <button class="nt" onclick="show('write',this)">✍️ Writing</button>
+  <button class="nt" onclick="show('quiz',this)">🎯 Quiz</button>
+  <button class="nt" onclick="show('scores',this)">🏆 Scores</button>
+</div>
+
+<div class="content">
+
+<!-- ══ STUDY ══════════════════════════════════════════════ -->
+<div class="sec on" id="s-study">
+  <div class="shead">📖 Picture Vocabulary — 图片词汇</div>
+  <div class="shead2">8 picture words with etymology, memory tricks &amp; audio. Click any card to hear.</div>
+  <div class="info">💡 Click any card to hear pronunciation. After studying all 8, your Study score is saved.</div>
+  <div class="vgrid" id="studyGrid"></div>
+  <div style="text-align:center">
+    <button class="cbtn bl" onclick="markStudyDone()">✅ I Have Studied All Words!</button>
+  </div>
+</div>
+
+<!-- ══ SCRIPT ══════════════════════════════════════════════ -->
+<div class="sec" id="s-script">
+  <div class="shead">🎬 Auto-play Script — 自动播放</div>
+  <div class="shead2">12 example sentences using the 8 picture vocabulary words. Click ▶ Auto-play to hear all in sequence.</div>
+  <div class="autoplay-bar">
+    <div class="ap-label" id="apLabel">Ready to play</div>
+    <div class="ap-progress"><div class="ap-fill" id="apFill" style="width:0%"></div></div>
+    <div class="ap-label" id="apCount">0/12</div>
+  </div>
+  <div class="script-controls">
+    <button class="scbtn bl" id="apBtn" onclick="startAutoPlay()">▶ Auto-play All</button>
+    <button class="scbtn bs" onclick="stopAutoPlay()">⏹ Stop</button>
+    <button class="scbtn bs" onclick="resetScript()">🔄 Reset</button>
+  </div>
+  <div id="scriptLines"></div>
+  <div id="scriptScoreArea"></div>
+</div>
+
+<!-- ══ WRITING ══════════════════════════════════════════════ -->
+<div class="sec" id="s-write">
+  <div class="shead">✍️ Writing Practice — 3× per Character</div>
+  <div class="shead2">Write each character 3 times in order. Each completed round scores points.</div>
+  <div class="info">✍️ Click <strong>▶ Animate</strong> to see stroke order → <strong>✏️ Practice</strong> to write → Complete all 3 rounds to score 100%</div>
+  <div class="write-word-row" id="writeWordRow"></div>
+  <div id="writePanel"></div>
+  <div id="writeScoreArea"></div>
+</div>
+
+<!-- ══ QUIZ ══════════════════════════════════════════════════ -->
+<div class="sec" id="s-quiz">
+  <div class="shead">🎯 Vocabulary Quiz — 8 Questions</div>
+  <div class="info">🎯 Match the Chinese character to its meaning. Each correct answer = score.</div>
+  <div id="quizArea"></div>
+</div>
+
+<!-- ══ SCORES ══════════════════════════════════════════════ -->
+<div class="sec" id="s-scores">
+  <div class="shead">🏆 My Scores</div>
+  <div id="scoresArea"></div>
+</div>
+
+</div><!-- /content -->
+
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js" onerror="document.head.appendChild(Object.assign(document.createElement('script'),{src:'https://unpkg.com/hanzi-writer@3.5.0/dist/hanzi-writer.min.js'}))"></script>
+<script>
+// ── DATA ─────────────────────────────────────────────────
+var WORDS = [
+  {zh:'洗', py:'xǐ', en:'To wash', emoji:'💧',
+   breakdown:'氵(water) + 先 (first/before)',
+   et:'Water is used first to clean — the water radical 氵 tells us meaning is related to water.',
+   memory:'Water comes first when you wash.',
+   st:9, grp:'pic'},
+  {zh:'累', py:'lèi', en:'Tired', emoji:'😩',
+   breakdown:'田 (field) + 糸 (silk/thread)',
+   et:'Ancient farmers worked long hours in the fields. After working all day they became tired. Thread hanging down = exhaustion.',
+   memory:'Working all day in the field makes you tired.',
+   st:11, grp:'pic'},
+  {zh:'拿', py:'ná', en:'To hold / take', emoji:'🤲',
+   breakdown:'合 (join together) + 手 (hand)',
+   et:'Hands come together to hold something. The bottom hand radical shows the action is done using the hand.',
+   memory:'Use your hand to take it.',
+   st:10, grp:'pic'},
+  {zh:'不错', py:'búcuò', en:'Not bad / pretty good', emoji:'👍',
+   breakdown:'不 (not/no) + 错 (wrong/mistake: 钅metal + 昔 phonetic)',
+   et:'Not + Wrong = Not wrong = Pretty good! If it is not wrong, it is good.',
+   memory:'If it is not wrong, it is pretty good.',
+   st:null, grp:'pic'},
+  {zh:'送', py:'sòng', en:'To send / deliver', emoji:'📦',
+   breakdown:'辶 (walk/movement) + 关 (phonetic component)',
+   et:'Moving something from one place to another. The movement radical 辶 shows transportation or delivery.',
+   memory:'You walk something to another person.',
+   st:9, grp:'verb'},
+  {zh:'做', py:'zuò', en:'To do / make', emoji:'⚒️',
+   breakdown:'亻(person) + 故 (old pronunciation component)',
+   et:'A person performs an action. Anything a person makes or does can use 做.',
+   memory:'A person is doing something.',
+   st:11, grp:'verb'},
+  {zh:'吃', py:'chī', en:'To eat', emoji:'🍎',
+   breakdown:'口 (mouth) + 乞 (phonetic component)',
+   et:'The mouth is used for eating. 口 appears in many characters related to speaking or eating.',
+   memory:'Mouth means eating.',
+   st:6, grp:'verb'},
+  {zh:'看', py:'kàn', en:'To look / watch', emoji:'👀',
+   breakdown:'手 (hand) + 目 (eye)',
+   et:'Long ago people shaded their eyes with their hands to look into the distance. Hand above eye = looking far.',
+   memory:'Cover your eyes with your hand to look far away.',
+   st:9, grp:'verb'},
+];
+
+// Single chars only for HanziWriter
+var WRITE_CHARS = WORDS.filter(function(w){return w.zh.length===1&&w.st;});
+
+// Script lines
+var SCRIPT = [
+  {zh:'妈妈在洗碗。',     py:'Māma zài xǐ wǎn.',        en:'Mum is washing dishes.',          word:'洗'},
+  {zh:'我今天很累。',     py:'Wǒ jīntiān hěn lèi.',     en:'I am very tired today.',          word:'累'},
+  {zh:'请帮我拿一下书包。',py:'Qǐng bāng wǒ ná yíxià shūbāo.',en:'Please help me hold the schoolbag for a moment.',word:'拿'},
+  {zh:'这个蛋糕不错！',   py:'Zhège dàngāo búcuò!',     en:'This cake is pretty good!',       word:'不错'},
+  {zh:'他送花给她。',     py:'Tā sòng huā gěi tā.',     en:'He sends flowers to her.',        word:'送'},
+  {zh:'妈妈在做饭。',     py:'Māma zài zuò fàn.',       en:'Mum is making food.',             word:'做'},
+  {zh:'我们去吃火锅吧！', py:'Wǒmen qù chī huǒguō ba!', en:'Let us go eat hot pot!',          word:'吃'},
+  {zh:'你在看什么？',     py:'Nǐ zài kàn shénme?',      en:'What are you looking at?',        word:'看'},
+  {zh:'弟弟去洗澡了。',   py:'Dìdi qù xǐzǎo le.',      en:'Little brother went to have a bath.',word:'洗'},
+  {zh:'跑步以后我很累。', py:'Pǎobù yǐhòu wǒ hěn lèi.',en:'I am tired after running.',       word:'累'},
+  {zh:'这家餐厅做的菜不错。',py:'Zhè jiā cāntīng zuò de cài búcuò.',en:'The food this restaurant makes is not bad.',word:'做'},
+  {zh:'我喜欢看电影。',   py:'Wǒ xǐhuan kàn diànyǐng.',en:'I like watching movies.',         word:'看'},
+];
+
+// ── CORE ─────────────────────────────────────────────────
+var SK = 'cf_hsk2_l3';
+var SC = JSON.parse(localStorage.getItem(SK)||'{}');
+var navBtns = document.querySelectorAll('.nt');
+var navMap  = ['study','script','write','quiz','scores'];
+
+function saveSC(){localStorage.setItem(SK,JSON.stringify(SC));updatePills();}
+function pct(v){return v!==undefined?v+'%':'—';}
+function updatePills(){
+  document.getElementById('sv1').textContent=pct(SC.study);
+  document.getElementById('sv2').textContent=pct(SC.script);
+  document.getElementById('sv3').textContent=pct(SC.write);
+  document.getElementById('sv4').textContent=pct(SC.quiz);
+  var v=Object.values(SC).filter(function(x){return x!==undefined;});
+  document.getElementById('sv0').textContent=v.length?Math.round(v.reduce(function(a,b){return a+b;},0)/v.length)+'%':'—';
+}
+updatePills();
+
+function sp(t){
+  if(!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(t);
+  u.lang='zh-CN';u.rate=0.8;u.pitch=1.05;
+  var v=speechSynthesis.getVoices().find(function(x){return x.lang.startsWith('zh');});
+  if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=function(){};
+
+function show(id,btn){
+  document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('on');});
+  navBtns.forEach(function(t){t.classList.remove('on');});
+  document.getElementById('s-'+id).classList.add('on');
+  btn.classList.add('on');
+  if(id==='script')initScript();
+  if(id==='write')initWrite();
+  if(id==='quiz')initQuiz();
+  if(id==='scores')renderScores();
+}
+function markNav(id){var i=navMap.indexOf(id);if(i>=0)navBtns[i].classList.add('done');}
+function shuffle(a){var b=[...a];for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+// ── STUDY ─────────────────────────────────────────────────
+function buildStudy(){
+  document.getElementById('studyGrid').innerHTML=WORDS.map(function(w,i){
+    return '<div class="vc" onclick="sp(\''+w.zh+'\')">'
+      +'<div class="vc-emoji">'+w.emoji+'</div>'
+      +'<div class="vc-zh">'+w.zh+'</div>'
+      +'<div class="vc-py">'+w.py+'</div>'
+      +'<div class="vc-en">'+w.en+'</div>'
+      +'<div class="vc-et"><strong>Structure:</strong> '+w.breakdown+'<br>'+w.et+'</div>'
+      +'<div class="vc-memory">💡 '+w.memory+'</div>'
+      +'<button class="vc-play" onclick="event.stopPropagation();sp(\''+w.zh+'\')">🔊 Play</button>'
+      +'</div>';
+  }).join('');
+}
+buildStudy();
+
+function markStudyDone(){SC.study=100;saveSC();markNav('study');
+  document.querySelector('[onclick="show(\'study\',this)"]').classList.add('done');
+  alert('Study complete! ✅ 100% saved. Now go to Script → Writing → Quiz!');
+}
+
+// ── SCRIPT ─────────────────────────────────────────────────
+var apTimer=null, apIdx=0, apRunning=false;
+var scriptListened=0;
+
+function initScript(){
+  document.getElementById('scriptLines').innerHTML=SCRIPT.map(function(s,i){
+    return '<div class="script-line" id="sline'+i+'" onclick="playLine('+i+')">'
+      +'<div class="sl-zh" style="display:flex;align-items:center;gap:6px">'
+      +'<span style="font-size:9px;font-weight:800;background:#e8f0fe;color:var(--blue);padding:1px 6px;border-radius:4px;text-transform:uppercase">'+s.word+'</span>'
+      +s.zh+'</div>'
+      +'<div class="sl-py">'+s.py+'</div>'
+      +'<div class="sl-en">'+s.en+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function playLine(i){
+  document.querySelectorAll('.script-line').forEach(function(l){l.classList.remove('active-line');});
+  document.getElementById('sline'+i).classList.add('active-line');
+  sp(SCRIPT[i].zh);
+  if(i+1>scriptListened){scriptListened=i+1;}
+  updateScriptProgress();
+}
+
+function updateScriptProgress(){
+  var pct=Math.round(scriptListened/SCRIPT.length*100);
+  document.getElementById('apFill').style.width=pct+'%';
+  document.getElementById('apCount').textContent=scriptListened+'/'+SCRIPT.length;
+  if(scriptListened>=SCRIPT.length){
+    document.getElementById('apLabel').textContent='All sentences heard! ✅';
+    SC.script=100;saveSC();markNav('script');
+    document.getElementById('scriptScoreArea').innerHTML=
+      '<div style="text-align:center;padding:14px;background:#d1fae5;border-radius:10px;margin-top:10px;font-weight:800;color:#065f46">🎬 Script Complete! 100% saved. 加油！</div>';
+  } else {
+    document.getElementById('apLabel').textContent='Listening: '+scriptListened+'/'+SCRIPT.length;
+  }
+}
+
+function startAutoPlay(){
+  if(apRunning)return;
+  apRunning=true;
+  apIdx=0;
+  document.getElementById('apBtn').textContent='▶ Playing…';
+  document.getElementById('apBtn').disabled=true;
+  playNextLine();
+}
+
+function playNextLine(){
+  if(!apRunning||apIdx>=SCRIPT.length){
+    stopAutoPlay();
+    return;
+  }
+  playLine(apIdx);
+  apIdx++;
+  // Wait for speech to finish — estimate duration by char count
+  var dur = Math.max(1500, SCRIPT[apIdx-1].zh.length*400+800);
+  apTimer=setTimeout(playNextLine, dur);
+}
+
+function stopAutoPlay(){
+  apRunning=false;
+  if(apTimer){clearTimeout(apTimer);apTimer=null;}
+  document.getElementById('apBtn').textContent='▶ Auto-play All';
+  document.getElementById('apBtn').disabled=false;
+}
+
+function resetScript(){
+  stopAutoPlay();
+  scriptListened=0;
+  document.querySelectorAll('.script-line').forEach(function(l){l.classList.remove('active-line');});
+  document.getElementById('apFill').style.width='0%';
+  document.getElementById('apCount').textContent='0/'+SCRIPT.length;
+  document.getElementById('apLabel').textContent='Ready to play';
+  document.getElementById('scriptScoreArea').innerHTML='';
+}
+
+// ── WRITING PRACTICE ──────────────────────────────────────
+var APP={curW:0, writers:{}, quizOn:{}, roundDone:[], roundScore:0};
+
+function initWrite(){
+  buildWordRow();
+  buildWritePanel(0);
+  buildWriteScore();
+}
+
+function buildWordRow(){
+  document.getElementById('writeWordRow').innerHTML=WRITE_CHARS.map(function(w,i){
+    return '<div class="write-word-btn '+(i===APP.curW?'wsel':'')+'" onclick="selectWord('+i+')">'
+      +'<span class="wz">'+w.zh+'</span>'
+      +'<span class="wp">'+w.py+'</span>'
+      +'</div>';
+  }).join('');
+}
+
+function selectWord(i){
+  APP.curW=i;APP.writers={};APP.quizOn={};
+  buildWordRow();buildWritePanel(i);
+  document.getElementById('writePanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function buildWritePanel(i){
+  var w=WRITE_CHARS[i];
+  var roundBoxes='';
+  for(var r=0;r<3;r++){
+    roundBoxes+='<div class="round-box">'
+      +'<div class="round-label">Round '+(r+1)+'</div>'
+      +'<div class="writer-box"><div id="hw'+i+'_'+r+'"></div></div>'
+      +'<div class="round-msg hide" id="rm'+i+'_'+r+'"></div>'
+      +'</div>';
+  }
+  document.getElementById('writePanel').innerHTML=
+    '<div class="write-panel">'
+    +'<div class="write-head">'
+    +'<div class="wh-zh" onclick="sp(\''+w.zh+'\')">'+w.zh+' 🔊</div>'
+    +'<div class="wh-info">'
+    +'<div class="wh-py">'+w.py+'</div>'
+    +'<div class="wh-en">'+w.en+'</div>'
+    +'<div class="wh-et">'+w.breakdown+'<br>'+w.et+'</div>'
+    +'</div></div>'
+    +'<div class="write-ctrl">'
+    +'<button class="wctrl-btn wc-a" id="btnAn" disabled onclick="doAnim()">▶ Animate</button>'
+    +'<button class="wctrl-btn wc-q" id="btnPr" disabled onclick="doQuiz()">✏️ Practice All 3</button>'
+    +'<button class="wctrl-btn wc-h" id="btnHi" disabled onclick="doHint()">💡 Hint</button>'
+    +'<button class="wctrl-btn wc-r" id="btnRe" disabled onclick="doReset()">🔄 Reset</button>'
+    +'<span style="margin-left:auto;font-size:10px;font-weight:700;color:var(--muted)">'+w.st+' strokes</span>'
+    +'</div>'
+    +'<div class="write-rounds">'+roundBoxes+'</div>'
+    +'<div class="write-score-row">'
+    +'<div class="ws-label">Progress:</div>'
+    +'<div class="ws-dots" id="wsDots'+i+'"></div>'
+    +'<div class="ws-pct" id="wsPct'+i+'">0%</div>'
+    +'</div>'
+    +'<div style="padding:10px 18px;background:#fafaf7;display:flex;gap:8px;border-top:2px solid var(--border)">'
+    +'<button class="wctrl-btn wc-r" onclick="prevWord()">← Prev</button>'
+    +'<button class="wctrl-btn wc-n" onclick="nextWord()">Next →</button>'
+    +'<span style="font-size:10px;font-weight:700;color:var(--muted);margin-left:auto">'+(i+1)+'/'+WRITE_CHARS.length+'</span>'
+    +'</div>'
+    +'</div>';
+
+  updateWordDots(i);
+  for(var _r=0;_r<3;_r++) setRMsg(i,_r,'tip','⏳ Loading…');
+  setTimeout(function(){createWriters(i);},300);
+}
+
+function setRMsg(ci,r,cls,txt){
+  var el=document.getElementById('rm'+ci+'_'+r);
+  if(!el)return;el.className='round-msg '+cls;el.textContent=txt;
+}
+function enableWBtns(){['btnAn','btnPr','btnHi','btnRe'].forEach(function(id){var b=document.getElementById(id);if(b)b.disabled=false;});}
+function disableWBtns(){['btnAn','btnPr','btnHi','btnRe'].forEach(function(id){var b=document.getElementById(id);if(b)b.disabled=true;});}
+
+function createWriters(ci){
+  var w=WRITE_CHARS[ci];var ch=w.zh;
+  var loaded=0;
+  for(var r=0;r<3;r++){
+    (function(round){
+      var target=document.getElementById('hw'+ci+'_'+round);
+      if(!target||typeof HanziWriter==='undefined'){
+        if(++loaded>=3)enableWBtns();return;
+      }
+      fetch('https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0.1/'+ch+'.json')
+        .then(function(res){if(!res.ok)throw 0;return res.json();})
+        .catch(function(){return fetch('https://unpkg.com/hanzi-writer-data@2.0/'+ch+'.json').then(function(r){return r.json();});})
+        .then(function(data){
+          try{
+            var wt=HanziWriter.create(target,ch,{
+              width:120,height:120,padding:12,showOutline:true,showCharacter:false,
+              strokeColor:'#1a1a2e',radicalColor:'#c0392b',outlineColor:'rgba(0,0,0,0.08)',
+              drawingColor:'#1d6fa8',drawingWidth:4,strokeAnimationSpeed:0.8,delayBetweenStrokes:300,
+              highlightOnComplete:true,highlightColor:'#0d9488',
+              charDataLoader:function(c,onL){onL(data);}
+            });
+            if(!APP.writers[ci])APP.writers[ci]={};
+            APP.writers[ci][round]=wt;
+            setRMsg(ci,round,'hide','');
+          }catch(e){showFB(target,ch,ci,round);}
+          if(++loaded>=3)enableWBtns();
+        })
+        .catch(function(){showFB(target,ch,ci,round);if(++loaded>=3)enableWBtns();});
+    })(r);
+  }
+  setTimeout(enableWBtns,8000);
+}
+
+function showFB(el,ch,ci,r){
+  el.innerHTML='<div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;font-family:\'Noto Sans SC\',sans-serif;font-size:60px;color:rgba(0,0,0,.1)">'+ch+'</div>';
+  setRMsg(ci,r,'tip','Tap to practice');
+}
+
+function doAnim(){
+  if(!APP.writers[APP.curW])return;
+  for(var r=0;r<3;r++){
+    (function(rr){
+      var w=APP.writers[APP.curW][rr];
+      if(!w)return;
+      try{w.animateCharacter({onComplete:function(){setRMsg(APP.curW,rr,'tip','✅ Done! Now click ✏️ Practice');}});
+        setRMsg(APP.curW,rr,'tip','▶ Watch stroke order…');}
+      catch(e){}
+    })(r);
+  }
+}
+
+function doQuiz(){
+  if(!APP.writers[APP.curW])return;APP.quizOn={};
+  var ci=APP.curW;
+  for(var r=0;r<3;r++){
+    (function(rr){
+      var w=APP.writers[ci][rr];if(!w)return;
+      try{
+        APP.quizOn[rr]=true;
+        w.quiz({
+          onMistake:function(){setRMsg(ci,rr,'bad','❌ Wrong stroke! Use 💡 Hint.');},
+          onCorrectStroke:function(){setRMsg(ci,rr,'tip','✓ Correct! Keep going…');},
+          onComplete:function(){
+            APP.quizOn[rr]=false;
+            setRMsg(ci,rr,'ok','🎉 Round '+(rr+1)+' complete!');
+            markRoundDone(ci,rr);
+          }
+        });
+        setRMsg(ci,rr,'tip','✏️ Draw strokes in order…');
+      }catch(e){setRMsg(ci,rr,'bad','⚠️ Error. Reset.');}
+    })(r);
+  }
+}
+
+function doHint(){
+  if(!APP.writers[APP.curW])return;
+  var ci=APP.curW;
+  for(var r=0;r<3;r++){
+    (function(rr){
+      var w=APP.writers[ci][rr];if(!w)return;
+      if(!APP.quizOn[rr]){
+        try{
+          APP.quizOn[rr]=true;
+          w.quiz({
+            onMistake:function(){setRMsg(ci,rr,'bad','❌ Wrong!');},
+            onCorrectStroke:function(){setRMsg(ci,rr,'tip','✓ Correct!');},
+            onComplete:function(){APP.quizOn[rr]=false;setRMsg(ci,rr,'ok','🎉 Round '+(rr+1)+' complete!');markRoundDone(ci,rr);}
+          });
+          setTimeout(function(){try{w.showHint();setRMsg(ci,rr,'tip','💡 Green = next stroke!');}catch(e2){}},600);
+        }catch(e){}
+      }else{try{w.showHint();setRMsg(ci,rr,'tip','💡 Green = next stroke!');}catch(e){}}
+    })(r);
+  }
+}
+
+function doReset(){
+  APP.quizOn={};APP.writers={};
+  var ci=APP.curW;var ch=WRITE_CHARS[ci].zh;
+  for(var r=0;r<3;r++){
+    setRMsg(ci,r,'hide','');
+    var t=document.getElementById('hw'+ci+'_'+r);if(t)t.innerHTML='';
+  }
+  disableWBtns();setTimeout(function(){createWriters(ci);},200);
+}
+
+// Track which rounds completed for each char
+if(!APP.roundDone)APP.roundDone={};
+function markRoundDone(ci,r){
+  if(!APP.roundDone[ci])APP.roundDone[ci]=[];
+  if(APP.roundDone[ci].indexOf(r)<0)APP.roundDone[ci].push(r);
+  updateWordDots(ci);
+  updateWriteScore();
+}
+
+function updateWordDots(ci){
+  var done=APP.roundDone[ci]||[];
+  var el=document.getElementById('wsDots'+ci);
+  if(!el)return;
+  var html='';
+  for(var r=0;r<3;r++){
+    html+='<div class="ws-dot '+(done.indexOf(r)>=0?'done':'')+'"></div>';
+  }
+  el.innerHTML=html;
+  var p=document.getElementById('wsPct'+ci);
+  if(p)p.textContent=Math.round(done.length/3*100)+'%';
+}
+
+function updateWriteScore(){
+  var totalRounds=WRITE_CHARS.length*3;
+  var doneRounds=0;
+  WRITE_CHARS.forEach(function(_,i){doneRounds+=(APP.roundDone[i]||[]).length;});
+  var pct=Math.round(doneRounds/totalRounds*100);
+  SC.write=pct;saveSC();
+  if(pct>=100)markNav('write');
+  var el=document.getElementById('writeScoreArea');
+  if(el)el.innerHTML=pct>=100?'<div style="text-align:center;padding:14px;background:#d1fae5;border-radius:10px;margin-top:10px;font-weight:800;color:#065f46">✍️ Writing Complete! 100% saved. 加油！</div>':'';
+}
+
+function buildWriteScore(){
+  updateWordDots(APP.curW);
+}
+
+function prevWord(){if(APP.curW>0){APP.curW--;APP.writers={};APP.quizOn={};buildWordRow();buildWritePanel(APP.curW);}}
+function nextWord(){if(APP.curW<WRITE_CHARS.length-1){APP.curW++;APP.writers={};APP.quizOn={};buildWordRow();buildWritePanel(APP.curW);}}
+
+// ── QUIZ ─────────────────────────────────────────────────
+var QS=[
+  {zh:'洗',py:'xǐ',opts:['To wash','Tired','To hold','To eat'],ans:0},
+  {zh:'累',py:'lèi',opts:['To look','Tired','To send','Not bad'],ans:1},
+  {zh:'拿',py:'ná',opts:['To wash','To eat','To hold/take','To do'],ans:2},
+  {zh:'不错',py:'búcuò',opts:['To send','Not bad/pretty good','To look','Tired'],ans:1},
+  {zh:'送',py:'sòng',opts:['To eat','To hold','To send/deliver','To wash'],ans:2},
+  {zh:'做',py:'zuò',opts:['To do/make','To look','Tired','To send'],ans:0},
+  {zh:'吃',py:'chī',opts:['To wash','To do','To hold','To eat'],ans:3},
+  {zh:'看',py:'kàn',opts:['Tired','To look/watch','To send','To eat'],ans:1},
+];
+var qPool=[],qIdx=0,qSc=0,qDone=false;
+function initQuiz(){if(qDone)return;qPool=shuffle([...QS]);qIdx=0;qSc=0;renderQQ();}
+function renderQQ(){
+  var q=qPool[qIdx];
+  document.getElementById('quizArea').innerHTML=
+    '<div class="qprog"><div class="qpf" style="width:'+Math.round(qIdx/qPool.length*100)+'%"></div></div>'
+    +'<div class="qmeta"><span>Q'+(qIdx+1)+'/'+qPool.length+'</span><span style="color:var(--teal)">✅'+qSc+'/'+qIdx+'</span></div>'
+    +'<div class="qcard" style="text-align:center">'
+    +'<div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:6px">What does this mean?</div>'
+    +'<div style="font-family:\'Noto Sans SC\',sans-serif;font-size:56px;font-weight:700;cursor:pointer;margin-bottom:4px" onclick="sp(\''+q.zh+'\')">'+q.zh+'</div>'
+    +'<div style="font-size:14px;color:var(--blue);font-weight:700;margin-bottom:4px">'+q.py+'</div>'
+    +'<div style="font-size:10px;color:var(--muted)">🔊 tap to hear</div>'
+    +'</div>'
+    +'<div class="opts2">'+q.opts.map(function(o,i){
+      return '<button class="opt2" id="qo'+i+'" onclick="ansQ('+i+',\''+q.zh+'\',\''+q.opts[q.ans]+'\')">'
+        +'<span class="oz">'+(['A','B','C','D'][i])+'</span>'
+        +'<span>'+o+'</span></button>';
+    }).join('')+'</div>';
+  sp(q.zh);
+}
+function ansQ(i,zh,correctText){
+  var q=qPool[qIdx];var ok=(i===q.ans);
+  if(ok)qSc++;
+  document.querySelectorAll('.opt2').forEach(function(b,j){
+    b.disabled=true;b.style.cursor='default';
+    if(j===q.ans){b.style.background='#d1fae5';b.style.borderColor='#059669';}
+    else if(j===i&&!ok){b.style.background='#fee2e2';b.style.borderColor='#dc2626';}
+  });
+  setTimeout(function(){
+    qIdx++;
+    if(qIdx>=qPool.length){
+      qDone=true;var p=Math.round(qSc/qPool.length*100);SC.quiz=p;saveSC();markNav('quiz');
+      var col=p>=80?'var(--teal)':p>=60?'var(--gold)':p>=40?'var(--blue)':'var(--muted)';
+      var em=p>=80?'🏆':p>=60?'🌟':p>=40?'📚':'🌱';
+      document.getElementById('quizArea').innerHTML=
+        '<div class="qcard" style="text-align:center;padding:32px">'
+        +'<div style="font-size:48px">'+em+'</div>'
+        +'<div style="font-size:32px;font-weight:900;color:'+col+';margin:8px 0">'+p+'%</div>'
+        +'<div style="color:var(--muted);font-weight:700;margin-bottom:16px">'+qSc+'/'+qPool.length+' correct</div>'
+        +'<button onclick="qDone=false;initQuiz()" class="cbtn bl">🔄 Try Again</button>'
+        +'</div>';
+    }else renderQQ();
+  },900);
+}
+
+// ── SCORES ─────────────────────────────────────────────────
+function renderScores(){
+  var secs=[
+    {key:'study', label:'📖 Study',  color:'var(--blue)'},
+    {key:'script',label:'🎬 Script', color:'var(--orange)'},
+    {key:'write', label:'✍️ Writing',color:'var(--purple)'},
+    {key:'quiz',  label:'🎯 Quiz',   color:'var(--red)'},
+  ];
+  var vals=secs.map(function(s){return SC[s.key];}).filter(function(x){return x!==undefined;});
+  var ov=vals.length?Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length):0;
+  var col=ov>=80?'var(--teal)':ov>=60?'var(--gold)':ov>=40?'var(--blue)':'var(--muted)';
+  var em=ov>=80?'🏆':ov>=60?'🌟':ov>=40?'📚':'🌱';
+  document.getElementById('scoresArea').innerHTML=
+    '<div class="sb-card">'
+    +'<div style="font-size:16px;font-weight:900;text-align:center;margin-bottom:14px">HSK2 Lesson 3 — Picture Vocabulary</div>'
+    +'<div style="text-align:center;margin-bottom:18px">'
+    +'<div style="font-size:58px;font-weight:900;color:'+col+'">'+em+' '+ov+'%</div>'
+    +'<div style="font-size:12px;color:var(--muted);font-weight:600">'+vals.length+'/4 sections completed</div>'
+    +'</div>'
+    +secs.map(function(s){
+      var v=SC[s.key],p=v||0;
+      return '<div class="sb-row">'
+        +'<div class="sb-lbl">'+s.label+'</div>'
+        +'<div class="sb-bar"><div class="sb-fill" style="width:'+p+'%;background:'+s.color+'"></div></div>'
+        +'<div class="sb-sc" style="color:'+s.color+'">'+(v!==undefined?v+'%':'—')+'</div></div>';
+    }).join('')
+    +'<div style="display:flex;gap:7px;justify-content:center;margin-top:16px;flex-wrap:wrap">'
+    +'<button onclick="if(confirm(\'Reset all?\'))  {SC={};saveSC();renderScores();}" class="cbtn br" style="font-size:11px">🔄 Reset</button>'
+    +'<button onclick="alert(\'Lesson 4 coming soon! 加油！\')" class="cbtn bg" style="font-size:11px">Lesson 4 →</button>'
+    +'</div></div>';
+}
+</script>
+</body>
+</html>
