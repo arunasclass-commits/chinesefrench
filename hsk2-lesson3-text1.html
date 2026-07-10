@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSK2 Lesson 3 Text 1</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+:root{
+  --ink:#1a1a2e;--red:#c0392b;--gold:#d4af37;--teal:#0d9488;
+  --blue:#1d6fa8;--purple:#6b21a8;--orange:#c05621;
+  --light:#f0f4ff;--card:#fff;--border:#e2e8f0;--muted:#8892a4;
+  --paper:#f5f0e8;--shadow:0 6px 24px rgba(0,0,0,0.10)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--ink);min-height:100vh}
+
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#1a4a7a 55%,#0d7377 100%);color:#fff;padding:22px 18px 32px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'回';position:absolute;font-family:'Noto Sans SC',sans-serif;font-size:160px;font-weight:700;color:rgba(255,255,255,0.04);top:-10px;right:8%;pointer-events:none}
+.badge{display:inline-block;background:rgba(212,175,55,.2);border:1px solid rgba(212,175,55,.5);color:var(--gold);font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:9px}
+.hero h1{font-family:'Noto Sans SC',sans-serif;font-size:clamp(16px,3.5vw,28px);font-weight:700;margin-bottom:3px}
+.hero-py{font-size:12px;color:rgba(255,255,255,.65);margin-bottom:3px}
+.hero-en{font-size:12px;color:rgba(255,255,255,.8);font-weight:700;margin-bottom:16px}
+.score-row{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+.pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:6px 10px;text-align:center;min-width:68px}
+.pill .pv{font-size:14px;font-weight:900}.pill .pl{font-size:8px;opacity:.7;text-transform:uppercase;letter-spacing:.5px}
+.pill.ov{background:rgba(212,175,55,.25);border-color:rgba(212,175,55,.5)}
+
+.nav{display:flex;background:#fff;border-bottom:2px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.nt{flex-shrink:0;padding:10px 11px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap}
+.nt.on{color:var(--red);border-bottom-color:var(--red)}
+.nt.done::after{content:'✓';color:var(--teal);margin-left:3px;font-size:10px}
+
+.content{max-width:840px;margin:0 auto;padding:16px 14px 60px}
+.sec{display:none}.sec.on{display:block}
+.shead{font-size:16px;font-weight:900;margin-bottom:4px}
+.shead2{font-size:11px;color:var(--muted);font-weight:600;margin-bottom:12px}
+.info{background:#e8f0fe;border-left:4px solid var(--blue);border-radius:0 8px 8px 0;padding:9px 13px;margin-bottom:12px;font-size:11px;color:#1a3a6b;font-weight:600;line-height:1.6}
+
+/* DIALOGUE */
+.dbox{background:var(--card);border-radius:14px;padding:18px;box-shadow:var(--shadow);margin-bottom:12px}
+.dscene{font-size:11px;color:var(--orange);font-style:italic;margin-bottom:12px;line-height:1.5;border-left:3px solid var(--gold);padding-left:8px}
+.dl{display:flex;gap:8px;margin-bottom:14px;align-items:flex-start}
+.dl:last-child{margin-bottom:0}
+.av{flex-shrink:0;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
+.avF{background:#fde8e8}.avM{background:#e8f0fe}
+.dt .zh{font-family:'Noto Sans SC',sans-serif;font-size:17px;font-weight:700;color:var(--ink);margin-bottom:2px;cursor:pointer}
+.dt .zh:hover{color:var(--blue)}
+.dt .py{font-size:10px;color:var(--blue);font-weight:600;margin-bottom:1px}
+.dt .en{font-size:10px;color:var(--muted)}
+.pb{background:none;border:1.5px solid var(--border);border-radius:4px;padding:2px 7px;font-size:9px;cursor:pointer;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:700;margin-top:3px}
+.pb:hover{border-color:var(--blue);color:var(--blue)}
+
+/* READING PASSAGE */
+.passage{background:var(--paper);border:2px solid var(--border);border-radius:12px;padding:18px;margin-bottom:14px}
+.pass-line{margin-bottom:10px}
+.pass-zh{font-family:'Noto Sans SC',sans-serif;font-size:18px;font-weight:700;color:var(--ink);cursor:pointer;margin-bottom:2px}
+.pass-zh:hover{color:var(--blue)}
+.pass-py{font-size:10px;color:var(--blue);font-weight:600}
+.pass-en{font-size:10px;color:var(--muted);margin-top:1px}
+
+/* QUIZ / QUESTIONS */
+.qprog{background:var(--border);border-radius:3px;height:4px;margin-bottom:10px}
+.qpf{height:4px;border-radius:3px;background:linear-gradient(90deg,var(--red),var(--gold));transition:width .4s}
+.qmeta{display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px}
+.qcard{background:var(--card);border-radius:12px;padding:18px;box-shadow:var(--shadow);margin-bottom:10px}
+.qtitle{font-size:13px;font-weight:800;color:var(--ink);margin-bottom:3px;line-height:1.5}
+.qtitle .qzh{font-family:'Noto Sans SC',sans-serif}
+.qpy{font-size:11px;color:var(--blue);font-weight:600;margin-bottom:10px}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{background:#fff;border:2px solid var(--border);border-radius:9px;padding:10px 13px;font-family:'Nunito',sans-serif;cursor:pointer;text-align:left;transition:all .15s;color:var(--ink)}
+.opt:hover:not(:disabled){border-color:var(--blue);background:#f0f4ff}
+.opt .okey{font-size:10px;font-weight:900;color:var(--muted);display:block;margin-bottom:3px}
+.opt .ozh{font-family:'Noto Sans SC',sans-serif;font-size:16px;font-weight:700;display:block;margin-bottom:2px}
+.opt .opy{font-size:10px;color:var(--blue);font-weight:700;display:block}
+
+/* VOCAB QUIZ */
+.vq-card{background:var(--card);border-radius:12px;padding:18px;box-shadow:var(--shadow);margin-bottom:10px;text-align:center}
+.vq-en{font-size:22px;font-weight:900;color:var(--ink);margin-bottom:14px}
+.vq-opts{display:flex;flex-direction:column;gap:7px}
+.vq-opt{background:#fff;border:2px solid var(--border);border-radius:9px;padding:10px 14px;font-family:'Nunito',sans-serif;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:all .15s}
+.vq-opt:hover:not(:disabled){border-color:var(--blue)}
+.vq-opt .vzh{font-family:'Noto Sans SC',sans-serif;font-size:20px;font-weight:700;min-width:48px}
+.vq-opt .vpy{font-size:11px;color:var(--blue);font-weight:700}
+
+/* GRAMMAR */
+.gram-box{background:var(--card);border-radius:12px;padding:18px;box-shadow:var(--shadow);margin-bottom:10px}
+.gram-pattern{background:#f3e8ff;border-radius:8px;padding:10px 14px;margin:10px 0;font-family:monospace;font-size:14px;font-weight:800;color:var(--purple)}
+.gram-example{background:var(--light);border-radius:6px;padding:8px 12px;margin-bottom:6px}
+.gram-example .gz{font-family:'Noto Sans SC',sans-serif;font-size:16px;font-weight:700;color:var(--ink)}
+.gram-example .gp{font-size:10px;color:var(--blue);font-weight:700}
+.gram-example .ge{font-size:10px;color:var(--muted)}
+.fill-input{border:2px solid var(--border);border-radius:8px;padding:9px 12px;font-family:'Noto Sans SC','Nunito',sans-serif;font-size:15px;width:100%;outline:none;margin-bottom:6px;transition:border-color .2s;background:var(--paper)}
+.fill-input:focus{border-color:var(--purple)}
+.check-btn{padding:10px 20px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;margin-top:6px;transition:all .15s}
+.check-btn:hover{opacity:.88;transform:scale(1.02)}
+.fill-result{margin-top:8px;padding:10px;border-radius:7px;font-size:12px;font-weight:700;display:none}
+.fill-result.ok{background:#d1fae5;color:#065f46}.fill-result.tip{background:#fff8e1;color:#7a5a00}
+
+/* HANZI */
+.hanzi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:12px}
+.hcard{background:var(--card);border-radius:10px;padding:12px;box-shadow:var(--shadow);text-align:center;cursor:pointer;transition:all .2s;border:2px solid transparent}
+.hcard:hover{border-color:var(--gold);transform:translateY(-2px)}
+.hcard.hsel{border-color:var(--red);background:#fff5f5}
+.hc-zh{font-family:'Noto Sans SC',sans-serif;font-size:32px;font-weight:700;margin-bottom:4px}
+.hc-py{font-size:11px;color:var(--blue);font-weight:700;margin-bottom:2px}
+.hc-en{font-size:9px;color:var(--muted);font-weight:600}
+.hc-done{position:absolute;top:5px;right:6px;font-size:11px}
+.hc-wrap{position:relative}
+.writer-outer{background:var(--card);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px}
+.writer-head{background:var(--paper);border-bottom:2px solid var(--border);padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.wh-big{font-family:'Noto Sans SC',sans-serif;font-size:42px;font-weight:900;cursor:pointer;flex-shrink:0}
+.wh-info .wpy{font-size:15px;color:var(--blue);font-weight:800}
+.wh-info .wen{font-size:12px;font-weight:700;margin-bottom:3px}
+.wh-info .wst{font-size:10px;color:var(--muted)}
+.rounds-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 16px}
+.round-unit{text-align:center}
+.rlbl{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:5px}
+.writer-cell{width:100%;aspect-ratio:1;max-width:130px;margin:0 auto;border:2px solid var(--border);border-radius:4px;background:var(--paper);position:relative;overflow:hidden}
+.writer-cell::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(212,175,55,.45);z-index:1;pointer-events:none}
+.writer-cell::after{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(212,175,55,.45);z-index:1;pointer-events:none}
+.rmsg{font-size:9px;font-weight:700;margin-top:4px;padding:2px 5px;border-radius:3px;display:inline-block}
+.rmsg.ok{background:#d1fae5;color:#065f46}.rmsg.bad{background:#fee2e2;color:#991b1b}
+.rmsg.tip{background:#fef3c7;color:#92400e}.rmsg.hide{display:none}
+.wctrl{padding:10px 16px;border-top:2px solid var(--border);display:flex;gap:6px;flex-wrap:wrap;background:#fafaf7}
+.wcb{padding:8px 13px;border:none;border-radius:5px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;cursor:pointer;transition:all .15s}
+.wcb:hover:not(:disabled){opacity:.85;transform:translateY(-1px)}.wcb:disabled{opacity:.45;cursor:not-allowed}
+.wca{background:var(--blue);color:#fff}.wcq{background:var(--red);color:#fff}
+.wch{background:var(--orange);color:#fff}.wcr{background:#e2e8f0;color:var(--ink)}
+.wcd{background:var(--teal);color:#fff}.wcn{background:var(--ink);color:#fff}
+.write-score-strip{padding:10px 16px;background:#fafaf7;border-top:2px solid var(--border);display:flex;align-items:center;gap:8px}
+.wdots{display:flex;gap:3px;flex:1}
+.wdot{width:13px;height:13px;border-radius:50%;background:var(--border);transition:all .3s}
+.wdot.done{background:var(--teal)}.wdot.act{background:var(--gold)}
+.wpct-txt{font-size:12px;font-weight:900;color:var(--teal)}
+
+/* SCORES */
+.sb-card{background:var(--card);border-radius:14px;padding:20px;box-shadow:var(--shadow);max-width:480px;margin:0 auto}
+.sb-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.sb-lbl{font-size:11px;font-weight:700;width:110px;flex-shrink:0}
+.sb-bar{flex:1;background:#f1f5f9;border-radius:3px;height:7px;overflow:hidden}
+.sb-fill{height:7px;border-radius:3px;transition:width .8s}
+.sb-sc{font-size:11px;font-weight:800;width:36px;text-align:right}
+.abtn{padding:9px 16px;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;margin:3px;transition:all .15s}
+.abtn:hover{transform:scale(1.03)}
+.abl{background:var(--blue);color:#fff}.abg{background:var(--teal);color:#fff}.abr{background:var(--red);color:#fff}
+
+@media(max-width:500px){.rounds-row{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">新HSK2 · Lesson 3 · Text 1</div>
+  <h1>今天回来得有点儿晚啊！</h1>
+  <div class="hero-py">Jīntiān huílái de yǒudiǎnr wǎn a!</div>
+  <div class="hero-en">You came home a little late today! — Dialogue, Reading, Writing, Vocab &amp; Grammar</div>
+  <div class="score-row">
+    <div class="pill"><div class="pv" id="pv1">—</div><div class="pl">🎧 Listen</div></div>
+    <div class="pill"><div class="pv" id="pv2">—</div><div class="pl">📖 Read</div></div>
+    <div class="pill"><div class="pv" id="pv3">—</div><div class="pl">✍️ Write</div></div>
+    <div class="pill"><div class="pv" id="pv4">—</div><div class="pl">📚 Vocab</div></div>
+    <div class="pill"><div class="pv" id="pv5">—</div><div class="pl">📝 Grammar</div></div>
+    <div class="pill ov"><div class="pv" id="pv0">—</div><div class="pl">⭐ Overall</div></div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nt on" onclick="show('listen',this)">🎧 Listening</button>
+  <button class="nt" onclick="show('reading',this)">📖 Reading</button>
+  <button class="nt" onclick="show('write',this)">✍️ Writing</button>
+  <button class="nt" onclick="show('vocab',this)">📚 Vocab Quiz</button>
+  <button class="nt" onclick="show('grammar',this)">📝 Grammar</button>
+  <button class="nt" onclick="show('scores',this)">🏆 Scores</button>
+</div>
+
+<div class="content">
+
+<!-- ══ LISTENING ══════════════════════════════════════════ -->
+<div class="sec on" id="s-listen">
+  <div class="shead">🎧 Listening — 听力 (10 Points)</div>
+  <div class="shead2">📍 At the apartment entrance — wife notices husband came home late.</div>
+
+  <div class="dbox">
+    <div class="dscene">📍 A wife and husband at the apartment entrance. He is returning from work late.</div>
+    <div class="dl">
+      <div class="av avF">👩</div>
+      <div class="dt">
+        <div class="zh" onclick="sp('今天回来得有点儿晚啊')">今天回来得有点儿晚啊！</div>
+        <div class="py">Jīntiān huílái de yǒudiǎnr wǎn a!</div>
+        <div class="en">You came home a little late today!</div>
+        <button class="pb" onclick="sp('今天回来得有点儿晚啊')">▶ Play</button>
+      </div>
+    </div>
+    <div class="dl">
+      <div class="av avM">👨</div>
+      <div class="dt">
+        <div class="zh" onclick="sp('今天公司事情很多，下班以后还开了一个会')">今天公司事情很多，下班以后还开了一个会。</div>
+        <div class="py">Jīntiān gōngsī shìqing hěn duō, xiàbān yǐhòu hái kāile yí ge huì.</div>
+        <div class="en">There was a lot of work today, and we had a meeting after work.</div>
+        <button class="pb" onclick="sp('今天公司事情很多，下班以后还开了一个会')">▶ Play</button>
+      </div>
+    </div>
+    <div class="dl">
+      <div class="av avF">👩</div>
+      <div class="dt">
+        <div class="zh" onclick="sp('晚饭已经做好了，你先洗手吧')">晚饭已经做好了，你先洗手吧。</div>
+        <div class="py">Wǎnfàn yǐjīng zuò hǎo le, nǐ xiān xǐshǒu ba.</div>
+        <div class="en">Dinner is already ready. Wash your hands first.</div>
+        <button class="pb" onclick="sp('晚饭已经做好了，你先洗手吧')">▶ Play</button>
+      </div>
+    </div>
+    <div class="dl">
+      <div class="av avM">👨</div>
+      <div class="dt">
+        <div class="zh" onclick="sp('好的，我先喝点儿水，再去吃饭')">好的，我先喝点儿水，再去吃饭。</div>
+        <div class="py">Hǎo de, wǒ xiān hē diǎnr shuǐ, zài qù chīfàn.</div>
+        <div class="en">Okay. I will drink some water first and then eat.</div>
+        <button class="pb" onclick="sp('好的，我先喝点儿水，再去吃饭')">▶ Play</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="shead" style="margin-top:8px;margin-bottom:8px">🎧 Listening Questions</div>
+  <div id="listenArea"></div>
+</div>
+
+<!-- ══ READING ════════════════════════════════════════════ -->
+<div class="sec" id="s-reading">
+  <div class="shead">📖 Reading — 阅读 (15 Points)</div>
+  <div class="shead2">Read the passage carefully. Click any sentence to hear it.</div>
+
+  <div class="passage">
+    <div class="pass-line">
+      <div class="pass-zh" onclick="sp('今天下午，公司很忙')">今天下午，公司很忙。</div>
+      <div class="pass-py">Jīntiān xiàwǔ, gōngsī hěn máng.</div>
+      <div class="pass-en">This afternoon the company was very busy.</div>
+    </div>
+    <div class="pass-line">
+      <div class="pass-zh" onclick="sp('下班以后，我们还开了一个会')">下班以后，我们还开了一个会。</div>
+      <div class="pass-py">Xiàbān yǐhòu, wǒmen hái kāile yí ge huì.</div>
+      <div class="pass-en">After work, we also had a meeting.</div>
+    </div>
+    <div class="pass-line">
+      <div class="pass-zh" onclick="sp('所以我回来得比较晚')">所以我回来得比较晚。</div>
+      <div class="pass-py">Suǒyǐ wǒ huílái de bǐjiào wǎn.</div>
+      <div class="pass-en">So I came home relatively late.</div>
+    </div>
+    <div class="pass-line">
+      <div class="pass-zh" onclick="sp('现在我有一点儿累')">现在我有一点儿累。</div>
+      <div class="pass-py">Xiànzài wǒ yǒu yìdiǎnr lèi.</div>
+      <div class="pass-en">Right now I am a little tired.</div>
+    </div>
+    <div class="pass-line" style="margin-bottom:0">
+      <div class="pass-zh" onclick="sp('我想先喝杯茶，再吃晚饭')">我想先喝杯茶，再吃晚饭。</div>
+      <div class="pass-py">Wǒ xiǎng xiān hē bēi chá, zài chī wǎnfàn.</div>
+      <div class="pass-en">I want to drink a cup of tea first, then eat dinner.</div>
+    </div>
+  </div>
+
+  <div class="shead" style="margin-bottom:8px">📖 Reading Questions</div>
+  <div id="readArea"></div>
+</div>
+
+<!-- ══ WRITING ════════════════════════════════════════════ -->
+<div class="sec" id="s-write">
+  <div class="shead">✍️ Writing Practice — 汉字 (15 Points)</div>
+  <div class="shead2">10 characters from today's lesson. Write each 3 times. Complete all 3 rounds to score 100%.</div>
+  <div class="info">▶ Animate → watch stroke order · ✏️ Practice → write in all 3 boxes · 💡 Hint → green stroke guide</div>
+  <div class="hanzi-grid" id="hanziGrid"></div>
+  <div id="writerOuter"></div>
+  <div id="writeScoreBox"></div>
+</div>
+
+<!-- ══ VOCAB QUIZ ══════════════════════════════════════════ -->
+<div class="sec" id="s-vocab">
+  <div class="shead">📚 Vocabulary Quiz — 词汇 (10 Points)</div>
+  <div class="shead2">English → Mandarin. All options show Chinese characters + pinyin.</div>
+  <div id="vocabArea"></div>
+</div>
+
+<!-- ══ GRAMMAR ════════════════════════════════════════════ -->
+<div class="sec" id="s-grammar">
+  <div class="shead">📝 Grammar Practice — 语法 (10 Points)</div>
+  <div class="shead2">Pattern: 先……再…… (first … then …)</div>
+  <div id="gramArea"></div>
+</div>
+
+<!-- ══ SCORES ══════════════════════════════════════════════ -->
+<div class="sec" id="s-scores">
+  <div class="shead">🏆 My Scores — 成绩</div>
+  <div id="scoresArea"></div>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js" onerror="document.head.appendChild(Object.assign(document.createElement('script'),{src:'https://unpkg.com/hanzi-writer@3.5.0/dist/hanzi-writer.min.js'}))"></script>
+<script>
+// ── DATA ────────────────────────────────────────────────
+var LISTEN_QS = [
+  {
+    q:'为什么男生回来晚了？',qpy:'Wèishénme nánshēng huílái wǎn le?',
+    qen:'Why did the man come home late?',
+    opts:[
+      {zh:'去看电影',py:'qù kàn diànyǐng',en:'Went to watch a movie'},
+      {zh:'公司事情很多',py:'gōngsī shìqing hěn duō',en:'There was a lot of work at the company'},
+      {zh:'去商店买东西',py:'qù shāngdiàn mǎi dōngxi',en:'Went shopping'},
+    ], ans:1
+  },
+  {
+    q:'女生让男生先做什么？',qpy:'Nǚshēng ràng nánshēng xiān zuò shénme?',
+    qen:'What does the woman ask him to do first?',
+    opts:[
+      {zh:'吃饭',py:'chīfàn',en:'Eat dinner'},
+      {zh:'洗手',py:'xǐshǒu',en:'Wash his hands'},
+      {zh:'睡觉',py:'shuìjiào',en:'Go to sleep'},
+    ], ans:1
+  },
+];
+
+var READ_QS = [
+  {
+    q:'他为什么回来晚？',qpy:'Tā wèishénme huílái wǎn?',
+    qen:'Why did he come home late?',
+    opts:[
+      {zh:'去旅行了',py:'qù lǚxíng le',en:'He went travelling'},
+      {zh:'公司很忙',py:'gōngsī hěn máng',en:'The company was very busy'},
+      {zh:'去朋友家了',py:'qù péngyou jiā le',en:'He went to a friend\'s place'},
+    ], ans:1
+  },
+  {
+    q:'他现在怎么样？',qpy:'Tā xiànzài zěnmeyàng?',
+    qen:'How is he feeling right now?',
+    opts:[
+      {zh:'很高兴',py:'hěn gāoxìng',en:'Very happy'},
+      {zh:'有一点儿累',py:'yǒu yìdiǎnr lèi',en:'A little tired'},
+      {zh:'生病了',py:'shēngbìng le',en:'He is sick'},
+    ], ans:1
+  },
+  {
+    q:'他先想做什么？',qpy:'Tā xiān xiǎng zuò shénme?',
+    qen:'What does he want to do first?',
+    opts:[
+      {zh:'睡觉',py:'shuìjiào',en:'Sleep'},
+      {zh:'喝茶',py:'hē chá',en:'Drink tea'},
+      {zh:'洗车',py:'xǐ chē',en:'Wash the car'},
+    ], ans:1
+  },
+];
+
+var VOCAB_QS = [
+  {
+    en:'Come back',
+    opts:[
+      {zh:'回来',py:'huílái'},{zh:'公司',py:'gōngsī'},{zh:'洗手',py:'xǐshǒu'},{zh:'晚饭',py:'wǎnfàn'}
+    ], ans:0
+  },
+  {
+    en:'Drink water',
+    opts:[
+      {zh:'吃饭',py:'chīfàn'},{zh:'喝水',py:'hē shuǐ'},{zh:'工作',py:'gōngzuò'},{zh:'睡觉',py:'shuìjiào'}
+    ], ans:1
+  },
+  {
+    en:'Busy',
+    opts:[
+      {zh:'累',py:'lèi'},{zh:'晚',py:'wǎn'},{zh:'忙',py:'máng'},{zh:'早',py:'zǎo'}
+    ], ans:2
+  },
+  {
+    en:'Meeting / a meeting',
+    opts:[
+      {zh:'公司',py:'gōngsī'},{zh:'晚饭',py:'wǎnfàn'},{zh:'手',py:'shǒu'},{zh:'会',py:'huì / meeting'}
+    ], ans:3
+  },
+  {
+    en:'Already',
+    opts:[
+      {zh:'所以',py:'suǒyǐ'},{zh:'已经',py:'yǐjīng'},{zh:'以后',py:'yǐhòu'},{zh:'现在',py:'xiànzài'}
+    ], ans:1
+  },
+  {
+    en:'Wash hands',
+    opts:[
+      {zh:'洗脸',py:'xǐ liǎn'},{zh:'洗澡',py:'xǐzǎo'},{zh:'洗手',py:'xǐshǒu'},{zh:'洗车',py:'xǐ chē'}
+    ], ans:2
+  },
+];
+
+var WRITE_CHARS = [
+  {zh:'回',py:'huí',en:'Return',st:6},
+  {zh:'公',py:'gōng',en:'Company / public',st:4},
+  {zh:'晚',py:'wǎn',en:'Late / evening',st:11},
+  {zh:'忙',py:'máng',en:'Busy',st:6},
+  {zh:'洗',py:'xǐ',en:'Wash',st:9},
+  {zh:'手',py:'shǒu',en:'Hand',st:4},
+  {zh:'喝',py:'hē',en:'Drink',st:12},
+  {zh:'水',py:'shuǐ',en:'Water',st:4},
+  {zh:'饭',py:'fàn',en:'Meal / cooked rice',st:7},
+  {zh:'累',py:'lèi',en:'Tired',st:11},
+];
+
+var GRAM_QS = [
+  {
+    prefix:'我先',suffix:'，再',suffix2:'。',
+    hint1:'洗手 (xǐshǒu — wash hands)',
+    hint2:'吃饭 (chīfàn — eat dinner)',
+    sample:'我先洗手，再吃饭。',
+    sampleEn:'I will wash my hands first, then eat dinner.'
+  },
+  {
+    prefix:'他先',suffix:'，再',suffix2:'。',
+    hint1:'喝水 (hē shuǐ — drink water)',
+    hint2:'休息 (xiūxi — rest)',
+    sample:'他先喝水，再休息。',
+    sampleEn:'He will drink water first, then rest.'
+  },
+  {
+    prefix:'我们先',suffix:'，再',suffix2:'。',
+    hint1:'开会 (kāihuì — have a meeting)',
+    hint2:'下班 (xiàbān — finish work)',
+    sample:'我们先开会，再下班。',
+    sampleEn:'We will have a meeting first, then finish work.'
+  },
+];
+
+// ── CORE ────────────────────────────────────────────────
+var SK = 'cf_hsk2_l3t1';
+var SC = JSON.parse(localStorage.getItem(SK)||'{}');
+
+function saveSC(){localStorage.setItem(SK,JSON.stringify(SC));updatePills();}
+function p(v){return v!==undefined?v+'%':'—';}
+function updatePills(){
+  ['pv1','pv2','pv3','pv4','pv5'].forEach(function(id,i){
+    var keys=['listen','read','write','vocab','grammar'];
+    document.getElementById(id).textContent=p(SC[keys[i]]);
+  });
+  var vals=Object.values(SC).filter(function(x){return x!==undefined;});
+  document.getElementById('pv0').textContent=vals.length?Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length)+'%':'—';
+}
+updatePills();
+
+function sp(t){
+  if(!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(t);
+  u.lang='zh-CN';u.rate=0.78;u.pitch=1.05;
+  var v=speechSynthesis.getVoices().find(function(x){return x.lang.startsWith('zh');});
+  if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=function(){};
+
+var navBtns=document.querySelectorAll('.nt');
+var navMap=['listen','reading','write','vocab','grammar','scores'];
+function show(id,btn){
+  document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('on');});
+  navBtns.forEach(function(t){t.classList.remove('on');});
+  document.getElementById('s-'+id).classList.add('on');
+  btn.classList.add('on');
+  if(id==='reading')initRead();
+  if(id==='write')initWrite();
+  if(id==='vocab')initVocab();
+  if(id==='grammar')initGram();
+  if(id==='scores')renderScores();
+}
+function markNav(id){var i=navMap.indexOf(id);if(i>=0)navBtns[i].classList.add('done');}
+function shuffle(a){var b=[...a];for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+// ── LISTENING ───────────────────────────────────────────
+var lAnswered={},lScore=0;
+(function initListen(){
+  document.getElementById('listenArea').innerHTML=LISTEN_QS.map(function(q,i){
+    return '<div class="qcard" id="lq'+i+'">'
+      +'<div class="qtitle"><span class="qzh">Q'+(i+1)+'. '+q.q+'</span></div>'
+      +'<div class="qpy">'+q.qpy+' — '+q.qen+'</div>'
+      +'<div class="opts">'+q.opts.map(function(o,j){
+        return '<button class="opt" id="lo'+i+'_'+j+'" onclick="ansL('+i+','+j+')">'
+          +'<span class="okey">'+['A','B','C'][j]+'</span>'
+          +'<span class="ozh">'+o.zh+'</span>'
+          +'<span class="opy">'+o.py+' — '+o.en+'</span>'
+          +'</button>';
+      }).join('')+'</div></div>';
+  }).join('');
+})();
+
+var currentListenAudio='';
+function ansL(qi,ji){
+  if(lAnswered[qi]!==undefined)return;
+  var q=LISTEN_QS[qi];lAnswered[qi]=ji;
+  if(ji===q.ans)lScore++;
+  for(var j=0;j<q.opts.length;j++){
+    var b=document.getElementById('lo'+qi+'_'+j);if(!b)continue;
+    b.disabled=true;b.style.cursor='default';
+    if(j===q.ans){b.style.background='#d1fae5';b.style.borderColor='#059669';}
+    else if(j===ji&&ji!==q.ans){b.style.background='#fee2e2';b.style.borderColor='#dc2626';}
+  }
+  if(Object.keys(lAnswered).length>=LISTEN_QS.length){
+    var pct=Math.round(lScore/LISTEN_QS.length*100);
+    SC.listen=pct;saveSC();markNav('listen');
+    document.getElementById('listenArea').insertAdjacentHTML('beforeend',
+      '<div style="text-align:center;padding:14px;background:#d1fae5;border-radius:10px;margin-top:10px;font-weight:800;color:#065f46">'
+      +'🎧 Listening complete! Score: '+pct+'% ('+lScore+'/'+LISTEN_QS.length+')</div>');
+  }
+}
+
+// ── READING ─────────────────────────────────────────────
+var rAnswered={},rScore=0,rInited=false;
+function initRead(){
+  if(rInited)return;rInited=true;rAnswered={};rScore=0;
+  document.getElementById('readArea').innerHTML=READ_QS.map(function(q,i){
+    return '<div class="qcard" id="rq'+i+'">'
+      +'<div class="qtitle"><span class="qzh">Q'+(i+1)+'. '+q.q+'</span></div>'
+      +'<div class="qpy">'+q.qpy+' — '+q.qen+'</div>'
+      +'<div class="opts">'+q.opts.map(function(o,j){
+        return '<button class="opt" id="ro'+i+'_'+j+'" onclick="ansR('+i+','+j+')">'
+          +'<span class="okey">'+['A','B','C'][j]+'</span>'
+          +'<span class="ozh">'+o.zh+'</span>'
+          +'<span class="opy">'+o.py+' — '+o.en+'</span>'
+          +'</button>';
+      }).join('')+'</div></div>';
+  }).join('')
+  +'<button id="rSub" style="width:100%;padding:11px;background:var(--blue);color:#fff;border:none;border-radius:9px;font-family:Nunito,sans-serif;font-size:13px;font-weight:800;cursor:pointer;margin-top:8px" onclick="submitRead()">Submit Reading Answers ✓</button>';
+}
+
+function ansR(qi,ji){
+  rAnswered[qi]=ji;
+  for(var j=0;j<3;j++){var b=document.getElementById('ro'+qi+'_'+j);if(b){b.style.borderColor='';b.style.background='';}}
+  var s=document.getElementById('ro'+qi+'_'+ji);if(s){s.style.borderColor='var(--blue)';s.style.background='#e8f0fe';}
+}
+
+function submitRead(){
+  if(Object.keys(rAnswered).length<READ_QS.length){alert('Please answer all '+READ_QS.length+' questions!');return;}
+  rScore=0;
+  READ_QS.forEach(function(q,i){
+    var ans=rAnswered[i];
+    for(var j=0;j<q.opts.length;j++){
+      var b=document.getElementById('ro'+i+'_'+j);if(!b)continue;
+      b.disabled=true;b.style.cursor='default';
+      if(j===q.ans){b.style.background='#d1fae5';b.style.borderColor='#059669';}
+      else if(j===ans&&ans!==q.ans){b.style.background='#fee2e2';b.style.borderColor='#dc2626';}
+    }
+    if(ans===q.ans)rScore++;
+  });
+  var pct=Math.round(rScore/READ_QS.length*100);SC.read=pct;saveSC();markNav('reading');
+  var btn=document.getElementById('rSub');
+  btn.textContent='✅ Score: '+pct+'% ('+rScore+'/'+READ_QS.length+')';
+  btn.style.background='var(--teal)';btn.disabled=true;
+}
+
+// ── WRITING ─────────────────────────────────────────────
+var WA={curW:0,writers:{},quizOn:{},roundDone:{}};
+function initWrite(){buildHanziGrid();buildWriter(0);}
+function buildHanziGrid(){
+  document.getElementById('hanziGrid').innerHTML=WRITE_CHARS.map(function(w,i){
+    var done=(WA.roundDone[i]||[]).length;
+    return '<div class="hc-wrap"><div class="hcard '+(i===WA.curW?'hsel':'')+'" onclick="selectW('+i+')">'
+      +(done>0?'<span class="hc-done">'+(['','🔵','🟡','✅'][done]||'✅')+'</span>':'')
+      +'<div class="hc-zh">'+w.zh+'</div>'
+      +'<div class="hc-py">'+w.py+'</div>'
+      +'<div class="hc-en">'+w.en+'</div>'
+      +'</div></div>';
+  }).join('');
+}
+function selectW(i){WA.curW=i;WA.writers={};WA.quizOn={};buildHanziGrid();buildWriter(i);document.getElementById('writerOuter').scrollIntoView({behavior:'smooth',block:'nearest'});}
+function buildWriter(i){
+  var w=WRITE_CHARS[i];
+  var boxes='';
+  for(var r=0;r<3;r++){
+    boxes+='<div class="round-unit"><div class="rlbl">Round '+(r+1)+'</div>'
+      +'<div class="writer-cell"><div id="wc'+i+'_'+r+'"></div></div>'
+      +'<div class="rmsg hide" id="rm'+i+'_'+r+'"></div></div>';
+  }
+  document.getElementById('writerOuter').innerHTML=
+    '<div class="writer-outer">'
+    +'<div class="writer-head">'
+    +'<div class="wh-big" onclick="sp(\''+w.zh+'\')">'+w.zh+' 🔊</div>'
+    +'<div class="wh-info"><div class="wpy">'+w.py+'</div><div class="wen">'+w.en+'</div><div class="wst">'+w.st+' strokes</div></div>'
+    +'</div>'
+    +'<div class="wctrl">'
+    +'<button class="wcb wca" id="btnAn" disabled onclick="doAnim()">▶ Animate</button>'
+    +'<button class="wcb wcq" id="btnPr" disabled onclick="doQuiz()">✏️ Practice × 3</button>'
+    +'<button class="wcb wch" id="btnHi" disabled onclick="doHint()">💡 Hint</button>'
+    +'<button class="wcb wcr" id="btnRe" disabled onclick="doReset()">🔄 Reset</button>'
+    +'<span style="margin-left:auto;font-size:10px;font-weight:700;color:var(--muted)">'+w.st+' strokes</span>'
+    +'</div>'
+    +'<div class="rounds-row">'+boxes+'</div>'
+    +'<div class="write-score-strip">'
+    +'<div style="font-size:10px;font-weight:700;color:var(--muted);margin-right:4px">Rounds:</div>'
+    +'<div class="wdots" id="wdots'+i+'">'
+    +'<div class="wdot '+(((WA.roundDone[i]||[]).indexOf(0)>=0)?'done':'')+'"></div>'
+    +'<div class="wdot '+(((WA.roundDone[i]||[]).indexOf(1)>=0)?'done':'')+'"></div>'
+    +'<div class="wdot '+(((WA.roundDone[i]||[]).indexOf(2)>=0)?'done':'')+'"></div>'
+    +'</div>'
+    +'<div class="wpct-txt" id="wpct'+i+'">'+Math.round(((WA.roundDone[i]||[]).length)/3*100)+'%</div>'
+    +'</div>'
+    +'<div style="padding:10px 16px;background:#fafaf7;display:flex;gap:6px;border-top:2px solid var(--border)">'
+    +'<button class="wcb wcr" onclick="prevW()">← Prev</button>'
+    +'<button class="wcb wcn" onclick="nextW()">Next →</button>'
+    +'<span style="margin-left:auto;font-size:10px;font-weight:700;color:var(--muted)">'+(i+1)+'/'+WRITE_CHARS.length+'</span>'
+    +'</div></div>';
+  for(var _r=0;_r<3;_r++) setRM(i,_r,'tip','⏳ Loading stroke data…');
+  setTimeout(function(){createW(i);},300);
+}
+function setRM(ci,r,cls,txt){var el=document.getElementById('rm'+ci+'_'+r);if(!el)return;el.className='rmsg '+cls;el.textContent=txt;}
+function enableWB(){['btnAn','btnPr','btnHi','btnRe'].forEach(function(id){var b=document.getElementById(id);if(b)b.disabled=false;});}
+function disableWB(){['btnAn','btnPr','btnHi','btnRe'].forEach(function(id){var b=document.getElementById(id);if(b)b.disabled=true;});}
+
+function createW(ci){
+  var ch=WRITE_CHARS[ci].zh;var loaded=0;
+  for(var r=0;r<3;r++){
+    (function(rr){
+      var target=document.getElementById('wc'+ci+'_'+rr);
+      if(!target||typeof HanziWriter==='undefined'){if(++loaded>=3)enableWB();return;}
+      fetch('https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0.1/'+ch+'.json')
+        .then(function(res){if(!res.ok)throw 0;return res.json();})
+        .catch(function(){return fetch('https://unpkg.com/hanzi-writer-data@2.0/'+ch+'.json').then(function(r){return r.json();});})
+        .then(function(data){
+          try{
+            var wt=HanziWriter.create(target,ch,{
+              width:110,height:110,padding:10,showOutline:true,showCharacter:false,
+              strokeColor:'#1a1a2e',radicalColor:'#c0392b',outlineColor:'rgba(0,0,0,0.08)',
+              drawingColor:'#1d6fa8',drawingWidth:4,strokeAnimationSpeed:0.8,delayBetweenStrokes:300,
+              highlightOnComplete:true,highlightColor:'#0d9488',
+              charDataLoader:function(c,onL){onL(data);}
+            });
+            if(!WA.writers[ci])WA.writers[ci]={};
+            WA.writers[ci][rr]=wt;setRM(ci,rr,'hide','');
+          }catch(e){fbW(target,ch,ci,rr);}
+          if(++loaded>=3)enableWB();
+        }).catch(function(){fbW(target,ch,ci,rr);if(++loaded>=3)enableWB();});
+    })(r);
+  }
+  setTimeout(enableWB,8000);
+}
+function fbW(el,ch,ci,r){el.innerHTML='<div style="width:110px;height:110px;display:flex;align-items:center;justify-content:center;font-family:\'Noto Sans SC\',sans-serif;font-size:55px;color:rgba(0,0,0,.1)">'+ch+'</div>';setRM(ci,r,'tip','Tap to draw');}
+
+function doAnim(){
+  if(!WA.writers[WA.curW])return;var ci=WA.curW;
+  for(var r=0;r<3;r++){(function(rr){var w=WA.writers[ci][rr];if(!w)return;
+    try{w.animateCharacter({onComplete:function(){setRM(ci,rr,'tip','✅ Click ✏️ Practice');}});setRM(ci,rr,'tip','▶ Watch…');}catch(e){}
+  })(r);}
+}
+function doQuiz(){
+  if(!WA.writers[WA.curW])return;WA.quizOn={};var ci=WA.curW;
+  for(var r=0;r<3;r++){(function(rr){var w=WA.writers[ci][rr];if(!w)return;
+    try{
+      WA.quizOn[rr]=true;
+      w.quiz({
+        onMistake:function(){setRM(ci,rr,'bad','❌ Wrong! Try 💡');},
+        onCorrectStroke:function(){setRM(ci,rr,'tip','✓ Keep going…');},
+        onComplete:function(){WA.quizOn[rr]=false;setRM(ci,rr,'ok','🎉 Round '+(rr+1)+' done!');markRound(ci,rr);}
+      });
+      setRM(ci,rr,'tip','✏️ Draw in order…');
+    }catch(e){setRM(ci,rr,'bad','⚠️ Error. Reset.');}
+  })(r);}
+}
+function doHint(){
+  if(!WA.writers[WA.curW])return;var ci=WA.curW;
+  for(var r=0;r<3;r++){(function(rr){var w=WA.writers[ci][rr];if(!w)return;
+    if(!WA.quizOn[rr]){
+      try{WA.quizOn[rr]=true;
+        w.quiz({onMistake:function(){setRM(ci,rr,'bad','❌');},onCorrectStroke:function(){setRM(ci,rr,'tip','✓');},onComplete:function(){WA.quizOn[rr]=false;setRM(ci,rr,'ok','🎉 Round '+(rr+1)+' done!');markRound(ci,rr);}});
+        setTimeout(function(){try{w.showHint();setRM(ci,rr,'tip','💡 Green = next stroke');}catch(e){}},600);
+      }catch(e){}
+    }else{try{w.showHint();setRM(ci,rr,'tip','💡 Green = next stroke');}catch(e){}}
+  })(r);}
+}
+function doReset(){
+  WA.quizOn={};WA.writers={};var ci=WA.curW;var ch=WRITE_CHARS[ci].zh;
+  for(var r=0;r<3;r++){setRM(ci,r,'hide','');var t=document.getElementById('wc'+ci+'_'+r);if(t)t.innerHTML='';}
+  disableWB();setTimeout(function(){createW(ci);},200);
+}
+function markRound(ci,r){
+  if(!WA.roundDone[ci])WA.roundDone[ci]=[];
+  if(WA.roundDone[ci].indexOf(r)<0)WA.roundDone[ci].push(r);
+  var done=WA.roundDone[ci].length;
+  var dots=document.getElementById('wdots'+ci);
+  if(dots){dots.querySelectorAll('.wdot').forEach(function(d,j){d.className='wdot '+(WA.roundDone[ci].indexOf(j)>=0?'done':'');});}
+  var pctEl=document.getElementById('wpct'+ci);if(pctEl)pctEl.textContent=Math.round(done/3*100)+'%';
+  buildHanziGrid();
+  var totalDone=0;WRITE_CHARS.forEach(function(_,i){totalDone+=(WA.roundDone[i]||[]).length;});
+  var pct=Math.round(totalDone/(WRITE_CHARS.length*3)*100);
+  SC.write=pct;saveSC();if(pct>=100)markNav('write');
+  var sb=document.getElementById('writeScoreBox');
+  if(sb)sb.innerHTML=pct>=100?'<div style="text-align:center;padding:12px;background:#d1fae5;border-radius:10px;margin-top:8px;font-weight:800;color:#065f46">✍️ Writing Complete! 100% saved!</div>':'';
+}
+function prevW(){if(WA.curW>0){WA.curW--;WA.writers={};WA.quizOn={};buildHanziGrid();buildWriter(WA.curW);}}
+function nextW(){if(WA.curW<WRITE_CHARS.length-1){WA.curW++;WA.writers={};WA.quizOn={};buildHanziGrid();buildWriter(WA.curW);}}
+
+// ── VOCAB QUIZ ──────────────────────────────────────────
+var vIdx=0,vSc=0,vDone=false,vPool=[];
+function initVocab(){if(vDone)return;vPool=shuffle([...VOCAB_QS]);vIdx=0;vSc=0;renderVQ();}
+function renderVQ(){
+  var q=vPool[vIdx];
+  var optsShuffled=q.opts.map(function(o,i){return {o:o,orig:i};});
+  // keep order but display cleanly
+  document.getElementById('vocabArea').innerHTML=
+    '<div class="qprog"><div class="qpf" style="width:'+Math.round(vIdx/vPool.length*100)+'%"></div></div>'
+    +'<div class="qmeta"><span>Q'+(vIdx+1)+'/'+vPool.length+'</span><span style="color:var(--teal)">✅'+vSc+'/'+vIdx+'</span></div>'
+    +'<div class="vq-card">'
+    +'<div class="vq-en">'+q.en+'</div>'
+    +'<div class="vq-opts">'+q.opts.map(function(o,j){
+      return '<button class="vq-opt" id="vo'+j+'" onclick="ansV('+j+','+q.ans+')">'
+        +'<span class="okey" style="font-size:10px;font-weight:900;color:var(--muted)">'+['A','B','C','D'][j]+'</span>'
+        +'<span class="vzh">'+o.zh+'</span>'
+        +'<span class="vpy">'+o.py+'</span>'
+        +'</button>';
+    }).join('')+'</div></div>';
+}
+function ansV(i,correctIdx){
+  var ok=(i===correctIdx);if(ok)vSc++;
+  document.querySelectorAll('.vq-opt').forEach(function(b,j){
+    b.disabled=true;b.style.cursor='default';
+    if(j===correctIdx){b.style.background='#d1fae5';b.style.borderColor='#059669';}
+    else if(j===i&&!ok){b.style.background='#fee2e2';b.style.borderColor='#dc2626';}
+  });
+  setTimeout(function(){
+    vIdx++;
+    if(vIdx>=vPool.length){
+      vDone=true;var pct=Math.round(vSc/vPool.length*100);SC.vocab=pct;saveSC();markNav('vocab');
+      var col=pct>=80?'var(--teal)':pct>=60?'var(--gold)':'var(--red)';
+      var em=pct>=80?'🏆':pct>=60?'🌟':'📚';
+      document.getElementById('vocabArea').innerHTML='<div style="text-align:center;padding:32px;background:var(--card);border-radius:14px;box-shadow:var(--shadow)">'
+        +'<div style="font-size:48px">'+em+'</div>'
+        +'<div style="font-size:30px;font-weight:900;color:'+col+';margin:8px 0">'+pct+'%</div>'
+        +'<div style="color:var(--muted);font-weight:700;margin-bottom:16px">'+vSc+'/'+vPool.length+' correct</div>'
+        +'<button onclick="vDone=false;initVocab()" class="abtn abl">🔄 Try Again</button></div>';
+    }else renderVQ();
+  },900);
+}
+
+// ── GRAMMAR ─────────────────────────────────────────────
+var gDone=[];
+function initGram(){
+  document.getElementById('gramArea').innerHTML=
+    '<div class="gram-box">'
+    +'<div style="font-size:13px;font-weight:800;margin-bottom:6px">Pattern: 先……再……</div>'
+    +'<div style="font-size:12px;color:var(--muted);margin-bottom:6px">先 (xiān) = first &nbsp;·&nbsp; 再 (zài) = then / after that</div>'
+    +'<div class="gram-pattern">Subject + 先 + [Action 1] ，再 + [Action 2]。</div>'
+    +'<div class="gram-example"><div class="gz" onclick="sp(this.dataset.t)" data-t="我先喝水，再吃饭">我先喝点儿水，再去吃饭。</div><div class="gp">Wǒ xiān hē diǎnr shuǐ, zài qù chīfàn.</div><div class="ge">I will drink some water first, then eat.</div></div>'
+    +'<div class="gram-example"><div class="gz" onclick="sp(this.dataset.t)" data-t="你先洗手吧">你先洗手吧。</div><div class="gp">Nǐ xiān xǐshǒu ba.</div><div class="ge">Wash your hands first.</div></div>'
+    +'</div>'
+    +GRAM_QS.map(function(q,i){
+      return '<div class="gram-box" id="gbox'+i+'">'
+        +'<div style="font-size:12px;font-weight:800;color:var(--muted);margin-bottom:8px">Fill in the blanks — Sentence '+(i+1)+':</div>'
+        +'<div style="font-family:\'Noto Sans SC\',sans-serif;font-size:18px;font-weight:700;margin-bottom:10px;color:var(--ink)">'
+        +q.prefix+' <span style="color:var(--border)">______</span> ，再 <span style="color:var(--border)">______</span> 。</div>'
+        +'<div style="font-size:11px;color:var(--muted);margin-bottom:8px">💡 Hint: Use <strong>'+q.hint1+'</strong> and <strong>'+q.hint2+'</strong></div>'
+        +'<input class="fill-input" id="gi1_'+i+'" placeholder="First action (先)…">'
+        +'<input class="fill-input" id="gi2_'+i+'" placeholder="Then action (再)…">'
+        +'<button class="check-btn" onclick="checkGram('+i+')">Check ✓</button>'
+        +'<div class="fill-result" id="gr'+i+'"></div>'
+        +'</div>';
+    }).join('');
+}
+function checkGram(i){
+  var q=GRAM_QS[i];
+  var v1=(document.getElementById('gi1_'+i).value||'').trim();
+  var v2=(document.getElementById('gi2_'+i).value||'').trim();
+  var res=document.getElementById('gr'+i);res.style.display='block';
+  if(v1.length>0&&v2.length>0){
+    res.className='fill-result ok';
+    res.innerHTML='✅ Great attempt!<br>'
+      +'<span style="font-family:\'Noto Sans SC\',sans-serif;font-size:16px;font-weight:700">'+q.prefix+v1+'，再'+v2+'。</span><br>'
+      +'<span style="font-size:11px;color:#065f46">Sample answer: <strong>'+q.sample+'</strong> — '+q.sampleEn+'</span>';
+    if(gDone.indexOf(i)<0)gDone.push(i);
+    var pct=Math.round(gDone.length/GRAM_QS.length*100);
+    SC.grammar=pct;saveSC();if(pct>=100)markNav('grammar');
+  }else{
+    res.className='fill-result tip';
+    res.innerHTML='⚠️ Please fill in both blanks. Hint: try <strong>'+q.hint1+'</strong> for 先 and <strong>'+q.hint2+'</strong> for 再.';
+  }
+}
+
+// ── SCORES ──────────────────────────────────────────────
+function renderScores(){
+  var secs=[
+    {key:'listen', label:'🎧 Listening',   pts:'10 pts', color:'var(--blue)'},
+    {key:'read',   label:'📖 Reading',     pts:'15 pts', color:'var(--teal)'},
+    {key:'write',  label:'✍️ Writing',     pts:'15 pts', color:'var(--purple)'},
+    {key:'vocab',  label:'📚 Vocab Quiz',  pts:'10 pts', color:'var(--red)'},
+    {key:'grammar',label:'📝 Grammar',     pts:'10 pts', color:'var(--orange)'},
+  ];
+  var vals=secs.map(function(s){return SC[s.key];}).filter(function(x){return x!==undefined;});
+  var ov=vals.length?Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length):0;
+  var col=ov>=80?'var(--teal)':ov>=60?'var(--gold)':ov>=40?'var(--blue)':'var(--muted)';
+  var em=ov>=80?'🏆':ov>=60?'🌟':ov>=40?'📚':'🌱';
+  document.getElementById('scoresArea').innerHTML=
+    '<div class="sb-card">'
+    +'<div style="font-size:15px;font-weight:900;text-align:center;margin-bottom:12px">HSK2 Lesson 3 · Text 1</div>'
+    +'<div style="text-align:center;margin-bottom:16px">'
+    +'<div style="font-size:54px;font-weight:900;color:'+col+'">'+em+' '+ov+'%</div>'
+    +'<div style="font-size:11px;color:var(--muted);font-weight:600">'+vals.length+'/5 sections completed</div>'
+    +'</div>'
+    +secs.map(function(s){
+      var v=SC[s.key],pct=v||0;
+      return '<div class="sb-row">'
+        +'<div class="sb-lbl">'+s.label+'</div>'
+        +'<div class="sb-bar"><div class="sb-fill" style="width:'+pct+'%;background:'+s.color+'"></div></div>'
+        +'<div class="sb-sc" style="color:'+s.color+'">'+(v!==undefined?v+'%':'—')+'</div>'
+        +'</div>';
+    }).join('')
+    +'<div style="display:flex;gap:6px;justify-content:center;margin-top:14px;flex-wrap:wrap">'
+    +'<button onclick="if(confirm(\'Reset all scores?\'))  {SC={};saveSC();renderScores();}" class="abtn" style="background:#e2e8f0;color:var(--ink);font-size:11px">🔄 Reset</button>'
+    +'<button onclick="alert(\'Text 2 coming soon! 加油！\')" class="abtn abg" style="font-size:11px">Text 2 →</button>'
+    +'</div></div>';
+}
+</script>
+</body>
+</html>
