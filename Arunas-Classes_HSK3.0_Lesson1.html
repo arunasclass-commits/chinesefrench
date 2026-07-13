@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<!--
+  Aruna's Classes — New HSK 3.0, Lesson 1 (我们去机场接你们)
+  © 2026 RRAruna Enterprises · ChineseFrench · Aruna's Classes. All Rights Reserved.
+  Standalone, offline-capable (GitHub Pages friendly). No backend, no API key.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="RRAruna Enterprises · ChineseFrench · Aruna's Classes">
+<meta name="copyright" content="© 2026 RRAruna Enterprises · ChineseFrench · Aruna's Classes. All Rights Reserved.">
+<title>Aruna's Classes — HSK 3.0 Lesson 1 · 我们去机场接你们</title>
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.7.1/dist/hanzi-writer.min.js"></script>
+<style>
+:root{
+  --red:#a2231d;
+  --red-dark:#7a1a15;
+  --gold:#c99a2e;
+  --gold-light:#f3e3b3;
+  --cream:#fbf6ea;
+  --ink:#2b1a12;
+  --green:#2e7d32;
+  --gray:#8a7f6e;
+  --radius:14px;
+  --shadow:0 4px 14px rgba(122,26,21,.15);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  min-height:100vh;
+}
+.app-header{
+  background:linear-gradient(135deg,var(--red) 0%,var(--red-dark) 100%);
+  color:var(--gold-light);
+  padding:18px 16px 14px;
+  text-align:center;
+  border-bottom:4px solid var(--gold);
+  position:relative;
+}
+.app-header h1{
+  margin:0 0 4px;
+  font-size:1.5rem;
+  letter-spacing:.5px;
+}
+.app-header .sub{
+  font-size:.85rem;
+  color:var(--gold);
+  font-weight:600;
+}
+.app-header .lesson-title{
+  margin-top:8px;
+  font-size:1.05rem;
+  color:#fff;
+}
+.student-bar{
+  max-width:720px;
+  margin:12px auto 0;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.student-bar input{
+  padding:8px 12px;
+  border-radius:20px;
+  border:none;
+  font-size:.9rem;
+  width:220px;
+}
+.student-bar .streak{
+  background:var(--gold);
+  color:var(--red-dark);
+  font-weight:700;
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:.85rem;
+}
+nav.tabs{
+  display:flex;
+  overflow-x:auto;
+  gap:6px;
+  padding:10px 10px 0;
+  max-width:1000px;
+  margin:0 auto;
+  -webkit-overflow-scrolling:touch;
+}
+nav.tabs button{
+  flex:0 0 auto;
+  background:#fff;
+  border:2px solid var(--gold);
+  color:var(--red-dark);
+  padding:9px 14px;
+  border-radius:20px 20px 0 0;
+  font-weight:700;
+  font-size:.82rem;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:.15s;
+}
+nav.tabs button.active{
+  background:var(--red);
+  color:#fff;
+  border-color:var(--red);
+}
+main{
+  max-width:1000px;
+  margin:0 auto;
+  padding:18px 14px 60px;
+}
+.panel{display:none;animation:fadein .25s ease;}
+.panel.active{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:#fff;
+  border:1px solid var(--gold-light);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:16px;
+  margin-bottom:16px;
+}
+.card h2{
+  margin-top:0;
+  color:var(--red-dark);
+  border-bottom:2px solid var(--gold-light);
+  padding-bottom:8px;
+  font-size:1.15rem;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:12px;
+}
+.vocab-card{
+  background:var(--cream);
+  border:1px solid var(--gold-light);
+  border-radius:12px;
+  padding:12px;
+  text-align:center;
+}
+.vocab-card .emoji{font-size:2rem;}
+.vocab-card .hanzi{font-size:1.8rem;font-weight:700;color:var(--red-dark);margin:4px 0 0;}
+.vocab-card .pinyin{color:var(--gray);font-style:italic;}
+.vocab-card .meaning{font-size:.85rem;margin:4px 0 8px;}
+.vocab-card .etym{font-size:.72rem;color:var(--gray);text-align:left;background:#fff;padding:6px 8px;border-radius:8px;margin-top:6px;display:none;}
+.btn{
+  background:var(--red);
+  color:#fff;
+  border:none;
+  padding:7px 12px;
+  border-radius:16px;
+  font-size:.78rem;
+  cursor:pointer;
+  margin:2px;
+  font-weight:600;
+}
+.btn:hover{background:var(--red-dark);}
+.btn.gold{background:var(--gold);color:var(--red-dark);}
+.btn.gold:hover{background:#b3872a;}
+.btn.outline{background:#fff;color:var(--red);border:2px solid var(--red);}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+
+.dialogue-line{
+  margin-bottom:10px;
+  padding:10px 12px;
+  border-left:4px solid var(--gold);
+  background:var(--cream);
+  border-radius:0 8px 8px 0;
+}
+.dialogue-line .spk{font-weight:700;color:var(--red-dark);}
+.dialogue-line .hanzi{font-size:1.15rem;margin:4px 0 2px;}
+.dialogue-line .pinyin{color:var(--gray);font-style:italic;font-size:.9rem;}
+.dialogue-line .meaning{font-size:.85rem;color:#444;margin-top:2px;}
+.pinyin.hidden-py{display:none;}
+
+.mc-q{margin-bottom:14px;padding:10px;border:1px solid var(--gold-light);border-radius:10px;}
+.mc-opt{
+  display:block;
+  width:100%;
+  text-align:left;
+  background:#fff;
+  border:1px solid var(--gold-light);
+  border-radius:8px;
+  padding:8px 10px;
+  margin:6px 0;
+  cursor:pointer;
+  font-size:.92rem;
+}
+.mc-opt.correct{background:#e3f5e1;border-color:var(--green);}
+.mc-opt.wrong{background:#fbe3e1;border-color:var(--red);}
+.mc-opt:disabled{cursor:default;}
+
+.score-badge{
+  display:inline-block;
+  background:var(--gold);
+  color:var(--red-dark);
+  font-weight:700;
+  padding:4px 10px;
+  border-radius:14px;
+  font-size:.85rem;
+}
+.tag{
+  display:inline-block;background:var(--gold-light);color:var(--red-dark);
+  font-size:.72rem;padding:2px 8px;border-radius:10px;margin-left:6px;font-weight:600;
+}
+.writer-target{border:2px dashed var(--gold);border-radius:10px;background:#fff;margin:0 auto;}
+.write-grid{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;}
+.write-item{text-align:center;background:var(--cream);border-radius:12px;padding:10px;width:170px;}
+.cloze-bank{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.cloze-bank span{
+  background:var(--gold-light);border:1px solid var(--gold);border-radius:16px;
+  padding:5px 12px;font-weight:600;cursor:pointer;font-size:.9rem;
+}
+.cloze-bank span.used{opacity:.35;pointer-events:none;}
+.cloze-sentence{margin-bottom:10px;font-size:1rem;line-height:1.9;}
+.blank-slot{
+  display:inline-block;min-width:46px;border-bottom:2px solid var(--red);
+  text-align:center;font-weight:700;color:var(--red-dark);cursor:pointer;
+  padding:0 4px;
+}
+.footer-copy{
+  text-align:center;color:var(--gray);font-size:.72rem;padding:20px 10px 40px;
+}
+.watermark{
+  position:fixed;bottom:6px;right:10px;font-size:.62rem;color:rgba(122,26,21,.35);
+  pointer-events:none;z-index:5;
+}
+.note{font-size:.8rem;color:var(--gray);background:var(--gold-light);padding:8px 10px;border-radius:8px;margin-bottom:10px;}
+.progress-table{width:100%;border-collapse:collapse;}
+.progress-table td,.progress-table th{padding:8px;border-bottom:1px solid var(--gold-light);text-align:left;font-size:.9rem;}
+.freeform{width:100%;padding:8px;border:1px solid var(--gold-light);border-radius:8px;font-size:.9rem;margin-top:4px;}
+.reveal-box{display:none;background:#eef7ee;border:1px solid var(--green);padding:8px 10px;border-radius:8px;margin-top:6px;font-size:.85rem;}
+.grammar-card h3{color:var(--red-dark);margin-top:0;}
+select.rp-select{padding:6px;border-radius:8px;border:1px solid var(--gold-light);}
+@media (max-width:600px){
+  .app-header h1{font-size:1.2rem;}
+  .write-item{width:140px;}
+}
+</style>
+</head>
+<body>
+
+<div class="watermark">© 2026 RRAruna Enterprises · ChineseFrench · Aruna's Classes</div>
+
+<header class="app-header">
+  <h1>爱睿娜的课堂 · Aruna's Classes</h1>
+  <div class="sub">新HSK 3.0 标准教程 — New HSK Course 3.0</div>
+  <div class="lesson-title">第一课 · Lesson 1 · 我们去机场接你们</div>
+  <div class="student-bar">
+    <input id="studentName" type="text" placeholder="Enter your name to save progress...">
+    <span class="streak" id="streakBadge">🔥 0 day streak</span>
+  </div>
+</header>
+
+<nav class="tabs" id="tabNav"></nav>
+
+<main id="mainArea"></main>
+
+<div class="footer-copy">
+  © 2026 RRAruna Enterprises · ChineseFrench · Aruna's Classes. All Rights Reserved.<br>
+  Audio &amp; microphone features work best in Chrome or Edge on desktop/Android.
+</div>
+
+<script>
+/* ============================================================
+   © 2026 RRAruna Enterprises · ChineseFrench · Aruna's Classes.
+   All Rights Reserved.
+   ============================================================ */
+const COPYRIGHT = "© 2026 RRAruna Enterprises · ChineseFrench · Aruna's Classes. All Rights Reserved.";
+
+/* ============================================================
+   LESSON CONTENT OBJECT — edit this to reuse the engine
+   for future lessons.
+   ============================================================ */
+const LESSON = {
+  code: "hsk3-l1",
+  title: "第一课 我们去机场接你们",
+  vocab: [
+    {id:1, ch:"以为", py:"yǐwéi", en:"to think; suppose (mistakenly)", emoji:"🤔",
+     etym:"以 (to take/use) + 为 (to regard as) — literally 'to take [something] as [true]', used when an assumption turns out to be wrong."},
+    {id:2, ch:"像", py:"xiàng", en:"to resemble; be like", emoji:"👥",
+     etym:"Contains 象 (elephant / image) — the character grew from 'likeness/image' to mean 'resembling'."},
+    {id:3, ch:"长", py:"zhǎng", en:"to grow; develop", emoji:"🌱",
+     etym:"A pictograph of long flowing hair — the same character read cháng means 'long', and zhǎng means 'to grow'."},
+    {id:4, ch:"身高", py:"shēngāo", en:"height (of a person)", emoji:"📏",
+     etym:"身 (body) + 高 (tall/high) — literally 'body-height'."},
+    {id:5, ch:"米", py:"mǐ", en:"meter", emoji:"📐",
+     etym:"Originally a pictograph of rice grains; later borrowed for the sound to mean the metric 'meter'."},
+    {id:6, ch:"瘦", py:"shòu", en:"thin (of a person)", emoji:"🥢",
+     etym:"疒 (sickness radical) + 叟 (old man, phonetic) — historically linked to thinness from age or illness."},
+    {id:7, ch:"接", py:"jiē", en:"to meet; pick up (a person)", emoji:"🤝",
+     etym:"扌(hand radical) + 妾 (phonetic) — 'to receive with the hand', extended to 'meet/pick someone up'."},
+    {id:8, ch:"行李", py:"xíngli", en:"luggage", emoji:"🧳",
+     etym:"行 (to travel) + 李 (borrowed for sound) — 'things one carries while traveling'."},
+    {id:9, ch:"丢", py:"diū", en:"to lose", emoji:"❓",
+     etym:"A simplified, informal character depicting something dropped and gone missing."},
+    {id:10, ch:"箱子", py:"xiāngzi", en:"box; suitcase", emoji:"🧰",
+     etym:"竹 (bamboo radical) + 相 (phonetic) — early storage boxes were woven from bamboo."},
+    {id:11, ch:"号码", py:"hàomǎ", en:"number", emoji:"🔢",
+     etym:"号 (mark/sign) + 码 (numeral/code) — together, 'a marked number'."},
+    {id:12, ch:"好像", py:"hǎoxiàng", en:"seemingly; it seems", emoji:"💭",
+     etym:"好 (quite) + 像 (to resemble) — 'quite resembling [the truth]', i.e. 'it seems that'."},
+    {id:13, ch:"重要", py:"zhòngyào", en:"important", emoji:"⭐",
+     etym:"重 (heavy/weighty) + 要 (essential) — 'weighty and essential'."},
+    {id:14, ch:"着急", py:"zháojí", en:"worried; anxious", emoji:"😟",
+     etym:"着 (to be affected by) + 急 (urgent) — 'affected by urgency'."},
+    {id:15, ch:"护照", py:"hùzhào", en:"passport", emoji:"🛂",
+     etym:"护 (to protect) + 照 (document/permit) — 'a protective identity document'."},
+    {id:16, ch:"服务台", py:"fúwùtái", en:"service desk", emoji:"🛎️",
+     etym:"服务 (service) + 台 (counter/platform) — 'the counter where service is given'."},
+    {id:17, ch:"应该", py:"yīnggāi", en:"should; ought to", emoji:"✅",
+     etym:"应 (to respond/ought) + 该 (should) — two near-synonyms combined for emphasis."},
+    {id:18, ch:"站", py:"zhàn", en:"to stand; a stop/station", emoji:"🧍",
+     etym:"立 (to stand) + 占 (phonetic) — a person standing upright at a fixed spot."},
+    {id:19, ch:"中间", py:"zhōngjiān", en:"middle; between", emoji:"↔️",
+     etym:"中 (center) + 间 (space/between) — 'the space at the center'."},
+    {id:20, ch:"短", py:"duǎn", en:"short (in length)", emoji:"📏",
+     etym:"矢 (arrow) + 豆 (phonetic) — arrows were once used as a short unit of measurement."},
+    {id:21, ch:"头发", py:"tóufa", en:"hair (on the head)", emoji:"💇",
+     etym:"头 (head) + 发 (hair) — literally 'head hair'."},
+    {id:22, ch:"年轻", py:"niánqīng", en:"young", emoji:"🧑",
+     etym:"年 (year/age) + 轻 (light) — 'light in years', i.e. young."},
+    {id:23, ch:"发现", py:"fāxiàn", en:"to discover; find", emoji:"🔍",
+     etym:"发 (to bring out) + 现 (to appear) — 'to bring [something] to appear'."},
+    {id:24, ch:"不见", py:"bújiàn", en:"to be lost; disappear", emoji:"🚫",
+     etym:"不 (not) + 见 (to see) — literally 'not seen', i.e. missing."},
+    {id:25, ch:"带", py:"dài", en:"to take; bring; lead", emoji:"🧭",
+     etym:"Originally depicted a belt/sash used to carry things — extended to 'bring along'."},
+    {id:26, ch:"帮助", py:"bāngzhù", en:"to help; assist", emoji:"🤲",
+     etym:"帮 (to help) + 助 (to assist) — two synonyms compounded for emphasis."},
+    {id:27, ch:"照片", py:"zhàopiàn", en:"photo; photograph", emoji:"📷",
+     etym:"照 (to illuminate/reflect) + 片 (a slice/piece) — 'a piece capturing light', i.e. a photo."}
+  ],
+
+  dialogues: [
+    { key:"text1", title:"课文1 · Text 1", scene:"在家里，刘明和王一雪在沙发上聊天儿。",
+      sceneEn:"At home, Liu Ming and Wang Yixue are chatting on the sofa.",
+      lines:[
+        {spk:"刘明", ch:"这是杨同乐吗？他怎么跟白家月在一起？", py:"Zhè shì Yáng Tónglè ma? Tā zěnme gēn Bái Jiāyuè zài yìqǐ?", en:"Is this Yang Tongle? Why is he together with Bai Jiayue?"},
+        {spk:"王一雪", ch:"他不是杨同乐，他叫李文，是白家月的好朋友。", py:"Tā bú shì Yáng Tónglè, tā jiào Lǐ Wén, shì Bái Jiāyuè de hǎo péngyou.", en:"He isn't Yang Tongle. His name is Li Wen. He is Bai Jiayue's good friend."},
+        {spk:"刘明", ch:"我还以为是同乐呢，他们看上去有点儿像。", py:"Wǒ hái yǐwéi shì Tónglè ne, tāmen kàn shàngqù yǒudiǎnr xiàng.", en:"I thought it was Tongle. They look a little alike."},
+        {spk:"王一雪", ch:"是长得有点儿像，但是他比同乐高，身高有一米八。", py:"Shì zhǎng de yǒudiǎnr xiàng, dànshì tā bǐ Tónglè gāo, shēngāo yǒu yì mǐ bā.", en:"Yes, they look a little alike, but he is taller than Tongle. He is 1.8 meters tall."},
+        {spk:"刘明", ch:"看起来也比同乐瘦一点儿。", py:"Kàn qǐlái yě bǐ Tónglè shòu yìdiǎnr.", en:"He also looks a little thinner than Tongle."},
+        {spk:"王一雪", ch:"下个星期家月和李文要来北京，我去机场接他们。", py:"Xià gè xīngqī Jiāyuè hé Lǐ Wén yào lái Běijīng, wǒ qù jīchǎng jiē tāmen.", en:"Next week Jiayue and Li Wen are coming to Beijing. I'll go to the airport to pick them up."},
+        {spk:"刘明", ch:"他们哪天到北京？我跟你一起去机场接他们吧。", py:"Tāmen nǎ tiān dào Běijīng? Wǒ gēn nǐ yìqǐ qù jīchǎng jiē tāmen ba.", en:"Which day will they arrive in Beijing? I'll go with you to pick them up."}
+      ],
+      listening:[
+        {q:"刘明和王一雪在做什么？", opts:["看电视","看手机","去机场"], answer:1},
+        {q:"刘明跟王一雪一起去机场做什么？", opts:["坐飞机","找朋友","接白家月"], answer:2}
+      ],
+      reading:[
+        {q:"刘明为什么以为李文是杨同乐？"},
+        {q:"李文长什么样？"},
+        {q:"白家月什么时候来中国？"}
+      ]
+    },
+    { key:"text2", title:"课文2 · Text 2", scene:"在机场，李文和白家月在行李领取处。",
+      sceneEn:"At the airport, Li Wen and Bai Jiayue are at the baggage claim.",
+      lines:[
+        {spk:"白家月", ch:"我的行李怎么还没出来？是不是丢了？", py:"Wǒ de xíngli zěnme hái méi chūlái? Shì bú shì diū le?", en:"Why hasn't my luggage come out yet? Has it been lost?"},
+        {spk:"李文", ch:"你的行李箱是什么样的？", py:"Nǐ de xínglǐxiāng shì shénme yàng de?", en:"What does your suitcase look like?"},
+        {spk:"白家月", ch:"是一个黑色的箱子，上面写着我的名字和电话号码。", py:"Shì yí ge hēisè de xiāngzi, shàngmiàn xiězhe wǒ de míngzi hé diànhuà hàomǎ.", en:"It is a black suitcase. My name and phone number are written on it."},
+        {spk:"李文", ch:"我好像在哪儿看到过这个箱子，是不是有人拿错了？", py:"Wǒ hǎoxiàng zài nǎr kàn dào guò zhège xiāngzi, shì bú shì yǒurén ná cuò le?", en:"I think I saw this suitcase somewhere. Did someone take it by mistake?"},
+        {spk:"白家月", ch:"我们快找谁问一下吧，箱子里有不少重要的东西。", py:"Wǒmen kuài zhǎo shéi wèn yíxià ba, xiāngzi lǐ yǒu bù shǎo zhòngyào de dōngxi.", en:"Let's quickly ask someone. There are many important things inside the suitcase."},
+        {spk:"李文", ch:"别着急，我们拿着护照和机票，去服务台问问吧。", py:"Bié zháojí, wǒmen názhe hùzhào hé jīpiào, qù fúwùtái wènwen ba.", en:"Don't worry. Let's take the passport and air tickets and ask at the service desk."}
+      ],
+      listening:[
+        {q:"李文和白家月在机场做什么？", opts:["等箱子","等同学","等王一雪"], answer:0},
+        {q:"白家月为什么很着急？", opts:["护照丢了","行李箱丢了","拿错行李箱了"], answer:1}
+      ],
+      reading:[
+        {q:"白家月的箱子是什么样的？"},
+        {q:"李文看到过白家月的箱子吗？"},
+        {q:"他们现在要做什么？"}
+      ]
+    },
+    { key:"text3", title:"课文3 · Text 3", scene:"在机场大厅，刘明和王一雪接机。",
+      sceneEn:"In the airport arrival hall, Liu Ming and Wang Yixue are waiting to meet their friends.",
+      lines:[
+        {spk:"刘明", ch:"飞机早就到了，你看见白家月他们了吗？", py:"Fēijī zǎo jiù dào le, nǐ kànjiàn Bái Jiāyuè tāmen le ma?", en:"The plane arrived a long time ago. Have you seen Bai Jiayue and the others?"},
+        {spk:"王一雪", ch:"没有，他们应该快出来了。", py:"Méiyǒu, tāmen yīnggāi kuài chūlái le.", en:"No. They should be coming out soon."},
+        {spk:"刘明", ch:"我们站到中间去吧，这样他们好找一些。", py:"Wǒmen zhàn dào zhōngjiān qù ba, zhèyàng tāmen hǎo zhǎo yìxiē.", en:"Let's stand in the middle. It'll be easier for them to find us."},
+        {spk:"王一雪", ch:"你看那个高个子的人是李文吗？", py:"Nǐ kàn nàge gāo gèzi de rén shì Lǐ Wén ma?", en:"Look, is that tall person Li Wen?"},
+        {spk:"刘明", ch:"你说的是哪个？那个穿着黑衣服的短头发的年轻人？", py:"Nǐ shuō de shì nǎge? Nàge chuānzhe hēi yīfu de duǎn tóufa de niánqīngrén?", en:"Which one do you mean? The young man with short hair wearing black clothes?"},
+        {spk:"王一雪", ch:"对，那个人就是李文！你看，家月在他后面呢。", py:"Duì, nàge rén jiù shì Lǐ Wén! Nǐ kàn, Jiāyuè zài tā hòumiàn ne.", en:"Yes, that's Li Wen! Look, Jiayue is behind him."}
+      ],
+      listening:[
+        {q:"刘明和王一雪在机场做什么？", opts:["接人","坐飞机","找行李箱"], answer:0},
+        {q:"刘明为什么要站到中间？", opts:["旁边人太多了","他看见白家月了","白家月好找他们"], answer:2}
+      ],
+      reading:[
+        {q:"王一雪为什么说白家月他们应该快出来了？"},
+        {q:"刘明看见的年轻人长什么样？"},
+        {q:"王一雪怎么知道那个年轻人就是李文？"}
+      ]
+    },
+    { key:"text4", title:"课文4 · Text 4", scene:"在宾馆房间，李文在写日记。",
+      sceneEn:"In the hotel room, Li Wen was writing in his diary.", isNarrative:true,
+      lines:[
+        {spk:"李文(日记)", ch:"昨天我到北京了。虽然路上花了十几个小时，但是跟家月坐在一起，我觉得时间过得很快。", py:"Zuótiān wǒ dào Běijīng le. Suīrán lùshang huā le shí jǐ ge xiǎoshí, dànshì gēn Jiāyuè zuò zài yìqǐ, wǒ juéde shíjiān guò de hěn kuài.", en:"Yesterday I arrived in Beijing. Although the trip took more than ten hours, I was sitting with Jiayue, so I felt the time passed very quickly."},
+        {spk:"李文(日记)", ch:"到机场的时候，家月发现行李箱不见了，我带她去服务台，帮助她找到了行李箱。", py:"Dào jīchǎng de shíhou, Jiāyuè fāxiàn xínglǐxiāng bú jiàn le, wǒ dài tā qù fúwùtái, bāngzhù tā zhǎodào le xínglǐxiāng.", en:"When we arrived at the airport, Jiayue discovered that her suitcase was missing. I took her to the service desk and helped her find it."},
+        {spk:"李文(日记)", ch:"走出机场的时候，已经八点多了，我们一出来就看见了王老师的姐姐，她看起来比照片上年轻。", py:"Zǒuchū jīchǎng de shíhou, yǐjīng bā diǎn duō le, wǒmen yì chūlái jiù kànjiàn le Wáng lǎoshī de jiějie, tā kàn qǐlái bǐ zhàopiàn shàng niánqīng.", en:"When we walked out of the airport, it was already after eight o'clock. As soon as we came out, we saw Teacher Wang's elder sister. She looked younger than in the photo."},
+        {spk:"李文(日记)", ch:"晚上，一雪姐带我们去吃了一家很好吃的中国菜。", py:"Wǎnshang, Yīxuě jiě dài wǒmen qù chī le yì jiā hěn hǎochī de Zhōngguó cài.", en:"In the evening, Sister Yixue took us to eat at a restaurant serving very delicious Chinese food."}
+      ],
+      listening:[
+        {q:"李文回北京的路上花了多长时间？", opts:["几个小时","十几个小时","几十个小时"], answer:1},
+        {q:"李文觉得王老师的姐姐看起来怎么样？", opts:["很累","很年轻","很像王老师"], answer:1}
+      ],
+      reading:[
+        {q:"李文为什么觉得时间过得很快？"},
+        {q:"到机场的时候，白家月发现了什么问题？"},
+        {q:"王一雪带他们去做什么了？"}
+      ]
+    }
+  ],
+
+  grammar: [
+    { key:"kanshangqu", title:"固定短语 \"看上去 / 看起来\"", titleEn:"Set phrases: \"look\" / \"seem\"",
+      explain:"看上去 and 看起来 both mean 'looks / seems [to be]', describing an impression from appearance. They are largely interchangeable and go before an adjective or descriptive phrase.",
+      examples:[
+        {ch:"他们看上去有点儿像。", py:"Tāmen kàn shàngqù yǒudiǎnr xiàng.", en:"They look a little alike."},
+        {ch:"这些菜看起来都很好吃。", py:"Zhèxiē cài kàn qǐlái dōu hěn hǎochī.", en:"These dishes look delicious."},
+        {ch:"那个新来的老师看上去很年轻。", py:"Nàge xīn lái de lǎoshī kàn shàngqù hěn niánqīng.", en:"The new teacher looks very young."}
+      ],
+      practice:[
+        {q:"这个箱子 ____ 很重要。(It looks very important.)", opts:["看上去","以为","应该"], answer:0},
+        {q:"她 ____ 比照片上年轻。(She looks younger than in the photo.)", opts:["帮助","看起来","号码"], answer:1},
+        {q:"这道菜 ____ 很好吃。(This dish looks delicious.)", opts:["看上去","中间","丢了"], answer:0}
+      ]
+    },
+    { key:"nonquestion", title:"疑问代词的非疑问用法（1）", titleEn:"Non-Interrogative Use of Interrogative Pronouns (1)",
+      explain:"Interrogative pronouns such as 哪儿 (where), 什么 (what), 谁 (who), 哪 (which) can also appear in statements (not questions) to refer to an unspecified place, thing, or person — similar to English 'somewhere / something / someone / some'.",
+      examples:[
+        {ch:"我好像在哪儿看到过这个箱子。", py:"Wǒ hǎoxiàng zài nǎr kàn dào guò zhège xiāngzi.", en:"I think I saw this suitcase somewhere."},
+        {ch:"你吃点儿什么再走吧。", py:"Nǐ chī diǎnr shénme zài zǒu ba.", en:"Have something to eat before you leave."},
+        {ch:"我们哪天一起去踢足球吧。", py:"Wǒmen nǎ tiān yìqǐ qù tī zúqiú ba.", en:"Let's play football together someday."}
+      ],
+      practice:[
+        {q:"我也不知道，我去 ____ 问一下。(I'll go ask someone.)", opts:["谁","什么","哪儿"], answer:0},
+        {q:"你有时间了来我家，我做 ____ 给你吃。(I'll cook something for you.)", opts:["谁","什么","哪"], answer:1},
+        {q:"这几天太累了，我想去 ____ 。(I want to go somewhere.)", opts:["哪儿","什么","谁"], answer:0}
+      ]
+    },
+    { key:"multiattr", title:"多项定语", titleEn:"Multiple Attributives",
+      explain:"A noun can be modified by several attributives (定语) at once. They are generally ordered: time/place → action/state → characteristic. Numeral-measure phrases (like 两个, 这件) are flexible and can go before or after the action/state attributive.",
+      examples:[
+        {ch:"李文是那个穿着黑衣服的短头发的年轻人吗？", py:"Lǐ Wén shì nàge chuānzhe hēi yīfu de duǎn tóufa de niánqīngrén ma?", en:"Is Li Wen the young man with short hair wearing black clothes?"},
+        {ch:"昨天和家月一起看电影的两个人是我的朋友。", py:"Zuótiān hé Jiāyuè yìqǐ kàn diànyǐng de liǎng gè rén shì wǒ de péngyou.", en:"The two people who watched a movie with Jiayue yesterday are my friends."},
+        {ch:"我那件新买的白色的衣服在哪儿？", py:"Wǒ nà jiàn xīn mǎi de báisè de yīfu zài nǎr?", en:"Where is my newly bought white piece of clothing?"}
+      ],
+      practice:[
+        {q:"那本 ____ 的书是我最喜欢的。(most natural order: characteristic before 书)", opts:["昨天买的很有意思","很有意思昨天买的","书昨天很有意思"], answer:0},
+        {q:"Which order is correct for 'the tall person wearing black clothes'?", opts:["穿着黑衣服的高个子的人","高个子的穿着黑衣服的人 (也可，但课文顺序如前)","人穿着黑衣服高个子的"], answer:0},
+        {q:"我 ____ 的衣服在哪儿？(my newly-bought white clothes)", opts:["那件新买的白色的","白色的那件新买的可以但课文顺序为前者","衣服新买的白色的那件"], answer:0}
+      ]
+    }
+  ],
+
+  clozeBank1: {
+    bank: [
+      {label:"带", val:"带"}, {label:"接", val:"接"}, {label:"丢", val:"丢"},
+      {label:"重要", val:"重要"}, {label:"应该", val:"应该"}
+    ],
+    items:[
+      {pre:"服务台", blank:"应该", post:"在前面，我们过去问问吧。", en:"The service desk should be ahead. Let's go over and ask."},
+      {pre:"他已经到了，我们快出去", blank:"接", post:"他吧。", en:"He has already arrived. Let's quickly go out and pick him up."},
+      {pre:"我的护照不见了，是不是在机场", blank:"丢", post:"了？", en:"My passport is missing. Did I lose it at the airport?"},
+      {pre:"行李票很", blank:"重要", post:"，你们出机场的时候有人看。", en:"The baggage claim ticket is very important. Someone checks it when you leave the airport."},
+      {pre:"我", blank:"带", post:"了两个行李箱和一个大包，所以走得非常慢。", en:"I brought two suitcases and a large bag, so I walked very slowly."}
+    ]
+  },
+  clozeBank2: {
+    bank: [
+      {label:"发现", val:"发现"}, {label:"以为", val:"以为"}, {label:"好像", val:"好像"},
+      {label:"年轻", val:"年轻"}, {label:"帮助", val:"帮助"}
+    ],
+    items:[
+      {pre:"A：这个头发很短的男孩儿是我弟弟。 B：我", blank:"以为", post:"这个是你，你们长得太像了。", en:"I thought this was you. You two look so much alike."},
+      {pre:"A：我", blank:"发现", post:"坐飞机来北京的人非常多。 B：对，很多人这个时候来北京旅游。", en:"I noticed there are many people flying to Beijing."},
+      {pre:"A：这是我和哥哥的照片，你看我们像吗？ B：你们很像，你哥哥看起来也很", blank:"年轻", post:"。", en:"You look very alike. Your elder brother also looks very young."},
+      {pre:"A：你的行李箱找到了。 B：对，太好了！谢谢您的", blank:"帮助", post:"。", en:"Thank you for your help."},
+      {pre:"A：那个穿着黑衣服的高个子的人是王老师吗？ B：", blank:"好像", post:"是吧，我也不知道。", en:"Seems like it, I don't know either."}
+    ]
+  },
+
+  completeSentences: [
+    { title:"完成句子 (from 课文1)", items:[
+        {ch:"你____________长得更像你妈妈。", en:"You ________ look more like your mother.", sample:"越长大 (as you grow up)"},
+        {ch:"你____________，好好休息一下吧。", en:"You ________. Have a good rest.", sample:"看起来很累 (look very tired)"},
+        {ch:"你怎么了？今天____________。", en:"What's wrong? Today you ____________.", sample:"看上去很着急 (look very worried)"}
+    ]},
+    { title:"完成对话 (from 课文2, using 谁/什么/哪儿)", items:[
+        {ch:"A：我们是不是走错了？ B：我也不知道，我去__________。（谁）", en:"I'll go ask someone.", sample:"问问谁 / 问一下别人"},
+        {ch:"A：你有时间了来我家，我__________给你吃。（什么）", en:"I'll cook something for you.", sample:"做点儿什么"},
+        {ch:"A：这几天太累了，我想__________。（哪儿）B：那你去西安吧。", en:"I want to go somewhere.", sample:"去哪儿玩玩"}
+    ]},
+    { title:"完成句子 (from 课文3, 多项定语)", items:[
+        {ch:"那本 __________________ 的书是我最喜欢的。", en:"That ________ book is my favorite.", sample:"昨天买的很有意思"},
+        {ch:"A：哪个人是你男朋友？ B：__________________。", en:"Point out which person.", sample:"穿着蓝色衣服的那个高个子"},
+        {ch:"A：你们上课的楼在哪儿？ B：在 __________________ 的楼后面。", en:"It is behind the ________ building.", sample:"新盖的白色"}
+    ]}
+  ],
+
+  pictureDescription: [
+    { title:"第一组图片 · Picture 1", items:[
+        {ch:"我 ________ 他是你男朋友。", en:"I thought he was your boyfriend.", sample:"以为"},
+        {ch:"我好像 ________。", en:"It seems that I ________ .", sample:"看错了 / 认错人了"},
+        {ch:"下午我去机场 ________。", en:"I'll go to the airport to ________ .", sample:"接他"}
+    ]},
+    { title:"第二组图片 · Picture 2", items:[
+        {ch:"我的行李箱 ________，里面有很多重要的东西。", en:"My suitcase ________. There are many important things inside.", sample:"不见了 / 丢了"},
+        {ch:"你 ________ 问一问。", en:"You should ask.", sample:"应该"},
+        {ch:"给我看一下您的 ________。", en:"Please show me your ________.", sample:"护照 / 行李票"}
+    ]},
+    { title:"第三组图片 · Picture 3", items:[
+        {ch:"________ 的那个人是小文吗？", en:"Is that person who is ________ Xiaowen?", sample:"站在中间"},
+        {ch:"那个 ________。", en:"That one ________ .", sample:"头发短短的"},
+        {ch:"头发也 ________。", en:"and her hair is also ________.", sample:"比较长"}
+    ]}
+  ],
+
+  writingChars: ["以","像","长","接","米","瘦","站","短","发","带"]
+};
+
+/* ============================================================
+   STORAGE / PROGRESS HELPERS
+   ============================================================ */
+function studentKey(){
+  const n = document.getElementById('studentName').value.trim();
+  return n ? ("aruna_hsk3_l1_" + n.toLowerCase().replace(/\s+/g,'_')) : "aruna_hsk3_l1_guest";
+}
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(studentKey());
+    return raw ? JSON.parse(raw) : defaultProgress();
+  }catch(e){ return defaultProgress(); }
+}
+function defaultProgress(){
+  return {
+    writing:{}, listening:{}, reading:{}, exercises:{}, lastVisit:null, streak:0
+  };
+}
+function saveProgress(p){
+  try{ localStorage.setItem(studentKey(), JSON.stringify(p)); }catch(e){}
+}
+function touchStreak(){
+  const p = loadProgress();
+  const today = new Date().toDateString();
+  if(p.lastVisit !== today){
+    const yesterday = new Date(Date.now()-86400000).toDateString();
+    p.streak = (p.lastVisit === yesterday) ? (p.streak||0)+1 : 1;
+    p.lastVisit = today;
+    saveProgress(p);
+  }
+  document.getElementById('streakBadge').textContent = "🔥 " + (p.streak||0) + " day streak";
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  const saved = localStorage.getItem('aruna_hsk3_l1_current_name');
+  if(saved) document.getElementById('studentName').value = saved;
+  touchStreak();
+  document.getElementById('studentName').addEventListener('change', ()=>{
+    localStorage.setItem('aruna_hsk3_l1_current_name', document.getElementById('studentName').value.trim());
+    touchStreak();
+    renderProgressIfActive();
+  });
+});
+function renderProgressIfActive(){
+  if(document.getElementById('panel-progress') && document.getElementById('panel-progress').classList.contains('active')){
+    renderProgress();
+  }
+}
+
+/* ============================================================
+   SPEECH: TTS + Recognition
+   ============================================================ */
+function speak(text){
+  if(!('speechSynthesis' in window)){ alert('Speech synthesis not supported in this browser.'); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'zh-CN';
+  u.rate = 0.85;
+  const voices = window.speechSynthesis.getVoices();
+  const zh = voices.find(v=>v.lang && v.lang.toLowerCase().startsWith('zh'));
+  if(zh) u.voice = zh;
+  window.speechSynthesis.speak(u);
+}
+if('speechSynthesis' in window){
+  window.speechSynthesis.onvoiceschanged = ()=>{ /* voices load async */ };
+}
+
+function startRecognition(expectedText, onResult){
+  const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!Rec){ alert('Speech recognition not supported in this browser. Try Chrome or Edge.'); return; }
+  const rec = new Rec();
+  rec.lang = 'zh-CN';
+  rec.interimResults = false;
+  rec.maxAlternatives = 3;
+  rec.onresult = (e)=>{
+    const said = e.results[0][0].transcript;
+    onResult(said);
+  };
+  rec.onerror = (e)=>{ onResult(null, e.error); };
+  rec.start();
+}
+function normalizeZh(s){
+  return (s||'').replace(/[，。？！,.?!\s]/g,'');
+}
+
+/* ============================================================
+   TAB / ROUTER SETUP
+   ============================================================ */
+const TABS = [
+  {id:'vocab', label:'📚 词汇 Vocabulary'},
+  {id:'writing', label:'✍️ 写字 Writing'},
+  {id:'listening', label:'🎧 听力 Listening'},
+  {id:'reading', label:'📖 阅读 Reading'},
+  {id:'grammar', label:'💡 语法 Grammar'},
+  {id:'exercises', label:'📝 练习 Exercises'},
+  {id:'roleplay', label:'🎭 角色扮演 Roleplay'},
+  {id:'progress', label:'📊 进度 Progress'}
+];
+
+function initNav(){
+  const nav = document.getElementById('tabNav');
+  TABS.forEach((t,i)=>{
+    const b = document.createElement('button');
+    b.textContent = t.label;
+    b.dataset.tab = t.id;
+    if(i===0) b.classList.add('active');
+    b.onclick = ()=> switchTab(t.id);
+    nav.appendChild(b);
+  });
+  const main = document.getElementById('mainArea');
+  TABS.forEach((t,i)=>{
+    const div = document.createElement('div');
+    div.className = 'panel' + (i===0?' active':'');
+    div.id = 'panel-' + t.id;
+    main.appendChild(div);
+  });
+  renderVocab();
+  renderWriting();
+  renderListening();
+  renderReading();
+  renderGrammar();
+  renderExercises();
+  renderRoleplay();
+  renderProgress();
+}
+function switchTab(id){
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active', b.dataset.tab===id));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active', p.id==='panel-'+id));
+  if(id==='progress') renderProgress();
+}
+
+/* ============================================================
+   1. VOCABULARY TAB
+   ============================================================ */
+function renderVocab(){
+  const el = document.getElementById('panel-vocab');
+  el.innerHTML = `<div class="card"><h2>生词 New Words (1–27)</h2>
+    <p class="note">Tap 🔊 to hear pronunciation, ⭐ to jump to the stroke-order animation in the Writing tab.</p>
+    <div class="grid" id="vocabGrid"></div></div>`;
+  const grid = document.getElementById('vocabGrid');
+  LESSON.vocab.forEach(v=>{
+    const c = document.createElement('div');
+    c.className = 'vocab-card';
+    c.innerHTML = `
+      <div class="emoji">${v.emoji}</div>
+      <div class="hanzi">${v.ch}</div>
+      <div class="pinyin">${v.py}</div>
+      <div class="meaning">${v.en}</div>
+      <button class="btn" onclick="speak('${v.ch}')">🔊 Audio</button>
+      <button class="btn gold" onclick="jumpToWriting('${v.ch}')">⭐ Stroke Order</button>
+      <button class="btn outline" onclick="toggleEtym(this)">字源 Etymology</button>
+      <div class="etym">${v.etym}</div>
+    `;
+    grid.appendChild(c);
+  });
+}
+function toggleEtym(btn){
+  const box = btn.nextElementSibling;
+  box.style.display = (box.style.display==='block') ? 'none' : 'block';
+}
+function jumpToWriting(ch){
+  switchTab('writing');
+  setTimeout(()=>{
+    const target = document.getElementById('writeslot-'+charCode(ch));
+    if(target) target.scrollIntoView({behavior:'smooth', block:'center'});
+  }, 150);
+}
+function charCode(ch){ return ch.split('').map(c=>c.codePointAt(0)).join('_'); }
+
+/* ============================================================
+   2. WRITING TAB (Hanzi Writer)
+   ============================================================ */
+function renderWriting(){
+  const el = document.getElementById('panel-writing');
+  el.innerHTML = `<div class="card"><h2>写字 Writing Practice</h2>
+    <p class="note">Watch the animated stroke order, then trace the character 3 times. Your best score is saved to Progress.</p>
+    <div class="write-grid" id="writeGrid"></div></div>`;
+  const grid = document.getElementById('writeGrid');
+  LESSON.writingChars.forEach(ch=>{
+    const vocabMatch = LESSON.vocab.find(v=>v.ch.includes(ch));
+    const meaning = vocabMatch ? vocabMatch.en : '';
+    const id = 'writeslot-' + charCode(ch);
+    const box = document.createElement('div');
+    box.className = 'write-item';
+    box.id = id;
+    box.innerHTML = `
+      <div style="font-weight:700;color:var(--red-dark);">${ch}</div>
+      <div style="font-size:.75rem;color:var(--gray);margin-bottom:6px;">${meaning}</div>
+      <div class="writer-target" id="target-${id}" style="width:140px;height:140px;"></div>
+      <div style="margin-top:6px;">
+        <button class="btn" onclick="animateChar('${id}','${ch}')">▶ Animate</button>
+        <button class="btn gold" onclick="quizChar('${id}','${ch}')">✍️ Practice 3×</button>
+      </div>
+      <div style="font-size:.75rem;margin-top:4px;" id="score-${id}"></div>
+    `;
+    grid.appendChild(box);
+  });
+}
+const writerCache = {};
+function getWriter(id, ch){
+  const key = id;
+  if(writerCache[key]) return writerCache[key];
+  const container = document.getElementById('target-'+id);
+  container.innerHTML = '';
+  const w = HanziWriter.create('target-'+id, ch, {
+    width:140, height:140, padding:8,
+    strokeAnimationSpeed:1, delayBetweenStrokes:250,
+    showOutline:true
+  });
+  writerCache[key] = w;
+  return w;
+}
+function animateChar(id, ch){
+  try{
+    const w = getWriter(id, ch);
+    w.animateCharacter();
+  }catch(e){ console.error(e); }
+}
+function quizChar(id, ch){
+  try{
+    const w = getWriter(id, ch);
+    let attempts = 0;
+    let scores = [];
+    function runOnce(){
+      w.quiz({
+        showHintAfterMisses:2,
+        onComplete: (summary)=>{
+          attempts++;
+          const totalMistakes = summary.totalMistakes || 0;
+          const score = Math.max(0, 100 - totalMistakes*10);
+          scores.push(score);
+          const avg = Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+          recordWritingScore(ch, avg);
+          document.getElementById('score-'+id).innerHTML =
+            `<span class="score-badge">Attempt ${attempts}/3 — Score: ${score}/100 (best avg saved: ${avg})</span>`;
+          if(attempts < 3){
+            setTimeout(runOnce, 700);
+          }
+        }
+      });
+    }
+    runOnce();
+  }catch(e){ console.error(e); }
+}
+function recordWritingScore(ch, score){
+  const p = loadProgress();
+  const prev = p.writing[ch] || 0;
+  p.writing[ch] = Math.max(prev, score);
+  saveProgress(p);
+}
+
+/* ============================================================
+   3. LISTENING TAB
+   ============================================================ */
+function renderListening(){
+  const el = document.getElementById('panel-listening');
+  let html = `<div class="card"><h2>听力 Listening</h2>
+    <p class="note">Click "Listen twice" to hear the dialogue played twice, then answer the multiple-choice questions in Mandarin.</p></div>`;
+  LESSON.dialogues.forEach(d=>{
+    html += `<div class="card">
+      <h2>${d.title}</h2>
+      <p style="color:var(--gray);font-style:italic;">${d.scene}<br><span style="font-style:normal;">${d.sceneEn}</span></p>
+      <button class="btn" onclick="listenTwice('${d.key}')">🎧 Listen twice</button>
+      <div id="lqs-${d.key}" style="margin-top:10px;"></div>
+      <div id="lscore-${d.key}"></div>
+    </div>`;
+  });
+  el.innerHTML = html;
+  LESSON.dialogues.forEach(d=> renderListeningQuestions(d));
+}
+function listenTwice(key){
+  const d = LESSON.dialogues.find(x=>x.key===key);
+  const fullText = d.lines.map(l=>l.ch).join('，');
+  speak(fullText);
+  setTimeout(()=> speak(fullText), Math.max(4000, fullText.length*350));
+}
+function renderListeningQuestions(d){
+  const box = document.getElementById('lqs-'+d.key);
+  let html = '';
+  d.listening.forEach((q,i)=>{
+    html += `<div class="mc-q"><div><strong>(${i+1}) ${q.q}</strong></div>`;
+    q.opts.forEach((opt,j)=>{
+      html += `<button class="mc-opt" onclick="answerListening('${d.key}',${i},${j},this)">${String.fromCharCode(65+j)}. ${opt}</button>`;
+    });
+    html += `</div>`;
+  });
+  box.innerHTML = html;
+}
+function answerListening(key, qi, choice, btn){
+  const d = LESSON.dialogues.find(x=>x.key===key);
+  const q = d.listening[qi];
+  const group = btn.parentElement;
+  group.querySelectorAll('.mc-opt').forEach(b=>b.disabled = true);
+  if(choice === q.answer){
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('wrong');
+    group.querySelectorAll('.mc-opt')[q.answer].classList.add('correct');
+  }
+  const p = loadProgress();
+  if(!p.listening[key]) p.listening[key] = {};
+  p.listening[key][qi] = (choice === q.answer) ? 1 : 0;
+  saveProgress(p);
+  updateListeningScoreDisplay(key);
+}
+function updateListeningScoreDisplay(key){
+  const p = loadProgress();
+  const rec = p.listening[key] || {};
+  const vals = Object.values(rec);
+  const correct = vals.reduce((a,b)=>a+b,0);
+  document.getElementById('lscore-'+key).innerHTML =
+    vals.length ? `<span class="score-badge">Score: ${correct}/${vals.length}</span>` : '';
+}
+
+/* ============================================================
+   4. READING TAB
+   ============================================================ */
+function renderReading(){
+  const el = document.getElementById('panel-reading');
+  let html = `<div class="card"><h2>阅读 Reading</h2>
+    <p class="note">Pinyin is hidden by default — this trains real character recognition. Toggle it on if you need help.</p></div>`;
+  LESSON.dialogues.forEach(d=>{
+    html += `<div class="card">
+      <h2>${d.title} <button class="btn gold" onclick="togglePinyin('${d.key}')">拼音 Show/Hide Pinyin</button></h2>
+      <div id="rlines-${d.key}"></div>
+      <h3 style="color:var(--red-dark);">读后回答问题 Comprehension</h3>
+      <div id="rqs-${d.key}"></div>
+    </div>`;
+  });
+  el.innerHTML = html;
+  LESSON.dialogues.forEach(d=>{
+    const linesBox = document.getElementById('rlines-'+d.key);
+    let lhtml = '';
+    d.lines.forEach(l=>{
+      lhtml += `<div class="dialogue-line">
+        <span class="spk">${l.spk}：</span>
+        <div class="hanzi">${l.ch} <button class="btn" style="padding:3px 8px;font-size:.7rem;" onclick="speak('${l.ch}')">🔊</button></div>
+        <div class="pinyin hidden-py" data-key="${d.key}">${l.py}</div>
+        <div class="meaning">${l.en}</div>
+      </div>`;
+    });
+    linesBox.innerHTML = lhtml;
+
+    const qBox = document.getElementById('rqs-'+d.key);
+    let qhtml = '';
+    d.reading.forEach((q,i)=>{
+      qhtml += `<div class="mc-q">
+        <div><strong>(${i+1}) ${q.q}</strong></div>
+        <input type="text" class="freeform" id="rans-${d.key}-${i}" placeholder="Type your answer in Chinese...">
+        <button class="btn" onclick="markReadingDone('${d.key}',${i})">✓ Mark as answered</button>
+      </div>`;
+    });
+    qBox.innerHTML = qhtml;
+  });
+}
+function togglePinyin(key){
+  document.querySelectorAll(`.pinyin[data-key="${key}"]`).forEach(p=>{
+    p.classList.toggle('hidden-py');
+  });
+}
+function markReadingDone(key, i){
+  const val = document.getElementById(`rans-${key}-${i}`).value.trim();
+  const p = loadProgress();
+  if(!p.reading[key]) p.reading[key] = {};
+  p.reading[key][i] = val.length > 0 ? 1 : 0;
+  saveProgress(p);
+  alert(val.length ? 'Saved — nice work!' : 'Write something first, then mark it.');
+}
+
+/* ============================================================
+   5. GRAMMAR SPOTLIGHT TAB
+   ============================================================ */
+function renderGrammar(){
+  const el = document.getElementById('panel-grammar');
+  let html = `<div class="card"><h2>小语讲堂 Grammar Spotlight</h2>
+  <p class="note">Three grammar points from this lesson, each with textbook examples and quick practice.</p></div>`;
+  LESSON.grammar.forEach(g=>{
+    html += `<div class="card grammar-card">
+      <h3>${g.title}</h3>
+      <p style="color:var(--gray);font-weight:600;">${g.titleEn}</p>
+      <p>${g.explain}</p>
+      <div>${g.examples.map(ex=>`
+        <div class="dialogue-line">
+          <div class="hanzi">${ex.ch} <button class="btn" style="padding:3px 8px;font-size:.7rem;" onclick="speak('${ex.ch}')">🔊</button></div>
+          <div class="pinyin">${ex.py}</div>
+          <div class="meaning">${ex.en}</div>
+        </div>`).join('')}
+      </div>
+      <h3 style="margin-top:14px;">✏️ Quick Practice</h3>
+      <div id="gpractice-${g.key}"></div>
+    </div>`;
+  });
+  el.innerHTML = html;
+  LESSON.grammar.forEach(g=>{
+    const box = document.getElementById('gpractice-'+g.key);
+    let phtml = '';
+    g.practice.forEach((q,i)=>{
+      phtml += `<div class="mc-q"><div>${q.q}</div>`;
+      q.opts.forEach((opt,j)=>{
+        phtml += `<button class="mc-opt" onclick="answerGrammar('${g.key}',${i},${j},this)">${String.fromCharCode(65+j)}. ${opt}</button>`;
+      });
+      phtml += `</div>`;
+    });
+    box.innerHTML = phtml;
+  });
+}
+function answerGrammar(key, qi, choice, btn){
+  const g = LESSON.grammar.find(x=>x.key===key);
+  const q = g.practice[qi];
+  const group = btn.parentElement;
+  group.querySelectorAll('.mc-opt').forEach(b=>b.disabled=true);
+  if(choice === q.answer){ btn.classList.add('correct'); }
+  else{
+    btn.classList.add('wrong');
+    group.querySelectorAll('.mc-opt')[q.answer].classList.add('correct');
+  }
+}
+
+/* ============================================================
+   6. EXERCISES TAB
+   ============================================================ */
+function renderExercises(){
+  const el = document.getElementById('panel-exercises');
+  let html = `<div class="card"><h2>练习 Exercises</h2>
+    <p class="note">Tap a word from the bank to fill each blank. Correct answers turn green automatically.</p></div>`;
+
+  html += `<div class="card"><h2>选词填空 · Word Bank 1</h2>
+    <div class="cloze-bank" id="bank1"></div>
+    <div id="cloze1"></div>
+    <div id="clozescore1"></div></div>`;
+
+  html += `<div class="card"><h2>选词填空 · Word Bank 2</h2>
+    <div class="cloze-bank" id="bank2"></div>
+    <div id="cloze2"></div>
+    <div id="clozescore2"></div></div>`;
+
+  LESSON.completeSentences.forEach((set,si)=>{
+    html += `<div class="card"><h2>${set.title}</h2><div id="complete-${si}"></div></div>`;
+  });
+
+  html += `<div class="card"><h2>用本课新学的词语描述图片 · Picture Description</h2></div>`;
+  LESSON.pictureDescription.forEach((set,si)=>{
+    html += `<div class="card"><h3>${set.title}</h3><div id="pic-${si}"></div></div>`;
+  });
+
+  el.innerHTML = html;
+  renderClozeSet(1, LESSON.clozeBank1);
+  renderClozeSet(2, LESSON.clozeBank2);
+
+  LESSON.completeSentences.forEach((set,si)=>{
+    const box = document.getElementById('complete-'+si);
+    let h = '';
+    set.items.forEach((item,ii)=>{
+      h += `<div class="mc-q">
+        <div class="cloze-sentence">${item.ch}</div>
+        <div style="font-size:.8rem;color:var(--gray);">${item.en}</div>
+        <input type="text" class="freeform" id="cs-${si}-${ii}" placeholder="Type your answer...">
+        <button class="btn" onclick="revealSample('cs-reveal-${si}-${ii}', this)">Show sample answer</button>
+        <div class="reveal-box" id="cs-reveal-${si}-${ii}">Sample: ${item.sample}</div>
+        <button class="btn gold" onclick="markExerciseDone('complete-${si}-${ii}')">✓ Mark as practiced</button>
+      </div>`;
+    });
+    box.innerHTML = h;
+  });
+
+  LESSON.pictureDescription.forEach((set,si)=>{
+    const box = document.getElementById('pic-'+si);
+    let h = '';
+    set.items.forEach((item,ii)=>{
+      h += `<div class="mc-q">
+        <div class="cloze-sentence">${item.ch}</div>
+        <div style="font-size:.8rem;color:var(--gray);">${item.en}</div>
+        <input type="text" class="freeform" id="pd-${si}-${ii}" placeholder="Type your answer...">
+        <button class="btn" onclick="revealSample('pd-reveal-${si}-${ii}', this)">Show sample answer</button>
+        <div class="reveal-box" id="pd-reveal-${si}-${ii}">Sample: ${item.sample}</div>
+        <button class="btn gold" onclick="markExerciseDone('pic-${si}-${ii}')">✓ Mark as practiced</button>
+      </div>`;
+    });
+    box.innerHTML = h;
+  });
+}
+function revealSample(id, btn){
+  const box = document.getElementById(id);
+  box.style.display = (box.style.display==='block') ? 'none' : 'block';
+}
+function markExerciseDone(tag){
+  const p = loadProgress();
+  if(!p.exercises.freeform) p.exercises.freeform = {};
+  p.exercises.freeform[tag] = 1;
+  saveProgress(p);
+}
+function renderClozeSet(num, data){
+  const bankBox = document.getElementById('bank'+num);
+  bankBox.innerHTML = data.bank.map((b,i)=>`<span id="bank${num}-${i}" onclick="selectBankWord(${num},${i})">${b.label}</span>`).join('');
+  const itemsBox = document.getElementById('cloze'+num);
+  let h = '';
+  data.items.forEach((item,ii)=>{
+    h += `<div class="cloze-sentence">${item.pre}
+      <span class="blank-slot" id="blank${num}-${ii}" data-answer="${item.blank}">____</span>
+      ${item.post}
+      <div style="font-size:.78rem;color:var(--gray);">${item.en}</div>
+    </div>`;
+  });
+  itemsBox.innerHTML = h;
+  window['clozeState'+num] = {selected:null};
+}
+function selectBankWord(num, idx){
+  window['clozeState'+num].selected = idx;
+  document.querySelectorAll(`#bank${num} span`).forEach((s,i)=>{
+    s.style.outline = (i===idx) ? '2px solid var(--red)' : 'none';
+  });
+}
+// Delegate: clicking a blank slot fills it with the currently-selected bank word
+document.addEventListener('click', function(e){
+  if(e.target.classList && e.target.classList.contains('blank-slot')){
+    const idParts = e.target.id.split('-'); // blankN-ii
+    const num = idParts[0].replace('blank','');
+    const ii = idParts[1];
+    const state = window['clozeState'+num];
+    if(!state || state.selected === null || state.selected === undefined) return;
+    const data = num==='1' ? LESSON.clozeBank1 : LESSON.clozeBank2;
+    const chosen = data.bank[state.selected];
+    e.target.textContent = chosen.val;
+    const correctAns = e.target.dataset.answer;
+    if(chosen.val === correctAns){
+      e.target.style.color = 'var(--green)';
+      e.target.style.borderColor = 'var(--green)';
+    } else {
+      e.target.style.color = 'var(--red)';
+      e.target.style.borderColor = 'var(--red)';
+    }
+    document.getElementById(`bank${num}-${state.selected}`).classList.add('used');
+    updateClozeScore(num);
+  }
+});
+function updateClozeScore(num){
+  const data = num==='1' ? LESSON.clozeBank1 : LESSON.clozeBank2;
+  const slots = document.querySelectorAll(`#cloze${num} .blank-slot`);
+  let correct = 0, filled = 0;
+  slots.forEach(s=>{
+    if(s.textContent !== '____'){
+      filled++;
+      if(s.textContent === s.dataset.answer) correct++;
+    }
+  });
+  document.getElementById('clozescore'+num).innerHTML =
+    filled ? `<span class="score-badge">Score: ${correct}/${slots.length}</span>` : '';
+  const p = loadProgress();
+  if(!p.exercises.cloze) p.exercises.cloze = {};
+  p.exercises.cloze['bank'+num] = correct;
+  saveProgress(p);
+}
+
+/* ============================================================
+   7. ROLEPLAY TAB
+   ============================================================ */
+function renderRoleplay(){
+  const el = document.getElementById('panel-roleplay');
+  let html = `<div class="card"><h2>角色扮演 Roleplay</h2>
+    <p class="note">Pick a dialogue and a character. The app will speak the other character's lines; when it's your turn, click "Your turn — speak" and say your line aloud. You can also reveal or skip a line.</p>
+    <select class="rp-select" id="rpDialogueSelect" onchange="setupRoleplay()">
+      ${LESSON.dialogues.map(d=>`<option value="${d.key}">${d.title}</option>`).join('')}
+    </select>
+    <select class="rp-select" id="rpCharSelect" onchange="setupRoleplay()"></select>
+    <div id="rpArea" style="margin-top:14px;"></div>
+  </div>`;
+  el.innerHTML = html;
+  setupRoleplay();
+}
+let rpIndex = 0;
+function setupRoleplay(){
+  const key = document.getElementById('rpDialogueSelect').value;
+  const d = LESSON.dialogues.find(x=>x.key===key);
+  const speakers = [...new Set(d.lines.map(l=>l.spk))];
+  const charSel = document.getElementById('rpCharSelect');
+  const prevVal = charSel.value;
+  charSel.innerHTML = speakers.map(s=>`<option value="${s}">${s}</option>`).join('');
+  if(speakers.includes(prevVal)) charSel.value = prevVal;
+  rpIndex = 0;
+  renderRoleplayLine();
+}
+function renderRoleplayLine(){
+  const key = document.getElementById('rpDialogueSelect').value;
+  const d = LESSON.dialogues.find(x=>x.key===key);
+  const myChar = document.getElementById('rpCharSelect').value;
+  const area = document.getElementById('rpArea');
+  if(rpIndex >= d.lines.length){
+    area.innerHTML = `<p><strong>🎉 Done!</strong> You finished this dialogue.</p>
+      <button class="btn" onclick="rpIndex=0; renderRoleplayLine();">↺ Restart</button>`;
+    return;
+  }
+  const line = d.lines[rpIndex];
+  const isMine = line.spk === myChar;
+  area.innerHTML = `
+    <div class="dialogue-line">
+      <span class="spk">${line.spk}${isMine ? ' (YOU)' : ''}：</span>
+      <div class="hanzi" id="rpline-hanzi">${isMine ? '🙈 (hidden — say it aloud)' : line.ch}</div>
+      <div class="pinyin" id="rpline-pinyin" style="display:none;">${line.py}</div>
+      <div class="meaning">${line.en}</div>
+    </div>
+    <div style="margin-top:8px;">
+      ${isMine
+        ? `<button class="btn" onclick="rpRecord('${line.ch.replace(/'/g,"\\'")}')">🎤 Your turn — speak</button>
+           <button class="btn outline" onclick="rpReveal()">👁 Reveal</button>`
+        : `<button class="btn" onclick="speak('${line.ch.replace(/'/g,"\\'")}')">🔊 Play line</button>`}
+      <button class="btn gold" onclick="rpNext()">⏭ Next</button>
+    </div>
+    <div id="rpFeedback" style="margin-top:8px;"></div>
+  `;
+}
+function rpReveal(){
+  document.getElementById('rpline-hanzi').textContent = LESSON.dialogues
+    .find(x=>x.key===document.getElementById('rpDialogueSelect').value).lines[rpIndex].ch;
+  document.getElementById('rpline-pinyin').style.display = 'block';
+}
+function rpRecord(expected){
+  const fb = document.getElementById('rpFeedback');
+  fb.innerHTML = '🎙️ Listening...';
+  startRecognition(expected, (said, err)=>{
+    if(err){ fb.innerHTML = `<span style="color:var(--red);">Could not hear you (${err}). Try again or reveal the line.</span>`; return; }
+    const match = normalizeZh(said) === normalizeZh(expected);
+    fb.innerHTML = match
+      ? `<span style="color:var(--green);font-weight:700;">✓ Great! Heard: ${said}</span>`
+      : `<span style="color:var(--red);">Heard: "${said}" — expected: "${expected}". Try again!</span>`;
+  });
+}
+function rpNext(){ rpIndex++; renderRoleplayLine(); }
+
+/* ============================================================
+   8. PROGRESS TAB
+   ============================================================ */
+function renderProgress(){
+  const el = document.getElementById('panel-progress');
+  const p = loadProgress();
+  const writingEntries = Object.entries(p.writing || {});
+  const writingAvg = writingEntries.length
+    ? Math.round(writingEntries.reduce((a,[,v])=>a+v,0) / writingEntries.length) : 0;
+
+  let listeningCorrect=0, listeningTotal=0;
+  Object.values(p.listening || {}).forEach(rec=>{
+    Object.values(rec).forEach(v=>{ listeningTotal++; listeningCorrect += v; });
+  });
+
+  let readingDone=0, readingTotal=0;
+  Object.values(p.reading || {}).forEach(rec=>{
+    Object.values(rec).forEach(v=>{ readingTotal++; readingDone += v; });
+  });
+
+  const clozeScores = p.exercises && p.exercises.cloze ? p.exercises.cloze : {};
+  const clozeSum = Object.values(clozeScores).reduce((a,b)=>a+b,0);
+  const freeformDone = p.exercises && p.exercises.freeform ? Object.keys(p.exercises.freeform).length : 0;
+
+  el.innerHTML = `
+    <div class="card"><h2>📊 Progress ${document.getElementById('studentName').value ? '— ' + document.getElementById('studentName').value : '(guest)'}</h2>
+      <table class="progress-table">
+        <tr><th>Area</th><th>Result</th></tr>
+        <tr><td>✍️ Writing (avg trace score)</td><td>${writingEntries.length ? writingAvg + '/100 (' + writingEntries.length + ' chars practiced)' : '— not started —'}</td></tr>
+        <tr><td>🎧 Listening</td><td>${listeningTotal ? listeningCorrect + '/' + listeningTotal + ' correct' : '— not started —'}</td></tr>
+        <tr><td>📖 Reading comprehension</td><td>${readingTotal ? readingDone + '/' + readingTotal + ' answered' : '— not started —'}</td></tr>
+        <tr><td>📝 Exercises (cloze score)</td><td>${Object.keys(clozeScores).length ? clozeSum + ' correct across word banks' : '— not started —'}</td></tr>
+        <tr><td>📝 Free-form items practiced</td><td>${freeformDone}</td></tr>
+        <tr><td>🔥 Day streak</td><td>${p.streak || 0}</td></tr>
+      </table>
+      <p class="note" style="margin-top:12px;">Progress is saved per student name in this browser's local storage. Use the same name and device to keep your streak going!</p>
+      <button class="btn outline" onclick="resetProgress()">🗑 Reset my progress</button>
+    </div>
+  `;
+}
+function resetProgress(){
+  if(confirm('This will clear all saved progress for this student name. Continue?')){
+    localStorage.removeItem(studentKey());
+    renderProgress();
+  }
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+initNav();
+console.log(COPYRIGHT);
+</script>
+</body>
+</html>
