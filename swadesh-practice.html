@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>काल-दीप · स्वदेश परीक्षा अभ्यास</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Noto+Serif+Devanagari:wght@500;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-night:#1B1B2E;
+    --bg-card:#242440;
+    --bg-card-2:#2C2C4E;
+    --flame:#F4A226;
+    --flame-soft:#FFD37D;
+    --text-warm:#F5EFE6;
+    --text-muted:#ADA8C4;
+    --sage:#7FAE83;
+    --rust:#C1666B;
+    --line:#3E3A5C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:radial-gradient(ellipse at top, #24243F 0%, var(--bg-night) 55%);
+    color:var(--text-warm);
+    font-family:'Noto Sans Devanagari','Inter',sans-serif;
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  .eng{font-family:'Inter',sans-serif;}
+  h1,h2,h3{font-family:'Noto Serif Devanagari','Fraunces',serif; margin:0;}
+  .eyebrow{font-family:'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase; font-size:11px; color:var(--text-muted);}
+
+  /* ---- Header / Diya ---- */
+  header{
+    text-align:center;
+    padding:28px 16px 18px;
+    position:relative;
+  }
+  header h1{font-size:26px; color:var(--flame-soft); font-weight:700;}
+  header p.eng{font-size:12px; color:var(--text-muted); margin-top:4px;}
+
+  .diya-wrap{
+    display:flex; flex-direction:column; align-items:center; margin-top:14px;
+  }
+  .diya-svg{width:110px; height:90px;}
+  .flame{
+    transform-origin:60px 46px;
+    animation:flicker 2.6s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce){ .flame{animation:none;} }
+  @keyframes flicker{
+    0%,100%{ transform:scaleY(1) scaleX(1) rotate(0deg); }
+    30%{ transform:scaleY(1.06) scaleX(.97) rotate(-1deg); }
+    60%{ transform:scaleY(.95) scaleX(1.03) rotate(1deg); }
+  }
+  .score-line{font-size:13px; color:var(--text-muted); margin-top:8px;}
+  .score-bar-track{width:220px; height:6px; background:var(--line); border-radius:4px; margin:8px auto 0; overflow:hidden;}
+  .score-bar-fill{height:100%; background:linear-gradient(90deg,var(--flame),var(--flame-soft)); transition:width .5s ease;}
+
+  /* ---- Tabs ---- */
+  nav.tabs{
+    display:flex; gap:6px; overflow-x:auto; padding:0 12px 10px;
+    -webkit-overflow-scrolling:touch;
+  }
+  nav.tabs button{
+    flex:0 0 auto;
+    background:var(--bg-card);
+    color:var(--text-muted);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:8px 16px;
+    font-size:14px;
+    font-family:'Noto Sans Devanagari',sans-serif;
+    font-weight:600;
+    cursor:pointer;
+  }
+  nav.tabs button.active{
+    background:var(--flame);
+    color:#1B1B2E;
+    border-color:var(--flame);
+  }
+
+  main{padding:6px 16px 40px; max-width:640px; margin:0 auto;}
+  section{display:none;}
+  section.active{display:block; animation:fadeIn .25s ease;}
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .section-title{font-size:20px; color:var(--flame-soft); margin-bottom:2px;}
+  .section-sub{font-size:12px; color:var(--text-muted); margin-bottom:16px;}
+
+  /* ---- Cards ---- */
+  .card{
+    background:var(--bg-card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:18px;
+    margin-bottom:14px;
+  }
+  .icon-badge{
+    width:46px; height:46px; border-radius:50%;
+    background:var(--bg-card-2);
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; margin-bottom:10px;
+  }
+  .hi-word{font-size:24px; font-weight:700; color:var(--text-warm);}
+  .pron{font-size:13px; color:var(--flame-soft); font-family:'Inter',sans-serif; margin-top:4px;}
+  .meaning{font-size:14px; color:var(--text-muted); margin-top:6px; font-family:'Inter',sans-serif;}
+
+  .row-btns{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;}
+  button.pill{
+    border:none; border-radius:20px; padding:8px 14px;
+    font-size:13px; font-weight:600; cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .btn-listen{background:var(--bg-card-2); color:var(--flame-soft); border:1px solid var(--line);}
+  .btn-know{background:var(--sage); color:#122016;}
+  .btn-learning{background:transparent; color:var(--text-muted); border:1px solid var(--line);}
+  .btn-primary{background:var(--flame); color:#1B1B2E;}
+  .btn-primary:disabled{opacity:.4; cursor:not-allowed;}
+  .tag-done{font-size:11px; color:var(--sage); font-family:'Inter',sans-serif;}
+
+  /* ---- Grammar sub-tabs ---- */
+  .subtabs{display:flex; gap:6px; margin-bottom:14px;}
+  .subtabs button{
+    flex:1; background:var(--bg-card); color:var(--text-muted); border:1px solid var(--line);
+    border-radius:10px; padding:8px 4px; font-size:12px; font-family:'Inter',sans-serif; font-weight:600; cursor:pointer;
+  }
+  .subtabs button.active{background:var(--bg-card-2); color:var(--flame-soft); border-color:var(--flame);}
+
+  .opp-pair{display:flex; align-items:center; gap:10px;}
+  .opp-side{flex:1; text-align:center;}
+  .opp-x{color:var(--rust); font-family:'Inter',sans-serif; font-size:13px;}
+
+  /* ---- MCQ ---- */
+  .mcq-q{font-size:16px; margin-bottom:4px;}
+  .options{display:flex; flex-direction:column; gap:8px; margin-top:12px;}
+  .opt-btn{
+    text-align:left; background:var(--bg-card-2); border:1px solid var(--line); color:var(--text-warm);
+    border-radius:10px; padding:10px 12px; font-size:14px; cursor:pointer; font-family:'Noto Sans Devanagari',sans-serif;
+  }
+  .opt-btn.correct{background:rgba(127,174,131,.25); border-color:var(--sage);}
+  .opt-btn.wrong{background:rgba(193,102,107,.25); border-color:var(--rust);}
+
+  /* ---- Writing practice ---- */
+  .qa-list-item{
+    background:var(--bg-card); border:1px solid var(--line); border-radius:14px;
+    padding:14px; margin-bottom:10px; cursor:pointer;
+  }
+  .qa-list-item .hi-word{font-size:16px;}
+  .qa-progress{font-size:11px; color:var(--flame-soft); font-family:'Inter',sans-serif; margin-top:6px;}
+
+  .phrase-stage{
+    background:var(--bg-card); border:1px solid var(--flame); border-radius:18px;
+    padding:24px 18px; text-align:center;
+  }
+  .phrase-counter{font-size:11px; color:var(--text-muted); font-family:'Inter',sans-serif; margin-bottom:10px;}
+  .phrase-hi{font-size:30px; font-weight:700; color:var(--flame-soft);}
+  .phrase-pron{font-size:14px; color:var(--text-muted); font-family:'Inter',sans-serif; margin-top:6px;}
+  .phrase-meaning{font-size:14px; color:var(--text-warm); font-family:'Inter',sans-serif; margin-top:4px;}
+  .write-dots{display:flex; gap:8px; justify-content:center; margin:16px 0 6px;}
+  .dot{width:14px; height:14px; border-radius:50%; background:var(--line); border:1px solid var(--flame);}
+  .dot.filled{background:var(--flame);}
+  .write-instruction{font-size:12px; color:var(--text-muted); font-family:'Inter',sans-serif;}
+  .back-link{font-size:12px; color:var(--text-muted); font-family:'Inter',sans-serif; margin-bottom:10px; cursor:pointer; display:inline-block;}
+
+  .toast{
+    position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
+    background:var(--sage); color:#122016; padding:10px 18px; border-radius:20px;
+    font-size:13px; font-family:'Inter',sans-serif; font-weight:600;
+    opacity:0; pointer-events:none; transition:opacity .3s ease;
+    z-index:50;
+  }
+  .toast.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">CBSE Hindi · कक्षा अभ्यास</p>
+  <h1>स्वदेश — परीक्षा अभ्यास</h1>
+  <p class="eng">Swadesh Poem — Exam Practice</p>
+
+  <div class="diya-wrap">
+    <svg class="diya-svg" viewBox="0 0 120 90">
+      <ellipse cx="60" cy="66" rx="42" ry="12" fill="#3E3A5C"/>
+      <path d="M20 60 Q60 82 100 60 Q100 74 60 78 Q20 74 20 60 Z" fill="#8A6A3A"/>
+      <ellipse cx="60" cy="58" rx="40" ry="8" fill="#B98A46"/>
+      <g class="flame">
+        <path id="flamePath" d="M60 50 C50 38 52 24 60 12 C68 24 70 38 60 50 Z" fill="var(--flame)"/>
+        <path d="M60 46 C55 38 56 30 60 22 C64 30 65 38 60 46 Z" fill="var(--flame-soft)"/>
+      </g>
+    </svg>
+    <div class="score-line eng"><span id="scoreText">0 / 0 अभ्यास पूर्ण</span></div>
+    <div class="score-bar-track"><div class="score-bar-fill" id="scoreBar" style="width:0%"></div></div>
+    <button class="pill btn-listen" style="margin-top:12px;" onclick="speak('नमस्ते')">🔊 आवाज़ जांचें · Test audio</button>
+    <div id="audioStatus" class="score-line eng" style="margin-top:4px; font-size:11px;"></div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="words">शब्दार्थ</button>
+  <button class="tab-btn" data-tab="grammar">व्याकरण</button>
+  <button class="tab-btn" data-tab="mcq">बोध प्रश्न</button>
+  <button class="tab-btn" data-tab="writing">लेखन अभ्यास</button>
+</nav>
+
+<main>
+
+  <!-- WORDS -->
+  <section id="tab-words" class="active">
+    <div class="section-title">शब्दार्थ</div>
+    <div class="section-sub eng">Word meanings — tap 🔊 to hear it, then say if you know it</div>
+    <div id="wordsList"></div>
+  </section>
+
+  <!-- GRAMMAR -->
+  <section id="tab-grammar">
+    <div class="section-title">व्याकरण</div>
+    <div class="section-sub eng">Grammar — opposites, synonyms & idioms</div>
+    <div class="subtabs">
+      <button class="gsub-btn active" data-gsub="opp">विलोम</button>
+      <button class="gsub-btn" data-gsub="syn">पर्यायवाची</button>
+      <button class="gsub-btn" data-gsub="idiom">मुहावरे</button>
+    </div>
+    <div id="oppList"></div>
+    <div id="synList" style="display:none"></div>
+    <div id="idiomList" style="display:none"></div>
+  </section>
+
+  <!-- MCQ -->
+  <section id="tab-mcq">
+    <div class="section-title">बोध प्रश्न</div>
+    <div class="section-sub eng">Reading comprehension — pick the correct answer</div>
+    <div id="mcqList"></div>
+  </section>
+
+  <!-- WRITING -->
+  <section id="tab-writing">
+    <div id="writingListView">
+      <div class="section-title">लेखन अभ्यास</div>
+      <div class="section-sub eng">Writing practice — 2-word phrases. Listen, say it, write each phrase 3 times in your notebook.</div>
+      <div id="qaList"></div>
+    </div>
+    <div id="phraseStageView" style="display:none"></div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const words = [
+  {hi:"स्वदेश", pron:"Swa-desh", meaning:"One's own country / Homeland", icon:"🏡"},
+  {hi:"उद्धार", pron:"Ud-dhaar", meaning:"Salvation, liberation", icon:"🕊️"},
+  {hi:"लासानी", pron:"Laa-saa-nee", meaning:"Unique, incomparable", icon:"✨"},
+  {hi:"ज्ञानी", pron:"Gyaa-nee", meaning:"Wise, knowledgeable person", icon:"📖"},
+  {hi:"पसीजा", pron:"Pa-see-jaa", meaning:"Melted with compassion, became kind", icon:"💧"},
+  {hi:"निस्संशय", pron:"Nis-san-shay", meaning:"Without doubt, certainly", icon:"✅"},
+  {hi:"जाति", pron:"Jaa-ti", meaning:"Community / Caste", icon:"🤝"},
+  {hi:"रस-धार", pron:"Ras-dhaar", meaning:"Stream of emotions", icon:"🌊"},
+  {hi:"नवरत्न", pron:"Nav-rat-na", meaning:"Nine precious gems", icon:"💎"},
+  {hi:"निश्चित", pron:"Nish-chit", meaning:"Definite, certain", icon:"📌"},
+  {hi:"काल-दीप", pron:"Kaal-deep", meaning:"Lamp of time", icon:"🪔"},
+];
+
+const opposites = [
+  {a:"ज्ञानी",ap:"Gyaa-nee",b:"अज्ञानी",bp:"Agyaa-nee",meaning:"Wise × Ignorant"},
+  {a:"स्वदेश",ap:"Swa-desh",b:"विदेश",bp:"Vi-desh",meaning:"Homeland × Foreign country"},
+  {a:"निश्चित",ap:"Nish-chit",b:"अनिश्चित",bp:"A-nish-chit",meaning:"Certain × Uncertain"},
+  {a:"साहस",ap:"Saa-has",b:"कायरता",bp:"Kaa-yar-taa",meaning:"Courage × Cowardice"},
+  {a:"स्नेह",ap:"Sneh",b:"द्वेष",bp:"Dvesh",meaning:"Affection × Hatred"},
+];
+
+const synonyms = [
+  {hi:"हृदय", pron:"Hriday", meaning:"Heart", syns:[["दिल","Dil"],["मन","Man"],["चित्त","Chitt"]]},
+  {hi:"पत्थर", pron:"Pat-thar", meaning:"Stone", syns:[["शिला","Shi-laa"],["पाषाण","Paa-shaan"],["चट्टान","Chat-taan"]]},
+  {hi:"संसार", pron:"San-saar", meaning:"World", syns:[["जगत","Ja-gat"],["दुनिया","Du-ni-yaa"],["विश्व","Vish-va"]]},
+];
+
+const idioms = [
+  {hi:"अपना उल्लू सीधा करना", pron:"Apnaa Ulloo Seedhaa Karnaa", meaning:"To fulfil one's selfish purpose."},
+  {hi:"अपना राग अलापना", pron:"Apnaa Raag Alaapnaa", meaning:"To keep talking only about oneself."},
+  {hi:"अपनी खिचड़ी अलग पकाना", pron:"Apnee Khichdi Alag Pakaanaa", meaning:"To act independently without cooperating with others."},
+  {hi:"अपने पाँव पर कुल्हाड़ी मारना", pron:"Apne Paanv Par Kulhaadi Maarnaa", meaning:"To harm oneself through one's own actions."},
+  {hi:"अपने मुँह मियाँ मिठ्ठू बनना", pron:"Apne Munh Miyaan Miththoo Bannaa", meaning:"To praise oneself."},
+];
+
+const mcqs = [
+  {q:"'काल-दीप' किसका प्रतीक है?", pron:"'Kaal-deep' kiska prateek hai?", meaning:"What does the Lamp of Time symbolize?",
+   opts:["दीपावली (Diwali)","समय (Time)","मृत्यु (Death)","दीपक (Lamp)"], correct:1},
+  {q:"'परवाना' किसके लिए प्रयोग हुआ है?", pron:"'Parvaanaa' kiske liye prayog huaa hai?", meaning:"The word parvaanaa refers to whom?",
+   opts:["नेता (Leader)","सैनिक (Soldier)","देश पर मर मिटने वाले (Those who sacrifice for the country)","व्यापारी (Merchant)"], correct:2},
+  {q:"'सब कुछ है अपने हाथों में' का अर्थ है—", pron:"'Sab kuchh hai apne haathon mein' kaa arth hai—", meaning:"What does 'Everything is in our own hands' mean?",
+   opts:["हम असहाय हैं (We are helpless)","सब सरकार के हाथ में है (It's in govt's hands)","आत्मनिर्भर हैं, बलिदान हेतु (We are self-reliant, ready to sacrifice)","हमें कुछ नहीं करना (We need do nothing)"], correct:2},
+  {q:"'तोप और तलवार' किसका प्रतीक है?", pron:"'Top aur talvaar' kiska prateek hai?", meaning:"What do the cannon and sword symbolize?",
+   opts:["युद्ध का (War)","शक्ति और साहस का (Strength & courage)","सजावट का (Decoration)","प्यार का (Love)"], correct:0},
+  {q:"इस काव्यांश का मुख्य उद्देश्य क्या है?", pron:"Is kaavyaansh kaa mukhya uddeshya kyaa hai?", meaning:"What is the main purpose of this poem extract?",
+   opts:["डर फैलाना (To spread fear)","बलिदान और आत्मबल का संदेश (Message of sacrifice & inner strength)","मनोरंजन (Entertainment)","व्यापार (Business)"], correct:1},
+];
+
+const qaData = [
+  {
+    q:"कविता में भारत माता का रूप कैसा बताया गया है?", qp:"Kavitaa mein Bhaarat Maataa kaa roop kaisaa bataayaa gayaa hai?", qm:"How is Mother India described in the poem?",
+    fullAns:"कविता में भारत माता का रूप महान, पवित्र तथा गौरवशाली बताया गया है।",
+    fullPron:"Kavitaa mein Bhaarat Maataa kaa roop mahaan, pavitra tathaa gauravshaalee bataayaa gayaa hai.",
+    fullMeaning:"In the poem, Mother India is described as great, sacred, and glorious.",
+    phrases:[
+      {hi:"कविता में", pron:"Kavitaa mein", meaning:"in the poem"},
+      {hi:"भारत माता", pron:"Bhaarat Maataa", meaning:"Mother India"},
+      {hi:"का रूप", pron:"kaa roop", meaning:"the appearance / form of"},
+      {hi:"महान, पवित्र", pron:"mahaan, pavitra", meaning:"great, sacred"},
+      {hi:"तथा गौरवशाली", pron:"tathaa gauravshaalee", meaning:"and glorious"},
+      {hi:"बताया गया", pron:"bataayaa gayaa", meaning:"has been described"},
+      {hi:"है।", pron:"hai", meaning:"is"},
+    ]
+  },
+  {
+    q:"भारत माता के पुत्र कैसे हैं?", qp:"Bhaarat Maataa ke putra kaise hain?", qm:"What are the children of Mother India like?",
+    fullAns:"भारत माता के पुत्र वीर, साहसी तथा देशभक्त हैं।",
+    fullPron:"Bhaarat Maataa ke putra veer, saahasee tathaa deshbhakt hain.",
+    fullMeaning:"The children of Mother India are brave, courageous, and patriotic.",
+    phrases:[
+      {hi:"भारत माता", pron:"Bhaarat Maataa", meaning:"Mother India"},
+      {hi:"के पुत्र", pron:"ke putra", meaning:"'s sons/children"},
+      {hi:"वीर, साहसी", pron:"veer, saahasee", meaning:"brave, courageous"},
+      {hi:"तथा देशभक्त", pron:"tathaa deshbhakt", meaning:"and patriotic"},
+      {hi:"हैं।", pron:"hain", meaning:"are"},
+    ]
+  },
+  {
+    q:"'स्वदेश' कविता का मुख्य भाव क्या है?", qp:"'Swadesh' kavitaa kaa mukhya bhaav kyaa hai?", qm:"What is the main idea of the poem Swadesh?",
+    fullAns:"इस कविता का मुख्य भाव देशप्रेम, साहस, त्याग तथा मातृभूमि के प्रति सम्मान की भावना को व्यक्त करना है।",
+    fullPron:"Is kavitaa kaa mukhya bhaav deshprem, saahas, tyaag tathaa maatrubhoomi ke prati sammaan kee bhaavanaa ko vyakt karnaa hai.",
+    fullMeaning:"The main idea of the poem is to express patriotism, courage, sacrifice, and respect for the motherland.",
+    phrases:[
+      {hi:"इस कविता", pron:"is kavitaa", meaning:"this poem"},
+      {hi:"का मुख्य", pron:"kaa mukhya", meaning:"'s main"},
+      {hi:"भाव देशप्रेम,", pron:"bhaav deshprem,", meaning:"theme (is) patriotism,"},
+      {hi:"साहस, त्याग", pron:"saahas, tyaag", meaning:"courage, sacrifice"},
+      {hi:"तथा मातृभूमि", pron:"tathaa maatrubhoomi", meaning:"and motherland"},
+      {hi:"के प्रति", pron:"ke prati", meaning:"towards"},
+      {hi:"सम्मान की", pron:"sammaan kee", meaning:"of respect"},
+      {hi:"भावना को", pron:"bhaavanaa ko", meaning:"the feeling"},
+      {hi:"व्यक्त करना", pron:"vyakt karnaa", meaning:"to express"},
+      {hi:"है।", pron:"hai", meaning:"is"},
+    ]
+  },
+  {
+    q:"कवि ने भारत माता की महिमा का वर्णन कैसे किया है?", qp:"Kavi ne Bhaarat Maataa kee mahimaa kaa varnan kaise kiyaa hai?", qm:"How has the poet described the greatness of Mother India?",
+    fullAns:"कवि ने भारत माता को महान, ज्ञान, संस्कृति तथा वीरों की भूमि के रूप में प्रस्तुत किया है।",
+    fullPron:"Kavi ne Bhaarat Maataa ko mahaan, gyaan, sanskriti tathaa veeron kee bhoomi ke roop mein prastut kiyaa hai.",
+    fullMeaning:"The poet presents Mother India as a great land of knowledge, culture, and brave people.",
+    phrases:[
+      {hi:"कवि ने", pron:"kavi ne", meaning:"the poet"},
+      {hi:"भारत माता", pron:"Bhaarat Maataa", meaning:"Mother India"},
+      {hi:"को महान,", pron:"ko mahaan,", meaning:"as great,"},
+      {hi:"ज्ञान, संस्कृति", pron:"gyaan, sanskriti", meaning:"knowledge, culture"},
+      {hi:"तथा वीरों", pron:"tathaa veeron", meaning:"and of brave people"},
+      {hi:"की भूमि", pron:"kee bhoomi", meaning:"'s land"},
+      {hi:"के रूप", pron:"ke roop", meaning:"in the form"},
+      {hi:"में प्रस्तुत", pron:"mein prastut", meaning:"presents"},
+      {hi:"किया है।", pron:"kiyaa hai", meaning:"has (done)"},
+    ]
+  },
+  {
+    q:"हमें अपने देश के प्रति कैसा व्यवहार रखना चाहिए?", qp:"Hamen apne desh ke prati kaisaa vyavahaar rakhnaa chaahiye?", qm:"How should we behave towards our country?",
+    fullAns:"हमें अपने देश के प्रति प्रेम, सम्मान तथा सेवा की भावना रखनी चाहिए।",
+    fullPron:"Hamen apne desh ke prati prem, sammaan tathaa sevaa kee bhaavanaa rakhnee chaahiye.",
+    fullMeaning:"We should have love, respect, and a spirit of service towards our country.",
+    phrases:[
+      {hi:"हमें अपने", pron:"hamen apne", meaning:"we, our own"},
+      {hi:"देश के", pron:"desh ke", meaning:"country's"},
+      {hi:"प्रति प्रेम,", pron:"prati prem,", meaning:"towards, love"},
+      {hi:"सम्मान तथा", pron:"sammaan tathaa", meaning:"respect and"},
+      {hi:"सेवा की", pron:"sevaa kee", meaning:"of service"},
+      {hi:"भावना रखनी", pron:"bhaavanaa rakhnee", meaning:"keep the feeling"},
+      {hi:"चाहिए।", pron:"chaahiye", meaning:"should"},
+    ]
+  },
+  {
+    q:"इस कविता से हमें क्या शिक्षा मिलती है?", qp:"Is kavitaa se hamen kyaa shikshaa miltee hai?", qm:"What lesson do we learn from this poem?",
+    fullAns:"इस कविता से हमें देशभक्ति, साहस, त्याग तथा अपने देश पर गर्व करने की शिक्षा मिलती है।",
+    fullPron:"Is kavitaa se hamen deshbhakti, saahas, tyaag tathaa apne desh par garv karne kee shikshaa miltee hai.",
+    fullMeaning:"This poem teaches us patriotism, courage, sacrifice, and pride in our country.",
+    phrases:[
+      {hi:"इस कविता", pron:"is kavitaa", meaning:"this poem"},
+      {hi:"से हमें", pron:"se hamen", meaning:"teaches us"},
+      {hi:"देशभक्ति, साहस,", pron:"deshbhakti, saahas,", meaning:"patriotism, courage,"},
+      {hi:"त्याग तथा", pron:"tyaag tathaa", meaning:"sacrifice and"},
+      {hi:"अपने देश", pron:"apne desh", meaning:"our own country"},
+      {hi:"पर गर्व", pron:"par garv", meaning:"pride in"},
+      {hi:"करने की", pron:"karne kee", meaning:"of having"},
+      {hi:"शिक्षा मिलती", pron:"shikshaa miltee", meaning:"teaches the lesson"},
+      {hi:"है।", pron:"hai", meaning:"is"},
+    ]
+  },
+];
+
+/* ---------------- STORAGE ---------------- */
+const STORE_KEY = "swadesh-progress-v1";
+let progress = {
+  wordsKnown: {}, oppKnown: {}, synKnown: {}, idiomKnown: {},
+  mcqCorrect: {}, qaDone: {}, qaPhraseIdx: {}, qaWriteCount: {}
+};
+
+async function loadProgress(){
+  try{
+    const res = await window.storage.get(STORE_KEY, false);
+    if(res && res.value){ progress = JSON.parse(res.value); }
+  }catch(e){ /* no saved progress yet */ }
+  renderAll();
+}
+async function saveProgress(){
+  try{ await window.storage.set(STORE_KEY, JSON.stringify(progress), false); }
+  catch(e){ console.error("Could not save progress", e); }
+}
+
+/* ---------------- SPEECH ---------------- */
+let hindiVoice = null;
+let lastUtterance = null; // keep a reference so Android/Chrome doesn't garbage-collect mid-speech
+
+function loadVoices(){
+  if(!('speechSynthesis' in window)) return;
+  const voices = window.speechSynthesis.getVoices();
+  if(voices && voices.length){
+    hindiVoice = voices.find(v => v.lang === 'hi-IN') ||
+                 voices.find(v => v.lang && v.lang.toLowerCase().startsWith('hi')) ||
+                 null;
+  }
+}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+function speak(text){
+  const statusEl = document.getElementById('audioStatus');
+  if(!('speechSynthesis' in window)){
+    if(statusEl) statusEl.textContent = "⚠️ यह ब्राउज़र सपोर्ट नहीं करता · Open this file in Chrome browser";
+    showToast("Chrome में खोलें");
+    return;
+  }
+  loadVoices();
+  window.speechSynthesis.cancel();
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'hi-IN';
+  utter.rate = 0.8;
+  utter.pitch = 1;
+  if(hindiVoice) utter.voice = hindiVoice;
+
+  utter.onstart = () => { if(statusEl) statusEl.textContent = "🔊 बज रहा है... playing"; };
+  utter.onend = () => { if(statusEl) statusEl.textContent = hindiVoice ? "✓ आवाज़ काम कर रही है" : "⚠️ चली, पर हिंदी आवाज़ नहीं मिली"; };
+  utter.onerror = () => { if(statusEl) statusEl.textContent = "⚠️ आवाज़ नहीं बजी · check phone Settings → Text-to-Speech → install Hindi"; };
+
+  lastUtterance = utter;
+  window.speechSynthesis.speak(utter);
+
+  if(!hindiVoice && statusEl){
+    statusEl.textContent = "⚠️ हिंदी आवाज़ नहीं मिली · install Hindi TTS in phone Settings";
+  }
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1600);
+}
+
+/* ---------------- SCORE ---------------- */
+function computeScore(){
+  let done = 0, total = 0;
+  total += words.length; done += Object.values(progress.wordsKnown).filter(Boolean).length;
+  total += opposites.length; done += Object.values(progress.oppKnown).filter(Boolean).length;
+  total += synonyms.length; done += Object.values(progress.synKnown).filter(Boolean).length;
+  total += idioms.length; done += Object.values(progress.idiomKnown).filter(Boolean).length;
+  total += mcqs.length; done += Object.values(progress.mcqCorrect).filter(Boolean).length;
+  total += qaData.length; done += Object.values(progress.qaDone).filter(Boolean).length;
+  return {done, total};
+}
+function updateScoreUI(){
+  const {done, total} = computeScore();
+  document.getElementById('scoreText').textContent = `${done} / ${total} अभ्यास पूर्ण · ${done}/${total} complete`;
+  const pct = total ? Math.round((done/total)*100) : 0;
+  document.getElementById('scoreBar').style.width = pct + '%';
+  const flame = document.getElementById('flamePath');
+  const glow = 6 + Math.round(pct/100*18);
+  flame.style.filter = `drop-shadow(0 0 ${glow}px var(--flame))`;
+}
+
+/* ---------------- RENDER: WORDS ---------------- */
+function renderWords(){
+  const el = document.getElementById('wordsList');
+  el.innerHTML = words.map((w,i)=>{
+    const known = progress.wordsKnown[i];
+    return `
+    <div class="card">
+      <div class="icon-badge">${w.icon}</div>
+      <div class="hi-word">${w.hi}</div>
+      <div class="pron eng">${w.pron}</div>
+      <div class="meaning">${w.meaning}</div>
+      <div class="row-btns">
+        <button class="pill btn-listen" onclick="speak('${w.hi}')">🔊 सुनिए</button>
+        <button class="pill ${known? 'btn-know':'btn-learning'}" onclick="toggleWordKnown(${i})">${known? '✓ याद है' : 'मुझे याद है'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleWordKnown(i){
+  progress.wordsKnown[i] = !progress.wordsKnown[i];
+  saveProgress(); renderWords(); updateScoreUI();
+}
+
+/* ---------------- RENDER: GRAMMAR ---------------- */
+function renderOpp(){
+  const el = document.getElementById('oppList');
+  el.innerHTML = opposites.map((o,i)=>{
+    const known = progress.oppKnown[i];
+    return `
+    <div class="card">
+      <div class="opp-pair">
+        <div class="opp-side">
+          <div class="hi-word" style="font-size:20px">${o.a}</div>
+          <div class="pron eng">${o.ap}</div>
+        </div>
+        <div class="opp-x">×</div>
+        <div class="opp-side">
+          <div class="hi-word" style="font-size:20px">${o.b}</div>
+          <div class="pron eng">${o.bp}</div>
+        </div>
+      </div>
+      <div class="meaning" style="text-align:center; margin-top:10px;">${o.meaning}</div>
+      <div class="row-btns" style="justify-content:center">
+        <button class="pill btn-listen" onclick="speak('${o.a} ${o.b}')">🔊 सुनिए</button>
+        <button class="pill ${known? 'btn-know':'btn-learning'}" onclick="toggleOppKnown(${i})">${known? '✓ याद है' : 'मुझे याद है'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleOppKnown(i){ progress.oppKnown[i] = !progress.oppKnown[i]; saveProgress(); renderOpp(); updateScoreUI(); }
+
+function renderSyn(){
+  const el = document.getElementById('synList');
+  el.innerHTML = synonyms.map((s,i)=>{
+    const known = progress.synKnown[i];
+    const synText = s.syns.map(p=>`${p[0]} (${p[1]})`).join(' · ');
+    return `
+    <div class="card">
+      <div class="hi-word">${s.hi}</div>
+      <div class="pron eng">${s.pron}</div>
+      <div class="meaning">${s.meaning}</div>
+      <div class="meaning" style="margin-top:8px; color:var(--flame-soft)">${synText}</div>
+      <div class="row-btns">
+        <button class="pill btn-listen" onclick="speak('${s.hi}')">🔊 सुनिए</button>
+        <button class="pill ${known? 'btn-know':'btn-learning'}" onclick="toggleSynKnown(${i})">${known? '✓ याद है' : 'मुझे याद है'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleSynKnown(i){ progress.synKnown[i] = !progress.synKnown[i]; saveProgress(); renderSyn(); updateScoreUI(); }
+
+function renderIdiom(){
+  const el = document.getElementById('idiomList');
+  el.innerHTML = idioms.map((id,i)=>{
+    const known = progress.idiomKnown[i];
+    return `
+    <div class="card">
+      <div class="hi-word" style="font-size:19px">${id.hi}</div>
+      <div class="pron eng">${id.pron}</div>
+      <div class="meaning">${id.meaning}</div>
+      <div class="row-btns">
+        <button class="pill btn-listen" onclick="speak('${id.hi}')">🔊 सुनिए</button>
+        <button class="pill ${known? 'btn-know':'btn-learning'}" onclick="toggleIdiomKnown(${i})">${known? '✓ याद है' : 'मुझे याद है'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleIdiomKnown(i){ progress.idiomKnown[i] = !progress.idiomKnown[i]; saveProgress(); renderIdiom(); updateScoreUI(); }
+
+/* ---------------- RENDER: MCQ ---------------- */
+function renderMcq(){
+  const el = document.getElementById('mcqList');
+  el.innerHTML = mcqs.map((m,i)=>{
+    const answered = progress.mcqCorrect[i] !== undefined;
+    const optsHtml = m.opts.map((opt,oi)=>{
+      let cls = 'opt-btn';
+      if(answered){
+        if(oi === m.correct) cls += ' correct';
+        else if(oi === progress.mcqCorrect['sel'+i]) cls += ' wrong';
+      }
+      return `<button class="${cls}" ${answered?'disabled':''} onclick="answerMcq(${i},${oi})">${opt}</button>`;
+    }).join('');
+    return `
+    <div class="card">
+      <div class="mcq-q">${i+1}. ${m.q}</div>
+      <div class="pron eng">${m.pron}</div>
+      <div class="meaning">${m.meaning}</div>
+      <div class="options">${optsHtml}</div>
+      <div class="row-btns">
+        <button class="pill btn-listen" onclick="speak(\`${m.q}\`)">🔊 प्रश्न सुनिए</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function answerMcq(i, oi){
+  if(progress.mcqCorrect[i] !== undefined) return;
+  progress.mcqCorrect[i] = (oi === mcqs[i].correct);
+  progress.mcqCorrect['sel'+i] = oi;
+  saveProgress(); renderMcq(); updateScoreUI();
+  showToast(oi === mcqs[i].correct ? "सही ✓ Correct!" : "फिर कोशिश करें अगली बार");
+}
+
+/* ---------------- RENDER: WRITING PRACTICE ---------------- */
+let currentQaIndex = null;
+
+function renderQaList(){
+  const el = document.getElementById('qaList');
+  el.innerHTML = qaData.map((qa,i)=>{
+    const done = progress.qaDone[i];
+    const phraseIdx = progress.qaPhraseIdx[i] || 0;
+    return `
+    <div class="qa-list-item" onclick="openQa(${i})">
+      <div class="hi-word">${i+1}. ${qa.q}</div>
+      <div class="pron eng" style="font-size:11px">${qa.qp}</div>
+      <div class="qa-progress">${done? '✓ पूर्ण · complete' : phraseIdx>0 ? `जारी है · phrase ${phraseIdx+1}/${qa.phrases.length}` : `${qa.phrases.length} phrases · start →`}</div>
+    </div>`;
+  }).join('');
+}
+
+function openQa(i){
+  currentQaIndex = i;
+  document.getElementById('writingListView').style.display = 'none';
+  document.getElementById('phraseStageView').style.display = 'block';
+  renderQaStage();
+}
+
+function closeQa(){
+  document.getElementById('writingListView').style.display = 'block';
+  document.getElementById('phraseStageView').style.display = 'none';
+  renderQaList();
+}
+
+function renderQaStage(){
+  const qa = qaData[currentQaIndex];
+  const idx = progress.qaPhraseIdx[currentQaIndex] || 0;
+  const wc = progress.qaWriteCount[currentQaIndex+'_'+idx] || 0;
+  const el = document.getElementById('phraseStageView');
+
+  if(idx >= qa.phrases.length){
+    // question complete
+    progress.qaDone[currentQaIndex] = true;
+    saveProgress(); updateScoreUI();
+    el.innerHTML = `
+      <div class="back-link" onclick="closeQa()">← सूची पर वापस जाएं</div>
+      <div class="card" style="text-align:center;">
+        <div class="hi-word" style="font-size:20px">🎉 पूर्ण हुआ! Complete!</div>
+        <div class="meaning" style="margin-top:8px;">${qa.fullAns}</div>
+        <div class="pron eng" style="margin-top:6px">${qa.fullPron}</div>
+        <div class="meaning" style="margin-top:4px">${qa.fullMeaning}</div>
+        <div class="row-btns" style="justify-content:center; margin-top:14px;">
+          <button class="pill btn-primary" onclick="closeQa()">अगले प्रश्न पर जाएं</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const showAnswer = progress['reveal_'+currentQaIndex];
+  if(!showAnswer && idx === 0 && wc === 0){
+    // question intro screen with reveal button
+    el.innerHTML = `
+      <div class="back-link" onclick="closeQa()">← सूची पर वापस जाएं</div>
+      <div class="card">
+        <div class="eyebrow">प्रश्न · Question</div>
+        <div class="hi-word" style="font-size:19px; margin-top:6px;">${qa.q}</div>
+        <div class="pron eng">${qa.qp}</div>
+        <div class="meaning">${qa.qm}</div>
+        <div class="row-btns">
+          <button class="pill btn-listen" onclick="speak(\`${qa.q}\`)">🔊 प्रश्न सुनिए</button>
+          <button class="pill btn-primary" onclick="revealAnswer(${currentQaIndex})">उत्तर दिखाएं (Show Answer)</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const phrase = qa.phrases[idx];
+  const dots = [0,1,2].map(d=>`<div class="dot ${d<wc?'filled':''}"></div>`).join('');
+  el.innerHTML = `
+    <div class="back-link" onclick="closeQa()">← सूची पर वापस जाएं</div>
+    <div class="phrase-counter eng">Phrase ${idx+1} of ${qa.phrases.length} — प्रश्न ${currentQaIndex+1}</div>
+    <div class="phrase-stage">
+      <div class="phrase-hi">${phrase.hi}</div>
+      <div class="phrase-pron">${phrase.pron}</div>
+      <div class="phrase-meaning">${phrase.meaning}</div>
+      <div class="row-btns" style="justify-content:center; margin-top:14px;">
+        <button class="pill btn-listen" onclick="speak('${phrase.hi}')">🔊 सुनिए</button>
+      </div>
+      <div class="write-instruction" style="margin-top:16px;">अपनी कॉपी में 3 बार लिखिए<br><span class="eng">Write this phrase 3 times in your notebook</span></div>
+      <div class="write-dots">${dots}</div>
+      <div class="row-btns" style="justify-content:center; margin-top:6px;">
+        <button class="pill btn-primary" onclick="markWritten(${currentQaIndex})" ${wc>=3?'disabled':''}>${wc>=3? '✓ लिख लिया' : `लिख दिया ✓ (${wc}/3)`}</button>
+      </div>
+      <div class="row-btns" style="justify-content:center; margin-top:10px;">
+        <button class="pill btn-know" onclick="nextPhrase(${currentQaIndex})" ${wc<3?'disabled':''}>अगला वाक्यांश → Next phrase</button>
+      </div>
+    </div>`;
+}
+
+function revealAnswer(i){
+  progress['reveal_'+i] = true;
+  saveProgress();
+  const qa = qaData[i];
+  const el = document.getElementById('phraseStageView');
+  el.innerHTML = `
+    <div class="back-link" onclick="closeQa()">← सूची पर वापस जाएं</div>
+    <div class="card">
+      <div class="eyebrow">पूरा उत्तर · Full Answer</div>
+      <div class="hi-word" style="font-size:18px; margin-top:6px;">${qa.fullAns}</div>
+      <div class="pron eng">${qa.fullPron}</div>
+      <div class="meaning">${qa.fullMeaning}</div>
+      <div class="section-sub eng" style="margin-top:14px;">Now let's build it 2 words at a time — listen, then write each phrase 3 times in your notebook.</div>
+      <div class="row-btns">
+        <button class="pill btn-listen" onclick="speak(\`${qa.fullAns}\`)">🔊 पूरा उत्तर सुनिए</button>
+        <button class="pill btn-primary" onclick="renderQaStage()">वाक्यांश अभ्यास शुरू करें →</button>
+      </div>
+    </div>`;
+}
+
+function markWritten(i){
+  const idx = progress.qaPhraseIdx[i] || 0;
+  const key = i+'_'+idx;
+  progress.qaWriteCount[key] = (progress.qaWriteCount[key]||0) + 1;
+  if(progress.qaWriteCount[key] >= 3){ showToast("शाबाश! 3/3 ✓"); }
+  saveProgress();
+  renderQaStage();
+}
+
+function nextPhrase(i){
+  progress.qaPhraseIdx[i] = (progress.qaPhraseIdx[i]||0) + 1;
+  saveProgress();
+  renderQaStage();
+}
+
+/* ---------------- TABS ---------------- */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+document.querySelectorAll('.gsub-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.gsub-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('oppList').style.display = btn.dataset.gsub==='opp' ? 'block':'none';
+    document.getElementById('synList').style.display = btn.dataset.gsub==='syn' ? 'block':'none';
+    document.getElementById('idiomList').style.display = btn.dataset.gsub==='idiom' ? 'block':'none';
+  });
+});
+
+/* ---------------- INIT ---------------- */
+function renderAll(){
+  renderWords(); renderOpp(); renderSyn(); renderIdiom(); renderMcq(); renderQaList();
+  updateScoreUI();
+}
+loadProgress();
+</script>
+</body>
+</html>
