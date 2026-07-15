@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#E4472B" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>熊猫村历险记 · Panda Village Adventure</title>
+<style>
+/* ============================================================
+   PANDA VILLAGE ADVENTURE — design tokens
+   Palette: lantern red, rice paper, deep ink, imperial gold,
+   bamboo jade, dragon teal, lotus pink.
+   Signature: the world lights up (dusk -> day) as you learn.
+============================================================ */
+:root{
+  --lantern:#E4472B;      /* primary red */
+  --lantern-deep:#B5321C;
+  --paper:#FBF3E2;        /* rice paper cream */
+  --paper-2:#F3E6CB;
+  --ink:#2A2320;          /* text / night */
+  --ink-soft:#5A5048;
+  --gold:#F2B441;
+  --gold-deep:#E08C1E;
+  --jade:#3FA66A;         /* correct / bamboo */
+  --jade-deep:#2E7D4F;
+  --teal:#2FA8C4;         /* magic / water */
+  --teal-soft:#BFE6F0;    /* choice card edge */
+  --lotus:#E86A9A;        /* soft accent */
+  --wrong:#D95a45;
+
+  --font-display:"Arial Rounded MT Bold","Baloo 2","Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-cjk:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Noto Sans CJK SC",sans-serif;
+
+  --r-lg:26px; --r-md:18px; --r-sm:12px;
+  --shadow:0 10px 30px -8px rgba(42,35,32,.45);
+  --shadow-lift:0 18px 44px -12px rgba(42,35,32,.55);
+  --fs:1;      /* font-size multiplier, controlled by reader settings */
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:var(--font-body);
+  background:var(--ink);
+  color:var(--ink);
+  overflow:hidden;
+  overscroll-behavior:none;
+  user-select:none;
+  -webkit-user-select:none;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.cjk{font-family:var(--font-cjk)}
+
+#app{position:fixed;inset:0;overflow:hidden}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden}
+.screen.active{display:flex}
+
+/* scrollable inner regions */
+.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+
+/* ---------- shared painted-sky backdrop ---------- */
+.sky{position:absolute;inset:0;z-index:0;transition:filter 1.2s ease, background 1.2s ease}
+/* time-of-day is toggled by adding .is-day / .is-dusk to a scene root */
+
+/* particles layer */
+.particles{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.pnode{position:absolute;top:-8%;will-change:transform,opacity}
+
+/* =========================================================
+   LOADING
+========================================================= */
+#loading{background:radial-gradient(120% 100% at 50% 20%,#3a2f6b 0%,#241d44 55%,#140f2a 100%);
+  align-items:center;justify-content:center;z-index:100}
+.load-lantern{width:90px;height:120px;position:relative;animation:sway 2.6s ease-in-out infinite}
+.load-lantern .body{position:absolute;inset:8px 0;background:radial-gradient(circle at 50% 35%,#ff8a5c,var(--lantern) 60%,var(--lantern-deep));
+  border-radius:50% 50% 46% 46%/60% 60% 40% 40%;box-shadow:0 0 40px 6px rgba(228,71,43,.65),inset 0 -10px 20px rgba(0,0,0,.25)}
+.load-lantern .cap{position:absolute;top:0;left:50%;transform:translateX(-50%);width:34px;height:12px;background:var(--gold);border-radius:4px}
+.load-lantern .tassel{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);width:4px;height:20px;background:var(--gold-deep)}
+.load-txt{color:#ffe9c2;font-family:var(--font-display);margin-top:28px;letter-spacing:.5px;font-size:1.05rem;opacity:.9;text-align:center}
+.load-txt .cjk{font-size:1.9rem;display:block;margin-bottom:6px;color:#fff}
+@keyframes sway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+
+/* =========================================================
+   HERO SETUP
+========================================================= */
+#setup{background:linear-gradient(160deg,#ffd98a,#f3b34d 45%,#e4472b);align-items:center;justify-content:center;z-index:60}
+.setup-card{width:min(92vw,440px);background:var(--paper);border-radius:var(--r-lg);padding:26px 22px 24px;box-shadow:var(--shadow-lift);text-align:center;border:3px solid #fff}
+.setup-card h1{font-family:var(--font-display);color:var(--lantern-deep);font-size:1.5rem;line-height:1.1}
+.setup-card h1 .cjk{display:block;font-size:2.1rem;color:var(--lantern);margin-bottom:4px}
+.setup-sub{color:var(--ink-soft);margin:8px 0 18px;font-size:.95rem}
+.avatar-pick{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+.avatar-opt{width:62px;height:62px;border-radius:50%;background:#fff;border:3px solid var(--paper-2);font-size:34px;display:flex;align-items:center;justify-content:center;transition:transform .15s,border-color .15s}
+.avatar-opt.sel{border-color:var(--lantern);transform:scale(1.12);box-shadow:0 6px 16px -4px rgba(228,71,43,.5)}
+.name-field{width:100%;padding:14px 16px;border-radius:var(--r-md);border:2px solid var(--paper-2);font-size:1.1rem;text-align:center;font-family:var(--font-display);color:var(--ink);background:#fff;margin-bottom:16px}
+.name-field:focus{outline:none;border-color:var(--gold)}
+.btn{font-family:var(--font-display);font-size:1.1rem;color:#fff;background:linear-gradient(180deg,#ff6a3d,var(--lantern));padding:14px 22px;border-radius:999px;box-shadow:0 8px 18px -6px rgba(228,71,43,.7);transition:transform .12s,box-shadow .12s;display:inline-flex;align-items:center;gap:8px;justify-content:center}
+.btn:active{transform:translateY(2px) scale(.98);box-shadow:0 4px 10px -4px rgba(228,71,43,.7)}
+.btn.jade{background:linear-gradient(180deg,#54c47f,var(--jade));box-shadow:0 8px 18px -6px rgba(63,166,106,.7)}
+.btn.gold{background:linear-gradient(180deg,#ffcf6b,var(--gold-deep));color:#4a2e05;box-shadow:0 8px 18px -6px rgba(224,140,30,.7)}
+.btn.ghost{background:rgba(255,255,255,.85);color:var(--lantern-deep);box-shadow:none;border:2px solid var(--paper-2)}
+.btn.wide{width:100%}
+.btn[disabled]{opacity:.45;filter:grayscale(.4)}
+
+/* =========================================================
+   WORLD MAP
+========================================================= */
+#map{background:#173b2e}
+.map-sky{position:absolute;inset:0;
+  background:
+   radial-gradient(140% 90% at 50% -10%,#bfe8ff 0%,#8fd0f0 30%,#5fb0dc 55%,transparent 70%),
+   linear-gradient(180deg,#a6dcf5 0%,#7cc4a0 45%,#3f8f63 100%)}
+.map-mtn{position:absolute;left:0;right:0;bottom:38%;height:34%;z-index:1;
+  background:linear-gradient(180deg,#6fae86,#3f7d5c);
+  clip-path:polygon(0 60%,12% 30%,22% 55%,34% 18%,46% 50%,58% 22%,70% 52%,82% 26%,92% 55%,100% 40%,100% 100%,0 100%)}
+.map-hills{position:absolute;left:0;right:0;bottom:0;height:44%;z-index:2;
+  background:linear-gradient(180deg,#59b174,#2e7a49);
+  clip-path:polygon(0 40%,18% 20%,40% 42%,62% 18%,82% 40%,100% 22%,100% 100%,0 100%)}
+.map-head{position:relative;z-index:5;padding:14px 16px calc(10px + env(safe-area-inset-top)) 16px;display:flex;align-items:center;gap:10px}
+.map-title{font-family:var(--font-display);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25);font-size:1.15rem;line-height:1}
+.map-title .cjk{font-size:1.4rem;display:block}
+.map-body{position:relative;z-index:5;flex:1;padding:0 8px 90px}
+.map-track{position:relative;min-height:100%;max-width:560px;margin:0 auto}
+.node{position:absolute;width:118px;transform:translate(-50%,-50%);text-align:center;transition:transform .15s}
+.node:active{transform:translate(-50%,-50%) scale(.95)}
+.node-disc{width:96px;height:96px;margin:0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:46px;position:relative;
+  background:radial-gradient(circle at 40% 30%,#fff,#ffe9c2 55%,#f2b441);border:4px solid #fff;box-shadow:var(--shadow)}
+.node.locked .node-disc{background:radial-gradient(circle at 40% 30%,#c9c2b4,#8f887a);filter:grayscale(.4)}
+.node.locked .node-disc::after{content:"🔒";position:absolute;font-size:26px;filter:none}
+.node.locked .node-emoji{opacity:.25}
+.node-lanterns{position:absolute;top:-6px;right:6px;display:flex;gap:2px}
+.mini-lantern{width:12px;height:16px;background:#7a746a;border-radius:50% 50% 45% 45%;transition:background .3s, box-shadow .3s}
+.mini-lantern.lit{background:radial-gradient(circle at 50% 35%,#ffb37a,var(--lantern));box-shadow:0 0 8px 1px rgba(228,71,43,.8)}
+.node-name{margin-top:8px;font-family:var(--font-display);color:#fff;text-shadow:0 2px 3px rgba(0,0,0,.35);font-size:.9rem;line-height:1.05}
+.node-name .cjk{display:block;font-size:1.05rem}
+.node-path{position:absolute;z-index:4;pointer-events:none}
+.node.current .node-disc{animation:bob 1.6s ease-in-out infinite}
+.node.current::before{content:"";position:absolute;inset:-10px;border-radius:50%;border:3px dashed rgba(255,255,255,.85);animation:spin 9s linear infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* =========================================================
+   TOP HUD (persistent in map + scene)
+========================================================= */
+.hud{position:relative;z-index:8;display:flex;gap:8px;align-items:center;padding:8px 12px;flex-wrap:wrap}
+.hud-hero{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.9);border-radius:999px;padding:5px 12px 5px 6px;box-shadow:var(--shadow)}
+.hud-ava{width:34px;height:34px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid var(--gold)}
+.hud-hero b{font-family:var(--font-display);color:var(--ink);font-size:.9rem;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.9);border-radius:999px;padding:6px 12px;font-family:var(--font-display);font-size:.88rem;color:var(--ink);box-shadow:var(--shadow)}
+.chip .ic{font-size:1rem}
+.hud-spacer{flex:1}
+.icon-btn{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:var(--shadow)}
+
+/* =========================================================
+   SCENE (story) engine
+========================================================= */
+#scene{background:var(--ink)}
+.scene-sky{position:absolute;inset:0;z-index:0}
+/* dusk default; day when .is-day added */
+.scene-root .scene-sky{
+  background:linear-gradient(180deg,#43376b 0%,#7d4a7e 42%,#e08a5b 78%,#f2b441 100%)}
+.scene-root.is-day .scene-sky{
+  background:linear-gradient(180deg,#bfeaff 0%,#8fd6f2 45%,#cdeecb 78%,#f4e4bf 100%)}
+.scene-scape{position:absolute;left:0;right:0;bottom:0;height:60%;z-index:2;pointer-events:none}
+/* layered bamboo / hills built with gradients + clip */
+.layer{position:absolute;left:-5%;right:-5%;bottom:0;will-change:transform}
+.layer.far{height:70%;background:linear-gradient(180deg,#6a5a92,#4a3d6e);opacity:.85;
+  clip-path:polygon(0 55%,15% 30%,30% 52%,48% 24%,66% 50%,82% 28%,100% 48%,100% 100%,0 100%)}
+.scene-root.is-day .layer.far{background:linear-gradient(180deg,#9fd0b0,#6ba883)}
+.layer.mid{height:46%;background:linear-gradient(180deg,#3f7d5c,#2b5b40);
+  clip-path:polygon(0 40%,20% 18%,42% 42%,64% 16%,86% 40%,100% 20%,100% 100%,0 100%)}
+.layer.near{height:26%;background:linear-gradient(180deg,#234a34,#16311f)}
+.bamboo{position:absolute;bottom:0;width:16px;border-radius:8px 8px 0 0;
+  background:linear-gradient(90deg,#2e7d4f,#4fae72 55%,#2e7d4f);opacity:.9}
+.bamboo::before,.bamboo::after{content:"";position:absolute;left:-6px;width:28px;height:9px;border-radius:4px;background:#256b43}
+.bamboo::before{top:26%}.bamboo::after{top:62%}
+
+.scene-content{position:relative;z-index:5;flex:1;display:flex;flex-direction:column;justify-content:flex-end;min-height:0}
+#sceneSlot{position:relative;z-index:6;display:flex;flex-direction:column;align-items:center;width:100%;padding-top:24px;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;max-height:82vh;flex:0 0 auto}
+/* character */
+.char-stage{position:relative;z-index:5;flex:1;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;min-height:0}
+.char{font-size:96px;filter:drop-shadow(0 12px 14px rgba(0,0,0,.35));animation:charin .5s cubic-bezier(.2,1.4,.5,1)}
+.char.talk{animation:talk .5s ease-in-out infinite}
+@keyframes charin{from{transform:translateY(30px) scale(.6);opacity:0}to{transform:none;opacity:1}}
+@keyframes talk{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px) rotate(-2deg)}}
+
+/* dialogue box */
+.dbox{position:relative;z-index:6;margin:0 10px calc(12px + env(safe-area-inset-bottom));background:var(--paper);
+  border-radius:var(--r-lg);padding:16px 16px 14px;box-shadow:var(--shadow-lift);border:3px solid #fff;max-width:640px;width:calc(100% - 20px);align-self:center}
+.dbox .speaker{position:absolute;top:-16px;left:16px;background:linear-gradient(180deg,#ff6a3d,var(--lantern));color:#fff;font-family:var(--font-display);
+  padding:5px 14px;border-radius:999px;font-size:.9rem;box-shadow:var(--shadow);display:flex;gap:6px;align-items:center}
+.line{font-size:calc(1.5rem * var(--fs));line-height:1.5;color:var(--ink);margin:8px 0 2px;word-break:break-word}
+.line .w{position:relative;cursor:pointer;padding:1px 2px;border-radius:6px;transition:background .15s}
+.line .w:active,.line .w.tapped{background:var(--gold)}
+.line .w.known{border-bottom:2px dotted var(--jade)}
+.pinyin{color:var(--teal);font-weight:700;font-size:calc(1rem * var(--fs));line-height:1.3;min-height:1px}
+.translation{color:var(--ink-soft);font-size:calc(1rem * var(--fs));margin-top:6px;font-style:italic}
+.dbox-foot{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.speak-btn{width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,#5fd0ea,var(--teal));color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 14px -5px rgba(47,168,196,.7)}
+.speak-btn.slow{background:linear-gradient(180deg,#ffcf6b,var(--gold-deep));color:#4a2e05}
+.next-btn{margin-left:auto;font-family:var(--font-display);background:linear-gradient(180deg,#54c47f,var(--jade));color:#fff;padding:11px 20px;border-radius:999px;font-size:1rem;box-shadow:0 6px 14px -5px rgba(63,166,106,.7);display:flex;gap:6px;align-items:center}
+.next-btn:active{transform:translateY(2px)}
+
+.tone-stage{text-align:center;padding:6px 0}
+.tone-char{font-family:var(--font-cjk);font-size:calc(3.6rem * var(--fs));color:var(--ink);line-height:1.1}
+.tone-py{color:var(--teal);font-weight:800;font-size:calc(1.05rem * var(--fs));margin-top:2px}
+.tone-en{color:var(--ink-soft);font-weight:600;font-size:calc(.9rem * var(--fs))}
+.tone-ask{font-weight:800;color:var(--ink);margin:10px 0 8px}
+.tone-opts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tone-btn{background:#fff;border:2px solid var(--paper-2);border-radius:var(--r-md);padding:10px 4px;box-shadow:0 3px 0 var(--paper-2);transition:transform .12s,border-color .15s,background .15s;cursor:pointer}
+.tone-btn:active{transform:translateY(3px);box-shadow:none}
+.tone-btn .tn{font-weight:800;color:var(--ink-soft);font-size:.8rem}
+.tone-btn .tm{font-size:1.7rem;line-height:1;color:var(--lantern);font-weight:800}
+.tone-btn .tl{font-size:.66rem;color:var(--ink-soft);font-weight:700;margin-top:2px}
+.tone-btn.ok{border-color:var(--jade);background:#eafaf0;animation:pop .4s ease}
+.tone-btn.bad{border-color:var(--wrong);background:#fdeae6;animation:shake .4s}
+@media(max-width:380px){.tone-btn .tl{display:none}}
+/* choices */
+.choices{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.turn-label{display:flex;align-items:center;gap:8px;margin:16px 0 2px;font-weight:800;color:var(--teal);font-size:.95rem}
+.turn-label .tl-av{width:30px;height:30px;border-radius:50%;background:var(--teal);display:grid;place-items:center;font-size:1.1rem;flex:none;box-shadow:0 2px 0 rgba(0,0,0,.15)}
+.turn-label .tl-cjk{font-family:var(--font-cjk);color:var(--ink)}
+.turn-label .tl-hint{margin-left:auto;font-weight:700;color:var(--ink-soft);font-size:.8rem;animation:tapNudge 1.6s ease-in-out infinite}
+@keyframes tapNudge{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.choice{position:relative;width:100%;text-align:left;background:#fff;border:2px solid var(--teal-soft);border-left:6px solid var(--teal);border-radius:var(--r-md);padding:12px 40px 12px 14px;transition:transform .12s,border-color .12s,background .12s,box-shadow .12s;box-shadow:0 4px 0 var(--teal-soft);cursor:pointer}
+.choice:hover{background:#f4fdff;border-color:var(--teal)}
+.choice:active{transform:translateY(4px);box-shadow:none}
+.choice::after{content:"👆";position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:1.1rem;opacity:.45;transition:opacity .12s,transform .12s}
+.choice:hover::after{opacity:1;transform:translateY(-50%) scale(1.15)}
+.choice .zh{font-family:var(--font-cjk);font-size:calc(1.25rem * var(--fs));color:var(--ink)}
+.choice .py{color:var(--teal);font-weight:700;font-size:.9rem}
+.choice .en{color:var(--ink-soft);font-size:.9rem;margin-top:2px}
+.choice.picked{border-color:var(--jade);border-left-color:var(--jade);background:#eafaf0;box-shadow:0 4px 0 #bfe8cf}
+.choice.picked::after{content:"✅";opacity:1}
+.choices.done .turn-label{display:none}
+
+/* grammar micro-card */
+.grammar{position:relative;z-index:6;margin:0 10px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg,#fffaf0,#fff);
+  border-radius:var(--r-lg);padding:18px;box-shadow:var(--shadow-lift);border:3px dashed var(--gold);max-width:640px;width:calc(100% - 20px);align-self:center}
+.grammar h3{font-family:var(--font-display);color:var(--gold-deep);font-size:1.15rem;display:flex;gap:8px;align-items:center}
+.grammar p{color:var(--ink-soft);margin:8px 0;font-size:calc(.98rem * var(--fs));line-height:1.5}
+.gr-formula{background:var(--paper);border-radius:var(--r-md);padding:12px;text-align:center;margin:10px 0;font-family:var(--font-cjk);font-size:calc(1.3rem * var(--fs))}
+.gr-formula .slot{display:inline-block;background:var(--jade);color:#fff;border-radius:8px;padding:2px 10px;margin:0 3px}
+.gr-formula .fix{color:var(--lantern-deep);font-weight:800}
+
+/* =========================================================
+   MINI-GAMES
+========================================================= */
+.mg{position:relative;z-index:6;margin:0 10px calc(12px + env(safe-area-inset-bottom));background:var(--paper);
+  border-radius:var(--r-lg);padding:16px;box-shadow:var(--shadow-lift);border:3px solid #fff;max-width:660px;width:calc(100% - 20px);align-self:center}
+.mg-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.mg-title{font-family:var(--font-display);color:var(--lantern-deep);font-size:1.05rem;line-height:1.05}
+.mg-title small{display:block;color:var(--ink-soft);font-weight:400;font-family:var(--font-body);font-size:.8rem}
+.mg-prog{margin-left:auto;font-family:var(--font-display);color:var(--jade-deep);font-size:.9rem}
+
+/* match grid */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.match-cell{background:#fff;border:2px solid var(--paper-2);border-radius:var(--r-md);padding:14px 8px;text-align:center;min-height:64px;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:transform .12s,border-color .15s,background .15s;box-shadow:0 3px 0 var(--paper-2)}
+.match-cell .zh{font-family:var(--font-cjk);font-size:calc(1.5rem * var(--fs));color:var(--ink)}
+.match-cell .en{font-size:calc(1rem * var(--fs));color:var(--ink);font-weight:700}
+.match-cell .cpy{font-size:calc(.82rem * var(--fs));color:var(--teal);font-weight:700;margin-top:2px;letter-spacing:.2px}
+.match-cell .cen{font-size:calc(.78rem * var(--fs));color:var(--ink-soft);font-weight:600;margin-top:1px}
+.tile .cpy{font-size:.7rem;color:var(--teal);font-weight:700;display:block;margin-top:1px}
+.match-cell:active{transform:translateY(3px);box-shadow:none}
+.match-cell.sel{border-color:var(--gold);background:#fff7e2}
+.match-cell.ok{border-color:var(--jade);background:#eafaf0;animation:pop .4s ease}
+.match-cell.bad{border-color:var(--wrong);background:#fdeae6;animation:shake .4s}
+.match-cell.done{opacity:0;pointer-events:none;transition:opacity .4s}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* build sentence */
+.bs-target{min-height:56px;background:#fff;border:2px dashed var(--gold);border-radius:var(--r-md);padding:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
+.bs-hint{color:var(--ink-soft);font-size:.9rem;text-align:center;margin-bottom:10px}
+.bs-pool{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:52px}
+.tile{background:linear-gradient(180deg,#fff,#fdf4df);border:2px solid var(--paper-2);border-radius:var(--r-sm);padding:8px 12px;font-family:var(--font-cjk);font-size:calc(1.35rem * var(--fs));box-shadow:0 3px 0 var(--paper-2);transition:transform .1s}
+.tile .py{display:block;font-family:var(--font-body);font-size:.68rem;color:var(--teal);font-weight:700;text-align:center}
+.tile:active{transform:translateY(3px);box-shadow:none}
+.tile.placed{background:linear-gradient(180deg,#eafaf0,#d6f2e0);border-color:var(--jade)}
+.tile.ghost{opacity:.25;pointer-events:none}
+
+/* listen game */
+.listen-hero{text-align:center;margin-bottom:14px}
+.listen-play{width:88px;height:88px;border-radius:50%;background:linear-gradient(180deg,#5fd0ea,var(--teal));color:#fff;font-size:40px;display:flex;align-items:center;justify-content:center;margin:0 auto;box-shadow:0 10px 22px -8px rgba(47,168,196,.8);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 10px 22px -8px rgba(47,168,196,.8)}50%{box-shadow:0 10px 30px -6px rgba(47,168,196,1)}}
+.listen-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+
+.mg-feedback{text-align:center;font-family:var(--font-display);margin-top:12px;min-height:24px;font-size:1rem}
+.mg-feedback.good{color:var(--jade-deep)}
+.mg-feedback.bad{color:var(--wrong)}
+
+/* boss */
+.boss-badge{position:relative;z-index:6;text-align:center;margin-bottom:8px}
+.boss-lantern{font-size:60px;filter:drop-shadow(0 8px 12px rgba(0,0,0,.4))}
+
+/* =========================================================
+   VOCAB LANTERN CARD (signature)
+========================================================= */
+#vocab-layer{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;background:rgba(20,15,12,.55);backdrop-filter:blur(3px)}
+#vocab-layer.show{display:flex}
+.vcard{width:min(90vw,380px);background:var(--paper);border-radius:var(--r-lg);box-shadow:var(--shadow-lift);border:3px solid #fff;overflow:hidden;animation:rise .45s cubic-bezier(.2,1.3,.5,1);max-height:88vh;display:flex;flex-direction:column}
+@keyframes rise{from{transform:translateY(60px) scale(.8);opacity:0}to{transform:none;opacity:1}}
+.vcard-top{background:radial-gradient(120% 100% at 50% 0,#ff8a5c,var(--lantern) 60%,var(--lantern-deep));color:#fff;padding:22px 18px 18px;text-align:center;position:relative}
+.vcard-top .hsk{position:absolute;top:12px;right:12px;background:var(--gold);color:#4a2e05;font-family:var(--font-display);font-size:.75rem;padding:3px 10px;border-radius:999px}
+.vcard-top .fav{position:absolute;top:10px;left:12px;font-size:22px;opacity:.7}
+.vcard-top .fav.on{opacity:1;filter:drop-shadow(0 0 6px #fff)}
+.vcard-hz{font-family:var(--font-cjk);font-size:clamp(3rem,16vw,4.6rem);line-height:1;text-shadow:0 3px 10px rgba(0,0,0,.25)}
+.vcard-py{font-weight:800;font-size:1.3rem;margin-top:6px;color:#fff5e2}
+.vcard-body{padding:16px 18px;overflow-y:auto}
+.vcard-mean{font-family:var(--font-display);font-size:1.25rem;color:var(--ink);text-align:center}
+.vcard-pic{font-size:52px;text-align:center;margin:6px 0}
+.v-row{display:flex;gap:8px;margin:10px 0;font-size:.92rem;color:var(--ink-soft);align-items:flex-start}
+.v-row b{color:var(--ink);min-width:70px;font-family:var(--font-display);font-weight:700}
+.v-eg{background:#fff;border-radius:var(--r-md);padding:10px 12px;margin-top:6px}
+.v-eg .zh{font-family:var(--font-cjk);font-size:1.15rem;color:var(--ink)}
+.v-eg .py{color:var(--teal);font-weight:700;font-size:.85rem}
+.v-eg .en{color:var(--ink-soft);font-size:.85rem}
+.vcard-audio{display:flex;gap:10px;justify-content:center;margin:14px 0 4px}
+.stroke-box{width:120px;height:120px;margin:6px auto;border:2px dashed var(--paper-2);border-radius:var(--r-md);position:relative;background:
+  linear-gradient(var(--paper-2),var(--paper-2)) center/100% 1px no-repeat,
+  linear-gradient(var(--paper-2),var(--paper-2)) center/1px 100% no-repeat,#fff}
+.stroke-char{font-family:var(--font-cjk);font-size:82px;line-height:120px;text-align:center;color:var(--ink);
+  background:linear-gradient(90deg,var(--ink) 50%,#d9cdb8 50%);background-size:200% 100%;background-position:100% 0;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;transition:background-position 1.1s ease}
+.stroke-char.draw{background-position:0 0}
+.vcard-close{width:100%;padding:12px;background:var(--paper-2);color:var(--ink);font-family:var(--font-display);font-size:1rem}
+
+/* =========================================================
+   CELEBRATION
+========================================================= */
+#celebrate{background:radial-gradient(120% 100% at 50% -10%,#ffd98a,#f2b441 40%,#e4472b 100%);align-items:center;justify-content:center;z-index:65;text-align:center}
+.cele-card{width:min(92vw,420px);background:var(--paper);border-radius:var(--r-lg);padding:26px 22px;box-shadow:var(--shadow-lift);border:3px solid #fff;position:relative;z-index:5}
+.cele-card h2{font-family:var(--font-display);color:var(--lantern-deep);font-size:1.6rem}
+.cele-card h2 .cjk{display:block;font-size:2rem;color:var(--lantern)}
+.cele-badge{font-size:74px;margin:10px 0;animation:pop2 .8s cubic-bezier(.2,1.5,.4,1)}
+@keyframes pop2{0%{transform:scale(0) rotate(-30deg)}60%{transform:scale(1.2) rotate(8deg)}100%{transform:scale(1)}}
+.cele-rewards{display:flex;justify-content:center;gap:14px;margin:14px 0}
+.cele-r{background:#fff;border-radius:var(--r-md);padding:10px 14px;min-width:74px;box-shadow:0 3px 0 var(--paper-2)}
+.cele-r .n{font-family:var(--font-display);font-size:1.4rem;color:var(--gold-deep)}
+.cele-r .l{font-size:.72rem;color:var(--ink-soft)}
+
+/* =========================================================
+   SETTINGS / READER + PARENT sheets
+========================================================= */
+.sheet-wrap{position:fixed;inset:0;z-index:80;display:none;align-items:flex-end;justify-content:center;background:rgba(20,15,12,.5)}
+.sheet-wrap.show{display:flex}
+.sheet{width:min(100vw,560px);max-height:88vh;overflow-y:auto;background:var(--paper);border-radius:var(--r-lg) var(--r-lg) 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom));box-shadow:var(--shadow-lift);animation:slideup .35s ease}
+@keyframes slideup{from{transform:translateY(100%)}to{transform:none}}
+.sheet h2{font-family:var(--font-display);color:var(--lantern-deep);font-size:1.3rem;display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.sheet h2 .grab{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:44px;height:5px;border-radius:3px;background:var(--paper-2)}
+.set-group{margin:16px 0}
+.set-group>label{display:block;font-family:var(--font-display);color:var(--ink);margin-bottom:8px;font-size:.95rem}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1;min-width:88px;padding:10px;border-radius:var(--r-md);background:#fff;border:2px solid var(--paper-2);font-family:var(--font-display);color:var(--ink-soft);font-size:.85rem}
+.seg button.on{background:var(--lantern);color:#fff;border-color:var(--lantern)}
+.set-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--paper-2)}
+.set-row span{font-family:var(--font-display);color:var(--ink);font-size:.95rem}
+.toggle{width:52px;height:30px;border-radius:999px;background:var(--paper-2);position:relative;transition:background .2s}
+.toggle.on{background:var(--jade)}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.toggle.on::after{left:25px}
+
+/* parent dashboard */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.stat{background:#fff;border-radius:var(--r-md);padding:14px;box-shadow:0 3px 0 var(--paper-2)}
+.stat .n{font-family:var(--font-display);font-size:1.7rem;color:var(--lantern-deep)}
+.stat .l{color:var(--ink-soft);font-size:.8rem;margin-top:2px}
+.skill-bar{margin:10px 0}
+.skill-bar .top{display:flex;justify-content:space-between;font-size:.85rem;color:var(--ink);font-family:var(--font-display)}
+.bar{height:12px;border-radius:6px;background:var(--paper-2);overflow:hidden;margin-top:4px}
+.bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),var(--jade))}
+.word-cloud{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.word-cloud .wc{background:#fff;border:1px solid var(--paper-2);border-radius:999px;padding:4px 10px;font-family:var(--font-cjk);font-size:.95rem}
+.parent-gate{text-align:center;padding:10px 0}
+.parent-gate .q{font-family:var(--font-display);font-size:1.4rem;margin:10px 0;color:var(--ink)}
+.gate-in{width:130px;padding:12px;text-align:center;font-size:1.3rem;border-radius:var(--r-md);border:2px solid var(--paper-2);font-family:var(--font-display)}
+
+/* toast */
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);z-index:95;
+  background:var(--ink);color:#fff;padding:12px 20px;border-radius:999px;font-family:var(--font-display);font-size:.92rem;opacity:0;transition:.3s;pointer-events:none;box-shadow:var(--shadow-lift);display:flex;gap:8px;align-items:center;max-width:90vw}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* confetti */
+.confetti{position:fixed;inset:0;z-index:64;pointer-events:none;overflow:hidden}
+.cft{position:absolute;top:-5%;width:10px;height:14px;border-radius:2px;will-change:transform}
+
+/* reward float */
+.rfloat{position:fixed;z-index:96;font-family:var(--font-display);font-size:1.2rem;pointer-events:none;animation:rfloat 1s ease forwards;text-shadow:0 2px 6px rgba(0,0,0,.4)}
+@keyframes rfloat{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(-60px);opacity:0}}
+
+/* responsive */
+@media(min-width:720px){
+  .char{font-size:120px}
+  .line{font-size:calc(1.7rem * var(--fs))}
+}
+@media(max-height:560px){
+  .char{font-size:64px}
+  .char-stage{padding-bottom:0}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.05ms !important}
+}
+/* accessible focus */
+button:focus-visible,.name-field:focus-visible,.w:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ LOADING ============ -->
+  <section class="screen active" id="loading">
+    <div class="load-lantern"><div class="cap"></div><div class="body"></div><div class="tassel"></div></div>
+    <div class="load-txt"><span class="cjk">熊猫村历险记</span>Lighting the lanterns…</div>
+  </section>
+
+  <!-- ============ HERO SETUP ============ -->
+  <section class="screen" id="setup">
+    <div class="setup-card">
+      <h1><span class="cjk">你好!</span>Welcome, little explorer</h1>
+      <p class="setup-sub">Pick your hero and tell us your name. Panda Village is waiting in the dark — you will light it up!</p>
+      <div class="avatar-pick" id="avatarPick"></div>
+      <input class="name-field" id="heroName" maxlength="14" placeholder="Your hero name" autocomplete="off" />
+      <button class="btn wide" id="startBtn" disabled>Start the adventure →</button>
+    </div>
+  </section>
+
+  <!-- ============ WORLD MAP ============ -->
+  <section class="screen" id="map">
+    <div class="map-sky"></div><div class="map-mtn"></div><div class="map-hills"></div>
+    <div class="particles" id="mapParticles"></div>
+    <div class="hud" id="mapHud"></div>
+    <div class="map-head">
+      <div class="map-title"><span class="cjk">中国探险地图</span>China Adventure Map</div>
+    </div>
+    <div class="map-body scroll">
+      <div class="map-track" id="mapTrack"></div>
+    </div>
+  </section>
+
+  <!-- ============ SCENE ============ -->
+  <section class="screen" id="scene">
+    <div class="scene-root" id="sceneRoot" style="position:absolute;inset:0;display:flex;flex-direction:column">
+      <div class="scene-sky"></div>
+      <div class="scene-scape">
+        <div class="layer far"></div>
+        <div class="layer mid"></div>
+        <div class="layer near" id="bambooLayer"></div>
+      </div>
+      <div class="particles" id="sceneParticles"></div>
+      <div class="hud" id="sceneHud"></div>
+      <div class="char-stage"><div class="char" id="sceneChar" style="display:none"></div></div>
+      <div id="sceneSlot"></div>
+    </div>
+  </section>
+
+  <!-- ============ CELEBRATION ============ -->
+  <section class="screen" id="celebrate">
+    <div class="confetti" id="celeConfetti"></div>
+    <div class="cele-card" id="celeCard"></div>
+  </section>
+
+  <!-- ============ VOCAB LANTERN CARD ============ -->
+  <div id="vocab-layer"><div class="vcard" id="vcard"></div></div>
+
+  <!-- ============ READER SETTINGS SHEET ============ -->
+  <div class="sheet-wrap" id="settingsSheet">
+    <div class="sheet"><span class="grab"></span>
+      <h2>⚙️ Reading & comfort</h2>
+      <div class="set-group">
+        <label>Show text as</label>
+        <div class="seg" id="readMode">
+          <button data-v="zh">中文</button>
+          <button data-v="zhpy">中文 + pīnyīn</button>
+          <button data-v="all">全部 All</button>
+          <button data-v="en">English</button>
+        </div>
+      </div>
+      <div class="set-group">
+        <label>Text size</label>
+        <div class="seg" id="fontSize">
+          <button data-v="0.85">Small</button>
+          <button data-v="1">Medium</button>
+          <button data-v="1.2">Large</button>
+          <button data-v="1.4">Huge</button>
+        </div>
+      </div>
+      <div class="set-row"><span>🌙 Night mode</span><div class="toggle" id="darkToggle"></div></div>
+      <div class="set-row"><span>🔊 Voice speed: slow first</span><div class="toggle" id="slowToggle"></div></div>
+      <button class="btn wide jade" style="margin-top:16px" onclick="closeSheet('settingsSheet')">Done</button>
+    </div>
+  </div>
+
+  <!-- ============ PARENT SHEET ============ -->
+  <div class="sheet-wrap" id="parentSheet">
+    <div class="sheet" id="parentSheetBody"><span class="grab"></span></div>
+  </div>
+
+  <div id="toast"></div>
+</div>
+
+<script>
+/* ============================================================
+   PANDA VILLAGE ADVENTURE — engine
+   Single file. No dependencies. Offline-friendly.
+   Content lives in CHAPTERS + WORLD (the content engine).
+============================================================ */
+"use strict";
+
+/* ---------- tiny helpers ---------- */
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const el = (t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;};
+const rnd = a=>a[Math.floor(Math.random()*a.length)];
+const shuffle = a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+/* ============================================================
+   VOCABULARY BANK  (reusable across chapters)
+   Each entry: hz, py, en, hsk, pic(emoji), radical, etym, egZh, egPy, egEn
+============================================================ */
+const VOCAB = {
+  "你好":{py:"nǐ hǎo",en:"hello",hsk:1,pic:"👋",radical:"你 (person) + 好 (good)",etym:"Literally “you good” — the friendly Chinese hello.",egZh:"你好,小竹!",egPy:"Nǐ hǎo, Xiǎo Zhú!",egEn:"Hello, Little Bamboo!"},
+  "你":{py:"nǐ",en:"you",hsk:1,pic:"👉",radical:"亻 person",etym:"The person radical 亻 shows this word is about a person — you!",egZh:"你是我的朋友。",egPy:"Nǐ shì wǒ de péngyou.",egEn:"You are my friend."},
+  "我":{py:"wǒ",en:"I / me",hsk:1,pic:"🙋",radical:"手 hand",etym:"An old picture of a hand holding a weapon — “me, myself”.",egZh:"我是英雄。",egPy:"Wǒ shì yīngxióng.",egEn:"I am a hero."},
+  "是":{py:"shì",en:"to be / am / is",hsk:1,pic:"✅",radical:"日 sun",etym:"Means “is/are/am” — the little word that links two things.",egZh:"我是你的朋友。",egPy:"Wǒ shì nǐ de péngyou.",egEn:"I am your friend."},
+  "的":{py:"de",en:"'s (belongs to)",hsk:1,pic:"🔗",radical:"白 white",etym:"A tiny helper that shows belonging, like the apostrophe-s in English.",egZh:"我的家",egPy:"wǒ de jiā",egEn:"my home"},
+  "朋友":{py:"péngyou",en:"friend",hsk:1,pic:"🤝",radical:"月 moon (x2)",etym:"Two moons side by side — two friends who stick together.",egZh:"我们是好朋友。",egPy:"Wǒmen shì hǎo péngyou.",egEn:"We are good friends."},
+  "熊猫":{py:"xióngmāo",en:"panda",hsk:2,pic:"🐼",radical:"熊 bear + 猫 cat",etym:"“Bear-cat” — the panda! China's most beloved animal.",egZh:"熊猫很可爱。",egPy:"Xióngmāo hěn kě'ài.",egEn:"Pandas are very cute."},
+  "竹子":{py:"zhúzi",en:"bamboo",hsk:3,pic:"🎋",radical:"竹 bamboo",etym:"The character 竹 is a drawing of two bamboo stalks with leaves.",egZh:"熊猫吃竹子。",egPy:"Xióngmāo chī zhúzi.",egEn:"Pandas eat bamboo."},
+  "山":{py:"shān",en:"mountain",hsk:1,pic:"⛰️",radical:"山 mountain",etym:"Three peaks! 山 is a picture of a mountain range.",egZh:"山很高。",egPy:"Shān hěn gāo.",egEn:"The mountain is tall."},
+  "水":{py:"shuǐ",en:"water",hsk:1,pic:"💧",radical:"水 water",etym:"A drawing of a flowing river — water.",egZh:"我要水。",egPy:"Wǒ yào shuǐ.",egEn:"I want water."},
+  "家":{py:"jiā",en:"home / family",hsk:1,pic:"🏠",radical:"宀 roof + 豕 pig",etym:"A roof over a pig — long ago, a home had animals inside. Now it means home!",egZh:"这是我的家。",egPy:"Zhè shì wǒ de jiā.",egEn:"This is my home."},
+  "谢谢":{py:"xièxie",en:"thank you",hsk:1,pic:"🙏",radical:"讠 speech",etym:"The speech radical 讠 shows this is something you say — thanks!",egZh:"谢谢你!",egPy:"Xièxie nǐ!",egEn:"Thank you!"},
+  "欢迎":{py:"huānyíng",en:"welcome",hsk:2,pic:"🎉",radical:"欢 joy + 迎 greet",etym:"“Joyful greeting” — welcome!",egZh:"欢迎来到熊猫村!",egPy:"Huānyíng lái dào Xióngmāo cūn!",egEn:"Welcome to Panda Village!"},
+  "村":{py:"cūn",en:"village",hsk:3,pic:"🏘️",radical:"木 tree + 寸 inch",etym:"Trees measured out into a small place to live — a village.",egZh:"熊猫村很美。",egPy:"Xióngmāo cūn hěn měi.",egEn:"Panda Village is beautiful."},
+  "一":{py:"yī",en:"one",hsk:1,pic:"1️⃣",radical:"一 one",etym:"One line = one. Simple!",egZh:"一个朋友",egPy:"yí ge péngyou",egEn:"one friend"},
+  "二":{py:"èr",en:"two",hsk:1,pic:"2️⃣",radical:"二 two",etym:"Two lines = two.",egZh:"二个山",egPy:"èr ge shān",egEn:"two mountains"},
+  "三":{py:"sān",en:"three",hsk:1,pic:"3️⃣",radical:"三 three",etym:"Three lines = three.",egZh:"三只熊猫",egPy:"sān zhī xióngmāo",egEn:"three pandas"},
+  "吃":{py:"chī",en:"to eat",hsk:1,pic:"🍽️",radical:"口 mouth",etym:"The mouth radical 口 on the left — this word is all about eating!",egZh:"我想吃竹子。",egPy:"Wǒ xiǎng chī zhúzi.",egEn:"I want to eat bamboo."},
+  "想":{py:"xiǎng",en:"to want / to think",hsk:1,pic:"💭",radical:"心 heart",etym:"A heart 心 at the bottom — wanting comes from the heart.",egZh:"我想吃。",egPy:"Wǒ xiǎng chī.",egEn:"I want to eat."},
+  "大":{py:"dà",en:"big",hsk:1,pic:"🐘",radical:"大 big",etym:"A person stretching both arms wide — THIS big!",egZh:"山很大。",egPy:"Shān hěn dà.",egEn:"The mountain is big."},
+  "小":{py:"xiǎo",en:"small",hsk:1,pic:"🐜",radical:"小 small",etym:"Three tiny strokes — something little.",egZh:"小猴子很小。",egPy:"Xiǎo hóuzi hěn xiǎo.",egEn:"The little monkey is small."},
+  "很":{py:"hěn",en:"very",hsk:1,pic:"⭐",radical:"彳 step",etym:"The helper word that goes before adjectives: 很好 = very good.",egZh:"竹子很好吃。",egPy:"Zhúzi hěn hǎochī.",egEn:"Bamboo is very tasty."},
+  "好吃":{py:"hǎochī",en:"tasty / delicious",hsk:2,pic:"😋",radical:"好 good + 吃 eat",etym:"“Good-eat” — delicious!",egZh:"苹果很好吃。",egPy:"Píngguǒ hěn hǎochī.",egEn:"Apples are delicious."},
+  "猴子":{py:"hóuzi",en:"monkey",hsk:3,pic:"🐵",radical:"犭 animal",etym:"The animal radical 犭 tells you it is a creature — a cheeky monkey.",egZh:"猴子在树上。",egPy:"Hóuzi zài shù shàng.",egEn:"The monkey is in the tree."},
+  "树":{py:"shù",en:"tree",hsk:3,pic:"🌳",radical:"木 wood",etym:"The wood radical 木 — anything made of wood or growing tall.",egZh:"树很大。",egPy:"Shù hěn dà.",egEn:"The tree is big."},
+  "龙":{py:"lóng",en:"dragon",hsk:3,pic:"🐉",radical:"龙 dragon",etym:"In China the dragon brings rain and good luck — it is kind, not scary!",egZh:"老龙很大。",egPy:"Lǎo lóng hěn dà.",egEn:"The old dragon is big."},
+  "火":{py:"huǒ",en:"fire",hsk:3,pic:"🔥",radical:"火 fire",etym:"A picture of flames with sparks flying off both sides.",egZh:"我要火。",egPy:"Wǒ yào huǒ.",egEn:"I need fire."},
+  "天":{py:"tiān",en:"sky / day",hsk:1,pic:"☀️",radical:"大 big",etym:"A person 大 with one line above their head — the sky above us.",egZh:"天很大。",egPy:"Tiān hěn dà.",egEn:"The sky is big."},
+  "不":{py:"bù",en:"not / no",hsk:1,pic:"🚫",radical:"一 one",etym:"The little word that turns anything into its opposite: 不好 = not good.",egZh:"我不怕。",egPy:"Wǒ bú pà.",egEn:"I am not afraid."},
+  "有":{py:"yǒu",en:"to have",hsk:1,pic:"🎁",radical:"月 moon",etym:"A hand holding meat — to have something.",egZh:"我有火。",egPy:"Wǒ yǒu huǒ.",egEn:"I have fire."},
+  "上":{py:"shàng",en:"up / on",hsk:1,pic:"⬆️",radical:"上 up",etym:"A line ABOVE the base line — up!",egZh:"猴子在树上。",egPy:"Hóuzi zài shù shàng.",egEn:"The monkey is up the tree."},
+  "下":{py:"xià",en:"down / under",hsk:1,pic:"⬇️",radical:"下 down",etym:"A line BELOW the base line — down! The mirror of 上.",egZh:"下来吧!",egPy:"Xiàlái ba!",egEn:"Come down!"},
+  "什么":{py:"shénme",en:"what",hsk:1,pic:"❓",radical:"亻 person + 口 mouth",etym:"The question word — 你要什么? What do you want?",egZh:"你要什么?",egPy:"Nǐ yào shénme?",egEn:"What do you want?"},
+  "怕":{py:"pà",en:"afraid",hsk:3,pic:"😨",radical:"忄 heart",etym:"The heart radical 忄 on the left — fear lives in the heart.",egZh:"我不怕你。",egPy:"Wǒ bú pà nǐ.",egEn:"I am not afraid of you."},
+  "买":{py:"mǎi",en:"to buy",hsk:1,pic:"🛒",radical:"乛 + 头",etym:"Long ago money was shells — 买 is about trading them away.",egZh:"我想买苹果。",egPy:"Wǒ xiǎng mǎi píngguǒ.",egEn:"I want to buy apples."},
+  "钱":{py:"qián",en:"money",hsk:1,pic:"💰",radical:"钅 metal",etym:"The metal radical 钅 — money used to be metal coins.",egZh:"我有钱。",egPy:"Wǒ yǒu qián.",egEn:"I have money."},
+  "多少":{py:"duōshao",en:"how much / how many",hsk:1,pic:"🔢",radical:"多 many + 少 few",etym:"“Many-few” — put them together and you are asking HOW many!",egZh:"多少钱?",egPy:"Duōshao qián?",egEn:"How much money?"},
+  "块":{py:"kuài",en:"yuan (money)",hsk:1,pic:"💴",radical:"土 earth",etym:"The everyday word for Chinese money, like “bucks”.",egZh:"五块钱。",egPy:"Wǔ kuài qián.",egEn:"Five yuan."},
+  "苹果":{py:"píngguǒ",en:"apple",hsk:1,pic:"🍎",radical:"艹 grass + 果 fruit",etym:"The grass radical 艹 sits on top of both characters — it grows!",egZh:"苹果很好吃。",egPy:"Píngguǒ hěn hǎochī.",egEn:"Apples are tasty."},
+  "茶":{py:"chá",en:"tea",hsk:1,pic:"🍵",radical:"艹 grass",etym:"Grass 艹 over a person over a tree — leaves picked for tea.",egZh:"我要茶。",egPy:"Wǒ yào chá.",egEn:"I want tea."},
+  "要":{py:"yào",en:"to want",hsk:1,pic:"🙌",radical:"西 west + 女 woman",etym:"The strong way to say you want something.",egZh:"我要一个苹果。",egPy:"Wǒ yào yí ge píngguǒ.",egEn:"I want one apple."},
+  "北京":{py:"Běijīng",en:"Beijing",hsk:1,pic:"🏯",radical:"北 north + 京 capital",etym:"“Northern Capital” — the capital city of China!",egZh:"北京很大。",egPy:"Běijīng hěn dà.",egEn:"Beijing is big."},
+  "五":{py:"wǔ",en:"five",hsk:1,pic:"5️⃣",radical:"五 five",etym:"Five — one hand of fingers.",egZh:"五块钱",egPy:"wǔ kuài qián",egEn:"five yuan"},
+  "十":{py:"shí",en:"ten",hsk:1,pic:"🔟",radical:"十 ten",etym:"A cross — two hands of fingers make ten.",egZh:"十块钱",egPy:"shí kuài qián",egEn:"ten yuan"},
+  "灯笼":{py:"dēnglong",en:"lantern",hsk:4,pic:"🏮",radical:"火 fire + 竹 bamboo",etym:"Fire 火 inside a bamboo 竹 frame — a Chinese lantern!",egZh:"灯笼很美。",egPy:"Dēnglong hěn měi.",egEn:"The lantern is beautiful."}
+};
+
+/* ============================================================
+   CONTENT ENGINE — WORLD + CHAPTERS
+   To add a new adventure: add a WORLD location + a CHAPTERS entry.
+   Scene types: intro | dialogue | vocab | grammar | minigame | boss | end
+============================================================ */
+const WORLD = [
+  {id:"panda",   name:"Panda Village", cjk:"熊猫村", emoji:"🐼", x:50, y:88, chapter:"ch1"},
+  {id:"bamboo",  name:"Bamboo Forest", cjk:"竹林",   emoji:"🎋", x:24, y:62, chapter:"ch2"},
+  {id:"dragon",  name:"Dragon Mountain",cjk:"龙山",  emoji:"🐉", x:70, y:40, chapter:"ch3"},
+  {id:"market",  name:"Beijing Market",cjk:"北京市场",emoji:"🏮", x:38, y:20, chapter:"ch4"}
+];
+
+const CHAPTERS = {
+  ch1:{
+    title:"Welcome to Panda Village", cjk:"欢迎来到熊猫村",
+    location:"panda",
+    scenes:[
+      { type:"intro", char:"🐼", speaker:"Narrator", speakerCjk:"旁白",
+        zh:"", py:"", en:"Night has fallen on Panda Village. The lanterns are dark and cold. Only YOU can light them again — by learning the magic words! Tap the blue button to hear any Chinese, and tap glowing words to open them." },
+
+      { type:"dialogue", char:"🐼", speaker:"Little Bamboo", speakerCjk:"小竹",
+        zh:"你好! 欢迎!", py:"Nǐ hǎo! Huānyíng!", en:"Hello! Welcome!",
+        vocab:["你好","欢迎"] },
+
+      { type:"dialogue", char:"🐼", speaker:"Little Bamboo", speakerCjk:"小竹",
+        zh:"我是小竹。 你是我的朋友!", py:"Wǒ shì Xiǎo Zhú. Nǐ shì wǒ de péngyou!",
+        en:"I am Little Bamboo. You are my friend!",
+        vocab:["我","是","你","的","朋友"],
+        choices:[
+          {zh:"你好, 小竹!", py:"Nǐ hǎo, Xiǎo Zhú!", en:"Hello, Little Bamboo!", friend:2, reply:"太好了! 我们是朋友!", replyPy:"Tài hǎo le! Wǒmen shì péngyou!", replyEn:"Wonderful! We are friends!"},
+          {zh:"我要竹子!", py:"Wǒ yào zhúzi!", en:"I want bamboo!", friend:1, reply:"哈哈! 你很有趣!", replyPy:"Hāhā! Nǐ hěn yǒuqù!", replyEn:"Haha! You are funny!"}
+        ] },
+
+      { type:"vocab", char:"🐼", speaker:"Little Bamboo", speakerCjk:"小竹",
+        en:"Look around our village! Tap each glowing word to discover it. These are the words that light the lanterns.",
+        zh:"看! 熊猫、竹子、山、水、家。", py:"Kàn! Xióngmāo, zhúzi, shān, shuǐ, jiā.",
+        vocab:["熊猫","竹子","山","水","家"] },
+
+      { type:"minigame", game:"match", title:"Light the Lanterns", sub:"Match each word to its meaning",
+        words:["你好","朋友","熊猫","竹子","山","家"] },
+
+      { type:"grammar", title:"The magic word 是 (shì)",
+        body:"In Chinese, to say “A is B”, you use 是 (shì). It never changes — no am/is/are to worry about!",
+        formula:['<span class="slot">我 wǒ</span>','<span class="fix">是 shì</span>','<span class="slot">朋友 péngyou</span>'],
+        note:"我是朋友 = I am (a) friend." },
+
+      { type:"minigame", game:"build", title:"Build the Sentence", sub:"Tap the words in the right order",
+        answer:["我","是","你","的","朋友"], en:"I am your friend.", py:"Wǒ shì nǐ de péngyou." },
+
+      { type:"dialogue", char:"🐲", speaker:"Longlong the Dragon", speakerCjk:"龙龙",
+        zh:"你好! 我是龙龙。 谢谢你!", py:"Nǐ hǎo! Wǒ shì Lónglong. Xièxie nǐ!",
+        en:"Hello! I am Longlong. Thank you!",
+        vocab:["你好","我","是","谢谢","你"] },
+
+      { type:"minigame", game:"listen", title:"Dragon's Ear", sub:"Listen, then tap what you heard",
+        words:["熊猫","朋友","山","水","家","谢谢"] },
+
+      { type:"boss", title:"The Big Lantern", sub:"Answer to light the village!",
+        words:["你好","朋友","熊猫","竹子","山","家","谢谢","欢迎"] },
+
+      { type:"end", badge:"🏮", badgeName:"Panda Friend", badgeCjk:"熊猫朋友",
+        zh:"熊猫村亮了! 谢谢你!", py:"Xióngmāo cūn liàng le! Xièxie nǐ!",
+        en:"Panda Village is glowing again! Thank you, hero!" }
+    ]
+  },
+
+  /* --- Locked chapters: stubs that prove the engine scales.
+     Copy ch1's structure to flesh these out. --- */
+  ch2:{
+    title:"Bamboo Forest", cjk:"竹林", location:"bamboo",
+    scenes:[
+      { type:"intro", char:"🎋", speaker:"Narrator", speakerCjk:"旁白",
+        en:"Panda Village glows again — but the Great Lantern in the sky is still dark. Little Bamboo says only the Old Dragon has fire. To reach Dragon Mountain you must cross the Bamboo Forest… and something is stealing all the bamboo!" },
+
+      { type:"dialogue", char:"🐼", speaker:"Little Bamboo", speakerCjk:"小竹",
+        zh:"我很饿! 我想吃竹子。", py:"Wǒ hěn è! Wǒ xiǎng chī zhúzi.",
+        en:"I am so hungry! I want to eat bamboo.", vocab:["很","想","吃","竹子"] },
+
+      { type:"grammar", title:"我想 + verb = I want to ___", cjk:"我想吃",
+        body:"Put 想 (xiǎng) in front of any action word to say you WANT to do it. It is the most useful sentence a hungry panda knows!",
+        formula:["<b>我</b> wǒ","<b>想</b> xiǎng","<b>吃</b> chī"],
+        note:"我想吃 = I want to eat. Swap 吃 for any verb!" },
+
+      { type:"dialogue", char:"🐵", speaker:"Little Monkey", speakerCjk:"小猴",
+        zh:"哈哈! 竹子是我的! 我在树上!", py:"Hāhā! Zhúzi shì wǒ de! Wǒ zài shù shàng!",
+        en:"Haha! The bamboo is mine! I am up in the tree!", vocab:["树","上","的"],
+        choices:[
+          {zh:"下来吧! 我们是朋友。", py:"Xiàlái ba! Wǒmen shì péngyou.", en:"Come down! We are friends.", friend:3,
+           reply:"朋友? 我没有朋友…", replyPy:"Péngyou? Wǒ méiyǒu péngyou…", replyEn:"Friends? I do not have any friends…"},
+          {zh:"竹子不是你的!", py:"Zhúzi bú shì nǐ de!", en:"The bamboo is not yours!", friend:1,
+           reply:"哼! 我很小, 我很饿!", replyPy:"Hēng! Wǒ hěn xiǎo, wǒ hěn è!", replyEn:"Hmph! I am small, and I am hungry!"}
+        ] },
+
+      { type:"vocab", char:"🐵", speaker:"Little Monkey", speakerCjk:"小猴",
+        zh:"我很小。 树很大。", py:"Wǒ hěn xiǎo. Shù hěn dà.",
+        en:"I am small. The tree is big.", vocab:["小","大"] },
+
+      { type:"minigame", game:"tone", title:"Bamboo Tone Bells", sub:"Listen, then tap the right tone",
+        words:["大","小","树","上","下","火"] },
+
+      { type:"minigame", game:"match", title:"Feed the Forest", sub:"Match each word to its meaning",
+        words:["吃","想","大","小","很","树","猴子","好吃"] },
+
+      { type:"minigame", game:"build", title:"Say it to Little Monkey", sub:"Tap the tiles in the right order",
+        answer:["我","想","吃","竹子"], py:"Wǒ xiǎng chī zhúzi.", en:"I want to eat bamboo." },
+
+      { type:"dialogue", char:"🐵", speaker:"Little Monkey", speakerCjk:"小猴",
+        zh:"你说中文! 好! 竹子给你。", py:"Nǐ shuō Zhōngwén! Hǎo! Zhúzi gěi nǐ.",
+        en:"You speak Chinese! Good! The bamboo is for you.", vocab:["你","好"] },
+
+      { type:"boss", title:"Light the Forest Lantern", sub:"Answer to open the path to Dragon Mountain",
+        words:["吃","想","大","小","树","猴子"] },
+
+      { type:"end", badge:"🎋", badgeName:"Forest Friend", badgeCjk:"竹林朋友",
+        zh:"谢谢你! 我们是朋友!", py:"Xièxie nǐ! Wǒmen shì péngyou!",
+        en:"Thank you! We are friends! The path to Dragon Mountain is open." }
+    ]
+  },
+
+  ch3:{
+    title:"Dragon Mountain", cjk:"龙山", location:"dragon",
+    scenes:[
+      { type:"intro", char:"🐉", speaker:"Narrator", speakerCjk:"旁白",
+        en:"The path climbs high above the clouds. Everyone says the Old Dragon is terrifying. But nobody has ever actually talked to him… because nobody spoke his language. You do." },
+
+      { type:"dialogue", char:"🐉", speaker:"Old Dragon", speakerCjk:"老龙",
+        zh:"谁在我的山上?", py:"Shéi zài wǒ de shān shàng?",
+        en:"WHO is on my mountain?", vocab:["我","的","山","上"],
+        choices:[
+          {zh:"你好! 我不怕你。", py:"Nǐ hǎo! Wǒ bú pà nǐ.", en:"Hello! I am not afraid of you.", friend:3,
+           reply:"你…不怕我? 太好了!", replyPy:"Nǐ… bú pà wǒ? Tài hǎo le!", replyEn:"You… are not afraid of me? How wonderful!"},
+          {zh:"对不起! 我要火。", py:"Duìbuqǐ! Wǒ yào huǒ.", en:"Sorry! I need fire.", friend:1,
+           reply:"火? 我的火很大!", replyPy:"Huǒ? Wǒ de huǒ hěn dà!", replyEn:"Fire? My fire is very big!"}
+        ] },
+
+      { type:"vocab", char:"🐉", speaker:"Old Dragon", speakerCjk:"老龙",
+        zh:"我有火。 我不怕天。", py:"Wǒ yǒu huǒ. Wǒ bú pà tiān.",
+        en:"I have fire. I am not afraid of the sky.", vocab:["有","火","不","怕","天"] },
+
+      { type:"grammar", title:"不 = not", cjk:"不",
+        body:"Put 不 (bù) in front of a word to flip it to the opposite. 怕 = afraid → 不怕 = not afraid. It works with almost anything!",
+        formula:["<b>不</b> bù","+","<b>怕</b> pà","=","not afraid"],
+        note:"Try it: 好 good → 不好 not good. 是 is → 不是 is not." },
+
+      { type:"dialogue", char:"🐉", speaker:"Old Dragon", speakerCjk:"老龙",
+        zh:"我很大, 我有火… 我没有朋友。", py:"Wǒ hěn dà, wǒ yǒu huǒ… wǒ méiyǒu péngyou.",
+        en:"I am big, I have fire… but I have no friends.", vocab:["很","大","有","朋友"],
+        choices:[
+          {zh:"我是你的朋友!", py:"Wǒ shì nǐ de péngyou!", en:"I am your friend!", friend:5,
+           reply:"朋友! 太好了! 火给你!", replyPy:"Péngyou! Tài hǎo le! Huǒ gěi nǐ!", replyEn:"A friend! Wonderful! The fire is yours!"},
+          {zh:"你要什么?", py:"Nǐ yào shénme?", en:"What do you want?", friend:2,
+           reply:"我要一个朋友。", replyPy:"Wǒ yào yí ge péngyou.", replyEn:"I want one friend."}
+        ] },
+
+      { type:"minigame", game:"listen", title:"Dragon's Ear", sub:"Listen, then tap what you heard",
+        words:["火","天","有","不","山","龙"] },
+
+      { type:"minigame", game:"build", title:"Speak to the Dragon", sub:"Tap the tiles in the right order",
+        answer:["我","是","你","的","朋友"], py:"Wǒ shì nǐ de péngyou.", en:"I am your friend." },
+
+      { type:"minigame", game:"tone", title:"Dragon Fire Tones", sub:"Listen, then tap the right tone",
+        words:["龙","火","天","山","有","不"] },
+
+      { type:"boss", title:"Light the Dragon Lantern", sub:"Earn the fire of the Old Dragon",
+        words:["龙","火","天","有","不","什么"] },
+
+      { type:"end", badge:"🐉", badgeName:"Dragon Friend", badgeCjk:"龙的朋友",
+        zh:"我们是朋友! 火给你!", py:"Wǒmen shì péngyou! Huǒ gěi nǐ!",
+        en:"We are friends! Take my fire! Now — to Beijing for a lantern!" }
+    ]
+  },
+
+  ch4:{
+    title:"Beijing Market", cjk:"北京市场", location:"market",
+    scenes:[
+      { type:"intro", char:"🏮", speaker:"Narrator", speakerCjk:"旁白",
+        en:"You carry the dragon fire in a jar. Now you need one thing more: a Great Lantern to put it in. The Beijing market is loud, bright and full of people — and here, nobody speaks English at all." },
+
+      { type:"dialogue", char:"👩", speaker:"Auntie Wang", speakerCjk:"王阿姨",
+        zh:"欢迎! 你要什么?", py:"Huānyíng! Nǐ yào shénme?",
+        en:"Welcome! What do you want?", vocab:["欢迎","要","什么"],
+        choices:[
+          {zh:"我想买灯笼。", py:"Wǒ xiǎng mǎi dēnglong.", en:"I want to buy a lantern.", friend:3,
+           reply:"灯笼? 有! 很美!", replyPy:"Dēnglong? Yǒu! Hěn měi!", replyEn:"A lantern? I have one! Very beautiful!"},
+          {zh:"我要茶。", py:"Wǒ yào chá.", en:"I want tea.", friend:1,
+           reply:"茶? 好! 茶很好喝!", replyPy:"Chá? Hǎo! Chá hěn hǎohē!", replyEn:"Tea? Good! Tea is delicious!"}
+        ] },
+
+      { type:"vocab", char:"👩", speaker:"Auntie Wang", speakerCjk:"王阿姨",
+        zh:"苹果、茶、灯笼! 我有!", py:"Píngguǒ, chá, dēnglong! Wǒ yǒu!",
+        en:"Apples, tea, lanterns! I have them all!", vocab:["苹果","茶","灯笼","有"] },
+
+      { type:"grammar", title:"多少钱? = How much?", cjk:"多少钱?",
+        body:"多少 (duōshao) means “how much”. Add 钱 (qián, money) and you can shop anywhere in China. The answer comes back in 块 (kuài).",
+        formula:["<b>多少</b> duōshao","<b>钱</b> qián","?"],
+        note:"五块 = 5 yuan. 十块 = 10 yuan." },
+
+      { type:"dialogue", char:"👩", speaker:"Auntie Wang", speakerCjk:"王阿姨",
+        zh:"灯笼十块钱。", py:"Dēnglong shí kuài qián.",
+        en:"The lantern is ten yuan.", vocab:["灯笼","十","块","钱"],
+        choices:[
+          {zh:"好! 谢谢你!", py:"Hǎo! Xièxie nǐ!", en:"Okay! Thank you!", friend:3,
+           reply:"不客气! 灯笼给你!", replyPy:"Bú kèqi! Dēnglong gěi nǐ!", replyEn:"You are welcome! The lantern is yours!"},
+          {zh:"五块钱, 好吗?", py:"Wǔ kuài qián, hǎo ma?", en:"Five yuan, okay?", friend:2,
+           reply:"哈哈! 你会说中文! 好吧!", replyPy:"Hāhā! Nǐ huì shuō Zhōngwén! Hǎo ba!", replyEn:"Haha! You can bargain in Chinese! Fine!"}
+        ] },
+
+      { type:"minigame", game:"match", title:"Market Stalls", sub:"Match each word to its meaning",
+        words:["买","钱","苹果","茶","要","北京","多少","灯笼"] },
+
+      { type:"minigame", game:"listen", title:"Market Noise", sub:"Listen, then tap what you heard",
+        words:["买","钱","茶","苹果","十","五"] },
+
+      { type:"minigame", game:"build", title:"Buy the Lantern", sub:"Tap the tiles in the right order",
+        answer:["我","想","买","灯笼"], py:"Wǒ xiǎng mǎi dēnglong.", en:"I want to buy a lantern." },
+
+      { type:"boss", title:"Light the Great Lantern", sub:"The whole village is watching",
+        words:["买","钱","苹果","茶","多少","灯笼"] },
+
+      { type:"end", badge:"🏮", badgeName:"Lantern Keeper", badgeCjk:"灯笼守护者",
+        zh:"你会说中文! 谢谢你!", py:"Nǐ huì shuō Zhōngwén! Xièxie nǐ!",
+        en:"You can speak Chinese! Thank you! The Great Lantern is lit — and the whole valley is glowing because of YOU." }
+    ]
+  }
+};
+
+/* ============================================================
+   STATE + PERSISTENCE
+============================================================ */
+const KEY="pandaVillage.v1";
+const AVATARS=["🐼","🦊","🐯","🐰","🐵","🐨"];
+let S = {
+  name:"", avatar:"🐼",
+  xp:0, coins:0, stars:0, streak:1, lastPlay:null,
+  words:{},          /* hz -> {seen, correct, wrong, fav} */
+  friends:{},        /* npc -> level */
+  chapters:{},       /* chId -> {done, stars, lanterns} */
+  badges:[],
+  skills:{listen:0,read:0,speak:0,write:0}, /* rough 0-100 */
+  timeSpent:0,
+  settings:{read:"all", fs:1, dark:false, slowFirst:true}
+};
+function save(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} }
+function load(){ try{const r=localStorage.getItem(KEY);if(r){S=Object.assign(S,JSON.parse(r));S.settings=Object.assign({read:"all",fs:1,dark:false,slowFirst:true},S.settings||{});if(S.settings.read==="zhen")S.settings.read="all";}}catch(e){} }
+
+/* streak handling */
+function touchStreak(){
+  const today=new Date().toDateString();
+  if(S.lastPlay!==today){
+    const y=new Date(Date.now()-864e5).toDateString();
+    S.streak = (S.lastPlay===y)? (S.streak||0)+1 : 1;
+    S.lastPlay=today; save();
+  }
+}
+let sessionStart=Date.now();
+setInterval(()=>{ S.timeSpent += 5; save(); },5000);
+
+/* ============================================================
+   AUDIO — Web Speech API (zh-CN) with graceful fallback
+============================================================ */
+let zhVoice=null, voicesReady=false;
+function pickVoice(){
+  const vs=speechSynthesis.getVoices();
+  zhVoice = vs.find(v=>/zh[-_]?CN/i.test(v.lang)) || vs.find(v=>/^zh/i.test(v.lang)) || vs.find(v=>/chinese|中文|普通话/i.test(v.name)) || null;
+  voicesReady = vs.length>0;
+}
+if("speechSynthesis" in window){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; }
+let speakWarned=false;
+function speak(text, slow){
+  if(!text) return;
+  if(!("speechSynthesis" in window)){ if(!speakWarned){toast("🔇 Voice needs a modern browser");speakWarned=true;} return; }
+  try{
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang="zh-CN"; if(zhVoice)u.voice=zhVoice;
+    u.rate = slow?0.5:0.9; u.pitch=1.05;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* ============================================================
+   REWARD helpers
+============================================================ */
+function reward(x){
+  if(x.xp){S.xp+=x.xp;} if(x.coins){S.coins+=x.coins;} if(x.stars){S.stars+=x.stars;}
+  save(); renderHud();
+}
+function floatReward(txt,color,x,y){
+  const f=el("div","rfloat",txt); f.style.color=color||"var(--gold)";
+  f.style.left=(x||window.innerWidth/2)+"px"; f.style.top=(y||window.innerHeight/2)+"px";
+  document.body.appendChild(f); setTimeout(()=>f.remove(),1000);
+}
+function learnWord(hz,correct){
+  const w=S.words[hz]||(S.words[hz]={seen:0,correct:0,wrong:0,fav:false});
+  w.seen++; if(correct===true)w.correct++; if(correct===false)w.wrong++;
+  save();
+}
+function toast(msg,ms=1900){
+  const t=$("#toast"); t.innerHTML=msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("show"),ms);
+}
+
+/* ============================================================
+   SCREENS
+============================================================ */
+function show(id){
+  $$(".screen").forEach(s=>s.classList.remove("active"));
+  $("#"+id).classList.add("active");
+}
+
+/* ---------- HUD ---------- */
+function hudHtml(inScene){
+  const lvl=Math.floor(S.xp/100)+1;
+  return `
+   <div class="hud-hero"><div class="hud-ava">${S.avatar}</div><b>${escapeHtml(S.name||"Hero")}</b></div>
+   <div class="chip"><span class="ic">⭐</span>${S.stars}</div>
+   <div class="chip"><span class="ic">🪙</span>${S.coins}</div>
+   <div class="chip"><span class="ic">🔥</span>${S.streak}</div>
+   <div class="chip"><span class="ic">🏅</span>Lv${lvl}</div>
+   <div class="hud-spacer"></div>
+   <button class="icon-btn" onclick="openSettings()" aria-label="Reading settings">⚙️</button>
+   ${inScene?'<button class="icon-btn" onclick="quitToMap()" aria-label="Back to map">🗺️</button>':'<button class="icon-btn" onclick="openParent()" aria-label="Grown-up zone">👨‍👩‍👧</button>'}`;
+}
+function renderHud(){
+  $("#mapHud").innerHTML=hudHtml(false);
+  $("#sceneHud").innerHTML=hudHtml(true);
+}
+function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+
+/* ============================================================
+   PARTICLES (bamboo leaves / fireflies) — light + reduced-motion safe
+============================================================ */
+const reduced = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+function spawnParticles(container, kind){
+  if(reduced) return;
+  container.innerHTML="";
+  const n = kind==="firefly"?14:12;
+  for(let i=0;i<n;i++){
+    const p=el("div","pnode", kind==="firefly"?"✨":rnd(["🍃","🎋","🌸"]));
+    const dur=8+Math.random()*10, delay=-Math.random()*dur, size=(kind==="firefly"?10:16)+Math.random()*10;
+    p.style.left=Math.random()*100+"%";
+    p.style.fontSize=size+"px";
+    p.style.opacity=kind==="firefly"?.9:.75;
+    p.style.animation=`fall${i%3} ${dur}s linear ${delay}s infinite`;
+    container.appendChild(p);
+  }
+}
+/* inject keyframes for particle drift */
+(function(){
+  const st=el("style"); st.textContent=`
+   @keyframes fall0{0%{transform:translateY(-10vh) rotate(0)}100%{transform:translateY(110vh) translateX(40px) rotate(360deg)}}
+   @keyframes fall1{0%{transform:translateY(-10vh) rotate(0)}100%{transform:translateY(110vh) translateX(-50px) rotate(-320deg)}}
+   @keyframes fall2{0%{transform:translateY(-10vh) rotate(0)}100%{transform:translateY(110vh) translateX(20px) rotate(200deg)}}`;
+  document.head.appendChild(st);
+})();
+
+/* ============================================================
+   HERO SETUP
+============================================================ */
+function buildSetup(){
+  const pick=$("#avatarPick"); pick.innerHTML="";
+  AVATARS.forEach((a,i)=>{
+    const o=el("button","avatar-opt"+(i===0?" sel":""),a);
+    o.onclick=()=>{ $$(".avatar-opt").forEach(x=>x.classList.remove("sel")); o.classList.add("sel"); S.avatar=a; checkStart(); };
+    pick.appendChild(o);
+  });
+  $("#heroName").oninput=checkStart;
+  $("#startBtn").onclick=()=>{
+    S.name = $("#heroName").value.trim() || "Hero";
+    touchStreak(); save();
+    goMap(true);
+  };
+}
+function checkStart(){
+  const n=$("#heroName").value.trim();
+  $("#startBtn").disabled = n.length<1;
+}
+
+/* ============================================================
+   WORLD MAP
+============================================================ */
+function goMap(fresh){
+  renderHud(); spawnParticles($("#mapParticles"),"leaf");
+  const track=$("#mapTrack"); track.innerHTML="";
+  /* dotted path between nodes */
+  const svgns="http://www.w3.org/2000/svg";
+  const svg=document.createElementNS(svgns,"svg");
+  svg.setAttribute("class","node-path"); svg.style.left="0";svg.style.top="0";svg.style.width="100%";svg.style.height="100%";
+  svg.setAttribute("preserveAspectRatio","none");
+  track.appendChild(svg);
+  requestAnimationFrame(()=>{
+    const r=track.getBoundingClientRect();
+    let d="";
+    WORLD.forEach((loc,i)=>{ const px=loc.x/100*r.width, py=loc.y/100*r.height; d+=(i?"L":"M")+px+" "+py+" "; });
+    const path=document.createElementNS(svgns,"path");
+    path.setAttribute("d",d); path.setAttribute("fill","none");
+    path.setAttribute("stroke","rgba(255,255,255,.7)"); path.setAttribute("stroke-width","5");
+    path.setAttribute("stroke-dasharray","2 14"); path.setAttribute("stroke-linecap","round");
+    svg.appendChild(path);
+  });
+
+  const ready = ch => !!(ch && ch.scenes && ch.scenes.length);
+  const firstUndone = WORLD.find(l=>!(S.chapters[l.chapter]||{}).done && ready(CHAPTERS[l.chapter]));
+  WORLD.forEach((loc,i)=>{
+    const ch=CHAPTERS[loc.chapter];
+    const prog=S.chapters[loc.chapter]||{};
+    const prevDone = i===0 || (S.chapters[WORLD[i-1].chapter]||{}).done;
+    const locked = !ready(ch) || (!prevDone && !prog.done);
+    const node=el("button","node"+(locked?" locked":"")+(loc.id===(firstUndone&&firstUndone.id)?" current":""));
+    node.style.left=loc.x+"%"; node.style.top=loc.y+"%";
+    const lanterns=(prog.lanterns||0), total=6;
+    let lHtml="";
+    for(let k=0;k<total;k++) lHtml+=`<span class="mini-lantern${k<lanterns?" lit":""}"></span>`;
+    node.innerHTML=`
+      <div class="node-disc"><span class="node-emoji">${loc.emoji}</span>
+        <div class="node-lanterns">${lHtml}</div></div>
+      <div class="node-name"><span class="cjk">${loc.cjk}</span>${loc.name}</div>`;
+    node.onclick=()=>{
+      if(locked){ toast(!ready(ch)?"🔒 Coming soon — this land is still asleep":"🔒 Light the earlier village first!"); return; }
+      startChapter(loc.chapter);
+    };
+    track.appendChild(node);
+  });
+  applySettings();
+  show("map");
+  if(fresh) setTimeout(()=>toast("🗺️ Tap a glowing village to begin!"),500);
+}
+
+/* ============================================================
+   CHAPTER / SCENE ENGINE
+============================================================ */
+let RUN=null; /* current run state */
+function startChapter(chId){
+  const ch=CHAPTERS[chId];
+  if(!ch.scenes.length){ toast("🔒 This adventure is still being written!"); return; }
+  RUN={ chId, ch, i:0, correct:0, total:0, wordsSeen:new Set(), lanterns:0, coins:0, xp:0, stars:0 };
+  touchStreak();
+  const loc=WORLD.find(l=>l.id===ch.location);
+  buildBamboo();
+  renderHud(); spawnParticles($("#sceneParticles"),"firefly");
+  applySettings();
+  show("scene");
+  renderScene();
+}
+function buildBamboo(){
+  const layer=$("#bambooLayer"); layer.innerHTML="";
+  if(reduced) return;
+  const n=7;
+  for(let i=0;i<n;i++){
+    const b=el("div","bamboo");
+    b.style.left=(4+i*13+Math.random()*4)+"%";
+    b.style.height=(50+Math.random()*80)+"px";
+    b.style.opacity=.55+Math.random()*.4;
+    layer.appendChild(b);
+  }
+}
+function sceneRootDay(on){ $("#sceneRoot").classList.toggle("is-day",!!on); }
+
+function renderScene(){
+  const sc=RUN.ch.scenes[RUN.i];
+  const slot=$("#sceneSlot"); slot.innerHTML="";
+  const charEl=$("#sceneChar");
+  // brighten as we progress
+  const p=RUN.i/Math.max(1,RUN.ch.scenes.length-1);
+  sceneRootDay(p>0.55);
+
+  if(sc.char){ charEl.style.display=""; charEl.textContent=sc.char; charEl.className="char talk";
+    setTimeout(()=>charEl.classList.remove("talk"),1800);
+  } else { charEl.style.display="none"; }
+
+  if(sc.type==="intro"||sc.type==="dialogue"||sc.type==="vocab") renderDialogue(sc);
+  else if(sc.type==="grammar") renderGrammar(sc);
+  else if(sc.type==="minigame") renderMinigame(sc);
+  else if(sc.type==="boss") renderBoss(sc);
+  else if(sc.type==="end") finishChapter(sc);
+}
+function nextScene(){
+  RUN.i++;
+  if(RUN.i < RUN.ch.scenes.length){ renderScene(); return; }
+  // Safety net: never leave the child on a blank screen. If we somehow run past
+  // the last scene, finish with the chapter's end scene (or just bail to the map).
+  const last = RUN.ch.scenes[RUN.ch.scenes.length-1];
+  if(last && last.type==="end") finishChapter(last); else goMap();
+}
+
+/* ---------- render one dialogue/vocab line ---------- */
+function tokenize(zh,vocabList){
+  /* wrap known multi-char vocab first, then leftover chars */
+  if(!zh) return "";
+  const keys=Object.keys(VOCAB).sort((a,b)=>b.length-a.length);
+  let out=""; let i=0;
+  while(i<zh.length){
+    let matched=null;
+    for(const k of keys){ if(zh.startsWith(k,i)){ matched=k; break; } }
+    if(matched){
+      const known = S.words[matched] && S.words[matched].seen>0;
+      out+=`<span class="w${known?" known":""}" data-hz="${matched}" role="button" tabindex="0">${matched}</span>`;
+      i+=matched.length;
+    } else { out+=escapeHtml(zh[i]); i++; }
+  }
+  return out;
+}
+function readModeText(sc){
+  const m=S.settings.read;
+  let html="";
+  if(sc.zh && m!=="en"){ html+=`<div class="line cjk">${tokenize(sc.zh,sc.vocab)}</div>`; }
+  if(sc.py && (m==="zhpy"||m==="all")){ html+=`<div class="pinyin">${escapeHtml(sc.py)}</div>`; }
+  if(sc.en && (m==="all"||m==="en"||!sc.zh)){ html+=`<div class="translation">${escapeHtml(sc.en)}</div>`; }
+  return html;
+}
+function renderDialogue(sc){
+  const box=el("div","dbox");
+  const speaker = sc.speaker ? `<div class="speaker">${sc.speakerCjk?`<span class="cjk">${sc.speakerCjk}</span>`:""}${escapeHtml(sc.speaker)}</div>`:"";
+  const audio = sc.zh ? `
+     <button class="speak-btn slow" data-zh="${escapeHtml(sc.zh)}" data-slow="1" aria-label="Play slowly">🐢</button>
+     <button class="speak-btn" data-zh="${escapeHtml(sc.zh)}" aria-label="Play">🔊</button>`:"";
+  box.innerHTML = speaker + readModeText(sc) + `<div class="dbox-foot">${audio}<button class="next-btn">Next ▶</button></div>`;
+  let choicesPanel = null;
+
+  // choices
+  if(sc.choices){
+    const wrap=el("div","choices");
+    const label=el("div","turn-label");
+    label.innerHTML=`<span class="tl-av">${escapeHtml(S.avatar||"🐼")}</span>
+      <span class="tl-cjk">你说什么?</span><span>Your turn — what do you say?</span>
+      <span class="tl-hint">tap one 👆</span>`;
+    wrap.appendChild(label);
+    sc.choices.forEach(ch=>{
+      const c=el("button","choice");
+      c.innerHTML=`<div class="zh cjk">${escapeHtml(ch.zh)}</div><div class="py">${escapeHtml(ch.py)}</div><div class="en">${escapeHtml(ch.en)}</div>`;
+      c.onclick=()=>{
+        wrap.classList.add("done");
+        $$(".choice",wrap).forEach(x=>{x.style.pointerEvents="none";x.style.opacity=".45";});
+        c.classList.add("picked"); c.style.opacity="1";
+        const npc=sc.speaker; S.friends[npc]=(S.friends[npc]||0)+(ch.friend||1);
+        speak(ch.zh);
+        // reply bubble
+        const rep=el("div","dbox"); rep.style.marginTop="10px";
+        rep.innerHTML=`<div class="speaker"><span class="cjk">${sc.speakerCjk||""}</span>${escapeHtml(sc.speaker)}</div>
+          <div class="line cjk">${tokenize(ch.reply,[])}</div>
+          <div class="pinyin">${escapeHtml(ch.replyPy)}</div>
+          <div class="translation">${escapeHtml(ch.replyEn)}</div>
+          <div class="dbox-foot">
+            <button class="speak-btn" data-zh="${escapeHtml(ch.reply)}">🔊</button>
+            <button class="next-btn">Next ▶</button></div>`;
+        wireBox(rep);
+        rep.querySelector(".next-btn").onclick=()=>{ afterDialogue(sc); nextScene(); };
+        $("#sceneSlot").appendChild(rep);
+        if(rep.scrollIntoView) rep.scrollIntoView({behavior:"smooth",block:"center"});
+        floatReward("+2 ❤️","var(--lotus)");
+        reward({xp:5});
+      };
+      wrap.appendChild(c);
+    });
+    box.querySelector(".next-btn").remove(); // must choose
+    choicesPanel = wrap;
+  } else {
+    box.querySelector(".next-btn").onclick=()=>{ afterDialogue(sc); nextScene(); };
+  }
+
+  $("#sceneSlot").appendChild(box);
+  if(choicesPanel) $("#sceneSlot").appendChild(choicesPanel);
+  wireBox(box);
+  // auto play + auto-learn seen words
+  if(sc.zh){ setTimeout(()=>speak(sc.zh, S.settings.slowFirst),350); }
+  if(sc.vocab){ sc.vocab.forEach(hz=>{ if(!S.words[hz]||!S.words[hz].seen){ learnWord(hz,null); RUN.wordsSeen.add(hz);} }); S.skills.read=Math.min(100,S.skills.read+2); }
+}
+function afterDialogue(sc){ if(sc.zh){ reward({xp:8,coins:2}); } save(); }
+
+function wireBox(box){
+  $$(".speak-btn",box).forEach(b=>b.onclick=()=>speak(b.dataset.zh, b.dataset.slow==="1"));
+  $$(".w",box).forEach(w=>{
+    const open=()=>openVocab(w.dataset.hz,w);
+    w.onclick=open;
+    w.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();open();} };
+  });
+}
+
+/* ---------- grammar micro-card ---------- */
+function renderGrammar(sc){
+  const g=el("div","grammar");
+  g.innerHTML=`<h3>💡 ${escapeHtml(sc.title)}</h3>
+    <p>${escapeHtml(sc.body)}</p>
+    <div class="gr-formula cjk">${sc.formula.join(" ")}</div>
+    <p style="text-align:center">${escapeHtml(sc.note)}</p>
+    <button class="btn wide jade" style="margin-top:6px">Got it! ▶</button>`;
+  g.querySelector("button").onclick=()=>{ S.skills.write=Math.min(100,S.skills.write+4); reward({xp:6}); nextScene(); };
+  $("#sceneSlot").appendChild(g);
+}
+
+/* ============================================================
+   MINI-GAMES (reusable, data-driven)
+============================================================ */
+
+/* a Chinese "face" for game cells: characters + pinyin, always. Kids are new. */
+function zhFace(hz,withEn){
+  const v=VOCAB[hz]||{};
+  return `<div class="zh cjk">${escapeHtml(hz)}</div>`+
+         (v.py?`<div class="cpy">${escapeHtml(v.py)}</div>`:"")+
+         (withEn&&v.en?`<div class="cen">${escapeHtml(v.en)}</div>`:"");
+}
+
+/* ---- TONE: hear it, tap the tone. Tone is derived from the pinyin marks,
+   so any word you add to VOCAB works here automatically. ---- */
+const TONE_ROWS=[["āēīōūǖĀĒĪŌŪǕ",1],["áéíóúǘÁÉÍÓÚǗ",2],["ǎěǐǒǔǚǍĚǏǑǓǙ",3],["àèìòùǜÀÈÌÒÙǛ",4]];
+function toneOf(py){
+  for(const ch of (py||"")){ for(const [set,t] of TONE_ROWS){ if(set.indexOf(ch)>=0) return t; } }
+  return 0; // neutral
+}
+const TONE_INFO=[
+  {n:1,mark:"ˉ",name:"high & flat",hint:"like a sung note"},
+  {n:2,mark:"ˊ",name:"rising",hint:"like asking “huh?”"},
+  {n:3,mark:"ˇ",name:"dip then rise",hint:"like a bouncing ball"},
+  {n:4,mark:"ˋ",name:"falling",hint:"like a firm “No!”"}
+];
+function gameTone(sc){
+  const words=shuffle(sc.words.filter(hz=>VOCAB[hz]&&toneOf(VOCAB[hz].py)>0)).slice(0,5);
+  const mg=mgShell(sc,`0 / ${words.length}`);
+  const body=$("#mgBody",mg);
+  let idx=0, right=0;
+  function round(){
+    if(!body.isConnected) return;
+    const hz=words[idx], v=VOCAB[hz], t=toneOf(v.py);
+    body.innerHTML=`
+      <div class="tone-stage">
+        <div class="tone-char cjk">${escapeHtml(hz)}</div>
+        <div class="tone-py">${escapeHtml(v.py)}</div>
+        <div class="tone-en">${escapeHtml(v.en)}</div>
+        <button class="listen-play" id="toneAudio" aria-label="Play sound">🔊</button>
+        <div class="tone-ask">Which tone did you hear?</div>
+        <div class="tone-opts" id="toneOpts"></div>
+      </div>`;
+    $("#toneAudio",body).onclick=()=>speak(hz);
+    setTimeout(()=>speak(hz),300);
+    const ob=$("#toneOpts",body);
+    TONE_INFO.forEach(info=>{
+      const b=el("button","tone-btn");
+      b.innerHTML=`<div class="tn">${info.n}</div><div class="tm">${info.mark}</div><div class="tl">${escapeHtml(info.name)}</div>`;
+      b.onclick=()=>{
+        if(ob.dataset.locked==="1")return; ob.dataset.locked="1";
+        const fb=$("#mgFb");
+        if(info.n===t){
+          b.classList.add("ok"); right++; RUN.correct++; RUN.total++; learnWord(hz,true);
+          S.skills.listen=Math.min(100,S.skills.listen+4);
+          if(fb){fb.textContent=rnd(["对! Tone "+t+"!","好耳朵! Great ear!","太棒了! Perfect!"]);fb.className="mg-feedback good";}
+          reward({coins:1});
+        }else{
+          b.classList.add("bad"); RUN.total++; learnWord(hz,false);
+          const cor=$$(".tone-btn",ob)[t-1]; if(cor)cor.classList.add("ok");
+          if(fb){fb.textContent=`It was tone ${t} — ${TONE_INFO[t-1].name} (${TONE_INFO[t-1].hint})`;fb.className="mg-feedback bad";}
+        }
+        idx++; const pr=$("#mgProg",mg); if(pr)pr.textContent=`${idx} / ${words.length}`;
+        setTimeout(()=>{
+          if(idx<words.length) round();
+          else { const f2=$("#mgFb"); if(f2)f2.textContent="🔔 Tone master!"; mgWin({xp:24,coins:6,stars:1}); }
+        },1150);
+      };
+      ob.appendChild(b);
+    });
+  }
+  round();
+}
+function renderMinigame(sc){
+  if(sc.game==="match") gameMatch(sc);
+  else if(sc.game==="build") gameBuild(sc);
+  else if(sc.game==="listen") gameListen(sc);
+  else if(sc.game==="tone") gameTone(sc);
+}
+function mgShell(sc,progText){
+  const mg=el("div","mg");
+  mg.innerHTML=`<div class="mg-head">
+     <div class="mg-title">🎮 ${escapeHtml(sc.title)}<small>${escapeHtml(sc.sub||"")}</small></div>
+     <div class="mg-prog" id="mgProg">${progText||""}</div></div>
+     <div id="mgBody"></div>
+     <div class="mg-feedback" id="mgFb"></div>`;
+  $("#sceneSlot").appendChild(mg);
+  return mg;
+}
+function mgWin(bonus){
+  floatReward("+"+ (bonus.xp||0) +" XP","var(--jade)");
+  reward(bonus); RUN.lanterns++; save();
+  setTimeout(nextScene, 700);
+}
+
+/* ---- MATCH: word <-> meaning ---- */
+function gameMatch(sc){
+  const pool=shuffle(sc.words).slice(0,6);
+  const mg=mgShell(sc,`0 / ${pool.length}`);
+  const body=$("#mgBody",mg);
+  const grid=el("div","match-grid");
+  const cells=[];
+  pool.forEach(hz=>{ cells.push({hz,side:"zh",txt:hz}); cells.push({hz,side:"en",txt:VOCAB[hz].en}); });
+  shuffle(cells).forEach(c=>{
+    const cell=el("div","match-cell");
+    cell.innerHTML = c.side==="zh"?zhFace(c.hz,false):`<div class="en">${escapeHtml(c.txt)}</div>`;
+    cell.dataset.hz=c.hz; cell.dataset.side=c.side;
+    cell.onclick=()=>pickMatch(cell,pool.length,mg);
+    grid.appendChild(cell);
+  });
+  body.appendChild(grid);
+  let sel=null, done=0;
+  mg._sel=null; mg._done=0;
+  function pickMatch(cell,total,mg){
+    if(cell.classList.contains("done")||cell.classList.contains("ok"))return;
+    if(cell.dataset.side==="zh") speak(cell.dataset.hz);
+    if(!mg._sel){ mg._sel=cell; cell.classList.add("sel"); return; }
+    if(mg._sel===cell){ cell.classList.remove("sel"); mg._sel=null; return; }
+    const a=mg._sel, b=cell;
+    if(a.dataset.hz===b.dataset.hz && a.dataset.side!==b.dataset.side){
+      [a,b].forEach(x=>{x.classList.remove("sel");x.classList.add("ok");});
+      learnWord(a.dataset.hz,true); RUN.correct++; RUN.total++;
+      setTimeout(()=>[a,b].forEach(x=>x.classList.add("done")),450);
+      mg._done++; $("#mgProg",mg).textContent=`${mg._done} / ${total}`;
+      $("#mgFb").textContent=rnd(["好! Nice!","太棒了! Great!","对! Correct!"]); $("#mgFb").className="mg-feedback good";
+      reward({coins:1});
+      if(mg._done===total){ $("#mgFb").textContent="✨ All lanterns lit!"; mgWin({xp:20,coins:5,stars:1}); }
+    } else {
+      a.classList.remove("sel"); a.classList.add("bad"); b.classList.add("bad");
+      learnWord(b.dataset.hz,false); RUN.total++;
+      $("#mgFb").textContent="Try again! 再试一次"; $("#mgFb").className="mg-feedback bad";
+      setTimeout(()=>{a.classList.remove("bad");b.classList.remove("bad");},450);
+    }
+    mg._sel=null;
+  }
+  S.skills.read=Math.min(100,S.skills.read+3);
+}
+
+/* ---- BUILD: order the tiles ---- */
+function gameBuild(sc){
+  const mg=mgShell(sc,"");
+  const body=$("#mgBody",mg);
+  body.innerHTML=`<div class="bs-hint">Make: “${escapeHtml(sc.en)}”</div>
+    <div class="bs-target" id="bsTarget"></div>
+    <div class="bs-pool" id="bsPool"></div>
+    <button class="speak-btn" id="bsHear" style="margin:10px auto 0">🔊</button>`;
+  const target=$("#bsTarget",mg), pool=$("#bsPool",mg);
+  const placed=[];
+  $("#bsHear",mg).onclick=()=>speak(sc.answer.join(""));
+  shuffle(sc.answer).forEach(hz=>{
+    const t=el("button","tile"); t.innerHTML=`${hz}<span class="py">${VOCAB[hz]?VOCAB[hz].py:""}</span>`;
+    t.dataset.hz=hz;
+    t.onclick=()=>{
+      if(t.classList.contains("ghost"))return;
+      speak(hz);
+      t.classList.add("ghost");
+      const p=el("button","tile placed"); p.innerHTML=`${hz}<span class="py">${VOCAB[hz]?VOCAB[hz].py:""}</span>`;
+      p.onclick=()=>{ p.remove(); t.classList.remove("ghost"); placed.splice(placed.indexOf(hz),1); check(); };
+      target.appendChild(p); placed.push(hz); check();
+    };
+    pool.appendChild(t);
+  });
+  function check(){
+    if(placed.length!==sc.answer.length) { $("#mgFb").textContent=""; return; }
+    const ok=placed.every((h,i)=>h===sc.answer[i]);
+    if(ok){
+      $("#mgFb").textContent="✅ 完美! Perfect sentence!"; $("#mgFb").className="mg-feedback good";
+      speak(sc.answer.join("")); sc.answer.forEach(h=>learnWord(h,true));
+      RUN.correct++;RUN.total++; S.skills.write=Math.min(100,S.skills.write+6);
+      mgWin({xp:25,coins:6,stars:1});
+    } else {
+      $("#mgFb").textContent="Close! Check the order 🤔"; $("#mgFb").className="mg-feedback bad";
+    }
+  }
+}
+
+/* ---- LISTEN: hear -> choose ---- */
+function gameListen(sc){
+  const words=shuffle(sc.words).slice(0,5);
+  const mg=mgShell(sc,`0 / ${words.length}`);
+  const body=$("#mgBody",mg);
+  let idx=0, right=0;
+  function round(){
+    const target=words[idx];
+    const opts=shuffle([target,...shuffle(sc.words.filter(w=>w!==target)).slice(0,3)]);
+    body.innerHTML=`<div class="listen-hero">
+        <button class="listen-play" id="lPlay">🔊</button>
+        <div style="color:var(--ink-soft);margin-top:8px;font-size:.9rem">Tap to hear • then choose</div></div>
+      <div class="listen-opts" id="lOpts"></div>`;
+    $("#lPlay",mg).onclick=()=>speak(target);
+    setTimeout(()=>speak(target),300);
+    const optsBox=$("#lOpts",mg);
+    opts.forEach(hz=>{
+      const b=el("button","match-cell"); b.innerHTML=zhFace(hz,true);
+      b.onclick=()=>{
+        if(optsBox.dataset.locked==="1") return;   // round already won
+        if(b.classList.contains("bad")) return;    // already tried this one
+        if(hz===target){
+          optsBox.dataset.locked="1";
+          b.classList.add("ok"); learnWord(target,true); right++; RUN.correct++;RUN.total++;
+          $("#mgFb").textContent=rnd(["对! Yes!","好! Nice ear!"]); $("#mgFb").className="mg-feedback good";
+          reward({coins:1}); idx++; $("#mgProg",mg).textContent=`${idx} / ${words.length}`;
+          setTimeout(()=>{ if(idx<words.length){ round(); } else { const fb=$("#mgFb"); if(fb)fb.textContent="🎧 Sharp ears!"; S.skills.listen=Math.min(100,S.skills.listen+10); mgWin({xp:22,coins:5,stars:1}); } },650);
+        } else {
+          b.classList.add("bad"); learnWord(hz,false); RUN.total++;
+          $("#mgFb").textContent="Not quite — listen again 🐢"; $("#mgFb").className="mg-feedback bad";
+          setTimeout(()=>speak(target,true),300);
+        }
+      };
+      optsBox.appendChild(b);
+    });
+  }
+  round();
+}
+
+/* ============================================================
+   BOSS — the Big Lantern quiz
+============================================================ */
+function renderBoss(sc){
+  const qs=shuffle(sc.words).slice(0,5);
+  let idx=0, right=0;
+  const wrap=el("div","dbox");
+  $("#sceneSlot").appendChild(wrap);
+  const bossBadge=el("div","boss-badge","<div class='boss-lantern'>🏮</div>");
+  $("#sceneChar").style.display="none";
+  wrap.before(bossBadge);
+  function q(){
+    const hz=qs[idx];
+    // alternate: meaning->char, or char->meaning
+    const mode = idx%2===0?"toMean":"toChar";
+    let prompt, correct, opts;
+    if(mode==="toMean"){
+      prompt=`<div class="line cjk" style="text-align:center">${hz}</div><div class="pinyin" style="text-align:center">${VOCAB[hz].py}</div><p style="text-align:center;color:var(--ink-soft)">What does it mean?</p>`;
+      correct=VOCAB[hz].en;
+      opts=shuffle([correct,...shuffle(sc.words.filter(w=>w!==hz)).slice(0,3).map(w=>VOCAB[w].en)]);
+    } else {
+      prompt=`<p style="text-align:center;color:var(--ink-soft)">Which one means…</p><div class="translation" style="text-align:center;font-size:1.2rem;font-style:normal;color:var(--ink)">“${VOCAB[hz].en}”</div>`;
+      correct=hz;
+      opts=shuffle([hz,...shuffle(sc.words.filter(w=>w!==hz)).slice(0,3)]);
+    }
+    wrap.innerHTML=`<div class="speaker">🏮 Big Lantern · ${idx+1}/${qs.length}</div>${prompt}
+      <div class="listen-opts" id="bossOpts" style="margin-top:10px"></div>
+      <div class="mg-feedback" id="bossFb"></div>`;
+    const ob=$("#bossOpts",wrap);
+    opts.forEach(o=>{
+      const b=el("button","match-cell");
+      b.dataset.val=o;   // compare on data, not text (the face now includes pinyin)
+      b.innerHTML = mode==="toMean"?`<div class="en">${escapeHtml(o)}</div>`:zhFace(o,false);
+      if(mode==="toChar") b.onclick=()=>speak(o);
+      b.onclick=()=>{
+        if(ob.dataset.locked==="1") return;   // one answer per question
+        ob.dataset.locked="1";
+        const good = (mode==="toMean"? o===correct : o===correct);
+        if(mode==="toChar")speak(o);
+        if(good){
+          b.classList.add("ok"); right++; RUN.correct++;RUN.total++;
+          learnWord(hz,true);
+          floatReward("+1 🏮","var(--lantern)"); RUN.lanterns++;
+          idx++; setTimeout(()=>{ if(idx<qs.length)q(); else bossDone(right,qs.length); },600);
+        } else {
+          b.classList.add("bad"); RUN.total++; learnWord(hz,false);
+          $("#bossFb").textContent="Oops! The right lantern will glow…"; $("#bossFb").className="mg-feedback bad";
+          $$(".match-cell",ob).forEach(x=>{
+            if(x.dataset.val===correct) x.classList.add("ok");
+            x.onclick=null;
+          });
+          idx++; setTimeout(()=>{ if(idx<qs.length)q(); else bossDone(right,qs.length); },1100);
+        }
+        $$(".match-cell",ob).forEach(x=>x.onclick=null);
+      };
+      ob.appendChild(b);
+    });
+  }
+  function bossDone(r,total){
+    const bl=bossBadge.querySelector(".boss-lantern"); if(bl) bl.textContent = r>=Math.ceil(total*0.6)?"🏮✨":"🏮";
+    if(!wrap.isConnected) return;
+    const stars = r===total?3 : r>=total*0.6?2:1;
+    RUN.stars = stars;
+    wrap.innerHTML=`<div class="speaker">🏮 Big Lantern</div>
+      <div class="line" style="text-align:center">${r} / ${total} correct!</div>
+      <div style="text-align:center;font-size:2rem;margin:6px 0">${"⭐".repeat(stars)}${"☆".repeat(3-stars)}</div>
+      <button class="btn wide gold">Light the village! ▶</button>`;
+    wrap.querySelector("button").onclick=()=>nextScene();
+    reward({xp:30,coins:8}); S.skills.read=Math.min(100,S.skills.read+5);
+  }
+  q();
+}
+
+/* ============================================================
+   FINISH + CELEBRATION
+============================================================ */
+function finishChapter(sc){
+  const prog=S.chapters[RUN.chId]||(S.chapters[RUN.chId]={});
+  prog.done=true; prog.stars=Math.max(prog.stars||0,RUN.stars||1); prog.lanterns=6;
+  if(sc.badgeName && !S.badges.includes(sc.badgeName)) S.badges.push(sc.badgeName);
+  reward({xp:40,coins:15,stars:RUN.stars||1});
+  save();
+  // celebration
+  const acc = RUN.total? Math.round(RUN.correct/RUN.total*100):100;
+  const card=$("#celeCard");
+  card.innerHTML=`
+    <div class="cele-badge">${sc.badge||"🏆"}</div>
+    <h2><span class="cjk">${escapeHtml(sc.zh||"")}</span>Chapter complete!</h2>
+    <p style="color:var(--ink-soft);margin:8px 0">${escapeHtml(sc.en||"")}</p>
+    <div style="font-family:var(--font-display);color:var(--lantern-deep);font-size:1.05rem;margin-top:6px">
+       New badge: ${sc.badge||"🏆"} <span class="cjk">${escapeHtml(sc.badgeCjk||"")}</span> ${escapeHtml(sc.badgeName||"")}</div>
+    <div class="cele-rewards">
+       <div class="cele-r"><div class="n">+${40}</div><div class="l">XP</div></div>
+       <div class="cele-r"><div class="n">${"⭐".repeat(RUN.stars||1)}</div><div class="l">stars</div></div>
+       <div class="cele-r"><div class="n">${acc}%</div><div class="l">correct</div></div>
+    </div>
+    <button class="btn wide" onclick="goMap()">Back to the map 🗺️</button>
+    <button class="btn wide ghost" style="margin-top:10px" onclick="replayChapter()">Play again 🔁</button>`;
+  show("celebrate");
+  confetti();
+}
+function replayChapter(){ startChapter(RUN.chId); }
+function quitToMap(){ if(confirm("Leave this adventure? Your stars so far are saved.")) goMap(); }
+
+function confetti(){
+  const box=$("#celeConfetti"); box.innerHTML=""; if(reduced) return;
+  const colors=["#E4472B","#F2B441","#3FA66A","#2FA8C4","#E86A9A","#fff"];
+  for(let i=0;i<70;i++){
+    const c=el("div","cft");
+    c.style.left=Math.random()*100+"%";
+    c.style.background=rnd(colors);
+    const dur=2.5+Math.random()*2, delay=Math.random()*.6;
+    c.style.animation=`confetti ${dur}s ${delay}s ease-in forwards`;
+    c.style.transform=`rotate(${Math.random()*360}deg)`;
+    box.appendChild(c);
+  }
+}
+(function(){const st=el("style");st.textContent=`@keyframes confetti{to{transform:translateY(110vh) rotate(720deg);opacity:.2}}`;document.head.appendChild(st);})();
+
+/* ============================================================
+   VOCAB LANTERN CARD (signature interaction)
+============================================================ */
+function openVocab(hz, wEl){
+  const v=VOCAB[hz]; if(!v) return;
+  learnWord(hz,null);
+  if(wEl) wEl.classList.add("known");
+  const w=S.words[hz]||{};
+  const card=$("#vcard");
+  card.innerHTML=`
+    <div class="vcard-top">
+      <span class="fav ${w.fav?"on":""}" id="vFav">${w.fav?"⭐":"☆"}</span>
+      <span class="hsk">HSK ${v.hsk}</span>
+      <div class="vcard-hz cjk">${hz}</div>
+      <div class="vcard-py">${escapeHtml(v.py)}</div>
+    </div>
+    <div class="vcard-body">
+      <div class="vcard-mean">${escapeHtml(v.en)}</div>
+      <div class="vcard-pic">${v.pic||""}</div>
+      <div class="vcard-audio">
+        <button class="speak-btn slow" id="vSlow" aria-label="Slow">🐢</button>
+        <button class="speak-btn" id="vNorm" aria-label="Normal">🔊</button>
+      </div>
+      <div class="stroke-box"><div class="stroke-char cjk" id="vStroke">${hz.length>1?hz[0]:hz}</div></div>
+      <div class="v-row"><b>Radical</b><span>${escapeHtml(v.radical||"—")}</span></div>
+      <div class="v-row"><b>Story</b><span>${escapeHtml(v.etym||"")}</span></div>
+      <div class="v-eg">
+        <div class="zh cjk">${tokenize(v.egZh,[])}</div>
+        <div class="py">${escapeHtml(v.egPy)}</div>
+        <div class="en">${escapeHtml(v.egEn)}</div>
+        <button class="speak-btn" id="vEg" style="margin-top:8px" aria-label="Play example">🔊</button>
+      </div>
+    </div>
+    <button class="vcard-close" id="vClose">Close 关闭</button>`;
+  $("#vocab-layer").classList.add("show");
+  speak(hz, S.settings.slowFirst);
+  // stroke reveal
+  const stroke=$("#vStroke"); requestAnimationFrame(()=>setTimeout(()=>stroke.classList.add("draw"),200));
+  $("#vSlow").onclick=()=>speak(hz,true);
+  $("#vNorm").onclick=()=>speak(hz,false);
+  $("#vEg").onclick=()=>speak(v.egZh);
+  $$(".v-eg .w",card).forEach(x=>x.onclick=()=>openVocab(x.dataset.hz));
+  $("#vFav").onclick=()=>{
+    const rec=S.words[hz]||(S.words[hz]={seen:1,correct:0,wrong:0,fav:false});
+    rec.fav=!rec.fav; $("#vFav").textContent=rec.fav?"⭐":"☆"; $("#vFav").classList.toggle("on",rec.fav);
+    toast(rec.fav?"⭐ Saved to your word treasure":"Removed from favourites"); save();
+  };
+  $("#vClose").onclick=closeVocab;
+  reward({xp:2});
+}
+function closeVocab(){ $("#vocab-layer").classList.remove("show"); }
+$("#vocab-layer").addEventListener("click",e=>{ if(e.target.id==="vocab-layer") closeVocab(); });
+
+/* ============================================================
+   READER SETTINGS
+============================================================ */
+function openSettings(){ syncSettingsUI(); $("#settingsSheet").classList.add("show"); }
+function closeSheet(id){ $("#"+id).classList.remove("show"); }
+function syncSettingsUI(){
+  $$("#readMode button").forEach(b=>b.classList.toggle("on",b.dataset.v===S.settings.read));
+  $$("#fontSize button").forEach(b=>b.classList.toggle("on",parseFloat(b.dataset.v)===S.settings.fs));
+  $("#darkToggle").classList.toggle("on",S.settings.dark);
+  $("#slowToggle").classList.toggle("on",S.settings.slowFirst);
+}
+function applySettings(){
+  document.documentElement.style.setProperty("--fs",S.settings.fs);
+  document.body.style.filter = S.settings.dark? "brightness(.82) saturate(.92)":"";
+}
+$$("#readMode button").forEach(b=>b.onclick=()=>{ S.settings.read=b.dataset.v; save(); syncSettingsUI(); reRenderScene(); });
+$$("#fontSize button").forEach(b=>b.onclick=()=>{ S.settings.fs=parseFloat(b.dataset.v); save(); syncSettingsUI(); applySettings(); });
+$("#darkToggle").onclick=()=>{ S.settings.dark=!S.settings.dark; save(); syncSettingsUI(); applySettings(); };
+$("#slowToggle").onclick=()=>{ S.settings.slowFirst=!S.settings.slowFirst; save(); syncSettingsUI(); };
+function reRenderScene(){ if($("#scene").classList.contains("active") && RUN){ renderScene(); } }
+
+/* ============================================================
+   PARENT / GROWN-UP ZONE  (light gate: a small sum)
+============================================================ */
+function openParent(){
+  const a=2+Math.floor(Math.random()*7), b=3+Math.floor(Math.random()*7);
+  const body=$("#parentSheetBody");
+  body.innerHTML=`<span class="grab"></span>
+    <h2>👨‍👩‍👧 Grown-up zone</h2>
+    <div class="parent-gate">
+      <p style="color:var(--ink-soft)">Quick check for grown-ups:</p>
+      <div class="q">${a} + ${b} = ?</div>
+      <input class="gate-in" id="gateIn" inputmode="numeric" />
+      <div style="margin-top:14px"><button class="btn" id="gateGo">Enter</button></div>
+    </div>`;
+  $("#parentSheet").classList.add("show");
+  $("#gateIn").focus();
+  $("#gateGo").onclick=()=>{ if(parseInt($("#gateIn").value,10)===a+b) renderParent(); else toast("Not quite — try again"); };
+}
+function renderParent(){
+  const wordsSeen=Object.keys(S.words).length;
+  const mastered=Object.values(S.words).filter(w=>w.correct>=2).length;
+  const favs=Object.entries(S.words).filter(([,w])=>w.fav).map(([h])=>h);
+  const weak=Object.entries(S.words).filter(([,w])=>w.wrong>w.correct).map(([h])=>h);
+  const mins=Math.max(1,Math.round(S.timeSpent/60));
+  const chaptersDone=Object.values(S.chapters).filter(c=>c.done).length;
+  const body=$("#parentSheetBody");
+  const skillBar=(name,val,label)=>`<div class="skill-bar"><div class="top"><span>${label}</span><span>${val}%</span></div><div class="bar"><i style="width:${val}%"></i></div></div>`;
+  body.innerHTML=`<span class="grab"></span>
+    <h2>📊 ${escapeHtml(S.name||"Hero")}'s progress</h2>
+    <div class="stat-grid">
+      <div class="stat"><div class="n">${wordsSeen}</div><div class="l">words met</div></div>
+      <div class="stat"><div class="n">${mastered}</div><div class="l">words mastered</div></div>
+      <div class="stat"><div class="n">${mins}</div><div class="l">minutes played</div></div>
+      <div class="stat"><div class="n">${S.streak}🔥</div><div class="l">day streak</div></div>
+      <div class="stat"><div class="n">${chaptersDone}</div><div class="l">chapters done</div></div>
+      <div class="stat"><div class="n">${S.badges.length}🏅</div><div class="l">badges</div></div>
+    </div>
+    <div style="margin:14px 0 4px;font-family:var(--font-display);color:var(--ink)">Skills</div>
+    ${skillBar("read",S.skills.read,"📖 Reading")}
+    ${skillBar("listen",S.skills.listen,"🎧 Listening")}
+    ${skillBar("write",S.skills.write,"✍️ Grammar")}
+    ${skillBar("speak",Math.min(100,Math.round((S.skills.read+S.skills.listen)/2.4)),"🗣️ Speaking (est.)")}
+    ${favs.length?`<div style="margin-top:14px;font-family:var(--font-display)">⭐ Favourite words</div><div class="word-cloud">${favs.map(h=>`<span class="wc cjk">${h}</span>`).join("")}</div>`:""}
+    ${weak.length?`<div style="margin-top:12px;font-family:var(--font-display)">🔁 Needs review</div><div class="word-cloud">${weak.map(h=>`<span class="wc cjk">${h}</span>`).join("")}</div>`:'<div style="margin-top:12px;color:var(--ink-soft);font-size:.9rem">No weak words yet — great going!</div>'}
+    <p style="color:var(--ink-soft);font-size:.82rem;margin-top:14px">Weekly report tip: play 10 minutes a day. The streak 🔥 keeps motivation high. Speaking score is estimated — connect a mic-based pronunciation check to make it real (see the README).</p>
+    <button class="btn wide jade" style="margin-top:14px" onclick="closeSheet('parentSheet')">Close</button>
+    <button class="btn wide ghost" style="margin-top:10px" onclick="resetAll()">Reset all progress</button>`;
+}
+function resetAll(){
+  if(confirm("Erase ALL progress and start over? This cannot be undone.")){
+    localStorage.removeItem(KEY); location.reload();
+  }
+}
+$$(".sheet-wrap").forEach(w=>w.addEventListener("click",e=>{ if(e.target===w) w.classList.remove("show"); }));
+
+/* ============================================================
+   PWA — inline manifest + service worker (best-effort, offline)
+============================================================ */
+(function pwa(){
+  try{
+    const manifest={ name:"Panda Village Adventure", short_name:"熊猫村", start_url:".",
+      display:"standalone", background_color:"#241d44", theme_color:"#E4472B",
+      icons:[{src:"data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"><rect width="512" height="512" rx="96" fill="#E4472B"/><text x="50%" y="58%" font-size="300" text-anchor="middle" dominant-baseline="middle">🐼</text></svg>'),sizes:"512x512",type:"image/svg+xml"}] };
+    const blob=new Blob([JSON.stringify(manifest)],{type:"application/manifest+json"});
+    const link=document.createElement("link"); link.rel="manifest"; link.href=URL.createObjectURL(blob);
+    document.head.appendChild(link);
+  }catch(e){}
+  if("serviceWorker" in navigator){
+    const sw=`self.addEventListener("install",e=>self.skipWaiting());
+      self.addEventListener("activate",e=>self.clients.claim());
+      self.addEventListener("fetch",e=>{ e.respondWith(
+        caches.open("pv1").then(c=>c.match(e.request).then(r=> r || fetch(e.request).then(res=>{try{c.put(e.request,res.clone())}catch(x){}return res;}).catch(()=>r) )) ); });`;
+    try{
+      const url=URL.createObjectURL(new Blob([sw],{type:"text/javascript"}));
+      navigator.serviceWorker.register(url).catch(()=>{});
+    }catch(e){}
+  }
+})();
+
+/* ============================================================
+   BOOT
+============================================================ */
+function boot(){
+  load();
+  buildSetup();
+  renderHud();
+  applySettings();
+  setTimeout(()=>{
+    if(S.name){ touchStreak(); goMap(); }
+    else { show("setup"); $("#heroName").value=""; }
+  },1300);
+}
+document.addEventListener("visibilitychange",()=>{ if(document.hidden) save(); });
+window.addEventListener("beforeunload",save);
+boot();
+</script>
+</body>
+</html>
