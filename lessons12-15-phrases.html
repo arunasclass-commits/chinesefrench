@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChineseFrench.in — Lessons 12–15 Phrase Studio</title>
+<style>
+  :root{
+    --paper:#f6efe2;
+    --paper-deep:#ece0cc;
+    --ink:#232a4d;
+    --ink-soft:#4a5480;
+    --seal:#b8392c;
+    --seal-soft:#e2705f;
+    --grid:#c9b79a;
+    --jade:#2f6b57;
+    --gold:#c08a2e;
+    --shadow:rgba(35,42,77,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Segoe UI","Noto Sans SC","PingFang SC","Hiragino Sans GB",system-ui,sans-serif;
+    background:
+      radial-gradient(circle at 12% 8%, #fffaf0 0%, transparent 45%),
+      radial-gradient(circle at 88% 92%, #f0e4cd 0%, transparent 50%),
+      var(--paper);
+    color:var(--ink);
+    min-height:100vh;
+    padding:16px 14px 48px;
+  }
+  .wrap{max-width:760px;margin:0 auto}
+
+  /* ---------- header ---------- */
+  header{text-align:center;margin-bottom:18px}
+  .brand{
+    font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--seal);font-weight:700;
+  }
+  h1{
+    font-size:1.6rem;margin:6px 0 2px;font-weight:800;letter-spacing:.01em;
+  }
+  h1 .han{color:var(--seal)}
+  .sub{color:var(--ink-soft);font-size:.86rem}
+
+  /* ---------- chips ---------- */
+  .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:14px 0}
+  .chip{
+    border:1.5px solid var(--ink);background:transparent;color:var(--ink);
+    padding:7px 14px;border-radius:999px;font-size:.82rem;font-weight:700;
+    cursor:pointer;transition:.18s;
+  }
+  .chip:hover{background:var(--paper-deep)}
+  .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .chip.seal.on{background:var(--seal);border-color:var(--seal)}
+
+  /* ---------- score bar ---------- */
+  .scorebar{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+    background:#fffdf7;border:1.5px solid var(--grid);border-radius:14px;
+    padding:10px;margin-bottom:16px;box-shadow:0 3px 12px var(--shadow);
+  }
+  .stat{text-align:center}
+  .stat b{display:block;font-size:1.25rem;color:var(--ink);line-height:1.2}
+  .stat span{font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+  .stat.hot b{color:var(--seal)}
+
+  /* ---------- panels ---------- */
+  .panel{display:none}
+  .panel.on{display:block;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ---------- 田字格 flashcard ---------- */
+  .card-stage{perspective:1400px;margin-bottom:14px}
+  .card{
+    position:relative;width:100%;min-height:300px;
+    transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,.2,.2,1);
+    cursor:pointer;
+  }
+  .card.flip{transform:rotateY(180deg)}
+  .face{
+    position:absolute;inset:0;backface-visibility:hidden;
+    background:#fffdf7;border-radius:16px;
+    border:2px solid var(--ink);
+    box-shadow:0 6px 22px var(--shadow);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:26px 20px;text-align:center;overflow:hidden;
+  }
+  /* signature motif: 田字格 guide lines */
+  .face::before,.face::after{
+    content:"";position:absolute;background:
+      repeating-linear-gradient(to right,var(--grid) 0 6px,transparent 6px 12px);
+    opacity:.55;
+  }
+  .face::before{left:8%;right:8%;top:50%;height:1px}
+  .face::after{top:8%;bottom:8%;left:50%;width:1px}
+  .back{transform:rotateY(180deg);background:#fffaf0}
+  .lesson-tag{
+    position:absolute;top:12px;left:14px;font-size:.62rem;font-weight:800;
+    letter-spacing:.14em;color:var(--seal);text-transform:uppercase;z-index:2;
+  }
+  .card-idx{
+    position:absolute;top:12px;right:14px;font-size:.68rem;color:var(--ink-soft);z-index:2;
+  }
+  .hanzi{
+    font-size:2rem;line-height:1.55;font-weight:700;letter-spacing:.04em;
+    position:relative;z-index:2;
+  }
+  .pinyin{font-size:1.05rem;color:var(--jade);margin-top:10px;position:relative;z-index:2}
+  .english{font-size:1rem;color:var(--ink-soft);margin-top:12px;position:relative;z-index:2;max-width:34ch}
+  .hint{
+    position:absolute;bottom:14px;font-size:.68rem;color:var(--ink-soft);
+    letter-spacing:.08em;z-index:2;
+  }
+  .known-mark{
+    position:absolute;bottom:12px;right:14px;font-size:.7rem;font-weight:800;
+    color:var(--jade);z-index:2;
+  }
+
+  /* ---------- buttons ---------- */
+  .btn{
+    border:none;border-radius:11px;padding:12px 18px;font-size:.9rem;font-weight:700;
+    cursor:pointer;transition:.16s;font-family:inherit;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn-ink{background:var(--ink);color:var(--paper)}
+  .btn-ink:hover{background:#161c38}
+  .btn-seal{background:var(--seal);color:#fff}
+  .btn-seal:hover{background:#9c2c21}
+  .btn-jade{background:var(--jade);color:#fff}
+  .btn-ghost{background:transparent;border:1.5px solid var(--ink);color:var(--ink)}
+  .btn-ghost:hover{background:var(--paper-deep)}
+  .controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .audio-btn{
+    background:var(--seal);color:#fff;border:none;border-radius:50%;
+    width:46px;height:46px;font-size:1.15rem;cursor:pointer;
+    box-shadow:0 4px 12px rgba(184,57,44,.32);transition:.16s;
+  }
+  .audio-btn:hover{transform:scale(1.08)}
+  .audio-btn.playing{animation:pulse .9s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 4px 12px rgba(184,57,44,.32)}50%{box-shadow:0 4px 22px rgba(184,57,44,.7)}}
+
+  /* ---------- quiz ---------- */
+  .qcard{
+    background:#fffdf7;border:2px solid var(--ink);border-radius:16px;
+    padding:22px 18px;box-shadow:0 6px 22px var(--shadow);margin-bottom:14px;
+    position:relative;
+  }
+  .qhead{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:.66rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--seal);margin-bottom:14px;
+  }
+  .qhead .prog{color:var(--ink-soft);letter-spacing:.08em}
+  .prompt-zh{font-size:1.5rem;font-weight:700;line-height:1.6;text-align:center}
+  .prompt-py{font-size:.98rem;color:var(--jade);text-align:center;margin-top:8px}
+  .prompt-ask{font-size:.82rem;color:var(--ink-soft);text-align:center;margin-top:12px}
+  .listen-stage{text-align:center;padding:14px 0 4px}
+  .listen-stage p{font-size:.82rem;color:var(--ink-soft);margin-top:10px}
+
+  .opts{display:grid;gap:9px;margin-top:16px}
+  .opt{
+    background:#fffdf7;border:1.5px solid var(--grid);border-radius:12px;
+    padding:13px 15px;text-align:left;cursor:pointer;font-family:inherit;
+    font-size:.95rem;color:var(--ink);transition:.15s;line-height:1.45;
+  }
+  .opt:hover:not(:disabled){border-color:var(--ink);background:var(--paper-deep)}
+  .opt:disabled{cursor:default}
+  .opt .o-py{display:block;font-size:.78rem;color:var(--jade);margin-top:3px}
+  .opt.right{background:#e6f2ec;border-color:var(--jade);color:var(--jade);font-weight:700}
+  .opt.right .o-py{color:var(--jade)}
+  .opt.wrong{background:#fbe8e5;border-color:var(--seal);color:var(--seal)}
+
+  .feedback{
+    text-align:center;margin-top:14px;font-size:.88rem;font-weight:700;min-height:22px;
+  }
+  .feedback .ans{display:block;font-weight:400;color:var(--ink-soft);font-size:.82rem;margin-top:4px}
+
+  /* ---------- scores panel ---------- */
+  .board{
+    background:#fffdf7;border:1.5px solid var(--grid);border-radius:14px;
+    overflow:hidden;box-shadow:0 4px 16px var(--shadow);
+  }
+  table{width:100%;border-collapse:collapse;font-size:.86rem}
+  th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--paper-deep)}
+  th{background:var(--ink);color:var(--paper);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+  tr:last-child td{border-bottom:none}
+  .bar{height:6px;background:var(--paper-deep);border-radius:99px;overflow:hidden;margin-top:5px}
+  .bar i{display:block;height:100%;background:var(--jade);border-radius:99px;transition:width .4s}
+  .note{
+    font-size:.78rem;color:var(--ink-soft);line-height:1.6;margin-top:14px;
+    border-left:3px solid var(--seal);padding-left:11px;
+  }
+
+  /* ---------- confetti ---------- */
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:99}
+  .conf{position:absolute;width:8px;height:12px;opacity:.95;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:0}}
+
+  .combo-pop{
+    position:fixed;left:50%;top:26%;transform:translateX(-50%);
+    font-size:1.7rem;font-weight:900;color:var(--seal);z-index:98;
+    pointer-events:none;opacity:0;
+  }
+  .combo-pop.go{animation:pop 1s ease forwards}
+  @keyframes pop{0%{opacity:0;transform:translate(-50%,10px) scale(.7)}30%{opacity:1;transform:translate(-50%,-6px) scale(1.12)}100%{opacity:0;transform:translate(-50%,-34px) scale(1)}}
+
+  @media (max-width:520px){
+    .hanzi{font-size:1.6rem}
+    .prompt-zh{font-size:1.25rem}
+    .stat b{font-size:1.05rem}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">ChineseFrench.in</div>
+    <h1><span class="han">词句</span> Phrase Studio · Lessons 12–15</h1>
+    <div class="sub">Flashcards · Reading MCQ with pinyin · Listening MCQ</div>
+  </header>
+
+  <div class="row" id="lessonChips"></div>
+  <div class="row" id="modeChips">
+    <button class="chip seal on" data-mode="cards">卡片 Flashcards</button>
+    <button class="chip seal" data-mode="reading">阅读 Reading</button>
+    <button class="chip seal" data-mode="listening">听力 Listening</button>
+    <button class="chip seal" data-mode="scores">成绩 Scores</button>
+  </div>
+
+  <div class="scorebar">
+    <div class="stat"><b id="sScore">0</b><span>Score</span></div>
+    <div class="stat hot"><b id="sCombo">0</b><span>Combo</span></div>
+    <div class="stat"><b id="sKnown">0</b><span>Known</span></div>
+    <div class="stat"><b id="sAcc">—</b><span>Accuracy</span></div>
+  </div>
+
+  <!-- ============ FLASHCARDS ============ -->
+  <section class="panel on" id="p-cards">
+    <div class="card-stage">
+      <div class="card" id="card">
+        <div class="face front">
+          <div class="lesson-tag" id="cTag">Lesson</div>
+          <div class="card-idx" id="cIdx">1 / 1</div>
+          <div class="hanzi" id="cZh">…</div>
+          <div class="hint">Tap the card to see pinyin and meaning</div>
+        </div>
+        <div class="face back">
+          <div class="lesson-tag" id="cTag2">Lesson</div>
+          <div class="known-mark" id="cKnown"></div>
+          <div class="hanzi" style="font-size:1.35rem" id="cZh2">…</div>
+          <div class="pinyin" id="cPy">…</div>
+          <div class="english" id="cEn">…</div>
+          <div class="hint">Tap again to turn back</div>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="btn btn-ghost" id="prevCard">← Back</button>
+      <button class="audio-btn" id="playCard" title="Listen">🔊</button>
+      <button class="btn btn-jade" id="knowIt">I know this +1</button>
+      <button class="btn btn-ghost" id="againIt">Practise again</button>
+      <button class="btn btn-ink" id="nextCard">Next →</button>
+    </div>
+  </section>
+
+  <!-- ============ READING ============ -->
+  <section class="panel" id="p-reading">
+    <div class="qcard">
+      <div class="qhead"><span id="rTag">Reading</span><span class="prog" id="rProg">1 / 1</span></div>
+      <div class="prompt-zh" id="rZh">…</div>
+      <div class="prompt-py" id="rPy">…</div>
+      <div class="prompt-ask" id="rAsk">…</div>
+      <div class="opts" id="rOpts"></div>
+      <div class="feedback" id="rFb"></div>
+    </div>
+    <div class="controls">
+      <button class="audio-btn" id="rPlay" title="Listen">🔊</button>
+      <button class="btn btn-ink" id="rNext">Next task →</button>
+    </div>
+  </section>
+
+  <!-- ============ LISTENING ============ -->
+  <section class="panel" id="p-listening">
+    <div class="qcard">
+      <div class="qhead"><span id="lTag">Listening</span><span class="prog" id="lProg">1 / 1</span></div>
+      <div class="listen-stage">
+        <button class="audio-btn" id="lPlay" style="width:64px;height:64px;font-size:1.5rem" title="Play audio">🔊</button>
+        <p>Listen, then choose what you heard</p>
+      </div>
+      <div class="opts" id="lOpts"></div>
+      <div class="feedback" id="lFb"></div>
+    </div>
+    <div class="controls">
+      <button class="btn btn-ghost" id="lRepeat">Play again</button>
+      <button class="btn btn-ink" id="lNext">Next task →</button>
+    </div>
+  </section>
+
+  <!-- ============ SCORES ============ -->
+  <section class="panel" id="p-scores">
+    <div class="board">
+      <table>
+        <thead>
+          <tr><th>Lesson</th><th>Cards known</th><th style="text-align:right">Reading</th><th style="text-align:right">Listening</th><th style="text-align:right">Points</th></tr>
+        </thead>
+        <tbody id="boardBody"></tbody>
+      </table>
+    </div>
+    <div class="note">
+      Scores save on this device only. Cards known counts phrases marked <b>I know this</b>.
+      Reading and Listening show correct answers out of attempts.
+    </div>
+    <div class="controls" style="margin-top:14px">
+      <button class="btn btn-ghost" id="resetScores">Clear scores</button>
+    </div>
+  </section>
+
+</div>
+
+<div id="confetti"></div>
+<div class="combo-pop" id="comboPop"></div>
+
+<script>
+/* ============================================================
+   DATA — phrases drawn only from Lessons 12, 13, 14, 15.
+   Every phrase uses vocabulary introduced up to its own lesson.
+   ============================================================ */
+const PHRASES = {
+  12: [
+    {zh:"今天天气怎么样？", py:"Jīntiān tiānqì zěnmeyàng?", en:"What is the weather like today?"},
+    {zh:"今天有点儿冷。", py:"Jīntiān yǒudiǎnr lěng.", en:"It is a bit cold today."},
+    {zh:"明天很热。", py:"Míngtiān hěn rè.", en:"Tomorrow is very hot."},
+    {zh:"今天下雨。", py:"Jīntiān xiàyǔ.", en:"It is raining today."},
+    {zh:"明天下雪吗？", py:"Míngtiān xiàxuě ma?", en:"Will it snow tomorrow?"},
+    {zh:"我想喝水。", py:"Wǒ xiǎng hē shuǐ.", en:"I want to drink water."},
+    {zh:"我喝一点儿水。", py:"Wǒ hē yìdiǎnr shuǐ.", en:"I am drinking a little water."},
+    {zh:"我生病了。", py:"Wǒ shēngbìng le.", en:"I have got sick."},
+    {zh:"你要去看病吗？", py:"Nǐ yào qù kànbìng ma?", en:"Are you going to see a doctor?"},
+    {zh:"我觉得有点儿热。", py:"Wǒ juéde yǒudiǎnr rè.", en:"I feel a bit hot."},
+    {zh:"医生说我要休息。", py:"Yīshēng shuō wǒ yào xiūxi.", en:"The doctor says I need to rest."},
+    {zh:"太冷了！", py:"Tài lěng le!", en:"It is too cold!"},
+    {zh:"你什么时候回家？", py:"Nǐ shénme shíhou huí jiā?", en:"When are you going home?"},
+    {zh:"他明天来学校。", py:"Tā míngtiān lái xuéxiào.", en:"He is coming to school tomorrow."},
+    {zh:"你再喝一点儿水吧。", py:"Nǐ zài hē yìdiǎnr shuǐ ba.", en:"Have a little more water."}
+  ],
+  13: [
+    {zh:"我可以再问您一个问题吗？", py:"Wǒ kěyǐ zài wèn nín yí ge wèntí ma?", en:"May I ask you one more question?"},
+    {zh:"你可以打电话问一下。", py:"Nǐ kěyǐ dǎ diànhuà wèn yíxià.", en:"You can call and ask."},
+    {zh:"那个小店卖不卖手机？", py:"Nàge xiǎodiàn mài bu mài shǒujī?", en:"Does that little shop sell mobile phones?"},
+    {zh:"女士，请坐！", py:"Nǚshì, qǐng zuò!", en:"Madam, please have a seat."},
+    {zh:"您喝点什么？", py:"Nín hē diǎn shénme?", en:"What would you like to drink?"},
+    {zh:"我看一下。", py:"Wǒ kàn yíxià.", en:"Let me take a look."},
+    {zh:"请给我一杯牛奶。", py:"Qǐng gěi wǒ yì bēi niúnǎi.", en:"Please give me a glass of milk."},
+    {zh:"您还要什么？", py:"Nín hái yào shénme?", en:"What else would you like?"},
+    {zh:"我还没吃早饭。", py:"Wǒ hái méi chī zǎofàn.", en:"I have not had breakfast yet."},
+    {zh:"先生，您要什么？", py:"Xiānsheng, nín yào shénme?", en:"Sir, what would you like?"},
+    {zh:"我要一斤饺子。", py:"Wǒ yào yì jīn jiǎozi.", en:"I would like one jin of dumplings."},
+    {zh:"四十个太多了。", py:"Sìshí ge tài duō le.", en:"Forty is too many."},
+    {zh:"我要一半吧。", py:"Wǒ yào yíbàn ba.", en:"I will take half then."},
+    {zh:"请给我一杯茶吧。", py:"Qǐng gěi wǒ yì bēi chá ba.", en:"Please give me a cup of tea."},
+    {zh:"我可以坐这儿吗？", py:"Wǒ kěyǐ zuò zhèr ma?", en:"May I sit here?"},
+    {zh:"请休息一下。", py:"Qǐng xiūxi yíxià.", en:"Please rest for a while."}
+  ],
+  14: [
+    {zh:"我看了一个电影。", py:"Wǒ kàn le yí ge diànyǐng.", en:"I watched a movie."},
+    {zh:"我买了一个新电脑。", py:"Wǒ mǎi le yí ge xīn diànnǎo.", en:"I bought a new computer."},
+    {zh:"我昨天没去商店。", py:"Wǒ zuótiān méi qù shāngdiàn.", en:"I did not go to the shop yesterday."},
+    {zh:"你们上火车后看见王老师了吗？", py:"Nǐmen shàng huǒchē hòu kànjiàn Wáng lǎoshī le ma?", en:"Did you see Teacher Wang after boarding the train?"},
+    {zh:"有些人在看书。", py:"Yǒuxiē rén zài kàn shū.", en:"Some people were reading."},
+    {zh:"有的人睡觉了。", py:"Yǒude rén shuìjiào le.", en:"Some people fell asleep."},
+    {zh:"你们会说汉语了，也会写汉字吗？", py:"Nǐmen huì shuō Hànyǔ le, yě huì xiě Hànzì ma?", en:"You can speak Chinese now — can you write characters too?"},
+    {zh:"老师，我听不见。", py:"Lǎoshī, wǒ tīng bu jiàn.", en:"Teacher, I cannot hear you."},
+    {zh:"不要说话！", py:"Búyào shuōhuà!", en:"Do not talk!"},
+    {zh:"请听老师的问题。", py:"Qǐng tīng lǎoshī de wèntí.", en:"Please listen to the teacher's question."},
+    {zh:"你们都会写哪些汉字？", py:"Nǐmen dōu huì xiě nǎxiē Hànzì?", en:"Which Chinese characters can you all write?"},
+    {zh:"我会写这些字了。", py:"Wǒ huì xiě zhèxiē zì le.", en:"I can write these characters now."},
+    {zh:"我们都会说汉语。", py:"Wǒmen dōu huì shuō Hànyǔ.", en:"We can all speak Chinese."},
+    {zh:"他们都是学生。", py:"Tāmen dōu shì xuésheng.", en:"They are all students."},
+    {zh:"你昨天做什么了？", py:"Nǐ zuótiān zuò shénme le?", en:"What did you do yesterday?"},
+    {zh:"火车中午开。", py:"Huǒchē zhōngwǔ kāi.", en:"The train leaves at noon."}
+  ],
+  15: [
+    {zh:"你们爱吃哪个菜？", py:"Nǐmen ài chī nǎge cài?", en:"Which dish do you like to eat?"},
+    {zh:"我喜欢这个，也喜欢那个。", py:"Wǒ xǐhuan zhège, yě xǐhuan nàge.", en:"I like this one, and I like that one too."},
+    {zh:"这些菜都好吃，还很好看。", py:"Zhèxiē cài dōu hǎochī, hái hěn hǎokàn.", en:"These dishes are all delicious, and they look lovely too."},
+    {zh:"我爱吃中国菜，也喜欢做。", py:"Wǒ ài chī Zhōngguó cài, yě xǐhuan zuò.", en:"I love eating Chinese food, and I like cooking it too."},
+    {zh:"大家多吃点儿。", py:"Dàjiā duō chī diǎnr.", en:"Everyone, please eat more."},
+    {zh:"我们坐飞机去北京。", py:"Wǒmen zuò fēijī qù Běijīng.", en:"We are taking a plane to Beijing."},
+    {zh:"北京很好玩儿。", py:"Běijīng hěn hǎowánr.", en:"Beijing is a lot of fun."},
+    {zh:"明天我去大兴机场接你。", py:"Míngtiān wǒ qù Dàxīng Jīchǎng jiē nǐ.", en:"Tomorrow I will pick you up at Daxing Airport."},
+    {zh:"我去年去了西安。", py:"Wǒ qùnián qù le Xī'ān.", en:"I went to Xi'an last year."},
+    {zh:"我明年想去中国。", py:"Wǒ míngnián xiǎng qù Zhōngguó.", en:"I want to go to China next year."},
+    {zh:"我的家人都爱吃饺子。", py:"Wǒ de jiārén dōu ài chī jiǎozi.", en:"My family all love eating dumplings."},
+    {zh:"我早上吃早饭。", py:"Wǒ zǎoshang chī zǎofàn.", en:"I eat breakfast in the morning."},
+    {zh:"我早上坐飞机。", py:"Wǒ zǎoshang zuò fēijī.", en:"I am taking the plane in the morning."},
+    {zh:"这是我的男朋友。", py:"Zhè shì wǒ de nánpéngyou.", en:"This is my boyfriend."},
+    {zh:"大兴机场见！", py:"Dàxīng Jīchǎng jiàn!", en:"See you at Daxing Airport!"}
+  ]
+};
+
+/* Fill-in-the-blank reading tasks (pinyin shown, four options) */
+const BLANKS = {
+  12: [
+    {zh:"今天____怎么样？", py:"Jīntiān ____ zěnmeyàng?", en:"What is the weather like today?", opts:["天气","医生","飞机","问题"], a:0},
+    {zh:"我生病了，我要去____。", py:"Wǒ shēngbìng le, wǒ yào qù ____.", en:"I am sick, I need to see a doctor.", opts:["看病","唱歌","开车","买菜"], a:0},
+    {zh:"我觉得____热。", py:"Wǒ juéde ____ rè.", en:"I feel a bit hot.", opts:["有点儿","太多","很多","一半"], a:0},
+    {zh:"明天____雨。", py:"Míngtiān ____ yǔ.", en:"It will rain tomorrow.", opts:["下","开","坐","写"], a:0}
+  ],
+  13: [
+    {zh:"请____我一杯茶。", py:"Qǐng ____ wǒ yì bēi chá.", en:"Please give me a cup of tea.", opts:["给","买","看","坐"], a:0},
+    {zh:"我____再问您一个问题吗？", py:"Wǒ ____ zài wèn nín yí ge wèntí ma?", en:"May I ask you one more question?", opts:["可以","一下","一半","太"], a:0},
+    {zh:"你可以打电话问____。", py:"Nǐ kěyǐ dǎ diànhuà wèn ____.", en:"You can call and ask briefly.", opts:["一下","一半","一斤","一杯"], a:0},
+    {zh:"四十个____多了。", py:"Sìshí ge ____ duō le.", en:"Forty is too many.", opts:["太","很","都","还"], a:0}
+  ],
+  14: [
+    {zh:"我昨天看____一个电影。", py:"Wǒ zuótiān kàn ____ yí ge diànyǐng.", en:"I watched a movie yesterday.", opts:["了","吗","呢","吧"], a:0},
+    {zh:"我们____会说汉语。", py:"Wǒmen ____ huì shuō Hànyǔ.", en:"We can all speak Chinese.", opts:["都","太","再","还"], a:0},
+    {zh:"我昨天____去商店。", py:"Wǒ zuótiān ____ qù shāngdiàn.", en:"I did not go to the shop yesterday.", opts:["没","了","都","很"], a:0},
+    {zh:"上课的时候不要____！", py:"Shàngkè de shíhou búyào ____!", en:"Do not talk during class!", opts:["说话","听见","火车","中午"], a:0}
+  ],
+  15: [
+    {zh:"我们坐____去北京。", py:"Wǒmen zuò ____ qù Běijīng.", en:"We are taking a plane to Beijing.", opts:["飞机","机场","家人","早饭"], a:0},
+    {zh:"这些菜都好吃，____很好看。", py:"Zhèxiē cài dōu hǎochī, ____ hěn hǎokàn.", en:"These dishes are all tasty, and they look nice too.", opts:["还","太","没","了"], a:0},
+    {zh:"我____去了西安。", py:"Wǒ ____ qù le Xī'ān.", en:"I went to Xi'an last year.", opts:["去年","明年","中午","早上"], a:0},
+    {zh:"明天我去大兴机场____你。", py:"Míngtiān wǒ qù Dàxīng Jīchǎng ____ nǐ.", en:"Tomorrow I will pick you up at Daxing Airport.", opts:["接","卖","听","写"], a:0}
+  ]
+};
+
+const LESSONS = [12,13,14,15];
+const LESSON_TITLE = {
+  12:"Lesson 12 · 天气和身体 Weather & health",
+  13:"Lesson 13 · 请给我一杯茶 Ordering politely",
+  14:"Lesson 14 · 我看了一个电影 Completed actions",
+  15:"Lesson 15 · 大兴机场见 Travel & food"
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const SAVE_KEY = "cf_scores_l12_15";
+let state = {
+  lesson: 12,
+  mode: "cards",
+  cardIdx: 0,
+  flipped: false,
+  combo: 0,
+  deck: [],
+  reading: {list:[], i:0, locked:false},
+  listening: {list:[], i:0, locked:false}
+};
+let scores = load();
+
+function blankScores(){
+  const s = {known:{}, reading:{}, listening:{}, points:0};
+  LESSONS.forEach(function(l){
+    s.known[l] = [];
+    s.reading[l] = {ok:0, n:0};
+    s.listening[l] = {ok:0, n:0};
+  });
+  return s;
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(SAVE_KEY);
+    if(!raw) return blankScores();
+    const s = JSON.parse(raw);
+    const base = blankScores();
+    base.points = s.points || 0;
+    LESSONS.forEach(function(l){
+      base.known[l] = (s.known && s.known[l]) || [];
+      base.reading[l] = (s.reading && s.reading[l]) || {ok:0,n:0};
+      base.listening[l] = (s.listening && s.listening[l]) || {ok:0,n:0};
+    });
+    return base;
+  }catch(e){ return blankScores(); }
+}
+function save(){
+  try{ localStorage.setItem(SAVE_KEY, JSON.stringify(scores)); }catch(e){}
+}
+
+/* ============================================================
+   AUDIO — Web Speech API, Mandarin voice
+   ============================================================ */
+let zhVoice = null;
+function pickVoice(){
+  const vs = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+  zhVoice = vs.find(function(v){ return v.lang === "zh-CN"; })
+         || vs.find(function(v){ return /^zh[-_]/i.test(v.lang); })
+         || vs.find(function(v){ return v.lang === "zh-TW"; })
+         || null;
+}
+if(window.speechSynthesis){
+  pickVoice();
+  speechSynthesis.onvoiceschanged = pickVoice;
+}
+function speak(text, btn){
+  if(!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text.replace(/____/g, "什么"));
+  u.lang = "zh-CN";
+  if(zhVoice) u.voice = zhVoice;
+  u.rate = 0.75;
+  u.pitch = 1.1;
+  if(btn){
+    btn.classList.add("playing");
+    u.onend = function(){ btn.classList.remove("playing"); };
+    u.onerror = function(){ btn.classList.remove("playing"); };
+  }
+  speechSynthesis.speak(u);
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function shuffle(a){
+  const r = a.slice();
+  for(let i=r.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    const t = r[i]; r[i] = r[j]; r[j] = t;
+  }
+  return r;
+}
+function $(id){ return document.getElementById(id); }
+
+function confetti(n){
+  const box = $("confetti");
+  const colors = ["#b8392c","#232a4d","#2f6b57","#c08a2e","#e2705f"];
+  for(let i=0;i<n;i++){
+    const d = document.createElement("div");
+    d.className = "conf";
+    d.style.left = Math.random()*100 + "vw";
+    d.style.top = "-14px";
+    d.style.background = colors[Math.floor(Math.random()*colors.length)];
+    d.style.animationDuration = (1.6 + Math.random()*1.2) + "s";
+    d.style.animationDelay = (Math.random()*0.3) + "s";
+    box.appendChild(d);
+    setTimeout(function(){ d.remove(); }, 3400);
+  }
+}
+function comboPop(txt){
+  const p = $("comboPop");
+  p.textContent = txt;
+  p.classList.remove("go");
+  void p.offsetWidth;
+  p.classList.add("go");
+}
+
+/* ============================================================
+   TASK BUILDERS (data-driven, never hardcoded sequences)
+   ============================================================ */
+function buildReading(lesson){
+  const bank = PHRASES[lesson];
+  const meaning = bank.map(function(p, i){
+    const pool = shuffle(bank.filter(function(_, j){ return j !== i; })).slice(0,3).map(function(x){ return x.en; });
+    const opts = shuffle(pool.concat([p.en]));
+    return {kind:"meaning", zh:p.zh, py:p.py, ask:"What does this sentence mean?", opts:opts, a:opts.indexOf(p.en), speak:p.zh};
+  });
+  const blanks = BLANKS[lesson].map(function(b){
+    const correct = b.opts[b.a];
+    const opts = shuffle(b.opts);
+    return {kind:"blank", zh:b.zh, py:b.py, ask:"Choose the word for the blank — " + b.en, opts:opts, a:opts.indexOf(correct), speak:b.zh.replace("____", correct), full:b.zh.replace("____", correct)};
+  });
+  return shuffle(meaning.concat(blanks));
+}
+function buildListening(lesson){
+  const bank = PHRASES[lesson];
+  return shuffle(bank.map(function(p, i){
+    const pool = shuffle(bank.filter(function(_, j){ return j !== i; })).slice(0,3);
+    const opts = shuffle(pool.concat([p]));
+    return {zh:p.zh, py:p.py, en:p.en, opts:opts, a:opts.indexOf(p)};
+  }));
+}
+
+/* ============================================================
+   SCORE BAR
+   ============================================================ */
+function refreshBar(){
+  const l = state.lesson;
+  $("sScore").textContent = scores.points;
+  $("sCombo").textContent = state.combo;
+  $("sKnown").textContent = scores.known[l].length + "/" + PHRASES[l].length;
+  const r = scores.reading[l], li = scores.listening[l];
+  const n = r.n + li.n, ok = r.ok + li.ok;
+  $("sAcc").textContent = n ? Math.round(ok/n*100) + "%" : "—";
+}
+
+/* ============================================================
+   FLASHCARDS
+   ============================================================ */
+function loadDeck(){
+  state.deck = PHRASES[state.lesson];
+  state.cardIdx = 0;
+  state.flipped = false;
+  renderCard();
+}
+function renderCard(){
+  const p = state.deck[state.cardIdx];
+  const card = $("card");
+  card.classList.remove("flip");
+  state.flipped = false;
+  $("cTag").textContent = "Lesson " + state.lesson;
+  $("cTag2").textContent = "Lesson " + state.lesson;
+  $("cIdx").textContent = (state.cardIdx+1) + " / " + state.deck.length;
+  $("cZh").textContent = p.zh;
+  $("cZh2").textContent = p.zh;
+  $("cPy").textContent = p.py;
+  $("cEn").textContent = p.en;
+  $("cKnown").textContent = scores.known[state.lesson].indexOf(p.zh) > -1 ? "✓ known" : "";
+  refreshBar();
+}
+$("card").addEventListener("click", function(){
+  state.flipped = !state.flipped;
+  $("card").classList.toggle("flip", state.flipped);
+});
+$("nextCard").addEventListener("click", function(){
+  state.cardIdx = (state.cardIdx + 1) % state.deck.length;
+  renderCard();
+});
+$("prevCard").addEventListener("click", function(){
+  state.cardIdx = (state.cardIdx - 1 + state.deck.length) % state.deck.length;
+  renderCard();
+});
+$("playCard").addEventListener("click", function(e){
+  e.stopPropagation();
+  speak(state.deck[state.cardIdx].zh, this);
+});
+$("knowIt").addEventListener("click", function(){
+  const p = state.deck[state.cardIdx];
+  const list = scores.known[state.lesson];
+  if(list.indexOf(p.zh) === -1){
+    list.push(p.zh);
+    scores.points += 5;
+    save();
+    if(list.length === PHRASES[state.lesson].length){
+      confetti(90);
+      comboPop("Lesson " + state.lesson + " deck complete!");
+    }
+  }
+  $("cKnown").textContent = "✓ known";
+  refreshBar();
+  setTimeout(function(){
+    state.cardIdx = (state.cardIdx + 1) % state.deck.length;
+    renderCard();
+  }, 450);
+});
+$("againIt").addEventListener("click", function(){
+  const p = state.deck[state.cardIdx];
+  const list = scores.known[state.lesson];
+  const at = list.indexOf(p.zh);
+  if(at > -1){ list.splice(at,1); save(); }
+  $("cKnown").textContent = "";
+  refreshBar();
+  setTimeout(function(){
+    state.cardIdx = (state.cardIdx + 1) % state.deck.length;
+    renderCard();
+  }, 300);
+});
+
+/* ============================================================
+   READING MCQ
+   ============================================================ */
+function loadReading(){
+  state.reading.list = buildReading(state.lesson);
+  state.reading.i = 0;
+  renderReading();
+}
+function renderReading(){
+  const q = state.reading.list[state.reading.i];
+  state.reading.locked = false;
+  $("rTag").textContent = "Reading · Lesson " + state.lesson;
+  $("rProg").textContent = (state.reading.i+1) + " / " + state.reading.list.length;
+  $("rZh").textContent = q.zh;
+  $("rPy").textContent = q.py;
+  $("rAsk").textContent = q.ask;
+  $("rFb").innerHTML = "";
+  const box = $("rOpts");
+  box.innerHTML = "";
+  q.opts.forEach(function(o, i){
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.textContent = o;
+    b.addEventListener("click", function(){ answerReading(i, b); });
+    box.appendChild(b);
+  });
+  refreshBar();
+}
+function answerReading(i, btn){
+  if(state.reading.locked) return;
+  state.reading.locked = true;
+  const q = state.reading.list[state.reading.i];
+  const stat = scores.reading[state.lesson];
+  stat.n++;
+  const btns = $("rOpts").querySelectorAll(".opt");
+  btns.forEach(function(b){ b.disabled = true; });
+  if(i === q.a){
+    stat.ok++;
+    state.combo++;
+    scores.points += 10 + Math.min(state.combo, 5) * 2;
+    btn.classList.add("right");
+    $("rFb").innerHTML = "对！ Correct" + (q.full ? "<span class='ans'>" + q.full + "</span>" : "");
+    if(state.combo > 0 && state.combo % 3 === 0){ comboPop("连对 " + state.combo + "!"); confetti(28); }
+    speak(q.speak, null);
+    setTimeout(nextReading, 1400);
+  }else{
+    state.combo = 0;
+    btn.classList.add("wrong");
+    btns[q.a].classList.add("right");
+    $("rFb").innerHTML = "再试一次 Not quite<span class='ans'>" + (q.full || q.zh) + " — " + q.opts[q.a] + "</span>";
+    setTimeout(nextReading, 2200);
+  }
+  save();
+  refreshBar();
+}
+function nextReading(){
+  if(state.mode !== "reading") return;
+  state.reading.i++;
+  if(state.reading.i >= state.reading.list.length){
+    confetti(70);
+    comboPop("Reading set done!");
+    loadReading();
+    return;
+  }
+  renderReading();
+}
+$("rNext").addEventListener("click", function(){
+  state.reading.i = (state.reading.i + 1) % state.reading.list.length;
+  renderReading();
+});
+$("rPlay").addEventListener("click", function(){
+  const q = state.reading.list[state.reading.i];
+  speak(q.speak, this);
+});
+
+/* ============================================================
+   LISTENING MCQ
+   ============================================================ */
+function loadListening(){
+  state.listening.list = buildListening(state.lesson);
+  state.listening.i = 0;
+  renderListening(true);
+}
+function renderListening(auto){
+  const q = state.listening.list[state.listening.i];
+  state.listening.locked = false;
+  $("lTag").textContent = "Listening · Lesson " + state.lesson;
+  $("lProg").textContent = (state.listening.i+1) + " / " + state.listening.list.length;
+  $("lFb").innerHTML = "";
+  const box = $("lOpts");
+  box.innerHTML = "";
+  q.opts.forEach(function(o, i){
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.innerHTML = o.zh + "<span class='o-py'>" + o.py + "</span>";
+    b.addEventListener("click", function(){ answerListening(i, b); });
+    box.appendChild(b);
+  });
+  refreshBar();
+  if(auto) setTimeout(function(){ speak(q.zh, $("lPlay")); }, 350);
+}
+function answerListening(i, btn){
+  if(state.listening.locked) return;
+  state.listening.locked = true;
+  const q = state.listening.list[state.listening.i];
+  const stat = scores.listening[state.lesson];
+  stat.n++;
+  const btns = $("lOpts").querySelectorAll(".opt");
+  btns.forEach(function(b){ b.disabled = true; });
+  if(i === q.a){
+    stat.ok++;
+    state.combo++;
+    scores.points += 10 + Math.min(state.combo, 5) * 2;
+    btn.classList.add("right");
+    $("lFb").innerHTML = "对！ Correct<span class='ans'>" + q.en + "</span>";
+    if(state.combo > 0 && state.combo % 3 === 0){ comboPop("连对 " + state.combo + "!"); confetti(28); }
+    setTimeout(nextListening, 1200);
+  }else{
+    state.combo = 0;
+    btn.classList.add("wrong");
+    btns[q.a].classList.add("right");
+    $("lFb").innerHTML = "再听一次 Not quite<span class='ans'>" + q.zh + " — " + q.en + "</span>";
+    setTimeout(nextListening, 2000);
+  }
+  save();
+  refreshBar();
+}
+function nextListening(){
+  if(state.mode !== "listening") return;
+  state.listening.i++;
+  if(state.listening.i >= state.listening.list.length){
+    confetti(70);
+    comboPop("Listening set done!");
+    loadListening();
+    return;
+  }
+  renderListening(true);
+}
+$("lNext").addEventListener("click", function(){
+  state.listening.i = (state.listening.i + 1) % state.listening.list.length;
+  renderListening(true);
+});
+$("lPlay").addEventListener("click", function(){
+  speak(state.listening.list[state.listening.i].zh, this);
+});
+$("lRepeat").addEventListener("click", function(){
+  speak(state.listening.list[state.listening.i].zh, $("lPlay"));
+});
+
+/* ============================================================
+   SCOREBOARD
+   ============================================================ */
+function renderBoard(){
+  const body = $("boardBody");
+  body.innerHTML = "";
+  LESSONS.forEach(function(l){
+    const total = PHRASES[l].length;
+    const k = scores.known[l].length;
+    const r = scores.reading[l], li = scores.listening[l];
+    const pts = k*5;
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      "<td><b>Lesson " + l + "</b><div class='bar'><i style='width:" + Math.round(k/total*100) + "%'></i></div></td>" +
+      "<td class='num'>" + k + " / " + total + "</td>" +
+      "<td class='num'>" + r.ok + " / " + r.n + "</td>" +
+      "<td class='num'>" + li.ok + " / " + li.n + "</td>" +
+      "<td class='num'>" + (pts + r.ok*10 + li.ok*10) + "</td>";
+    body.appendChild(tr);
+  });
+  const tr = document.createElement("tr");
+  tr.innerHTML = "<td colspan='4'><b>Total points earned</b></td><td class='num' style='color:var(--seal)'>" + scores.points + "</td>";
+  body.appendChild(tr);
+}
+$("resetScores").addEventListener("click", function(){
+  scores = blankScores();
+  state.combo = 0;
+  save();
+  renderBoard();
+  refreshBar();
+});
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function buildLessonChips(){
+  const box = $("lessonChips");
+  box.innerHTML = "";
+  LESSONS.forEach(function(l){
+    const b = document.createElement("button");
+    b.className = "chip" + (l === state.lesson ? " on" : "");
+    b.textContent = "Lesson " + l;
+    b.title = LESSON_TITLE[l];
+    b.addEventListener("click", function(){
+      state.lesson = l;
+      state.combo = 0;
+      buildLessonChips();
+      refreshMode();
+    });
+    box.appendChild(b);
+  });
+}
+function refreshMode(){
+  document.querySelectorAll(".panel").forEach(function(p){ p.classList.remove("on"); });
+  $("p-" + state.mode).classList.add("on");
+  if(window.speechSynthesis) speechSynthesis.cancel();
+  if(state.mode === "cards") loadDeck();
+  if(state.mode === "reading") loadReading();
+  if(state.mode === "listening") loadListening();
+  if(state.mode === "scores") renderBoard();
+  refreshBar();
+}
+document.querySelectorAll("#modeChips .chip").forEach(function(c){
+  c.addEventListener("click", function(){
+    document.querySelectorAll("#modeChips .chip").forEach(function(x){ x.classList.remove("on"); });
+    c.classList.add("on");
+    state.mode = c.dataset.mode;
+    refreshMode();
+  });
+});
+
+/* keyboard shortcuts on flashcards */
+document.addEventListener("keydown", function(e){
+  if(state.mode !== "cards") return;
+  if(e.code === "Space"){ e.preventDefault(); $("card").click(); }
+  if(e.code === "ArrowRight") $("nextCard").click();
+  if(e.code === "ArrowLeft") $("prevCard").click();
+});
+
+/* boot */
+buildLessonChips();
+refreshMode();
+</script>
+</body>
+</html>
