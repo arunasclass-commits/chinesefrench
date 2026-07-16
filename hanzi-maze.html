@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>汉字迷宫 · Hanzi Maze</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101E1A;
+    --ink-2:#182C26;
+    --paper:#F6EFDD;
+    --paper-2:#EDE2C7;
+    --lacquer:#B33A22;
+    --lacquer-dk:#7C2412;
+    --jade:#2F7D6A;
+    --jade-lt:#4FA88F;
+    --gold:#E5A93C;
+    --brush:#1D1A14;
+    --cell:40px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    background:
+      radial-gradient(circle at 50% 34%, rgba(229,169,60,.10), transparent 46%),
+      radial-gradient(circle at 50% 34%, rgba(79,168,143,.10), transparent 62%),
+      var(--ink);
+    color:var(--paper);
+    font-family:"Baloo 2","Noto Sans SC",system-ui,sans-serif;
+    display:flex;justify-content:center;
+    padding:10px 10px 18px;
+    overflow-x:hidden;
+  }
+  .app{width:100%;max-width:480px;display:flex;flex-direction:column;gap:10px}
+
+  /* ---------- masthead ---------- */
+  .masthead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .wordmark{font-family:"Noto Sans SC";font-weight:700;font-size:20px;letter-spacing:.12em;color:var(--gold);line-height:1.1}
+  .wordmark small{display:block;font-family:"Baloo 2";font-weight:700;font-size:9px;letter-spacing:.28em;color:var(--jade-lt);text-transform:uppercase}
+  .stats{display:flex;gap:14px;margin-left:auto;font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(246,239,221,.5);text-align:center}
+  .stats b{display:block;font-size:18px;letter-spacing:0;color:var(--paper);text-transform:none}
+  .swap{
+    flex:none;width:42px;height:42px;border:0;border-radius:50%;cursor:pointer;
+    background:var(--ink-2);color:var(--gold);
+    font-family:"Noto Sans SC";font-weight:700;font-size:19px;
+    box-shadow:0 3px 0 #0A1512, inset 0 0 0 1px rgba(229,169,60,.45);
+  }
+  .swap:active{transform:translateY(2px);box-shadow:0 1px 0 #0A1512, inset 0 0 0 1px rgba(229,169,60,.45)}
+
+  /* ---------- prompt ---------- */
+  .prompt{
+    display:flex;align-items:center;gap:12px;
+    background:linear-gradient(180deg,var(--paper) 0%,var(--paper-2) 100%);
+    color:var(--brush);border-radius:14px;padding:10px 12px;
+    box-shadow:0 6px 0 rgba(0,0,0,.28);
+  }
+  .prompt .eyebrow{font-size:10px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--lacquer)}
+  .prompt .word{font-size:26px;font-weight:800;line-height:1.05}
+  .prompt .revealed{font-family:"Noto Sans SC";font-weight:500;font-size:14px;color:var(--jade);min-height:18px}
+  .speak{
+    margin-left:auto;flex:none;width:52px;height:52px;border:0;border-radius:50%;
+    background:var(--jade);color:var(--paper);font-size:22px;cursor:pointer;
+    box-shadow:0 4px 0 #1D5548;
+  }
+  .speak:active{transform:translateY(3px);box-shadow:0 1px 0 #1D5548}
+
+  /* ---------- progress ---------- */
+  .pips{display:flex;gap:5px}
+  .pip{flex:1;height:5px;border-radius:99px;background:rgba(246,239,221,.14)}
+  .pip.on{background:var(--gold)}
+
+  /* ---------- board ---------- */
+  .board-wrap{position:relative;display:flex;justify-content:center}
+  .board{
+    position:relative;width:min(100%, 52vh);aspect-ratio:1;
+    border:7px solid var(--lacquer-dk);border-radius:14px;
+    background:var(--paper);overflow:hidden;
+    box-shadow:0 0 0 2px var(--gold), 0 14px 34px rgba(0,0,0,.5);
+    touch-action:none;
+  }
+  .board.nope{animation:nope .32s}
+  @keyframes nope{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+  .grid{position:absolute;inset:0;display:grid}
+  .cell{position:relative}
+  .cell.wall{
+    background:
+      linear-gradient(135deg,transparent 45%,rgba(229,169,60,.28) 45% 55%,transparent 55%),
+      linear-gradient(45deg,transparent 45%,rgba(229,169,60,.28) 45% 55%,transparent 55%),
+      var(--lacquer);
+  }
+  .cell.path{background:var(--paper)}
+
+  .lantern{
+    position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    border-radius:38% 38% 44% 44%/30% 30% 38% 38%;
+    background:linear-gradient(180deg,#D9542F,#A82A16);
+    border:1.5px solid var(--gold);
+    color:#FFF6DE;font-family:"Noto Sans SC";font-weight:700;line-height:1;
+    box-shadow:0 0 12px rgba(229,169,60,.45);
+    animation:sway 2.6s ease-in-out infinite;
+  }
+  .lantern .py{font-family:"Baloo 2";font-weight:700;color:var(--gold);margin-top:2px}
+  .lantern.spent{filter:grayscale(1);opacity:.35;animation:none}
+  @keyframes sway{50%{transform:translateY(-3px) rotate(-2.5deg)}}
+
+  .runner{
+    position:absolute;display:flex;align-items:center;justify-content:center;
+    transition:left .11s linear, top .11s linear;z-index:3;
+  }
+  .runner span{animation:hop 1.1s ease-in-out infinite;display:block}
+  @keyframes hop{50%{transform:translateY(-9%) scale(1.05)}}
+
+  .spark{position:absolute;z-index:4;pointer-events:none;font-family:"Noto Sans SC";font-weight:700;
+    color:var(--gold);animation:spark .8s ease-out forwards}
+  @keyframes spark{to{transform:translateY(-34px) scale(1.5);opacity:0}}
+
+  /* ---------- toast ---------- */
+  .toast{
+    min-height:34px;display:flex;align-items:center;justify-content:center;text-align:center;
+    font-weight:600;font-size:14px;color:var(--gold);padding:0 6px;
+  }
+  .toast .zh{font-family:"Noto Sans SC"}
+
+  /* ---------- dpad ---------- */
+  .dpad{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(2,54px);
+    gap:7px;justify-content:center}
+  .dpad button{
+    border:0;border-radius:12px;background:var(--ink-2);color:var(--jade-lt);
+    font-size:21px;font-weight:800;cursor:pointer;
+    box-shadow:0 4px 0 #0A1512, inset 0 0 0 1px rgba(79,168,143,.28);
+  }
+  .dpad button:active{transform:translateY(3px);box-shadow:0 1px 0 #0A1512, inset 0 0 0 1px rgba(79,168,143,.28)}
+  .dpad .up{grid-column:2}
+  .hint{text-align:center;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(246,239,221,.32)}
+
+  /* ---------- overlays ---------- */
+  .veil{
+    position:fixed;inset:0;z-index:20;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    padding:16px 16px 28px;
+    background:rgba(9,17,15,.94);backdrop-filter:blur(3px);
+  }
+  .veil[hidden]{display:none}
+  .card{width:100%;max-width:420px;margin:0 auto;text-align:center}
+  .card h1{font-family:"Noto Sans SC";font-size:30px;font-weight:700;color:var(--gold);letter-spacing:.1em}
+  .card h1 + p{font-size:11px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--jade-lt);margin-bottom:12px}
+  .card h2{font-size:26px;font-weight:800;color:var(--paper);margin-bottom:4px}
+  .card .lede{font-size:13px;color:rgba(246,239,221,.62);margin-bottom:14px;line-height:1.45}
+  .label{font-size:10px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(246,239,221,.4);margin:0 0 6px;text-align:left}
+  .sets{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}
+  .set{
+    border:0;border-radius:12px;padding:8px 6px;cursor:pointer;text-align:center;
+    background:var(--ink-2);color:var(--paper);box-shadow:inset 0 0 0 1px rgba(246,239,221,.14);
+  }
+  .set .zh{display:block;font-family:"Noto Sans SC";font-weight:700;font-size:17px}
+  .set .en{display:block;font-family:"Baloo 2";font-weight:600;font-size:11px;color:rgba(246,239,221,.5);margin-top:2px}
+  .set[aria-pressed="true"]{background:var(--jade);box-shadow:inset 0 0 0 2px var(--gold)}
+  .set[aria-pressed="true"] .en{color:rgba(255,255,255,.8)}
+  .switch{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    background:var(--ink-2);border-radius:12px;padding:9px 12px;margin-bottom:12px;text-align:left}
+  .switch p{font-size:13px;font-weight:700}
+  .switch small{display:block;font-family:"Baloo 2";font-weight:500;font-size:11px;color:rgba(246,239,221,.45)}
+  .switch input{width:48px;height:27px;appearance:none;background:rgba(246,239,221,.18);border-radius:99px;position:relative;cursor:pointer;flex:none}
+  .switch input:checked{background:var(--jade)}
+  .switch input::after{content:"";position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:var(--paper);transition:.16s}
+  .switch input:checked::after{left:24px}
+  .go{
+    width:100%;border:0;border-radius:14px;padding:15px;cursor:pointer;
+    background:var(--lacquer);color:#FFF6DE;font-family:"Baloo 2";font-weight:800;font-size:19px;letter-spacing:.04em;
+    box-shadow:0 5px 0 var(--lacquer-dk);
+  }
+  .go:active{transform:translateY(4px);box-shadow:0 1px 0 var(--lacquer-dk)}
+  .ghost{background:none;border:0;color:rgba(246,239,221,.42);font-family:"Baloo 2";font-weight:700;font-size:13px;margin-top:12px;cursor:pointer;text-decoration:underline}
+  .recap{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:18px}
+  .chip{background:var(--ink-2);border-radius:9px;padding:7px 10px;box-shadow:inset 0 0 0 1px rgba(229,169,60,.28)}
+  .chip .zh{font-family:"Noto Sans SC";font-weight:700;font-size:17px;color:var(--paper)}
+  .chip .py{display:block;font-size:10px;font-weight:700;color:var(--gold)}
+  button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="masthead">
+    <div class="wordmark">汉字迷宫<small>Hanzi Maze</small></div>
+    <div class="stats">
+      <div>Level<b id="lvl">1</b></div>
+      <div>Score<b id="score">0</b></div>
+    </div>
+    <button class="swap" id="home" title="Change word family" aria-label="Change word family">换</button>
+  </div>
+
+  <div class="prompt">
+    <div>
+      <div class="eyebrow">Find the word for</div>
+      <div class="word" id="target">cat</div>
+      <div class="revealed" id="revealed"></div>
+    </div>
+    <button class="speak" id="speak" aria-label="Hear the word in Chinese">🔊</button>
+  </div>
+
+  <div class="pips" id="pips"></div>
+
+  <div class="board-wrap">
+    <div class="board" id="board">
+      <div class="grid" id="grid"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Reach the right lantern.</div>
+
+  <div class="dpad">
+    <button class="up" data-dir="up" aria-label="Move up">▲</button>
+    <button data-dir="left" aria-label="Move left">◀</button>
+    <button data-dir="down" aria-label="Move down">▼</button>
+    <button data-dir="right" aria-label="Move right">▶</button>
+  </div>
+  <p class="hint">Swipe the maze · or use arrow keys · tap 换 to change words</p>
+</div>
+
+<!-- START -->
+<div class="veil" id="startVeil">
+  <div class="card">
+    <h1>汉字迷宫</h1>
+    <p>Hanzi Maze</p>
+    <p class="lede">Listen to the word, then run through the lattice and grab the lantern with the matching character.</p>
+    <p class="label">Pick a word family</p>
+    <div class="sets" id="sets"></div>
+    <label class="switch">
+      <p>Show pinyin on lanterns<small>Turn off once the characters are known</small></p>
+      <input type="checkbox" id="pyToggle" checked>
+    </label>
+    <button class="go" id="startBtn">Start running</button>
+    <button class="ghost" id="keepBtn" hidden>Keep playing instead</button>
+  </div>
+</div>
+
+<!-- LEVEL DONE -->
+<div class="veil" id="doneVeil" hidden>
+  <div class="card">
+    <h2 id="doneTitle">Level 1 cleared</h2>
+    <p class="lede" id="doneLede">Six words found. The lattice gets tighter from here.</p>
+    <p class="label">Words you caught</p>
+    <div class="recap" id="recap"></div>
+    <button class="go" id="nextBtn">Next level</button>
+    <button class="ghost" id="restartBtn">Change word family</button>
+  </div>
+</div>
+
+<script>
+/* ---------------- on-screen error reporter (mobile debugging) ---------------- */
+window.onerror=function(msg,src,line,col){ showErr(msg+"  (line "+line+":"+col+")"); };
+window.addEventListener("unhandledrejection",e=>showErr("Promise: "+(e.reason&&e.reason.message||e.reason)));
+function showErr(text){
+  let b=document.getElementById("errbar");
+  if(!b){
+    b=document.createElement("div"); b.id="errbar";
+    b.style.cssText="position:fixed;left:0;right:0;bottom:0;z-index:99;background:#B33A22;"+
+      "color:#FFF6DE;font:600 12px/1.4 monospace;padding:8px 10px;word-break:break-word";
+    document.body.appendChild(b);
+  }
+  b.textContent="⚠ "+text;
+}
+
+/* ---------------- vocabulary ---------------- */
+const SETS = {
+  animals:{zh:"动物",en:"Animals",words:[
+    {h:"猫",p:"māo",e:"cat"},{h:"狗",p:"gǒu",e:"dog"},{h:"鸟",p:"niǎo",e:"bird"},
+    {h:"鱼",p:"yú",e:"fish"},{h:"马",p:"mǎ",e:"horse"},{h:"猪",p:"zhū",e:"pig"},
+    {h:"羊",p:"yáng",e:"sheep"},{h:"熊猫",p:"xióngmāo",e:"panda"},
+    {h:"兔子",p:"tùzi",e:"rabbit"},{h:"老虎",p:"lǎohǔ",e:"tiger"}]},
+  food:{zh:"食物",en:"Food",words:[
+    {h:"水",p:"shuǐ",e:"water"},{h:"茶",p:"chá",e:"tea"},{h:"蛋",p:"dàn",e:"egg"},
+    {h:"肉",p:"ròu",e:"meat"},{h:"米饭",p:"mǐfàn",e:"rice"},{h:"面条",p:"miàntiáo",e:"noodles"},
+    {h:"苹果",p:"píngguǒ",e:"apple"},{h:"香蕉",p:"xiāngjiāo",e:"banana"},
+    {h:"牛奶",p:"niúnǎi",e:"milk"},{h:"面包",p:"miànbāo",e:"bread"}]},
+  family:{zh:"家人",en:"Family",words:[
+    {h:"妈妈",p:"māma",e:"mother"},{h:"爸爸",p:"bàba",e:"father"},
+    {h:"哥哥",p:"gēge",e:"older brother"},{h:"姐姐",p:"jiějie",e:"older sister"},
+    {h:"弟弟",p:"dìdi",e:"younger brother"},{h:"妹妹",p:"mèimei",e:"younger sister"},
+    {h:"爷爷",p:"yéye",e:"grandfather"},{h:"奶奶",p:"nǎinai",e:"grandmother"},
+    {h:"家",p:"jiā",e:"home"},{h:"朋友",p:"péngyou",e:"friend"}]},
+  colours:{zh:"颜色",en:"Colours",words:[
+    {h:"红",p:"hóng",e:"red"},{h:"黄",p:"huáng",e:"yellow"},{h:"蓝",p:"lán",e:"blue"},
+    {h:"绿",p:"lǜ",e:"green"},{h:"白",p:"bái",e:"white"},{h:"黑",p:"hēi",e:"black"},
+    {h:"粉",p:"fěn",e:"pink"},{h:"紫",p:"zǐ",e:"purple"},
+    {h:"橙",p:"chéng",e:"orange"},{h:"灰",p:"huī",e:"grey"}]},
+  numbers:{zh:"数字",en:"Numbers",words:[
+    {h:"一",p:"yī",e:"one"},{h:"二",p:"èr",e:"two"},{h:"三",p:"sān",e:"three"},
+    {h:"四",p:"sì",e:"four"},{h:"五",p:"wǔ",e:"five"},{h:"六",p:"liù",e:"six"},
+    {h:"七",p:"qī",e:"seven"},{h:"八",p:"bā",e:"eight"},
+    {h:"九",p:"jiǔ",e:"nine"},{h:"十",p:"shí",e:"ten"}]},
+  nature:{zh:"大自然",en:"Nature",words:[
+    {h:"山",p:"shān",e:"mountain"},{h:"树",p:"shù",e:"tree"},{h:"花",p:"huā",e:"flower"},
+    {h:"太阳",p:"tàiyáng",e:"sun"},{h:"月亮",p:"yuèliang",e:"moon"},{h:"星",p:"xīng",e:"star"},
+    {h:"云",p:"yún",e:"cloud"},{h:"雨",p:"yǔ",e:"rain"},
+    {h:"风",p:"fēng",e:"wind"},{h:"海",p:"hǎi",e:"sea"}]}
+};
+const PER_LEVEL = 6;
+const SIZES = [9,9,11,11,13,13,15];
+
+/* ---------------- state ---------------- */
+let setKey="animals", showPinyin=true;
+let level=1, score=0, found=0, caught=[];
+let maze=[], N=9, cellPx=40, pos={r:1,c:1}, lanterns=[], target=null, locked=false;
+
+const $ = id => document.getElementById(id);
+const grid=$("grid"), board=$("board");
+
+/* ---------------- start screen ---------------- */
+let playing=false;
+const setsEl=$("sets");
+Object.entries(SETS).forEach(([k,v])=>{
+  const b=document.createElement("button");
+  b.className="set"; b.dataset.key=k; b.setAttribute("aria-pressed", k===setKey);
+  b.innerHTML=`<span class="zh">${v.zh}</span><span class="en">${v.en}</span>`;
+  b.onclick=()=>{setKey=k;[...setsEl.children].forEach(c=>c.setAttribute("aria-pressed",c===b));};
+  setsEl.appendChild(b);
+});
+
+function openStart(){
+  hush();
+  [...setsEl.children].forEach(b=>b.setAttribute("aria-pressed", b.dataset.key===setKey));
+  $("pyToggle").checked = showPinyin;
+  $("keepBtn").hidden = !playing;
+  $("startBtn").textContent = playing ? "Start this family" : "Start running";
+  $("doneVeil").hidden = true;
+  $("startVeil").hidden = false;
+  try{ scrollTo(0,0); }catch(e){}
+}
+
+$("home").onclick = openStart;
+$("keepBtn").onclick = ()=>{ $("startVeil").hidden=true; };
+
+$("startBtn").onclick=()=>{
+  showPinyin=$("pyToggle").checked;
+  level=1;score=0;found=0;caught=[];playing=true;
+  $("startVeil").hidden=true;
+  newRound();
+};
+$("nextBtn").onclick=()=>{ level++; found=0; caught=[]; $("doneVeil").hidden=true; newRound(); };
+$("restartBtn").onclick=openStart;
+
+/* ---------------- maze ---------------- */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function genMaze(n){
+  const g=Array.from({length:n},()=>Array(n).fill(1));
+  const stack=[[1,1]]; g[1][1]=0;
+  while(stack.length){
+    const [r,c]=stack[stack.length-1];
+    let moved=false;
+    for(const [dr,dc] of shuffle([[-2,0],[2,0],[0,-2],[0,2]])){
+      const nr=r+dr, nc=c+dc;
+      if(nr>0&&nc>0&&nr<n-1&&nc<n-1&&g[nr][nc]===1){
+        g[r+dr/2][c+dc/2]=0; g[nr][nc]=0; stack.push([nr,nc]); moved=true; break;
+      }
+    }
+    if(!moved) stack.pop();
+  }
+  return g;
+}
+
+function distances(g,n,sr,sc){
+  const d=Array.from({length:n},()=>Array(n).fill(-1));
+  const q=[[sr,sc]]; d[sr][sc]=0;
+  while(q.length){
+    const [r,c]=q.shift();
+    for(const [dr,dc] of [[1,0],[-1,0],[0,1],[0,-1]]){
+      const nr=r+dr,nc=c+dc;
+      if(nr>=0&&nc>=0&&nr<n&&nc<n&&g[nr][nc]===0&&d[nr][nc]<0){d[nr][nc]=d[r][c]+1;q.push([nr,nc]);}
+    }
+  }
+  return d;
+}
+
+/* ---------------- round ---------------- */
+function newRound(){
+  N = SIZES[Math.min(level-1, SIZES.length-1)];
+  maze = genMaze(N);
+  pos = {r:1,c:1};
+  locked=false;
+
+  const pool = shuffle(SETS[setKey].words.slice());
+  const picks = pool.slice(0,3);
+  target = picks[0];
+
+  // candidate cells: dead ends, farthest first
+  const d = distances(maze,N,1,1);
+  const cands=[];
+  for(let r=1;r<N-1;r++) for(let c=1;c<N-1;c++){
+    if(maze[r][c]!==0 || (r===1&&c===1)) continue;
+    let open=0;
+    for(const [dr,dc] of [[1,0],[-1,0],[0,1],[0,-1]]) if(maze[r+dr][c+dc]===0) open++;
+    if(open===1) cands.push({r,c,d:d[r][c]});
+  }
+  cands.sort((a,b)=>b.d-a.d);
+  let spots = cands.slice(0, Math.max(3, Math.ceil(cands.length/2)));
+  spots = shuffle(spots).slice(0,3);
+  while(spots.length<3){
+    const r=1+2*(Math.random()*((N-1)/2)|0), c=1+2*(Math.random()*((N-1)/2)|0);
+    if(!(r===1&&c===1) && !spots.some(s=>s.r===r&&s.c===c)) spots.push({r,c});
+  }
+  shuffle(spots);
+  lanterns = picks.map((w,i)=>({...spots[i], word:w, spent:false}));
+
+  render();
+  $("target").textContent = target.e;
+  $("revealed").textContent = "";
+  say(target.h);
+  toast("Reach the right lantern.");
+}
+
+function render(){
+  board.querySelectorAll(".lantern,.runner,.spark").forEach(n=>n.remove());
+  grid.innerHTML="";
+  grid.style.gridTemplateColumns=`repeat(${N},1fr)`;
+  grid.style.gridTemplateRows=`repeat(${N},1fr)`;
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+    const d=document.createElement("div");
+    d.className="cell "+(maze[r][c]?"wall":"path");
+    grid.appendChild(d);
+  }
+  sizeUp();
+  lanterns.forEach(l=>{
+    const el=document.createElement("div");
+    el.className="lantern";
+    el.innerHTML=`<div class="ch">${l.word.h}</div>`+(showPinyin?`<div class="py">${l.word.p}</div>`:"");
+    board.appendChild(el);
+    l.el=el;
+  });
+  const runner=document.createElement("div");
+  runner.className="runner"; runner.id="runner";
+  runner.innerHTML="<span>🐼</span>";
+  board.appendChild(runner);
+  placeAll();
+  drawPips();
+}
+
+function sizeUp(){
+  const w = board.clientWidth || board.getBoundingClientRect().width || 320;
+  cellPx = w / N;
+}
+
+function placeAll(){
+  sizeUp();
+  lanterns.forEach(l=>{
+    const s=cellPx*1.02;
+    l.el.style.width=s+"px"; l.el.style.height=s+"px";
+    l.el.style.left=(l.c*cellPx-(s-cellPx)/2)+"px";
+    l.el.style.top=(l.r*cellPx-(s-cellPx)/2)+"px";
+    const multi=l.word.h.length>1;
+    l.el.querySelector(".ch").style.fontSize=(cellPx*(multi?(showPinyin?.34:.42):(showPinyin?.5:.62)))+"px";
+    const py=l.el.querySelector(".py"); if(py) py.style.fontSize=Math.max(7,cellPx*.19)+"px";
+  });
+  const runner=$("runner");
+  if(runner){
+    runner.style.width=cellPx+"px"; runner.style.height=cellPx+"px";
+    runner.style.fontSize=(cellPx*.72)+"px";
+    runner.style.left=(pos.c*cellPx)+"px";
+    runner.style.top=(pos.r*cellPx)+"px";
+  }
+}
+addEventListener("resize", ()=>{ if(lanterns.length) placeAll(); });
+
+function drawPips(){
+  const p=$("pips"); p.innerHTML="";
+  for(let i=0;i<PER_LEVEL;i++){
+    const d=document.createElement("div");
+    d.className="pip"+(i<found?" on":"");
+    p.appendChild(d);
+  }
+  $("lvl").textContent=level; $("score").textContent=score;
+}
+
+/* ---------------- movement ---------------- */
+const DIRS={up:[-1,0],down:[1,0],left:[0,-1],right:[0,1]};
+function move(dir){
+  if(locked||!maze.length) return;
+  if(!$("startVeil").hidden || !$("doneVeil").hidden) return;
+  const [dr,dc]=DIRS[dir];
+  const nr=pos.r+dr, nc=pos.c+dc;
+  if(nr<0||nc<0||nr>=N||nc>=N||maze[nr][nc]===1) return;
+  pos={r:nr,c:nc};
+  const runner=$("runner");
+  runner.style.left=(nc*cellPx)+"px";
+  runner.style.top=(nr*cellPx)+"px";
+  const hit=lanterns.find(l=>!l.spent&&l.r===nr&&l.c===nc);
+  if(hit) collect(hit);
+}
+
+function collect(l){
+  if(l.word.h===target.h){
+    locked=true;
+    score+=10; found++; caught.push(l.word);
+    l.el.style.animation="none";
+    l.el.style.transform="scale(1.35)";
+    burst(l);
+    $("revealed").textContent=`${l.word.h} · ${l.word.p}`;
+    say(l.word.h);
+    toast(`Got it — <span class="zh">${l.word.h}</span> ${l.word.p} · ${l.word.e}`);
+    drawPips();
+    setTimeout(()=>{
+      if(found>=PER_LEVEL) finishLevel(); else newRound();
+    },1150);
+  }else{
+    l.spent=true;
+    l.el.classList.add("spent");
+    board.classList.add("nope");
+    setTimeout(()=>board.classList.remove("nope"),340);
+    say(l.word.h);
+    toast(`That one is <span class="zh">${l.word.h}</span> ${l.word.p} — ${l.word.e}. Keep looking for “${target.e}”.`);
+  }
+}
+
+function burst(l){
+  for(let i=0;i<5;i++){
+    const s=document.createElement("div");
+    s.className="spark"; s.textContent="✦";
+    s.style.fontSize=(cellPx*.4)+"px";
+    s.style.left=(l.c*cellPx + (Math.random()*cellPx-cellPx/2))+"px";
+    s.style.top=(l.r*cellPx)+"px";
+    s.style.animationDelay=(i*40)+"ms";
+    board.appendChild(s);
+    setTimeout(()=>s.remove(),900);
+  }
+}
+
+function finishLevel(){
+  $("doneTitle").textContent=`Level ${level} cleared`;
+  $("doneLede").textContent = level>=SIZES.length
+    ? `Six more words found. This is the widest lattice — keep your score climbing.`
+    : `Six words found. The lattice gets tighter from here.`;
+  const rec=$("recap"); rec.innerHTML="";
+  caught.forEach(w=>{
+    const c=document.createElement("button");
+    c.className="chip";
+    c.innerHTML=`<span class="zh">${w.h}</span><span class="py">${w.p}</span>`;
+    c.onclick=()=>say(w.h);
+    rec.appendChild(c);
+  });
+  $("doneVeil").hidden=false;
+}
+
+function toast(html){ $("toast").innerHTML=html; }
+
+/* ---------------- speech ---------------- */
+let voice=null;
+const canSpeak = (()=>{ try{ return typeof window.speechSynthesis!=="undefined"
+  && typeof window.SpeechSynthesisUtterance!=="undefined"; }catch(e){ return false; } })();
+function pickVoice(){
+  if(!canSpeak) return;
+  try{
+    const v=speechSynthesis.getVoices()||[];
+    voice = v.find(x=>x.lang==="zh-CN") || v.find(x=>x.lang&&x.lang.toLowerCase().startsWith("zh")) || null;
+  }catch(e){ voice=null; }
+}
+if(canSpeak){
+  pickVoice();
+  try{ speechSynthesis.onvoiceschanged=pickVoice; }catch(e){}
+}else{
+  $("speak").style.display="none";
+}
+function say(text){
+  if(!canSpeak) return;
+  try{
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang="zh-CN"; u.rate=.8;
+    if(voice) u.voice=voice;
+    speechSynthesis.speak(u);
+  }catch(e){ /* audio unavailable — the game keeps working */ }
+}
+function hush(){ if(!canSpeak) return; try{ speechSynthesis.cancel(); }catch(e){} }
+$("speak").onclick=()=>{ if(target) say(target.h); };
+
+/* ---------------- input ---------------- */
+addEventListener("keydown",e=>{
+  const k={ArrowUp:"up",ArrowDown:"down",ArrowLeft:"left",ArrowRight:"right",
+           w:"up",s:"down",a:"left",d:"right",W:"up",S:"down",A:"left",D:"right"}[e.key];
+  if(k){ e.preventDefault(); move(k); }
+});
+document.querySelectorAll(".dpad button").forEach(b=>{
+  b.addEventListener("click",()=>move(b.dataset.dir));
+});
+let sx=0,sy=0;
+board.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+board.addEventListener("touchend",e=>{
+  const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)<18&&Math.abs(dy)<18) return;
+  move(Math.abs(dx)>Math.abs(dy) ? (dx>0?"right":"left") : (dy>0?"down":"up"));
+},{passive:true});
+</script>
+</body>
+</html>
