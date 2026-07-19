@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<!--
+  Aruna's Classes · ChineseFrench — New HSK 3.0 Level 1 · Lessons 1–5
+  听力 + 阅读 Listening & Reading Test (survival topics)
+  Listening audio via the browser Web Speech API (zh-CN). Self-contained, offline UI.
+  © 2026 RRAruna Enterprises · ChineseFrench · Aruna's Classes. All Rights Reserved.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aruna's Classes · ChineseFrench — HSK1 L1–5 Listening & Reading Test</title>
+<style>
+:root{--red:#a2231d;--red-dark:#7a1a15;--gold:#c99a2e;--gold-light:#f3e3b3;--cream:#fbf6ea;--ink:#2b1a12;--green:#2e7d32;--green-bg:#e3f5e1;--gray:#8a7f6e;--radius:14px;--shadow:0 4px 14px rgba(122,26,21,.15);}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{font-family:"Segoe UI",Helvetica,Arial,sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;}
+.app-header{background:linear-gradient(135deg,var(--red),var(--red-dark));padding:14px 14px 12px;text-align:center;border-bottom:4px solid var(--gold);}
+.logo-wrap{max-width:520px;margin:0 auto 8px;}
+.logo-wrap svg{width:100%;height:auto;display:block;}
+.app-header .lesson-title{color:#fff;font-size:.98rem;margin-top:4px;font-weight:600;}
+.student-bar{max-width:720px;margin:8px auto 0;display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;}
+.student-bar input{padding:8px 12px;border-radius:20px;border:none;font-size:.9rem;width:200px;}
+.badge{background:var(--gold);color:var(--red-dark);font-weight:700;padding:6px 12px;border-radius:20px;font-size:.82rem;}
+nav.tabs{display:flex;gap:6px;padding:10px 10px 0;max-width:900px;margin:0 auto;justify-content:center;flex-wrap:wrap;}
+nav.tabs button{background:#fff;border:2px solid var(--gold);color:var(--red-dark);padding:9px 18px;border-radius:20px 20px 0 0;font-weight:700;font-size:.9rem;cursor:pointer;}
+nav.tabs button.active{background:var(--red);color:#fff;border-color:var(--red);}
+main{max-width:760px;margin:0 auto;padding:16px 14px 70px;}
+.panel{display:none;} .panel.active{display:block;animation:fade .25s;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+.card{background:#fff;border:1px solid var(--gold-light);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:16px;}
+.card h2{margin-top:0;color:var(--red-dark);border-bottom:2px solid var(--gold-light);padding-bottom:8px;font-size:1.1rem;}
+.note{font-size:.82rem;color:var(--gray);background:var(--gold-light);padding:8px 10px;border-radius:8px;margin-bottom:10px;}
+.btn{background:var(--red);color:#fff;border:none;padding:10px 16px;border-radius:16px;font-size:.85rem;cursor:pointer;font-weight:600;margin:3px;}
+.btn:hover{background:var(--red-dark);}
+.btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+.btn.gold{background:var(--gold);color:var(--red-dark);}
+.btn.outline{background:#fff;color:var(--red);border:2px solid var(--red);}
+.btn.big{font-size:1rem;padding:12px 26px;}
+.btn:disabled{opacity:.45;cursor:not-allowed;}
+.qcount{font-size:.78rem;color:var(--gray);margin-bottom:6px;}
+.progress-wrap{height:8px;background:var(--gold-light);border-radius:6px;overflow:hidden;margin-bottom:12px;}
+.progress-bar{height:100%;background:var(--red);width:0;transition:width .25s;}
+.play-stage{text-align:center;background:var(--cream);border:2px dashed var(--gold);border-radius:12px;padding:22px 14px;margin-bottom:14px;}
+.play-btn{font-size:1.1rem;background:var(--gold);color:var(--red-dark);border:none;border-radius:40px;padding:14px 30px;font-weight:800;cursor:pointer;}
+.play-btn:hover{filter:brightness(.96);}
+.play-hint{font-size:.8rem;color:var(--gray);margin-top:10px;}
+.reveal-zh{font-size:1.4rem;font-weight:700;color:var(--red-dark);letter-spacing:.1em;margin-top:12px;min-height:1.4em;}
+.reveal-zh .py{display:block;font-size:.9rem;color:var(--green);font-weight:600;font-style:italic;letter-spacing:0;margin-top:2px;}
+.read-stage{text-align:center;background:var(--cream);border:2px dashed var(--gold);border-radius:12px;padding:20px 14px;margin-bottom:14px;}
+.read-zh{font-size:1.9rem;font-weight:700;color:var(--red-dark);letter-spacing:.1em;}
+.read-py{font-size:.95rem;color:var(--gray);font-style:italic;margin-top:6px;}
+.read-emoji{font-size:3.2rem;margin:6px 0;}
+.src-tag{display:inline-block;background:var(--gold-light);color:var(--red-dark);font-size:.68rem;padding:2px 8px;border-radius:10px;font-weight:700;margin-top:8px;}
+.opt-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:8px;}
+.opt-emoji{background:#fff;border:2px solid var(--gold-light);border-radius:12px;padding:14px 4px;font-size:2.4rem;cursor:pointer;text-align:center;}
+.opt-emoji:hover:not(:disabled){border-color:var(--gold);}
+.opt-emoji:focus-visible{outline:3px solid var(--gold);}
+.opt-emoji.correct{background:var(--green-bg);border-color:var(--green);}
+.opt-emoji.wrong{background:#fbe3e1;border-color:var(--red);}
+.mc-opt{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--gold-light);border-radius:8px;padding:11px 12px;margin:7px 0;cursor:pointer;font-size:1rem;font-family:inherit;color:var(--ink);}
+.mc-opt:hover:not(:disabled){border-color:var(--gold);}
+.mc-opt:focus-visible{outline:3px solid var(--gold);}
+.mc-opt .py{color:var(--gray);font-style:italic;font-size:.85rem;margin-left:6px;}
+.mc-opt.correct{background:var(--green-bg);border-color:var(--green);font-weight:700;}
+.mc-opt.wrong{background:#fbe3e1;border-color:var(--red);}
+.tf-row{display:flex;gap:12px;justify-content:center;margin-top:8px;}
+.tf-btn{flex:1;max-width:150px;font-size:1.4rem;background:#fff;border:2px solid var(--gold);border-radius:12px;padding:14px;cursor:pointer;font-weight:800;color:var(--red-dark);}
+.tf-btn.correct{background:var(--green-bg);border-color:var(--green);}
+.tf-btn.wrong{background:#fbe3e1;border-color:var(--red);}
+.feedback{margin-top:12px;padding:10px 12px;border-radius:8px;font-size:.92rem;display:none;}
+.feedback.ok{background:var(--green-bg);border:1px solid var(--green);display:block;}
+.feedback.no{background:#fbe3e1;border:1px solid var(--red);display:block;}
+.result-box{text-align:center;padding:20px 10px;}
+.gauge{font-size:2.6rem;font-weight:700;color:var(--red-dark);margin:6px 0;}
+.footer-copy{text-align:center;color:var(--gray);font-size:.72rem;padding:16px 10px 40px;}
+.watermark{position:fixed;bottom:6px;right:10px;font-size:.62rem;color:rgba(122,26,21,.3);pointer-events:none;z-index:5;}
+.warn{background:#fff3cd;border:1px solid var(--gold);color:#7a5b00;padding:8px 10px;border-radius:8px;font-size:.8rem;margin-bottom:10px;display:none;}
+.warn.show{display:block;}
+@media (max-width:520px){.read-zh{font-size:1.5rem;}.opt-emoji{font-size:2rem;}}
+</style>
+</head>
+<body>
+<div class="watermark">© 2026 ChineseFrench · Aruna's Classes</div>
+<header class="app-header">
+  <div class="logo-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1000" height="300" viewBox="0 0 1000 300">
+  <defs>
+    <linearGradient id="red" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a2231d"/><stop offset="1" stop-color="#7a1a15"/>
+    </linearGradient>
+  </defs>
+  <rect x="6" y="6" width="988" height="288" rx="34" fill="url(#red)" stroke="#c99a2e" stroke-width="7"/>
+  <!-- left seal -->
+  <circle cx="150" cy="150" r="98" fill="none" stroke="#c99a2e" stroke-width="6"/>
+  <circle cx="150" cy="150" r="86" fill="#fbf6ea"/>
+  <text x="150" y="150" font-family="Noto Serif CJK SC, serif" font-size="118" font-weight="700"
+        fill="#a2231d" text-anchor="middle" dominant-baseline="central">语</text>
+  <!-- wordmark -->
+  <text x="290" y="118" font-family="Georgia, serif" font-size="72" font-weight="700" fill="#fbf6ea">ChineseFrench</text>
+  <line x1="292" y1="150" x2="900" y2="150" stroke="#c99a2e" stroke-width="2"/>
+  <text x="290" y="196" font-family="Noto Serif CJK SC, serif" font-size="40" font-weight="700" fill="#f3e3b3">爱睿娜的课堂 · Aruna's Classes</text>
+  <text x="292" y="238" font-family="Georgia, serif" font-size="27" fill="#e8c98f">中文 Mandarin · Français · Deutsch · HSK Preparation</text>
+</svg>
+</div>
+  <div class="lesson-title">新 HSK 3.0 · 一级 · 第1–5课 · 听力 + 阅读测试 · Listening &amp; Reading Test</div>
+  <div class="student-bar">
+    <input id="studentName" type="text" placeholder="Enter your name..." aria-label="Student name">
+    <span class="badge" id="scoreBadge">🎧 0 · 📖 0</span>
+  </div>
+</header>
+<nav class="tabs" id="tabNav"></nav>
+<main id="mainArea">
+  <div class="panel active" id="panel-listen"></div>
+  <div class="panel" id="panel-read"></div>
+</main>
+<div class="footer-copy">
+  © 2026 RRAruna Enterprises · ChineseFrench · Aruna's Classes. All Rights Reserved.<br>
+  Listening audio uses your device's built-in Chinese voice (Web Speech API).
+</div>
+
+<script>
+const COPYRIGHT="© 2026 RRAruna Enterprises · ChineseFrench · Aruna's Classes. All Rights Reserved.";
+
+/* ---------------- Text-to-speech (listening) ---------------- */
+let zhVoice=null;
+function pickVoice(){
+  const vs=window.speechSynthesis?window.speechSynthesis.getVoices():[];
+  zhVoice=vs.find(v=>/zh(-|_)?CN/i.test(v.lang))||vs.find(v=>/zh/i.test(v.lang))||null;
+}
+if(window.speechSynthesis){ pickVoice(); window.speechSynthesis.onvoiceschanged=pickVoice; }
+function speak(text){
+  if(!window.speechSynthesis){ return; }
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="zh-CN"; u.rate=0.8; u.pitch=1;
+  if(zhVoice) u.voice=zhVoice;
+  window.speechSynthesis.speak(u);
+}
+function ttsAvailable(){ return !!window.speechSynthesis; }
+
+/* ---------------- DATA — survival topics, Lessons 1–5 ---------------- */
+// Listening: {type:'pic', audioZh, audioPy, options:[emoji...], answer, src}
+//            {type:'resp', audioZh, audioPy, options:[{zh,py}], answer, src}
+const LISTEN=[
+  {type:'pic', zh:"我不是老师，我是学生。", py:"Wǒ bú shì lǎoshī, wǒ shì xuésheng.", opts:["🧑‍🎓","👨‍🏫","👶"], ans:0, src:"L1–2 · 否定句"},
+  {type:'pic', zh:"我家有六个人。", py:"Wǒ jiā yǒu liù ge rén.", opts:["👨‍👩‍👧‍👦","👩‍👧","🧑"], ans:0, src:"L3–4 · 数字听辨"},
+  {type:'pic', zh:"现在不是三点，是九点。", py:"Xiànzài bú shì sān diǎn, shì jiǔ diǎn.", opts:["🕘","🕒","🕛"], ans:0, src:"L5 · 时间听辨"},
+  {type:'pic', zh:"我喜欢喝水，不喜欢喝茶。", py:"Wǒ xǐhuan hē shuǐ, bù xǐhuan hē chá.", opts:["💧","🍵","🍚"], ans:0, src:"L5 · 喜好"},
+  {type:'pic', zh:"这是我妈妈，那是我姐姐。", py:"Zhè shì wǒ māma, nà shì wǒ jiějie.", opts:["👩‍👧","👨‍👦","👴"], ans:0, src:"L4 · 指示代词"},
+  {type:'pic', zh:"明天是星期天，不是星期六。", py:"Míngtiān shì xīngqītiān, bú shì xīngqīliù.", opts:["📅","🕐","🍽️"], ans:0, src:"L5 · 星期"},
+  {type:'resp', zh:"你叫什么名字？你是哪国人？", py:"Nǐ jiào shénme míngzi? Nǐ shì nǎ guó rén?", opts:[{zh:"我叫玛丽，我是美国人。",py:"Wǒ jiào Mǎlì, wǒ shì Měiguó rén."},{zh:"我今年八岁。",py:"Wǒ jīnnián bā suì."},{zh:"我家有五个人。",py:"Wǒ jiā yǒu wǔ ge rén."}], ans:0, src:"L2 · 双问句"},
+  {type:'resp', zh:"你家有几个人？都有谁？", py:"Nǐ jiā yǒu jǐ ge rén? Dōu yǒu shéi?", opts:[{zh:"有四个人：爸爸、妈妈、哥哥和我。",py:"Yǒu sì ge rén: bàba, māma, gēge hé wǒ."},{zh:"我是中国人。",py:"Wǒ shì Zhōngguó rén."},{zh:"现在十点。",py:"Xiànzài shí diǎn."}], ans:0, src:"L4 · 家庭"},
+  {type:'resp', zh:"今天几号？星期几？", py:"Jīntiān jǐ hào? Xīngqī jǐ?", opts:[{zh:"今天十二号，星期三。",py:"Jīntiān shí'èr hào, xīngqīsān."},{zh:"我很高兴。",py:"Wǒ hěn gāoxìng."},{zh:"他是我弟弟。",py:"Tā shì wǒ dìdi."}], ans:0, src:"L5 · 日期"},
+  {type:'resp', zh:"你多大了？你姐姐呢？", py:"Nǐ duō dà le? Nǐ jiějie ne?", opts:[{zh:"我九岁，我姐姐十二岁。",py:"Wǒ jiǔ suì, wǒ jiějie shí'èr suì."},{zh:"我叫李中。",py:"Wǒ jiào Lǐ Zhōng."},{zh:"谢谢你。",py:"Xièxie nǐ."}], ans:0, src:"L3 · 年龄对比"},
+  {type:'resp', zh:"现在几点了？我们去吃饭吧。", py:"Xiànzài jǐ diǎn le? Wǒmen qù chī fàn ba.", opts:[{zh:"好，现在十二点，我很饿。",py:"Hǎo, xiànzài shí'èr diǎn, wǒ hěn è."},{zh:"我不是老师。",py:"Wǒ bú shì lǎoshī."},{zh:"她有三个妹妹。",py:"Tā yǒu sān ge mèimei."}], ans:0, src:"L5 · 邀请"},
+  {type:'resp', zh:"对不起，老师！", py:"Duìbuqǐ, lǎoshī!", opts:[{zh:"没关系。",py:"Méi guānxi."},{zh:"我八岁。",py:"Wǒ bā suì."},{zh:"再见！",py:"Zàijiàn!"}], ans:0, src:"L1 · 礼貌用语"},
+  {type:'resp', zh:"你爸爸是老师吗？", py:"Nǐ bàba shì lǎoshī ma?", opts:[{zh:"不是，我爸爸不是老师。",py:"Bú shì, wǒ bàba bú shì lǎoshī."},{zh:"今天星期一。",py:"Jīntiān xīngqīyī."},{zh:"我喜欢中国菜。",py:"Wǒ xǐhuan Zhōngguó cài."}], ans:0, src:"L2·L4 · 是非问"},
+  {type:'resp', zh:"你喜欢吃什么？", py:"Nǐ xǐhuan chī shénme?", opts:[{zh:"我喜欢吃中国菜。",py:"Wǒ xǐhuan chī Zhōngguó cài."},{zh:"我是中国人。",py:"Wǒ shì Zhōngguó rén."},{zh:"现在八点。",py:"Xiànzài bā diǎn."}], ans:0, src:"L5 · 喜好"},
+  {type:'pic', zh:"我有两个弟弟，没有妹妹。", py:"Wǒ yǒu liǎng ge dìdi, méiyǒu mèimei.", opts:["👦👦","👧👧","👨‍👩‍👧"], ans:0, src:"L4 · 有/没有"},
+  {type:'resp', zh:"她今年多大？", py:"Tā jīnnián duō dà?", opts:[{zh:"她今年七岁。",py:"Tā jīnnián qī suì."},{zh:"她叫王明。",py:"Tā jiào Wáng Míng."},{zh:"她家有四个人。",py:"Tā jiā yǒu sì ge rén."}], ans:0, src:"L3 · 干扰项"},
+];
+const READ=[
+  {type:'tf', zh:"我不是学生，我是老师。", py:"Wǒ bú shì xuésheng, wǒ shì lǎoshī.", emoji:"🧑‍🎓", ans:false, src:"L1–2 · 判断"},
+  {type:'tf', zh:"我家有三个人。", py:"Wǒ jiā yǒu sān ge rén.", emoji:"👨‍👩‍👧", ans:true, src:"L3–4 · 判断"},
+  {type:'tf', zh:"现在是七点。", py:"Xiànzài shì qī diǎn.", emoji:"🕘", ans:false, src:"L5 · 判断"},
+  {type:'tf', zh:"我很喜欢喝水。", py:"Wǒ hěn xǐhuan hē shuǐ.", emoji:"💧", ans:true, src:"L5 · 判断"},
+  {type:'resp', zh:"你是哪国人？", py:"Nǐ shì nǎ guó rén?", opts:[{zh:"我是中国人。",py:"Wǒ shì Zhōngguó rén."},{zh:"我很高兴。",py:"Wǒ hěn gāoxìng."},{zh:"我九岁。",py:"Wǒ jiǔ suì."}], ans:0, src:"L2 · 国家"},
+  {type:'resp', zh:"你家有几个人，都有谁？", py:"Nǐ jiā yǒu jǐ ge rén, dōu yǒu shéi?", opts:[{zh:"有五个人：爸爸、妈妈、哥哥、姐姐和我。",py:"Yǒu wǔ ge rén: bàba, māma, gēge, jiějie hé wǒ."},{zh:"我叫玛丽。",py:"Wǒ jiào Mǎlì."},{zh:"今天星期五。",py:"Jīntiān xīngqīwǔ."}], ans:0, src:"L4 · 家庭"},
+  {type:'resp', zh:"现在几点？", py:"Xiànzài jǐ diǎn?", opts:[{zh:"现在差不多八点。",py:"Xiànzài chàbuduō bā diǎn."},{zh:"我七岁。",py:"Wǒ qī suì."},{zh:"他是我哥哥。",py:"Tā shì wǒ gēge."}], ans:0, src:"L5 · 时间"},
+  {type:'resp', zh:"明天是星期几？", py:"Míngtiān shì xīngqī jǐ?", opts:[{zh:"明天是星期六。",py:"Míngtiān shì xīngqīliù."},{zh:"我是中国人。",py:"Wǒ shì Zhōngguó rén."},{zh:"我不喜欢喝茶。",py:"Wǒ bù xǐhuan hē chá."}], ans:0, src:"L5 · 星期"},
+  {type:'resp', zh:"你多大了？", py:"Nǐ duō dà le?", opts:[{zh:"我今年十岁。",py:"Wǒ jīnnián shí suì."},{zh:"我家有六个人。",py:"Wǒ jiā yǒu liù ge rén."},{zh:"我叫李中。",py:"Wǒ jiào Lǐ Zhōng."}], ans:0, src:"L3 · 干扰项"},
+  {type:'resp', zh:"这是谁的照片？", py:"Zhè shì shéi de zhàopiàn?", opts:[{zh:"这是我妈妈的照片。",py:"Zhè shì wǒ māma de zhàopiàn."},{zh:"现在三点。",py:"Xiànzài sān diǎn."},{zh:"我很高兴。",py:"Wǒ hěn gāoxìng."}], ans:0, src:"L4 · 的字结构"},
+  {type:'read', lines:[["我叫王明，是中国人。","Wǒ jiào Wáng Míng, shì Zhōngguó rén."],["今年我九岁，我姐姐十二岁。","Jīnnián wǒ jiǔ suì, wǒ jiějie shí'èr suì."],["我家有四个人：爸爸、妈妈、姐姐和我。","Wǒ jiā yǒu sì ge rén: bàba, māma, jiějie hé wǒ."]],
+   q:"王明的姐姐今年多大？", qpy:"Wáng Míng de jiějie jīnnián duō dà?", opts:[{zh:"十二岁",py:"shí'èr suì"},{zh:"九岁",py:"jiǔ suì"},{zh:"四岁",py:"sì suì"}], ans:0, src:"L2–4 · 短文（细节）"},
+  {type:'read', lines:[["今天星期六，不是星期天。","Jīntiān xīngqīliù, bú shì xīngqītiān."],["现在十二点，我们去吃饭。","Xiànzài shí'èr diǎn, wǒmen qù chī fàn."],["我喜欢吃中国菜，不喜欢喝茶。","Wǒ xǐhuan chī Zhōngguó cài, bù xǐhuan hē chá."]],
+   q:"下面哪个是对的？", qpy:"Xiàmian nǎge shì duì de?", opts:[{zh:"他喜欢吃中国菜。",py:"Tā xǐhuan chī Zhōngguó cài."},{zh:"今天是星期天。",py:"Jīntiān shì xīngqītiān."},{zh:"他喜欢喝茶。",py:"Tā xǐhuan hē chá."}], ans:0, src:"L5 · 短文（判断）"},
+  {type:'read', lines:[["这是我的老师，她叫李老师。","Zhè shì wǒ de lǎoshī, tā jiào Lǐ lǎoshī."],["她是中国人，今年不太大。","Tā shì Zhōngguó rén, jīnnián bú tài dà."],["我很喜欢她，她也很喜欢我们。","Wǒ hěn xǐhuan tā, tā yě hěn xǐhuan wǒmen."]],
+   q:"李老师是哪国人？", qpy:"Lǐ lǎoshī shì nǎ guó rén?", opts:[{zh:"中国人",py:"Zhōngguó rén"},{zh:"美国人",py:"Měiguó rén"},{zh:"短文没有说",py:"duǎnwén méiyǒu shuō"}], ans:0, src:"L1–2 · 短文"},
+  {type:'read', lines:[["我有一个哥哥，没有弟弟。","Wǒ yǒu yí ge gēge, méiyǒu dìdi."],["哥哥今年十五岁，我今年十岁。","Gēge jīnnián shíwǔ suì, wǒ jīnnián shí suì."]],
+   q:"关于弟弟，下面哪个对？", qpy:"Guānyú dìdi, nǎge duì?", opts:[{zh:"他没有弟弟。",py:"Tā méiyǒu dìdi."},{zh:"他有一个弟弟。",py:"Tā yǒu yí ge dìdi."},{zh:"他有两个弟弟。",py:"Tā yǒu liǎng ge dìdi."}], ans:0, src:"L4 · 有/没有（细节）"},
+  {type:'resp', zh:"你爸爸是不是老师？", py:"Nǐ bàba shì bu shì lǎoshī?", opts:[{zh:"不是，他不是老师。",py:"Bú shì, tā bú shì lǎoshī."},{zh:"今天八号。",py:"Jīntiān bā hào."},{zh:"我喜欢喝水。",py:"Wǒ xǐhuan hē shuǐ."}], ans:0, src:"L2 · 正反问"},
+];
+
+/* ---------------- storage ---------------- */
+function skey(){const el=document.getElementById('studentName');const n=el?el.value.trim():'';return "aruna_lr_"+(n?n.toLowerCase().replace(/\s+/g,'_'):'guest');}
+function loadP(){try{return Object.assign({listenBest:0,readBest:0},JSON.parse(localStorage.getItem(skey()))||{});}catch(e){return {listenBest:0,readBest:0};}}
+function saveP(p){try{localStorage.setItem(skey(),JSON.stringify(p));}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+/* ---------------- tabs ---------------- */
+const TABS=[{id:'listen',label:'🎧 听力 Listening'},{id:'read',label:'📖 阅读 Reading'}];
+function initTabs(){document.getElementById('tabNav').innerHTML=TABS.map((t,i)=>`<button data-tab="${t.id}" class="${i===0?'active':''}" onclick="switchTab('${t.id}')">${t.label}</button>`).join('');}
+function switchTab(id){
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+id));
+  if(id==='listen') renderListenIntro();
+  if(id==='read') renderReadIntro();
+}
+function updateBadge(){const p=loadP();document.getElementById('scoreBadge').textContent=`🎧 ${p.listenBest||0} · 📖 ${p.readBest||0}`;}
+
+/* ---------------- LISTENING ---------------- */
+let LS=null;
+function renderListenIntro(){
+  const p=loadP();
+  document.getElementById('panel-listen').innerHTML=`
+    <div class="card">
+      <h2>听力 · Listening — Lessons 1–5</h2>
+      <div class="warn ${ttsAvailable()?'':'show'}">Your browser has no Chinese voice available, so audio may not play. Try Chrome or Edge, or use the Reading tab.</div>
+      <p class="note">Press ▶ 播放 to hear the Chinese, then choose the answer. You can replay as many times as you like. ${LISTEN.length} questions.</p>
+      <div class="result-box">
+        <div style="font-size:.85rem;color:var(--gray);">Your best</div>
+        <div class="gauge">${p.listenBest||0} / ${LISTEN.length}</div>
+        <button class="btn big" onclick="startListen()">Start Listening test</button>
+      </div>
+    </div>`;
+}
+function startListen(){LS={i:0,correct:0};drawListen();}
+function drawListen(){
+  if(LS.i>=LISTEN.length) return finishListen();
+  const q=LISTEN[LS.i]; const el=document.getElementById('panel-listen');
+  let optsHtml='';
+  if(q.type==='pic'){
+    optsHtml=`<div class="opt-grid">${q.opts.map((e,j)=>`<button class="opt-emoji" onclick="ansListen(${j},this)">${e}</button>`).join('')}</div>`;
+  }else{
+    optsHtml=q.opts.map((o,j)=>`<button class="mc-opt" onclick="ansListen(${j},this)">${o.zh}<span class="py">${o.py}</span></button>`).join('');
+  }
+  el.innerHTML=`
+    <div class="card">
+      <div class="qcount">Question ${LS.i+1} of ${LISTEN.length} · Score ${LS.correct}</div>
+      <div class="progress-wrap"><div class="progress-bar" style="width:${LS.i/LISTEN.length*100}%"></div></div>
+      <div class="play-stage">
+        <button class="play-btn" onclick="speak('${q.zh}')">▶ 播放 Play audio</button>
+        <div class="play-hint">${q.type==='pic'?'Choose the picture that matches what you hear':'Choose the best reply to what you hear'}</div>
+        <div class="reveal-zh" id="revealZh"></div>
+        <div class="src-tag">${q.src}</div>
+      </div>
+      ${optsHtml}
+      <div class="feedback" id="lfb"></div>
+      <div id="lnext" style="text-align:center;"></div>
+    </div>`;
+  setTimeout(()=>speak(q.zh),250);
+}
+function ansListen(j,btn){
+  const q=LISTEN[LS.i]; const ok=j===q.ans;
+  document.querySelectorAll('#panel-listen .opt-emoji,#panel-listen .mc-opt').forEach((b,idx)=>{
+    b.disabled=true; if(idx===q.ans)b.classList.add('correct');
+  });
+  if(!ok) btn.classList.add('wrong');
+  if(ok) LS.correct++;
+  document.getElementById('revealZh').innerHTML=`${q.zh}<span class="py">${q.py}</span>`;
+  const fb=document.getElementById('lfb'); fb.className='feedback '+(ok?'ok':'no');
+  fb.innerHTML=ok?`✓ 对了！`:`✗ You heard: <strong>${q.zh}</strong> · ${q.py}`;
+  document.getElementById('lnext').innerHTML=`<button class="btn big" id="lnextBtn" onclick="LS.i++;drawListen();">Next →</button>`;
+  document.getElementById('lnextBtn').focus();
+}
+function finishListen(){
+  const p=loadP(); p.listenBest=Math.max(p.listenBest||0,LS.correct); saveP(p); updateBadge();
+  document.getElementById('panel-listen').innerHTML=`
+    <div class="card"><h2>听力 · Complete</h2><div class="result-box">
+      <div class="gauge">${LS.correct} / ${LISTEN.length}</div>
+      <button class="btn big" onclick="startListen()">↺ Again</button>
+      <button class="btn gold big" onclick="switchTab('read')">Go to Reading →</button>
+    </div></div>`;
+}
+
+/* ---------------- READING ---------------- */
+let RS=null;
+function renderReadIntro(){
+  const p=loadP();
+  document.getElementById('panel-read').innerHTML=`
+    <div class="card">
+      <h2>阅读 · Reading — Lessons 1–5</h2>
+      <p class="note">Read the Chinese (pinyin is shown) and choose the answer. ${READ.length} questions covering greetings, names, age, family, and time.</p>
+      <div class="result-box">
+        <div style="font-size:.85rem;color:var(--gray);">Your best</div>
+        <div class="gauge">${p.readBest||0} / ${READ.length}</div>
+        <button class="btn big" onclick="startRead()">Start Reading test</button>
+      </div>
+    </div>`;
+}
+function startRead(){RS={i:0,correct:0};drawRead();}
+function drawRead(){
+  if(RS.i>=READ.length) return finishRead();
+  const q=READ[RS.i]; const el=document.getElementById('panel-read');
+  let stage='',opts='';
+  if(q.type==='tf'){
+    stage=`<div class="read-stage"><div class="read-emoji">${q.emoji}</div><div class="read-zh">${q.zh}</div><div class="read-py">${q.py}</div><div class="src-tag">${q.src}</div></div>`;
+    opts=`<div class="tf-row"><button class="tf-btn" onclick="ansReadTF(true,this)">✓ 对</button><button class="tf-btn" onclick="ansReadTF(false,this)">✗ 错</button></div>`;
+  }else if(q.type==='resp'){
+    stage=`<div class="read-stage"><div class="read-zh">${q.zh}</div><div class="read-py">${q.py}</div><div class="src-tag">${q.src}</div></div>`;
+    opts=q.opts.map((o,j)=>`<button class="mc-opt" onclick="ansRead(${j},this)">${o.zh}<span class="py">${o.py}</span></button>`).join('');
+  }else{ // read passage
+    stage=`<div class="read-stage" style="text-align:left;">${q.lines.map(l=>`<div class="read-zh" style="font-size:1.3rem;">${l[0]}<div class="read-py">${l[1]}</div></div>`).join('')}<div class="src-tag">${q.src}</div></div>
+      <div style="font-weight:700;color:var(--red-dark);margin:6px 0;">${q.q} <span style="color:var(--gray);font-weight:400;font-style:italic;font-size:.85rem;">${q.qpy}</span></div>`;
+    opts=q.opts.map((o,j)=>`<button class="mc-opt" onclick="ansRead(${j},this)">${o.zh}<span class="py">${o.py}</span></button>`).join('');
+  }
+  el.innerHTML=`
+    <div class="card">
+      <div class="qcount">Question ${RS.i+1} of ${READ.length} · Score ${RS.correct}</div>
+      <div class="progress-wrap"><div class="progress-bar" style="width:${RS.i/READ.length*100}%"></div></div>
+      ${stage}${opts}
+      <div class="feedback" id="rfb"></div>
+      <div id="rnext" style="text-align:center;"></div>
+    </div>`;
+}
+function ansReadTF(choice,btn){
+  const q=READ[RS.i]; const ok=choice===q.ans;
+  document.querySelectorAll('#panel-read .tf-btn').forEach(b=>b.disabled=true);
+  btn.classList.add(ok?'correct':'wrong');
+  if(ok)RS.correct++;
+  const fb=document.getElementById('rfb'); fb.className='feedback '+(ok?'ok':'no');
+  fb.innerHTML=ok?`✓ 对了！<strong>${q.zh}</strong> ${q.py}`:`✗ ${q.zh} ${q.py} — ${q.ans?'matches ✓':'does NOT match ✗'} the picture.`;
+  nextRead();
+}
+function ansRead(j,btn){
+  const q=READ[RS.i]; const ok=j===q.ans;
+  document.querySelectorAll('#panel-read .mc-opt').forEach((b,idx)=>{b.disabled=true;if(idx===q.ans)b.classList.add('correct');});
+  if(!ok)btn.classList.add('wrong');
+  if(ok)RS.correct++;
+  const fb=document.getElementById('rfb'); fb.className='feedback '+(ok?'ok':'no');
+  fb.innerHTML=ok?`✓ 对了！`:`✗ Correct answer: <strong>${q.opts[q.ans].zh}</strong> ${q.opts[q.ans].py}`;
+  nextRead();
+}
+function nextRead(){
+  document.getElementById('rnext').innerHTML=`<button class="btn big" id="rnextBtn" onclick="RS.i++;drawRead();">Next →</button>`;
+  document.getElementById('rnextBtn').focus();
+}
+function finishRead(){
+  const p=loadP(); p.readBest=Math.max(p.readBest||0,RS.correct); saveP(p); updateBadge();
+  document.getElementById('panel-read').innerHTML=`
+    <div class="card"><h2>阅读 · Complete</h2><div class="result-box">
+      <div class="gauge">${RS.correct} / ${READ.length}</div>
+      <button class="btn big" onclick="startRead()">↺ Again</button>
+      <button class="btn gold big" onclick="switchTab('listen')">Back to Listening →</button>
+    </div></div>`;
+}
+
+/* ---------------- init ---------------- */
+document.addEventListener('DOMContentLoaded',()=>{
+  let saved=null;try{saved=localStorage.getItem('aruna_lr_name');}catch(e){}
+  if(saved)document.getElementById('studentName').value=saved;
+  document.getElementById('studentName').addEventListener('change',()=>{
+    try{localStorage.setItem('aruna_lr_name',document.getElementById('studentName').value.trim());}catch(e){}
+    updateBadge();renderListenIntro();renderReadIntro();
+  });
+  initTabs(); renderListenIntro(); updateBadge();
+  console.log(COPYRIGHT);
+});
+</script>
+</body>
+</html>
