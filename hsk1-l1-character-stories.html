@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>字源动画 · HSK 1 Lesson 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..48,500;12..48,700;12..48,800&family=Noto+Serif+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FCF9F3; --card:#FFFFFF;
+  --ink:#241F1B; --ink-soft:#7A6E60;
+  --red:#E8442B; --red-deep:#8E2B18; --red-tint:#FDECE8;
+  --jade:#2A7D6F; --jade-tint:#E6F1EE;
+  --clay:#A8763E; --clay-tint:#F7EEDF;
+  --line:#EADFCC; --grid:#F0E6D4;
+  --shadow:0 10px 30px -14px rgba(60,40,20,.3);
+  --serif:'Noto Serif SC', ui-serif, "Songti SC", serif;
+  --disp:'Bricolage Grotesque', system-ui, sans-serif;
+  --body:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:var(--body);color:var(--ink);background:var(--paper);-webkit-tap-highlight-color:transparent;overflow-x:hidden}
+.app{max-width:580px;margin:0 auto;min-height:100%;
+  background:
+    linear-gradient(var(--grid) 1px,transparent 1px) 0 0/100% 40px,
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/40px 100%,
+    var(--paper);
+  background-blend-mode:multiply;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--jade);outline-offset:2px;border-radius:10px}
+
+header{padding:16px 18px 10px;display:flex;align-items:center;gap:12px}
+.mark{width:42px;height:42px;flex:0 0 auto;border-radius:9px;background:var(--red-deep);display:grid;place-items:center}
+.mark span{font-family:var(--serif);font-weight:900;font-size:23px;color:#fff;line-height:1}
+.brand h1{font-family:var(--disp);font-weight:800;font-size:19px;margin:0;letter-spacing:-.01em}
+.brand p{margin:2px 0 0;font-size:12px;color:var(--ink-soft);font-weight:500}
+
+.tabs{position:sticky;top:0;z-index:30;display:flex;gap:6px;padding:10px 16px;
+  background:linear-gradient(var(--paper) 70%,rgba(252,249,243,.88));backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.tab{flex:1;padding:10px 6px;border-radius:12px;font-weight:700;font-size:14px;color:var(--ink-soft);border:1.5px solid transparent}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff}
+main{padding:16px 16px 44px}
+.view{display:none}.view.on{display:block}
+
+.note{background:var(--clay-tint);border:1px solid #E9DCC4;border-radius:14px;padding:13px 15px;font-size:13.5px;
+  line-height:1.62;color:#5C4B33;margin-bottom:18px}
+.note b{color:var(--red-deep)}
+
+/* ---------- story card ---------- */
+.scard{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);
+  padding:18px 16px 16px;margin-bottom:16px;position:relative}
+.shead{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:4px}
+.shz{font-family:var(--serif);font-weight:700;font-size:30px;line-height:1}
+.spy{font-family:var(--disp);font-weight:700;font-size:15px;color:var(--red-deep)}
+.sen{margin-left:auto;font-size:13.5px;color:var(--ink-soft);font-weight:600}
+.badge{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  padding:4px 9px;border-radius:999px;margin-top:2px}
+.b-pic{background:var(--jade-tint);color:var(--jade)}
+.b-mm{background:var(--clay-tint);color:var(--clay)}
+.b-ms{background:#EEEAF6;color:#6B54A8}
+.b-loan{background:var(--red-tint);color:var(--red-deep)}
+
+.stage{position:relative;width:min(70vw,240px);aspect-ratio:1;margin:12px auto 6px}
+.stage::before,.stage::after{content:"";position:absolute;background:repeating-linear-gradient(var(--red),var(--red) 4px,transparent 4px,transparent 10px);opacity:.28;z-index:0}
+.stage::before{left:0;right:0;top:50%;height:1.5px}
+.stage::after{top:0;bottom:0;left:50%;width:1.5px}
+.pic{position:absolute;inset:0;z-index:2;transition:opacity .5s}
+.pic path,.pic line,.pic circle{fill:none;stroke:var(--red-deep);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.pic .fill{fill:var(--red-tint);stroke:var(--red-deep)}
+.hw{position:absolute;inset:0;z-index:1;display:grid;place-items:center}
+.ghost{position:absolute;inset:0;z-index:0;display:grid;place-items:center;font-family:var(--serif);
+  font-size:150px;color:#EFE6D6;line-height:1;user-select:none}
+
+.story{font-size:14.5px;line-height:1.68;text-align:center;color:#463C33;margin:8px 4px 16px}
+.story b{color:var(--ink);font-weight:700}
+
+.srow{margin-bottom:12px}
+.slabel{text-align:center;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-soft);margin-bottom:8px}
+.tiles{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.tile{width:70px;padding:9px 4px 7px;border-radius:12px;text-align:center;border:1px solid transparent}
+.tile .tc{font-family:var(--serif);font-size:27px;font-weight:500;line-height:1.15}
+.tile .tn{font-size:10.5px;margin-top:3px;font-weight:600;opacity:.85}
+.t-shape{background:var(--jade-tint);border-color:#D2E6E0;color:var(--jade)}
+.t-origin{background:var(--clay-tint);border-color:#EADCC2;color:var(--clay)}
+.plus{align-self:center;font-size:15px;color:var(--ink-soft);font-weight:700}
+
+.play{display:block;margin:6px auto 0;background:var(--red-deep);color:#fff;padding:11px 22px;border-radius:12px;
+  font-weight:700;font-size:14.5px}
+.play:active{transform:translateY(1px)}
+.play[disabled]{opacity:.55}
+.caveat{font-size:11.5px;color:var(--ink-soft);text-align:center;margin:12px 6px 0;line-height:1.55;font-style:italic}
+
+/* ---------- builder ---------- */
+.bpick{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.bchip{min-width:50px;padding:8px 11px;border:1.5px solid var(--line);background:var(--card);border-radius:12px;
+  font-family:var(--serif);font-size:24px;font-weight:700;line-height:1.1}
+.bchip[aria-selected="true"]{border-color:var(--red);background:var(--red-tint);color:var(--red-deep)}
+.bchip.solved{border-color:var(--jade);background:var(--jade-tint);color:var(--jade)}
+.bchip small{display:block;font-family:var(--body);font-size:9px;font-weight:700;opacity:.7;margin-top:1px}
+
+.bstage{display:flex;flex-direction:column;align-items:center}
+.bhint{font-size:13px;color:var(--ink-soft);font-weight:600;margin-bottom:12px;text-align:center}
+.bhint b{color:var(--red-deep)}
+.tianzi{position:relative;width:min(70vw,250px);aspect-ratio:1;background:var(--card);
+  border:2.5px solid var(--red);border-radius:6px;box-shadow:var(--shadow)}
+.tianzi::before,.tianzi::after{content:"";position:absolute;background:repeating-linear-gradient(var(--red),var(--red) 5px,transparent 5px,transparent 11px);opacity:.5;z-index:1}
+.tianzi::before{left:0;right:0;top:50%;height:1.5px}
+.tianzi::after{top:0;bottom:0;left:50%;width:1.5px}
+.slots{position:absolute;inset:7px;z-index:3;display:flex;gap:6px}
+.slots.tb{flex-direction:column}
+.slot{flex:1;border:2px dashed #DCCDB4;border-radius:10px;display:grid;place-items:center;
+  font-family:var(--serif);font-size:52px;color:var(--ink);transition:.15s;background:rgba(255,255,255,.35)}
+.slot.lg{flex:1.35}
+.slot.over{border-color:var(--jade);background:var(--jade-tint)}
+.slot.filled{border-style:solid;border-color:transparent;background:transparent}
+.slot.shake{animation:shk .34s}
+@keyframes shk{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.bdone{position:absolute;inset:0;z-index:5;display:none;place-items:center;background:rgba(255,255,255,.96);border-radius:4px}
+.bdone.on{display:grid}
+.bdone .bhz{font-family:var(--serif);font-size:110px;font-weight:700;line-height:1;color:var(--jade)}
+
+.pool{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px;min-height:74px}
+.ptile{width:66px;height:66px;border:1.5px solid var(--line);background:var(--card);border-radius:14px;
+  display:grid;place-items:center;box-shadow:0 3px 10px -5px rgba(60,40,20,.35);touch-action:none;
+  font-family:var(--serif);font-size:34px;font-weight:500;position:relative;transition:opacity .2s}
+.ptile small{position:absolute;bottom:3px;left:0;right:0;font-family:var(--body);font-size:9px;font-weight:700;color:var(--ink-soft)}
+.ptile.used{opacity:0;pointer-events:none}
+.ptile.drag{position:fixed;z-index:200;pointer-events:none;box-shadow:0 14px 26px -10px rgba(60,40,20,.5);
+  border-color:var(--red);transform:scale(1.08)}
+.bfb{text-align:center;font-weight:700;font-size:14.5px;min-height:22px;margin-top:14px}
+.bfb.good{color:var(--jade)}.bfb.bad{color:var(--red-deep)}
+.bbtns{display:flex;gap:9px;margin-top:12px;width:100%;max-width:300px}
+.bbtns button{flex:1;padding:12px 6px;border-radius:13px;font-weight:700;font-size:14px;border:1.5px solid var(--line);background:var(--card)}
+.bbtns button.pri{background:var(--red);color:#fff;border-color:var(--red)}
+.bscore{text-align:center;font-size:12.5px;color:var(--ink-soft);font-weight:700;margin-top:16px}
+.bscore b{color:var(--jade)}
+footer{padding:8px 18px 30px;text-align:center;font-size:11px;color:var(--ink-soft);line-height:1.6}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="mark"><span>字</span></div>
+    <div class="brand">
+      <h1>字源动画 · Character Stories</h1>
+      <p>HSK 1 · 第一课 你好 · the picture draws itself, then becomes the character</p>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-v="story">📖 Stories</button>
+    <button class="tab" role="tab" aria-selected="false" data-v="build">🧩 Build the character</button>
+  </nav>
+
+  <main>
+    <section class="view on" id="v-story">
+      <div class="note">
+        <b>By shape</b> is what your eye sees in the modern character — it helps you write it.
+        <b>By origin</b> is what the character actually depicted 3,000 years ago — it helps you understand it.
+        They often disagree, because brush simplification reshaped the strokes. Both are shown rather than
+        pretending one is the other. Each card is also tagged with <b>what kind of character it is</b>, so you
+        know when there is a real story and when there simply isn't one.
+      </div>
+      <div id="cards"></div>
+    </section>
+
+    <section class="view" id="v-build">
+      <div class="note">
+        Only characters made of <b>separable parts</b> can be built this way. 一、五、八、大、我 are single
+        units — nothing to drag — so they're left out. Drag each part into the right box in the 田字格.
+      </div>
+      <div class="bpick" id="b-pick"></div>
+      <div class="bstage">
+        <p class="bhint" id="b-hint"></p>
+        <div class="tianzi">
+          <div class="slots" id="b-slots"></div>
+          <div class="bdone" id="b-done"><span class="bhz" id="b-donehz"></span></div>
+        </div>
+        <div class="pool" id="b-pool"></div>
+        <p class="bfb" id="b-fb">&nbsp;</p>
+        <div class="bbtns">
+          <button id="b-reset">↻ Clear</button>
+          <button id="b-say" class="pri">🔊 Hear it</button>
+        </div>
+        <p class="bscore">Built <b id="b-n">0</b> of <span id="b-tot">6</span></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Origins follow oracle-bone and seal-script evidence. Where scholars disagree, the card says so.<br><br>
+    Original teaching material, written from Aruna's own Mandarin proficiency (HSK / BCT certified).
+    Not a reproduction of 新HSK教程 or any other textbook.<br>
+    © ChineseFrench Institute — Aruna's Class. All rights reserved.
+  </footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hanzi-writer/3.5.0/hanzi-writer.min.js"></script>
+<script>
+/* ============ pictograph fragments (100x100) ============ */
+const P = {
+  person:(x,s)=>[ // standing person, x = centre, s = scale
+    `M${x} ${18*s+10} a${8*s} ${8*s} 0 1 1 .1 0`,
+    `M${x} ${26*s+10} L${x} ${58*s+10}`,
+    `M${x-13*s} ${36*s+10} L${x+13*s} ${36*s+10}`,
+    `M${x} ${58*s+10} L${x-10*s} ${80*s+10}`,
+    `M${x} ${58*s+10} L${x+10*s} ${80*s+10}`],
+  mouth:[ 'M14 46 Q30 33 46 46 Q30 60 14 46' ],
+};
+const PIC = {
+ '大':['M50 20 a9 9 0 1 1 .1 0','M50 29 L50 58','M20 42 L80 42','M50 58 L28 86','M50 58 L72 86'],
+ '一':['M16 50 L84 50'],
+ '五':['M20 22 L80 22','M20 80 L80 80','M32 30 L68 72','M68 30 L32 72'],
+ '八':['M47 20 Q41 48 26 82','M53 20 Q59 48 74 82','M40 16 L60 16'],
+ '好':['M30 20 a7.5 7.5 0 1 1 .1 0','M30 28 L30 58','M19 38 L41 38','M30 58 L21 82','M30 58 L39 82',
+       'M41 38 Q56 46 64 42','M70 34 a6 6 0 1 1 .1 0','M70 41 L70 62','M60 48 L80 48','M70 62 L63 80','M70 62 L77 80'],
+ '家':['M50 12 L50 19','M14 46 L50 20 L86 46','M22 46 L78 46',
+       'M34 64 C34 56 43 52 55 52 C68 52 76 58 76 66 C76 73 68 78 55 78 C42 78 34 72 34 64',
+       'M34 62 L26 66','M44 78 L44 87','M66 78 L66 87','M76 60 Q83 56 80 63'],
+ '我':['M64 12 L44 88','M30 38 L80 32','M68 44 L78 41','M68 52 L78 49','M68 60 L78 57',
+       'M46 60 Q34 57 31 65','M31 65 Q29 73 40 74','M36 52 Q28 50 27 57'],
+ '你':['M26 20 a7.5 7.5 0 1 1 .1 0','M26 28 L26 58','M15 38 L37 38','M26 58 L17 82','M26 58 L35 82',
+       'M37 36 L62 30','M58 26 L66 34','M72 24 L72 40','M62 44 L84 44','M73 44 L73 74','M64 56 L64 70','M82 56 L82 70'],
+ '很':['M22 22 L30 30','M22 38 L30 46','M28 30 L28 84',
+       'M52 26 a8 8 0 1 1 .1 0','M52 22 L52 30','M52 34 L52 60','M44 44 L60 44','M52 60 L44 82','M52 60 L64 78','M64 78 L80 78'],
+ '吗':['M12 44 Q28 31 44 44 Q28 58 12 44','M20 44 L36 44',
+       'M56 34 L60 24','M62 34 L66 24','M68 34 L72 24',
+       'M56 38 Q70 30 84 40 Q88 50 82 58','M56 38 L56 58','M56 58 L82 58',
+       'M60 58 L58 78','M78 58 L80 78','M84 44 Q90 52 86 62'],
+ '呢':['M12 44 Q28 31 44 44 Q28 58 12 44','M20 44 L36 44',
+       'M58 26 a6 6 0 1 1 .1 0','M58 33 L58 56','M49 41 L67 41','M58 56 L52 74',
+       'M64 52 a5 5 0 1 1 .1 0','M64 58 L64 74','M57 64 L72 64','M64 74 L58 86','M64 74 L72 86'],
+ '你好':['W'], '大家':['W']
+};
+
+/* ============ lesson data ============ */
+const DATA = [
+ {hz:'你',py:'nǐ',en:'you',kind:'ms',
+  story:'A <b>person</b> standing in front of you. The right half only supplies the sound — it carries no meaning here.',
+  shape:[['亻','person'],['尔','ěr']], origin:[['人','person'],['尔','sound only']],
+  caveat:'你 is a late character (roughly Tang dynasty), split off from 尔 by adding the person radical. There is no ancient picture behind it.'},
+
+ {hz:'好',py:'hǎo',en:'good; well',kind:'mm',
+  story:'A <b>woman</b> beside her <b>child</b>. Two things valued together — the character came to mean good.',
+  shape:[['女','woman'],['子','child']], origin:[['女','woman'],['子','child']],
+  caveat:'Attested on oracle bones. What the pairing meant is debated — "to love / to cherish" is as likely as "good".'},
+
+ {hz:'一',py:'yī',en:'one',kind:'pic',
+  story:'<b>One</b> tally stroke. The simplest character there is — a single mark for a single thing.',
+  shape:[['一','one stroke']], origin:[['一','one tally']], caveat:''},
+
+ {hz:'五',py:'wǔ',en:'five',kind:'pic',
+  story:'Two lines with a <b>crossing</b> between them — a counting knot marking a full set of five.',
+  shape:[['一','line'],['乂','cross'],['一','line']], origin:[['𠄡','tally knot']],
+  caveat:'The ancient form is clear; why a cross meant five is not settled.'},
+
+ {hz:'八',py:'bā',en:'eight',kind:'loan',
+  story:'Two strokes <b>turning away from each other</b> — the original meaning was to divide, to split apart.',
+  shape:[['丿','left stroke'],['乀','right stroke']], origin:[['八','to divide']],
+  caveat:'八 never depicted the number. It was borrowed for its sound, and the meaning "divide" moved to 分.'},
+
+ {hz:'大',py:'dà',en:'big',kind:'pic',
+  story:'A <b>person seen from the front</b>, arms and legs stretched wide — as big as a human can make themselves.',
+  shape:[['一','arms'],['人','person']], origin:[['大','person, arms spread']], caveat:''},
+
+ {hz:'家',py:'jiā',en:'home; family',kind:'mm',
+  story:'A <b>roof</b> with a <b>pig</b> underneath. Where the animals were kept was where the family lived.',
+  shape:[['宀','roof'],['豕','pig']], origin:[['宀','roof'],['豕','pig']],
+  caveat:'The parts are certain; the reason is not. Pig as household wealth, or pig as ancestral sacrifice — both are argued.'},
+
+ {hz:'大家',py:'dàjiā',en:'everyone',kind:'word',
+  story:'<b>大</b> big + <b>家</b> family = the big family — that is, everybody here.',
+  shape:[['大','big'],['家','family']], origin:[['大','big'],['家','family']],
+  caveat:'A word, not a character — two characters combining their meanings.'},
+
+ {hz:'我',py:'wǒ',en:'I; me',kind:'loan',
+  story:'A <b>hand gripping a serrated battle-axe</b>. It was a weapon, never a word about the self.',
+  shape:[['手','hand'],['戈','dagger-axe']], origin:[['戈','serrated axe']],
+  caveat:'Borrowed purely for its sound to write the pronoun. Nothing about "me" is in the picture.'},
+
+ {hz:'很',py:'hěn',en:'very',kind:'ms',
+  story:'A <b>footstep</b> on the left, and on the right a person <b>turning to glare back</b>. It first meant to defy, not to intensify.',
+  shape:[['彳','step'],['艮','gèn']], origin:[['彳','walking'],['艮','turn and stare']],
+  caveat:'"Very" is a much later grammatical use. Treat the picture as history, not as a memory aid for the modern meaning.'},
+
+ {hz:'吗',py:'ma',en:'(question particle)',kind:'ms',
+  story:'A <b>mouth</b> — because it is something you say — plus <b>马</b> mǎ, which is there only to give the sound.',
+  shape:[['口','mouth'],['马','mǎ']], origin:[['口','mouth'],['马','sound only']],
+  caveat:'A modern character. The horse means nothing here — resist any story that says otherwise.'},
+
+ {hz:'呢',py:'ne',en:'(and you? particle)',kind:'ms',
+  story:'A <b>mouth</b> again for a spoken particle, plus <b>尼</b> ní supplying the sound.',
+  shape:[['口','mouth'],['尼','ní']], origin:[['口','mouth'],['尼','sound only']],
+  caveat:'Same pattern as 吗. Mouth = it is speech; the other half = how it sounds.'},
+
+ {hz:'你好',py:'nǐ hǎo',en:'hello',kind:'word',
+  story:'<b>你</b> you + <b>好</b> well = "you — well?". A greeting built from a wish, not a word for hello.',
+  shape:[['你','you'],['好','good']], origin:[['你','you'],['好','good']],
+  caveat:'A word, not a character.'},
+];
+const KIND = {pic:['b-pic','pictograph'], mm:['b-mm','meaning + meaning'],
+              ms:['b-ms','meaning + sound'], loan:['b-loan','borrowed for sound'], word:['b-mm','compound word']};
+
+/* ============ speech ============ */
+let zhVoice=null;
+function loadVoice(){const v=speechSynthesis.getVoices();
+  zhVoice=v.find(x=>/zh[-_]?CN/i.test(x.lang))||v.find(x=>/zh|chinese|mandarin/i.test(x.lang+x.name))||null;}
+if('speechSynthesis' in window){loadVoice();speechSynthesis.onvoiceschanged=loadVoice;}
+function say(t){if(!('speechSynthesis'in window))return;speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=.75;if(!zhVoice)loadVoice();if(zhVoice)u.voice=zhVoice;
+  speechSynthesis.speak(u);}
+let actx=null;
+function ding(ok){try{actx=actx||new(window.AudioContext||window.webkitAudioContext)();
+  const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(actx.destination);
+  o.type=ok?'sine':'sawtooth';o.frequency.value=ok?680:170;
+  g.gain.setValueAtTime(.0001,actx.currentTime);
+  g.gain.exponentialRampToValueAtTime(.1,actx.currentTime+.02);
+  g.gain.exponentialRampToValueAtTime(.0001,actx.currentTime+.26);
+  o.start();o.stop(actx.currentTime+.28);}catch(e){}}
+
+/* ============ story cards ============ */
+const $=s=>document.querySelector(s);
+function tileHTML(list,cls){
+  return list.map((t,i)=>
+    (i?'<span class="plus">+</span>':'')+
+    `<div class="tile ${cls}"><div class="tc">${t[0]}</div><div class="tn">${t[1]}</div></div>`).join('');
+}
+function buildCards(){
+  const wrap=$('#cards');
+  DATA.forEach((d,i)=>{
+    const k=KIND[d.kind];
+    const el=document.createElement('article');
+    el.className='scard';
+    el.innerHTML=`
+      <div class="shead"><span class="shz">${d.hz}</span><span class="spy">${d.py}</span>
+        <span class="sen">${d.en}</span></div>
+      <span class="badge ${k[0]}">${k[1]}</span>
+      <div class="stage" data-i="${i}">
+        <div class="ghost">${d.hz}</div>
+        <div class="hw"></div>
+        <svg class="pic" viewBox="0 0 100 100"></svg>
+      </div>
+      <p class="story">${d.story}</p>
+      <div class="srow"><div class="slabel">Split by shape — helps you write it</div>
+        <div class="tiles">${tileHTML(d.shape,'t-shape')}</div></div>
+      <div class="srow"><div class="slabel">Split by origin — helps you understand it</div>
+        <div class="tiles">${tileHTML(d.origin,'t-origin')}</div></div>
+      <button class="play">▶ Play the story</button>
+      ${d.caveat?`<p class="caveat">${d.caveat}</p>`:''}`;
+    wrap.appendChild(el);
+    el.querySelector('.play').onclick=e=>playStory(el,d,e.currentTarget);
+  });
+}
+
+/* ============ the animation ============ */
+function drawPicture(svg,paths){
+  svg.innerHTML='';
+  svg.style.opacity='1';
+  const els=paths.map(d=>{
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',d); svg.appendChild(p); return p;
+  });
+  let t=0;
+  els.forEach(p=>{
+    let len=120; try{len=p.getTotalLength()||120;}catch(e){}
+    const dur=Math.max(180,Math.min(520,len*7));
+    p.style.strokeDasharray=len; p.style.strokeDashoffset=len;
+    p.style.transition=`stroke-dashoffset ${dur}ms ease ${t}ms`;
+    requestAnimationFrame(()=>{p.style.strokeDashoffset='0';});
+    t+=dur*0.72;
+  });
+  return t+300;
+}
+function playStory(card,d,btn){
+  const stage=card.querySelector('.stage');
+  const svg=card.querySelector('.pic');
+  const hw=card.querySelector('.hw');
+  const ghost=card.querySelector('.ghost');
+  btn.disabled=true; btn.textContent='▶ Playing…';
+  hw.innerHTML=''; ghost.style.opacity='1';
+
+  const isWord = d.hz.length>1;
+  const paths = isWord ? null : PIC[d.hz];
+  const after = ()=>{
+    // fade the picture out, write the real character in
+    svg.style.opacity='0';
+    ghost.style.opacity='0';
+    const size=stage.clientWidth||230;
+    say(d.hz);
+    if(typeof HanziWriter==='undefined'){ ghost.style.opacity='1'; reset(); return; }
+    if(isWord){
+      hw.style.display='flex';
+      const chars=[...d.hz]; hw.innerHTML='';
+      const each=Math.floor(size/chars.length)-4;
+      const ws=chars.map(ch=>{
+        const box=document.createElement('div'); hw.appendChild(box);
+        return HanziWriter.create(box,ch,{width:each,height:each,padding:2,
+          strokeColor:'#241F1B',radicalColor:'#E8442B',showCharacter:false,showOutline:false,
+          strokeAnimationSpeed:1.1,delayBetweenStrokes:90,onLoadCharDataError:()=>{ghost.style.opacity='1';}});
+      });
+      let chain=Promise.resolve();
+      ws.forEach(w=>{chain=chain.then(()=>new Promise(r=>w.animateCharacter({onComplete:r})));});
+      chain.then(reset).catch(reset);
+    }else{
+      hw.style.display='grid';
+      const w=HanziWriter.create(hw,d.hz,{width:size,height:size,padding:8,
+        strokeColor:'#241F1B',radicalColor:'#E8442B',showCharacter:false,showOutline:false,
+        strokeAnimationSpeed:1,delayBetweenStrokes:110,
+        onLoadCharDataError:()=>{ghost.style.opacity='1';reset();}});
+      w.animateCharacter({onComplete:reset});
+    }
+  };
+  const reset=()=>{btn.disabled=false;btn.textContent='▶ Play the story';};
+  if(paths && paths[0]!=='W'){
+    const wait=drawPicture(svg,paths);
+    setTimeout(after,wait+450);
+  }else{ svg.innerHTML=''; after(); }
+}
+buildCards();
+
+/* ============ BUILDER ============ */
+const BUILD=[
+ {hz:'你',py:'nǐ',en:'you',   layout:'lr',parts:[['亻','person'],['尔','sound']],  decoy:['彳','女']},
+ {hz:'好',py:'hǎo',en:'good', layout:'lr',parts:[['女','woman'],['子','child']],   decoy:['子','马']},
+ {hz:'家',py:'jiā',en:'home', layout:'tb',parts:[['宀','roof'],['豕','pig']],      decoy:['口','艮']},
+ {hz:'很',py:'hěn',en:'very', layout:'lr',parts:[['彳','step'],['艮','gèn']],      decoy:['亻','尼']},
+ {hz:'吗',py:'ma',en:'question',layout:'lr',parts:[['口','mouth'],['马','mǎ']],    decoy:['尼','女']},
+ {hz:'呢',py:'ne',en:'and you?',layout:'lr',parts:[['口','mouth'],['尼','ní']],    decoy:['马','宀']},
+];
+let bi=0; const solved=new Set();
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+function renderPick(){
+  const p=$('#b-pick'); p.innerHTML='';
+  BUILD.forEach((b,i)=>{
+    const el=document.createElement('button');
+    el.className='bchip'+(solved.has(b.hz)?' solved':'');
+    el.setAttribute('aria-selected',i===bi);
+    el.innerHTML=`${b.hz}<small>${b.py}</small>`;
+    el.onclick=()=>{bi=i;loadBuild();};
+    p.appendChild(el);
+  });
+  $('#b-n').textContent=solved.size; $('#b-tot').textContent=BUILD.length;
+}
+function loadBuild(){
+  const b=BUILD[bi];
+  renderPick();
+  $('#b-hint').innerHTML=`Build <b>${b.hz}</b> (${b.py} — ${b.en}) · ${b.layout==='lr'?'left then right':'top then bottom'}`;
+  $('#b-fb').innerHTML='&nbsp;'; $('#b-fb').className='bfb';
+  $('#b-done').classList.remove('on');
+  const sl=$('#b-slots'); sl.className='slots'+(b.layout==='tb'?' tb':''); sl.innerHTML='';
+  b.parts.forEach((pt,i)=>{
+    const s=document.createElement('div');
+    s.className='slot'+(b.layout==='lr'&&i===1?' lg':'');
+    s.dataset.want=pt[0]; s.dataset.idx=i;
+    sl.appendChild(s);
+  });
+  const pool=$('#b-pool'); pool.innerHTML='';
+  const items=shuffle([...b.parts.map(x=>x), ...b.decoy.map(d=>[d,''])]);
+  items.forEach(it=>{
+    const t=document.createElement('div');
+    t.className='ptile'; t.dataset.c=it[0];
+    t.innerHTML=`${it[0]}${it[1]?`<small>${it[1]}</small>`:''}`;
+    pool.appendChild(t);
+    attachDrag(t);
+  });
+}
+/* pointer drag — works with touch and mouse */
+let ghostEl=null, srcTile=null;
+function attachDrag(tile){
+  tile.addEventListener('pointerdown',e=>{
+    if(tile.classList.contains('used'))return;
+    e.preventDefault();
+    srcTile=tile;
+    const r=tile.getBoundingClientRect();
+    ghostEl=tile.cloneNode(true);
+    ghostEl.classList.add('drag');
+    ghostEl.style.width=r.width+'px'; ghostEl.style.height=r.height+'px';
+    document.body.appendChild(ghostEl);
+    moveGhost(e.clientX,e.clientY);
+    tile.setPointerCapture(e.pointerId);
+    tile.addEventListener('pointermove',onMove);
+    tile.addEventListener('pointerup',onUp);
+    tile.addEventListener('pointercancel',onUp);
+  });
+}
+function moveGhost(x,y){ if(!ghostEl)return;
+  ghostEl.style.left=(x-ghostEl.offsetWidth/2)+'px';
+  ghostEl.style.top=(y-ghostEl.offsetHeight/2)+'px'; }
+function slotUnder(x,y){
+  const el=document.elementFromPoint(x,y);
+  return el?el.closest('.slot'):null;
+}
+function onMove(e){
+  moveGhost(e.clientX,e.clientY);
+  document.querySelectorAll('.slot').forEach(s=>s.classList.remove('over'));
+  const s=slotUnder(e.clientX,e.clientY);
+  if(s&&!s.classList.contains('filled'))s.classList.add('over');
+}
+function onUp(e){
+  const tile=srcTile;
+  if(tile){tile.removeEventListener('pointermove',onMove);
+    tile.removeEventListener('pointerup',onUp);tile.removeEventListener('pointercancel',onUp);}
+  document.querySelectorAll('.slot').forEach(s=>s.classList.remove('over'));
+  const slot=slotUnder(e.clientX,e.clientY);
+  if(ghostEl){ghostEl.remove();ghostEl=null;}
+  if(!slot||!tile){srcTile=null;return;}
+  drop(tile,slot);
+  srcTile=null;
+}
+function drop(tile,slot){
+  if(slot.classList.contains('filled'))return;
+  const fb=$('#b-fb');
+  if(slot.dataset.want===tile.dataset.c){
+    slot.textContent=tile.dataset.c;
+    slot.classList.add('filled');
+    tile.classList.add('used');
+    ding(true);
+    fb.textContent='✓ correct'; fb.className='bfb good';
+    checkDone();
+  }else{
+    slot.classList.add('shake');
+    setTimeout(()=>slot.classList.remove('shake'),350);
+    ding(false);
+    const b=BUILD[bi];
+    fb.textContent = b.parts.some(p=>p[0]===tile.dataset.c)
+      ? '✗ right part, wrong position' : '✗ that part is not in this character';
+    fb.className='bfb bad';
+  }
+}
+function checkDone(){
+  const slots=[...document.querySelectorAll('.slot')];
+  if(!slots.every(s=>s.classList.contains('filled')))return;
+  const b=BUILD[bi];
+  solved.add(b.hz);
+  setTimeout(()=>{
+    $('#b-donehz').textContent=b.hz;
+    $('#b-done').classList.add('on');
+    say(b.hz);
+    $('#b-fb').textContent='✓ '+b.hz+' — '+b.py+' ('+b.en+')';
+    $('#b-fb').className='bfb good';
+    renderPick();
+  },320);
+}
+$('#b-reset').onclick=loadBuild;
+$('#b-say').onclick=()=>say(BUILD[bi].hz);
+
+/* ============ tabs ============ */
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',x===t));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  $('#v-'+t.dataset.v).classList.add('on');
+  if('speechSynthesis' in window)speechSynthesis.cancel();
+  if(t.dataset.v==='build')loadBuild();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+loadBuild();
+</script>
+</body>
+</html>
