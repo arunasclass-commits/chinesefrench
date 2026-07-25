@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSK1 · L1–5 · 50 Phrases Revision — Aruna's Classes</title>
+<style>
+  :root{
+    --paper:#FBFAF6; --ink:#1C1B1A; --ink-soft:#5B5854; --line:#E4DFD4;
+    --seal:#C0332B; --seal-deep:#8E241E; --jade:#3B7A67; --jade-tint:#EAF2EE;
+    --seal-tint:#F7E9E7; --amber:#B5741F; --gold:#A98428;
+    --shadow:0 1px 2px rgba(28,27,26,.05),0 8px 24px rgba(28,27,26,.06);
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:700px;margin:0 auto;padding:0 18px 70px}
+
+  header{padding:24px 0 12px;border-bottom:1px solid var(--line)}
+  .brandrow{display:flex;align-items:center;gap:13px}
+  .chop{flex:none;width:44px;height:44px;border-radius:6px;background:var(--seal);color:#fff;display:grid;place-items:center;font-size:24px;font-family:Georgia,serif;box-shadow:inset 0 0 0 2px rgba(255,255,255,.25);transform:rotate(-2deg)}
+  .brandtext h1{font-family:Georgia,serif;font-size:18px;margin:0}
+  .brandtext p{margin:2px 0 0;font-size:12px;color:var(--ink-soft);letter-spacing:.4px;text-transform:uppercase}
+  .kicker{margin-top:12px;font-size:12.5px;color:var(--ink-soft)} .kicker b{color:var(--ink)}
+
+  /* tabs */
+  .tabs{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+  .tab{flex:1;min-width:88px;background:none;border:1px solid var(--line);border-radius:10px;padding:9px 6px;font-size:13px;cursor:pointer;color:var(--ink-soft);font-weight:600}
+  .tab:hover{border-color:var(--seal);color:var(--seal)}
+  .tab.on{background:var(--seal);border-color:var(--seal);color:#fff}
+  .tab small{display:block;font-size:10.5px;font-weight:400;opacity:.85;text-transform:uppercase;letter-spacing:.5px}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:22px 20px;margin-top:18px}
+  .pane{display:none} .pane.on{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+  .eyebrow{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--seal);font-weight:700}
+  .lead{color:var(--ink-soft);font-size:14px;margin:6px 0 0}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+  .chip{background:none;border:1px solid var(--line);color:var(--ink-soft);border-radius:20px;padding:6px 13px;font-size:12.5px;cursor:pointer}
+  .chip:hover{border-color:var(--seal);color:var(--seal)}
+  .chip.on{background:var(--seal-tint);border-color:var(--seal);color:var(--seal-deep);font-weight:600}
+
+  /* study list */
+  .lgroup{margin-top:18px}
+  .lgroup h3{font-family:Georgia,serif;font-size:16px;margin:0 0 8px;color:var(--seal-deep)}
+  .prow{display:flex;gap:11px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:7px;background:#fff}
+  .prow .spk{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:none;cursor:pointer;font-size:14px;color:var(--seal)}
+  .prow .spk:hover{background:var(--seal-tint);border-color:var(--seal)}
+  .prow .txt{flex:1;min-width:0}
+  .hz{font-size:18px;font-weight:600}
+  .py{font-size:14px;color:var(--seal-deep);margin-top:1px}
+  .en{font-size:13.5px;color:var(--ink-soft);margin-top:1px}
+
+  /* quiz */
+  .qhead{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--ink-soft)}
+  .bar{height:3px;background:var(--line);border-radius:2px;margin:10px 0 4px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:var(--seal);transition:width .3s}
+  .prompt{text-align:center;padding:20px 0 10px}
+  .prompt .big{font-size:28px;font-weight:600;line-height:1.35}
+  .prompt .mid{font-size:17px;color:var(--seal-deep);margin-top:5px}
+  .prompt .sub{font-size:14px;color:var(--ink-soft);margin-top:5px}
+  .play{width:92px;height:92px;border-radius:50%;border:none;cursor:pointer;background:var(--seal);color:#fff;font-size:32px;display:block;margin:14px auto 8px;box-shadow:0 6px 18px rgba(192,51,43,.26)}
+  .play:active{transform:scale(.96)}
+  .play.speaking{animation:pulse 1s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 6px 18px rgba(192,51,43,.26)}50%{box-shadow:0 6px 30px rgba(192,51,43,.5)}}
+  .mini{display:flex;gap:8px;justify-content:center;margin-bottom:4px;flex-wrap:wrap}
+
+  .opts{display:flex;flex-direction:column;gap:9px;margin-top:14px}
+  .opt{display:flex;gap:11px;align-items:baseline;text-align:left;cursor:pointer;background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:12px 15px;font-size:15.5px;color:var(--ink)}
+  .opt:hover:not(:disabled){border-color:var(--seal)}
+  .opt .lab{flex:none;width:22px;height:22px;border-radius:6px;background:var(--line);color:var(--ink-soft);display:grid;place-items:center;font-size:12px;font-weight:700;transform:translateY(2px)}
+  .opt.right{border-color:var(--jade);background:var(--jade-tint)} .opt.right .lab{background:var(--jade);color:#fff}
+  .opt.wrong{border-color:var(--seal);background:var(--seal-tint)} .opt.wrong .lab{background:var(--seal);color:#fff}
+  .opt:disabled{cursor:default}
+
+  .fb{margin-top:12px;padding:12px 14px;border-radius:10px;font-size:14.5px;display:none}
+  .fb.ok{display:block;background:var(--jade-tint);border:1px solid #CBE0D6;color:var(--jade)}
+  .fb.no{display:block;background:var(--seal-tint);border:1px solid #EDD2CF;color:var(--seal-deep)}
+  .fb .l{display:block;font-size:13px;color:var(--ink-soft);margin-top:5px}
+
+  .btn{border:none;border-radius:22px;padding:11px 22px;font-size:14.5px;font-weight:600;cursor:pointer}
+  .btn.primary{background:var(--ink);color:#fff} .btn.primary:hover{background:#000}
+  .btn.ghost{background:none;color:var(--ink-soft);border:1px solid var(--line)}
+  .btn.ok{background:var(--jade);color:#fff} .btn.no{background:var(--seal);color:#fff}
+  .nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
+
+  /* speaking */
+  .selfrate{display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+  .reveal{background:#F7F5F0;border:1px solid var(--line);border-radius:11px;padding:14px;text-align:center;margin-top:12px}
+  .heard{font-size:13px;color:var(--ink-soft);margin-top:8px}
+
+  /* results */
+  .stamp{width:140px;height:140px;margin:4px auto;display:grid;place-items:center;border:3px double var(--seal);border-radius:12px;color:var(--seal);transform:rotate(-3deg)}
+  .stamp .big{font-family:Georgia,serif;font-size:38px;font-weight:700;line-height:1}
+  .stamp .small{font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-top:3px}
+  .verdict{text-align:center;font-size:15.5px;margin-top:8px}
+  .grid3{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap}
+  .bd{flex:1;min-width:96px;border:1px solid var(--line);border-radius:11px;padding:13px 8px;text-align:center;background:#fff}
+  .bd .s{font-family:Georgia,serif;font-size:20px} .bd .t{font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+  .bd .z{font-size:11.5px;color:var(--ink-soft)}
+  .miss{border:1px solid var(--line);border-left:3px solid var(--seal);border-radius:10px;padding:12px 14px;margin-top:10px;background:#fff}
+  .miss .tag{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft)}
+  .perfect{background:var(--jade-tint);border:1px solid #CBE0D6;border-radius:11px;padding:16px;text-align:center;color:var(--jade);margin-top:12px}
+  .note{font-size:12.5px;color:var(--amber);background:#FBF3E6;border:1px solid #EBD9B8;border-radius:10px;padding:10px 13px;margin-top:10px}
+
+  footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);text-align:center;font-size:11.5px;color:var(--ink-soft)}
+  @media (max-width:520px){.prompt .big{font-size:24px}.tab{min-width:70px;font-size:12px}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brandrow">
+      <div class="chop">语</div>
+      <div class="brandtext"><h1>ChineseFrench Language Institute</h1><p>Aruna&rsquo;s Classes</p></div>
+    </div>
+    <div class="kicker"><b>New HSK 1</b> · Lessons 1–5 · Fùxí (复习) · 50 chángyòng jùzi</div>
+    <div class="tabs">
+      <button class="tab on" data-p="study" onclick="tab('study')">学 Xué<small>Phrases</small></button>
+      <button class="tab" data-p="listen" onclick="tab('listen')">听 Tīng<small>Listening</small></button>
+      <button class="tab" data-p="read" onclick="tab('read')">读 Dú<small>Reading</small></button>
+      <button class="tab" data-p="speak" onclick="tab('speak')">说 Shuō<small>Speaking</small></button>
+      <button class="tab" data-p="score" onclick="tab('score')">分 Fēn<small>Scores</small></button>
+    </div>
+  </header>
+
+  <!-- STUDY -->
+  <section id="p-study" class="pane on">
+    <div class="card">
+      <div class="eyebrow">Xué · Study the 50 phrases</div>
+      <p class="lead">Diǎn 🔊 tīng fāyīn. Tap 🔊 to hear each phrase, then practise saying it aloud.</p>
+      <div class="chips" id="studyChips"></div>
+      <div id="studyList"></div>
+    </div>
+  </section>
+
+  <!-- LISTENING -->
+  <section id="p-listen" class="pane">
+    <div class="card">
+      <div class="eyebrow">Tīnglì · Listening</div>
+      <p class="lead">Tīng jùzi, xuǎn yìsi. Listen to the phrase, then choose its meaning.</p>
+      <div class="chips" id="listenChips"></div>
+      <div id="voicenote" class="note" style="display:none"></div>
+      <div class="nav" style="justify-content:flex-end"><button class="btn primary" onclick="startQuiz('listen')">Kāishǐ · Start →</button></div>
+    </div>
+    <div class="card" id="listenQuiz" style="display:none"></div>
+  </section>
+
+  <!-- READING -->
+  <section id="p-read" class="pane">
+    <div class="card">
+      <div class="eyebrow">Yuèdú · Reading</div>
+      <p class="lead">Dú jùzi, xuǎn yìsi. Read the phrase, then choose its meaning.</p>
+      <div class="chips" id="readChips"></div>
+      <div class="chips"><button class="chip on" id="pyChip" onclick="togglePy()">Pīnyīn: ON</button></div>
+      <div class="nav" style="justify-content:flex-end"><button class="btn primary" onclick="startQuiz('read')">Kāishǐ · Start →</button></div>
+    </div>
+    <div class="card" id="readQuiz" style="display:none"></div>
+  </section>
+
+  <!-- SPEAKING -->
+  <section id="p-speak" class="pane">
+    <div class="card">
+      <div class="eyebrow">Kǒuyǔ · Speaking</div>
+      <p class="lead">Kàn yìsi, shuō Zhōngwén. Read the meaning, say it in Chinese, then check yourself.</p>
+      <div class="chips" id="speakChips"></div>
+      <div id="micnote" class="note" style="display:none"></div>
+      <div class="nav" style="justify-content:flex-end"><button class="btn primary" onclick="startQuiz('speak')">Kāishǐ · Start →</button></div>
+    </div>
+    <div class="card" id="speakQuiz" style="display:none"></div>
+  </section>
+
+  <!-- SCORES -->
+  <section id="p-score" class="pane">
+    <div class="card" id="scoreCard"></div>
+  </section>
+
+  <footer>© ChineseFrench Language Institute — Aruna&rsquo;s Classes — All Rights Reserved</footer>
+</div>
+
+<script>
+/* ================= 50 phrases · HSK1 Lessons 1–5 ================= */
+const P = [
+ // ---- Lesson 1 · 你好 — greetings & courtesy ----
+ {L:1,hz:"你好！",py:"Nǐ hǎo!",en:"Hello!"},
+ {L:1,hz:"您好！",py:"Nín hǎo!",en:"Hello! (polite)"},
+ {L:1,hz:"你们好！",py:"Nǐmen hǎo!",en:"Hello, everyone!"},
+ {L:1,hz:"老师好！",py:"Lǎoshī hǎo!",en:"Hello, teacher!"},
+ {L:1,hz:"谢谢你！",py:"Xièxie nǐ!",en:"Thank you!"},
+ {L:1,hz:"不客气。",py:"Bú kèqi.",en:"You're welcome."},
+ {L:1,hz:"对不起。",py:"Duìbuqǐ.",en:"Sorry."},
+ {L:1,hz:"没关系。",py:"Méi guānxi.",en:"It's all right."},
+ {L:1,hz:"再见！",py:"Zàijiàn!",en:"Goodbye!"},
+ {L:1,hz:"明天见！",py:"Míngtiān jiàn!",en:"See you tomorrow!"},
+ // ---- Lesson 2 · 你叫什么名字 — names & introductions ----
+ {L:2,hz:"你叫什么名字？",py:"Nǐ jiào shénme míngzi?",en:"What's your name?"},
+ {L:2,hz:"我叫李文。",py:"Wǒ jiào Lǐ Wén.",en:"My name is Li Wen."},
+ {L:2,hz:"请问，您贵姓？",py:"Qǐngwèn, nín guìxìng?",en:"May I ask your surname?"},
+ {L:2,hz:"我姓王。",py:"Wǒ xìng Wáng.",en:"My surname is Wang."},
+ {L:2,hz:"很高兴认识你。",py:"Hěn gāoxìng rènshi nǐ.",en:"Nice to meet you."},
+ {L:2,hz:"认识你我也很高兴。",py:"Rènshi nǐ wǒ yě hěn gāoxìng.",en:"Nice to meet you too."},
+ {L:2,hz:"他叫什么名字？",py:"Tā jiào shénme míngzi?",en:"What's his name?"},
+ {L:2,hz:"这是我的朋友。",py:"Zhè shì wǒ de péngyou.",en:"This is my friend."},
+ {L:2,hz:"这是谁？",py:"Zhè shì shéi?",en:"Who is this?"},
+ {L:2,hz:"请问，你是老师吗？",py:"Qǐngwèn, nǐ shì lǎoshī ma?",en:"Excuse me, are you a teacher?"},
+ // ---- Lesson 3 · 我是中国人 — nationality & work ----
+ {L:3,hz:"你是哪国人？",py:"Nǐ shì nǎ guó rén?",en:"What's your nationality?"},
+ {L:3,hz:"我是中国人。",py:"Wǒ shì Zhōngguó rén.",en:"I'm Chinese."},
+ {L:3,hz:"我是印度人。",py:"Wǒ shì Yìndù rén.",en:"I'm Indian."},
+ {L:3,hz:"他是法国人吗？",py:"Tā shì Fǎguó rén ma?",en:"Is he French?"},
+ {L:3,hz:"他不是法国人。",py:"Tā bú shì Fǎguó rén.",en:"He's not French."},
+ {L:3,hz:"我是学生。",py:"Wǒ shì xuésheng.",en:"I'm a student."},
+ {L:3,hz:"我是老师。",py:"Wǒ shì lǎoshī.",en:"I'm a teacher."},
+ {L:3,hz:"你工作忙吗？",py:"Nǐ gōngzuò máng ma?",en:"Are you busy at work?"},
+ {L:3,hz:"我很忙。",py:"Wǒ hěn máng.",en:"I'm very busy."},
+ {L:3,hz:"我不太忙。",py:"Wǒ bú tài máng.",en:"I'm not too busy."},
+ // ---- Lesson 4 · 我有两个孩子 — family & numbers ----
+ {L:4,hz:"你家有几口人？",py:"Nǐ jiā yǒu jǐ kǒu rén?",en:"How many people are in your family?"},
+ {L:4,hz:"我家有四口人。",py:"Wǒ jiā yǒu sì kǒu rén.",en:"There are four people in my family."},
+ {L:4,hz:"我有两个孩子。",py:"Wǒ yǒu liǎng ge háizi.",en:"I have two children."},
+ {L:4,hz:"这是我爸爸。",py:"Zhè shì wǒ bàba.",en:"This is my father."},
+ {L:4,hz:"这是我妈妈。",py:"Zhè shì wǒ māma.",en:"This is my mother."},
+ {L:4,hz:"你有儿子吗？",py:"Nǐ yǒu érzi ma?",en:"Do you have a son?"},
+ {L:4,hz:"我有一个女儿。",py:"Wǒ yǒu yí ge nǚ'ér.",en:"I have one daughter."},
+ {L:4,hz:"你的孩子几岁？",py:"Nǐ de háizi jǐ suì?",en:"How old is your child?"},
+ {L:4,hz:"他五岁。",py:"Tā wǔ suì.",en:"He is five years old."},
+ {L:4,hz:"我没有孩子。",py:"Wǒ méiyǒu háizi.",en:"I don't have children."},
+ // ---- Lesson 5 · 今天我休息 — dates, days & plans ----
+ {L:5,hz:"今天几号？",py:"Jīntiān jǐ hào?",en:"What's the date today?"},
+ {L:5,hz:"今天五月八号。",py:"Jīntiān wǔ yuè bā hào.",en:"Today is the 8th of May."},
+ {L:5,hz:"今天星期几？",py:"Jīntiān xīngqī jǐ?",en:"What day is it today?"},
+ {L:5,hz:"今天星期一。",py:"Jīntiān xīngqīyī.",en:"Today is Monday."},
+ {L:5,hz:"今天我休息。",py:"Jīntiān wǒ xiūxi.",en:"I'm off today."},
+ {L:5,hz:"明天你做什么？",py:"Míngtiān nǐ zuò shénme?",en:"What are you doing tomorrow?"},
+ {L:5,hz:"我想去中国。",py:"Wǒ xiǎng qù Zhōngguó.",en:"I want to go to China."},
+ {L:5,hz:"你会说汉语吗？",py:"Nǐ huì shuō Hànyǔ ma?",en:"Can you speak Chinese?"},
+ {L:5,hz:"我会说一点儿。",py:"Wǒ huì shuō yìdiǎnr.",en:"I can speak a little."},
+ {L:5,hz:"我们一起去吧。",py:"Wǒmen yìqǐ qù ba.",en:"Let's go together."},
+];
+const LESSONS=[1,2,3,4,5];
+const ROUND=10;                       // questions per round
+const sel={study:new Set(LESSONS),listen:new Set(LESSONS),read:new Set(LESSONS),speak:new Set(LESSONS)};
+const stats={listen:{best:0,last:null,runs:0},read:{best:0,last:null,runs:0},speak:{best:0,last:null,runs:0}};
+let showPy=true;
+let quiz=null;   // {mode, items, i, score, misses, answered}
+
+/* ================= speech ================= */
+let zhVoice=null;
+function pickVoice(){
+  const vs=speechSynthesis.getVoices();
+  zhVoice=vs.find(v=>/zh[-_]?CN/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||null;
+  if(vs.length&&!zhVoice){
+    const n=document.getElementById('voicenote');
+    n.style.display='block';
+    n.textContent='Tíshì: no Chinese (zh-CN) voice is installed on this device, so the audio may be silent. The reading and speaking tabs still work.';
+  }
+}
+if('speechSynthesis' in window){speechSynthesis.onvoiceschanged=pickVoice;pickVoice();}
+function say(text,btn,rate){
+  if(!('speechSynthesis' in window))return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='zh-CN'; if(zhVoice)u.voice=zhVoice; u.rate=rate||0.85;
+  if(btn){btn.classList.add('speaking');
+    u.onend=()=>btn.classList.remove('speaking');
+    u.onerror=()=>btn.classList.remove('speaking');}
+  speechSynthesis.speak(u);
+}
+function sayIdx(i,ev){ say(P[i].hz, ev&&ev.currentTarget); }
+
+/* ================= tabs ================= */
+function tab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.p===name));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  document.getElementById('p-'+name).classList.add('on');
+  if(name==='score')renderScores();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ================= lesson chips ================= */
+function chips(hostId,key,after){
+  const box=document.getElementById(hostId); box.innerHTML='';
+  LESSONS.forEach(L=>{
+    const b=document.createElement('button');
+    b.className='chip'+(sel[key].has(L)?' on':'');
+    b.textContent='Lesson '+L;
+    b.onclick=()=>{ if(sel[key].has(L)){ if(sel[key].size>1)sel[key].delete(L); } else sel[key].add(L);
+      chips(hostId,key,after); if(after)after(); };
+    box.appendChild(b);
+  });
+}
+function togglePy(){ showPy=!showPy; document.getElementById('pyChip').textContent='Pīnyīn: '+(showPy?'ON':'OFF');
+  document.getElementById('pyChip').classList.toggle('on',showPy); if(quiz&&quiz.mode==='read')renderQ(); }
+
+/* ================= study list ================= */
+function renderStudy(){
+  const host=document.getElementById('studyList'); host.innerHTML='';
+  LESSONS.filter(L=>sel.study.has(L)).forEach(L=>{
+    const g=document.createElement('div'); g.className='lgroup';
+    g.innerHTML='<h3>Lesson '+L+'</h3>';
+    P.forEach((p,i)=>{
+      if(p.L!==L)return;
+      const r=document.createElement('div'); r.className='prow';
+      r.innerHTML='<button class="spk" onclick="sayIdx('+i+',event)" aria-label="play">🔊</button>'+
+        '<div class="txt"><div class="hz">'+p.hz+'</div><div class="py">'+p.py+'</div><div class="en">'+p.en+'</div></div>';
+      g.appendChild(r);
+    });
+    host.appendChild(g);
+  });
+}
+
+/* ================= quiz engine ================= */
+function pool(mode){ return P.map((p,i)=>({...p,i})).filter(p=>sel[mode].has(p.L)); }
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function startQuiz(mode){
+  const src=shuffle(pool(mode));
+  const items=src.slice(0,Math.min(ROUND,src.length)).map(p=>{
+    if(mode==='speak')return{p,ok:null};
+    // 2 distractor meanings from the wider set
+    const others=shuffle(P.filter(x=>x.en!==p.en)).slice(0,2);
+    const opts=shuffle([p,...others]);
+    return{p,opts,ans:opts.findIndex(o=>o.en===p.en),sel:null};
+  });
+  quiz={mode,items,i:0,score:0,misses:[],answered:false};
+  document.getElementById(mode+'Quiz').style.display='block';
+  renderQ();
+}
+
+function renderQ(){
+  const {mode,items,i}=quiz, it=items[i], host=document.getElementById(mode+'Quiz');
+  const head='<div class="qhead"><span>'+(mode==='listen'?'Tīnglì':mode==='read'?'Yuèdú':'Kǒuyǔ')+' · Lesson '+it.p.L+'</span><span>'+(i+1)+' / '+items.length+'</span></div>'+
+             '<div class="bar"><i style="width:'+(i/items.length*100)+'%"></i></div>';
+
+  if(mode==='speak'){ renderSpeak(host,head,it,i); return; }
+
+  let prompt='';
+  if(mode==='listen'){
+    prompt='<button class="play" id="pb" onclick="say(P['+it.p.i+'].hz,this)">▶</button>'+
+           '<div class="mini"><button class="chip" onclick="say(P['+it.p.i+'].hz,null,0.6)">Màn · slow</button></div>'+
+           '<div class="prompt"><div class="sub">Tīng, ránhòu xuǎn yìsi.</div></div>';
+  }else{
+    prompt='<div class="prompt"><div class="big">'+it.p.hz+'</div>'+
+           (showPy?'<div class="mid">'+it.p.py+'</div>':'')+'</div>';
+  }
+
+  let opts='<div class="opts">';
+  it.opts.forEach((o,k)=>{
+    let cls='opt';
+    if(quiz.answered){ if(k===it.ans)cls+=' right'; else if(k===it.sel)cls+=' wrong'; }
+    opts+='<button class="'+cls+'" '+(quiz.answered?'disabled':'')+' onclick="answer('+k+')">'+
+          '<span class="lab">'+'ABC'[k]+'</span><span>'+o.en+'</span></button>';
+  });
+  opts+='</div>';
+
+  let fb='';
+  if(quiz.answered){
+    const ok=it.sel===it.ans;
+    fb='<div class="fb '+(ok?'ok':'no')+'">'+(ok?'Duì! ✓ Correct.':'Bú duì. ✗ Not quite.')+
+       '<span class="l">'+it.p.hz+' · '+it.p.py+' — '+it.p.en+'</span></div>';
+  }
+  const nav='<div class="nav"><button class="btn ghost" onclick="say(P['+it.p.i+'].hz,null)">🔊 Zài tīng</button>'+
+    (quiz.answered?'<button class="btn primary" onclick="nextQ()">'+(i===items.length-1?'Chéngjì · Result →':'Xià yí tí →')+'</button>':'<span></span>')+'</div>';
+
+  host.innerHTML=head+prompt+opts+fb+nav;
+  if(mode==='listen'&&!quiz.answered)setTimeout(()=>say(it.p.hz,document.getElementById('pb')),300);
+}
+
+function answer(k){
+  if(quiz.answered)return;
+  const it=quiz.items[quiz.i];
+  it.sel=k; quiz.answered=true;
+  if(k===it.ans)quiz.score++; else quiz.misses.push(it.p);
+  renderQ();
+}
+function nextQ(){
+  quiz.answered=false;
+  if(quiz.i===quiz.items.length-1){finishQuiz();return;}
+  quiz.i++; renderQ();
+}
+
+/* ---------- speaking ---------- */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+let heardText='';
+function renderSpeak(host,head,it,i){
+  const shown=it.revealed;
+  let body='<div class="prompt"><div class="sub">Shuō zhè jù huà · say this in Chinese</div><div class="big" style="font-size:22px;margin-top:6px">'+it.p.en+'</div></div>';
+  if(SR&&!shown){
+    body+='<div class="mini"><button class="chip" id="micBtn" onclick="listenMic()">🎤 Shuō · speak</button></div>';
+    if(heardText)body+='<div class="heard">Tīngdào · heard: <b>'+heardText+'</b></div>';
+  }
+  if(shown){
+    body+='<div class="reveal"><div class="hz" style="font-size:22px">'+it.p.hz+'</div><div class="py">'+it.p.py+'</div>'+
+          '<div class="mini" style="margin-top:9px"><button class="chip" onclick="say(P['+it.p.i+'].hz,null)">🔊 Tīng</button>'+
+          '<button class="chip" onclick="say(P['+it.p.i+'].hz,null,0.6)">Màn · slow</button></div></div>';
+    if(it.ok===null||it.ok===undefined){
+      body+='<div class="selfrate"><button class="btn ok" onclick="rate(true)">✓ Shuō duì le</button>'+
+            '<button class="btn no" onclick="rate(false)">✗ Zài liànxí</button></div>';
+    }else{
+      body+='<div class="fb '+(it.ok?'ok':'no')+'">'+(it.ok?'Hěn hǎo! ✓':'Zài shuō yí cì. ✗')+'</div>';
+    }
+  }else{
+    body+='<div class="nav" style="justify-content:center;margin-top:14px"><button class="btn primary" onclick="revealSpeak()">Kàn dá\'àn · reveal</button></div>';
+  }
+  let nav='';
+  if(it.ok===true||it.ok===false){
+    nav='<div class="nav" style="justify-content:flex-end"><button class="btn primary" onclick="nextSpeak()">'+
+        (i===quiz.items.length-1?'Chéngjì · Result →':'Xià yí ge →')+'</button></div>';
+  }
+  host.innerHTML=head+body+nav;
+}
+function revealSpeak(){ quiz.items[quiz.i].revealed=true; renderQ(); }
+function rate(ok){
+  const it=quiz.items[quiz.i];
+  it.ok=ok; if(ok)quiz.score++; else quiz.misses.push(it.p);
+  heardText=''; renderQ();
+}
+function listenMic(){
+  if(!SR)return;
+  const r=new SR(); r.lang='zh-CN'; r.interimResults=false; r.maxAlternatives=3;
+  const btn=document.getElementById('micBtn'); if(btn)btn.textContent='🎤 Tīng zhe…';
+  r.onresult=e=>{
+    const said=[...e.results[0]].map(x=>x.transcript).join(' ');
+    heardText=said;
+    const clean=s=>s.replace(/[^\u4e00-\u9fff]/g,'');
+    const target=clean(quiz.items[quiz.i].p.hz), got=clean(said);
+    quiz.items[quiz.i].revealed=true;
+    if(got&&(got===target||target.includes(got)||got.includes(target))) rate(true);
+    else renderQ();
+  };
+  r.onerror=()=>{ if(btn)btn.textContent='🎤 Shuō · speak'; };
+  r.onend=()=>{ if(btn&&btn.textContent==='🎤 Tīng zhe…')btn.textContent='🎤 Shuō · speak'; };
+  r.start();
+}
+function nextSpeak(){ if(quiz.i===quiz.items.length-1){finishQuiz();return;} quiz.i++; heardText=''; renderQ(); }
+
+/* ---------- result ---------- */
+function finishQuiz(){
+  const {mode,items,score,misses}=quiz;
+  const pct=Math.round(score/items.length*100);
+  const s=stats[mode]; s.last=pct; s.runs++; if(pct>s.best)s.best=pct;
+  let v; if(pct>=90)v='Fēicháng hǎo! 非常好！'; else if(pct>=70)v='Hěn hǎo, jìxù jiāyóu. 很好！'; else if(pct>=50)v='Búcuò, zài liànxí. 不错。'; else v='Zài liànxí yí cì. 再练习一次。';
+  let html='<div class="eyebrow" style="text-align:center">Chéngjì · Result</div>'+
+    '<div class="stamp"><div><div class="big">'+score+'/'+items.length+'</div><div class="small">'+pct+'%</div></div></div>'+
+    '<div class="verdict">'+v+'</div>';
+  if(misses.length){
+    html+='<div style="margin-top:18px" class="eyebrow">Fùxí · review ('+misses.length+')</div>';
+    misses.forEach(p=>{
+      html+='<div class="miss"><div class="tag">Lesson '+p.L+'</div><div class="hz">'+p.hz+'</div>'+
+            '<div class="py">'+p.py+'</div><div class="en">'+p.en+'</div>'+
+            '<div class="mini" style="justify-content:flex-start;margin-top:7px"><button class="chip" onclick="say(P['+P.indexOf(p)+'].hz,null)">🔊 Tīng</button></div></div>';
+    });
+  }else{
+    html+='<div class="perfect">Quánbù zhèngquè! 全部正确 — no mistakes.</div>';
+  }
+  html+='<div class="nav"><button class="btn ghost" onclick="tab(\'score\')">Kàn zǒng fēn →</button>'+
+        '<button class="btn primary" onclick="startQuiz(\''+mode+'\')">↻ Zài liànxí</button></div>';
+  document.getElementById(mode+'Quiz').innerHTML=html;
+  quiz=null;
+  window.scrollTo({top:document.getElementById(mode+'Quiz').offsetTop-20,behavior:'smooth'});
+}
+
+/* ---------- scoreboard ---------- */
+function renderScores(){
+  const names={listen:['Tīnglì','Listening'],read:['Yuèdú','Reading'],speak:['Kǒuyǔ','Speaking']};
+  let done=0,sum=0;
+  Object.keys(stats).forEach(k=>{ if(stats[k].last!==null){done++;sum+=stats[k].last;} });
+  const overall=done?Math.round(sum/done):0;
+  let html='<div class="eyebrow" style="text-align:center">Zǒng fēn · Revision score</div>'+
+    '<div class="stamp"><div><div class="big">'+overall+'%</div><div class="small">'+(done?done+'/3 skills':'no data')+'</div></div></div>'+
+    '<div class="grid3">';
+  Object.keys(names).forEach(k=>{
+    const s=stats[k];
+    html+='<div class="bd"><div class="s">'+(s.last===null?'—':s.last+'%')+'</div>'+
+          '<div class="t">'+names[k][0]+'</div>'+
+          '<div class="z">'+names[k][1]+'</div>'+
+          '<div class="z" style="margin-top:4px">zuì hǎo · best '+(s.runs?s.best+'%':'—')+'</div></div>';
+  });
+  html+='</div><p class="lead" style="margin-top:14px">Liànxí sān ge jìnéng: tīng, dú, shuō. Practise all three skills — the overall score is the average of your latest round in each.</p>';
+  html+='<div class="nav"><button class="btn ghost" onclick="resetScores()">↻ Qīngchú · reset</button><button class="btn primary" onclick="tab(\'study\')">学 Xué →</button></div>';
+  document.getElementById('scoreCard').innerHTML=html;
+}
+function resetScores(){ Object.keys(stats).forEach(k=>{stats[k]={best:0,last:null,runs:0};}); renderScores(); }
+
+/* ---------- init ---------- */
+chips('studyChips','study',renderStudy);
+chips('listenChips','listen');
+chips('readChips','read');
+chips('speakChips','speak');
+renderStudy();
+renderScores();
+if(!SR){ const m=document.getElementById('micnote'); m.style.display='block';
+  m.textContent="Tíshì: this browser has no speech recognition, so speaking is self-checked — say the phrase, reveal the answer, then mark yourself. (Chrome gives an automatic 🎤 check.)"; }
+</script>
+</body>
+</html>
