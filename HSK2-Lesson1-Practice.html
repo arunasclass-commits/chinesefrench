@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aruna's Class · New HSK2 · Lesson 1 Practice</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+:root{--ink:#1a1a2e;--red:#c0392b;--gold:#d4af37;--teal:#0d9488;--blue:#1d6fa8;--purple:#6b21a8;--orange:#c05621;--light:#f0f4ff;--card:#fff;--border:#e2e8f0;--muted:#8892a4;--paper:#f5f0e8;--shadow:0 8px 32px rgba(0,0,0,0.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--ink);min-height:100vh}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#2c1a5c 60%,#c0392b 100%);color:#fff;padding:26px 20px 40px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'请';position:absolute;font-family:'Noto Sans SC',sans-serif;font-size:200px;font-weight:900;color:rgba(255,255,255,0.05);top:-30px;left:50%;transform:translateX(-50%);pointer-events:none}
+.hero-badge{display:inline-block;background:rgba(212,175,55,0.2);border:1px solid rgba(212,175,55,0.5);color:var(--gold);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:12px;position:relative}
+.hero h1{font-size:clamp(18px,5vw,32px);font-family:'Noto Sans SC',sans-serif;font-weight:900;margin-bottom:4px;position:relative}
+.hero-sub{font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:20px;position:relative}
+.score-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;position:relative}
+.sp{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:16px;padding:6px 12px;text-align:center;min-width:74px}
+.sp .sv{font-size:15px;font-weight:900}.sp .sl{font-size:9px;opacity:.75;text-transform:uppercase;letter-spacing:.5px}
+.sp.ov{background:rgba(212,175,55,.28);border-color:rgba(212,175,55,.55)}
+.nav{display:flex;background:#fff;border-bottom:2px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.nt{flex-shrink:0;padding:12px 14px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap}
+.nt.on{color:var(--red);border-bottom-color:var(--red)}
+.nt.done::after{content:'✓';color:var(--teal);margin-left:4px;font-size:10px}
+.content{max-width:900px;margin:0 auto;padding:18px 14px 70px}
+.sec{display:none}.sec.on{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.shead{font-size:19px;font-weight:900;margin-bottom:6px}
+.ssub{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:14px}
+.info{background:#e8f0fe;border-left:4px solid var(--blue);border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:#1a3a6b;font-weight:600;line-height:1.6}
+.fc-wrap{max-width:360px;margin:0 auto}
+.fc-meta{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:10px}
+.fc{perspective:1200px;height:300px;margin-bottom:16px;cursor:pointer}
+.fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.fc.flip .fc-inner{transform:rotateY(180deg)}
+.fc-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.fc-front{background:#fff;border:2px solid var(--border)}
+.fc-back{background:linear-gradient(135deg,#0d9488,#0f766e);color:#fff;transform:rotateY(180deg)}
+.fc-front .zh{font-family:'Noto Sans SC',sans-serif;font-size:72px;font-weight:900;color:var(--ink);line-height:1}
+.fc-front .tap{font-size:11px;color:var(--muted);font-weight:700;margin-top:18px}
+.fc-back .py{font-size:28px;font-weight:900;margin-bottom:8px}
+.fc-back .en{font-size:15px;font-weight:700;text-align:center;line-height:1.4}
+.fc-back .tag{margin-top:14px;font-size:10px;font-weight:800;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:10px;text-transform:uppercase;letter-spacing:1px}
+.fc-audio{position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;z-index:2}
+.fc-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.fc-dots{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.fcd{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.fcd.known{background:var(--teal)}.fcd.cur{background:var(--red);transform:scale(1.3)}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px;margin:20px 0}
+.vc{background:var(--card);border-radius:10px;padding:12px 9px;box-shadow:var(--shadow);text-align:center;position:relative;cursor:pointer}
+.vc:hover{border:2px solid var(--red)}
+.vc .zh{font-family:'Noto Sans SC',sans-serif;font-size:23px;font-weight:700;margin-bottom:2px}
+.vc .py{font-size:11px;color:var(--blue);font-weight:700}
+.vc .en{font-size:10px;color:var(--muted);font-weight:600}
+.dbox{background:var(--card);border-radius:14px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px}
+.dtitle{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.passage{font-family:'Noto Sans SC',sans-serif;font-size:19px;line-height:2.1;color:var(--ink)}
+.passage .py-line{display:block;font-family:'Nunito',sans-serif;font-size:12px;color:var(--blue);font-weight:600;line-height:1.5;margin:2px 0 12px}
+.pb{background:none;border:1.5px solid var(--border);border-radius:5px;padding:3px 9px;font-size:11px;cursor:pointer;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:700;margin-top:3px}
+.pb:hover{border-color:var(--blue);color:var(--blue)}
+.gb{background:var(--card);border-radius:10px;padding:18px;box-shadow:var(--shadow);margin-bottom:12px;border-left:4px solid var(--purple)}
+.gb h3{font-size:15px;font-weight:900;margin-bottom:6px}
+.gb h3 .py{font-size:12px;color:var(--purple);font-weight:700}
+.gb p{font-size:12.5px;color:#4a5568;line-height:1.65;margin-bottom:8px}
+.gp{display:inline-block;background:#f3e8ff;color:var(--purple);font-size:12px;font-weight:800;padding:3px 10px;border-radius:5px;margin-bottom:8px;font-family:monospace}
+.ge{background:var(--light);border-radius:6px;padding:9px 12px;margin-bottom:6px}
+.ge .zh{font-family:'Noto Sans SC',sans-serif;font-size:17px;font-weight:700}
+.ge .py{font-size:11px;color:var(--blue)}.ge .en{font-size:11px;color:var(--muted)}
+.qprog{background:var(--border);border-radius:4px;height:5px;margin-bottom:14px}
+.qpf{height:5px;border-radius:4px;background:linear-gradient(90deg,var(--red),var(--gold));transition:width .4s;width:0}
+.qmeta{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:10px}
+.qcard{background:var(--card);border-radius:14px;padding:20px;box-shadow:var(--shadow);margin-bottom:12px}
+.qq{font-size:15px;font-weight:800;margin-bottom:6px;line-height:1.5}
+.qq .zh{font-family:'Noto Sans SC',sans-serif;font-size:20px}
+.qq .py{font-size:12px;color:var(--blue);font-weight:700;margin-top:2px}
+.opts{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.opt{background:#fff;border:2px solid var(--border);border-radius:9px;padding:11px 13px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-align:left;transition:all .15s;color:var(--ink)}
+.opt .ozh{font-family:'Noto Sans SC',sans-serif;font-size:17px}
+.opt .opy{font-size:11px;color:var(--blue);font-weight:600}
+.opt:hover:not(.locked){border-color:var(--blue)}
+.opt.correct{background:#d1fae5!important;border-color:#059669!important;color:#065f46!important}
+.opt.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#991b1b!important}
+.fb{margin-top:12px;padding:11px 13px;border-radius:8px;font-size:12.5px;font-weight:700;display:none;line-height:1.55}
+.fb.ok{background:#d1fae5;color:#065f46;display:block}
+.fb.no{background:#fee2e2;color:#991b1b;display:block}
+.playbtn{background:linear-gradient(135deg,var(--blue),#0c6fa8);color:#fff;border:none;border-radius:10px;padding:13px 26px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px;margin:0 auto 8px;transition:transform .2s}
+.playbtn:hover{transform:scale(1.03)}
+.slowbtn{display:block;margin:0 auto 14px;background:none;border:1.5px solid var(--border);border-radius:7px;padding:6px 14px;font-size:11px;font-weight:800;color:var(--muted);cursor:pointer;font-family:'Nunito',sans-serif}
+.nextbtn{display:block;margin:14px auto 0;padding:11px 30px;background:var(--ink);color:#fff;border:none;border-radius:9px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer}
+.done-card{background:linear-gradient(135deg,#0d9488,#0f766e);color:#fff;border-radius:14px;padding:26px;text-align:center;box-shadow:var(--shadow)}
+.done-card .big{font-size:40px;font-weight:900;margin:8px 0}
+.done-card .rb{margin-top:14px;padding:10px 24px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:13px}
+.spk-card{background:var(--card);border-radius:14px;padding:22px;box-shadow:var(--shadow);margin-bottom:12px;text-align:center}
+.spk-prompt{font-size:13px;color:var(--orange);font-weight:800;margin-bottom:12px;line-height:1.5}
+.spk-zh{font-family:'Noto Sans SC',sans-serif;font-size:30px;font-weight:700}
+.spk-py{font-size:15px;color:var(--blue);font-weight:700;margin-top:6px}
+.spk-en{font-size:12px;color:var(--muted);margin-top:4px}
+.spk-hidden{filter:blur(7px);user-select:none}
+.sdots{display:flex;gap:5px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
+.sd{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background .3s}
+.sd.done{background:var(--teal)}.sd.cur{background:var(--red)}
+.btnrow{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.cbtn{padding:11px 20px;border:none;border-radius:9px;font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:800;cursor:pointer;transition:all .15s}
+.cbtn:hover:not(:disabled){transform:scale(1.03)}.cbtn:disabled{opacity:.45;cursor:not-allowed}
+.bl{background:var(--blue);color:#fff}.bg{background:var(--teal);color:#fff}.bs{background:#f1f5f9;color:var(--muted)}.br{background:var(--red);color:#fff}.bo{background:var(--orange);color:#fff}
+.wq{font-size:13px;font-weight:800;margin-bottom:4px}
+.wq .en{color:var(--muted);font-size:12px;font-weight:700}
+.wq .py{color:var(--blue);font-size:12px;font-weight:700;margin-top:2px}
+.wbuild{min-height:56px;border:2px dashed var(--border);border-radius:9px;padding:10px;margin:10px 0;display:flex;flex-wrap:wrap;gap:7px;align-content:flex-start;background:var(--paper)}
+.wbank{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:6px}
+.tile{background:#fff;border:2px solid var(--border);border-radius:8px;padding:8px 12px;font-family:'Noto Sans SC',sans-serif;font-size:18px;font-weight:700;cursor:pointer;transition:all .15s;user-select:none}
+.tile:hover{border-color:var(--blue);transform:translateY(-1px)}
+.tile.used{opacity:.3;pointer-events:none}
+.tile.inbuild{border-color:var(--teal);background:#e8f8f2}
+.footer{text-align:center;padding:22px;font-size:11px;color:var(--muted)}
+.footer b{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="hero-badge">Aruna's Class · ChineseFrench</div>
+  <h1>新 HSK 2 · 第一课 · 接朋友 · 请客</h1>
+  <div class="hero-sub">New HSK Course 2 — Lesson 1 theme: arriving &amp; being picked up · Grammar: 是…的 · 语气助词吧 · 请/让/叫 (pivotal)</div>
+  <div class="score-row" id="scoreRow"></div>
+</div>
+
+<div class="nav" id="nav"></div>
+<div class="content" id="content"></div>
+
+<div class="footer">Original practice built on the vocabulary &amp; grammar of <b>New HSK Course 2, Lesson 1</b> · <b>Aruna's Class</b> · No textbook text reproduced. Character names are fictional.</div>
+
+<script>
+/* ============ SPEECH ============ */
+let zhVoice=null;
+function pickVoice(){const vs=speechSynthesis.getVoices();zhVoice=vs.find(v=>/zh|Chinese/i.test(v.lang+v.name))||null;}
+if('speechSynthesis'in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function say(t,rate){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=rate||0.85;if(zhVoice)u.voice=zhVoice;speechSynthesis.speak(u);}catch(e){}}
+function playSeq(arr){let i=0;const step=()=>{if(i>=arr.length)return;const u=new SpeechSynthesisUtterance(arr[i]);u.lang='zh-CN';u.rate=0.85;if(zhVoice)u.voice=zhVoice;u.onend=()=>{i++;setTimeout(step,250);};speechSynthesis.speak(u);};speechSynthesis.cancel();step();}
+
+/* ============ VOCAB (Lesson 1 words) ============ */
+const VOCAB=[
+ {zh:'接',py:'jiē',en:'to pick up (sb); to answer',c:'new'},
+ {zh:'旅游',py:'lǚyóu',en:'to travel; tour',c:'new'},
+ {zh:'介绍',py:'jièshào',en:'to introduce',c:'new'},
+ {zh:'帮忙',py:'bāngmáng',en:'to help; do a favor',c:'new'},
+ {zh:'打电话',py:'dǎ diànhuà',en:'to make a phone call',c:'new'},
+ {zh:'打车',py:'dǎchē',en:'to take a taxi',c:'new'},
+ {zh:'找',py:'zhǎo',en:'to look for; seek',c:'new'},
+ {zh:'懂',py:'dǒng',en:'to understand',c:'new'},
+ {zh:'意思',py:'yìsi',en:'meaning; idea',c:'new'},
+ {zh:'已经',py:'yǐjīng',en:'already',c:'new'},
+ {zh:'有时',py:'yǒushí',en:'sometimes',c:'new'},
+ {zh:'次',py:'cì',en:'time (occurrence)',c:'new'},
+ {zh:'时候',py:'shíhou',en:'time; moment (什么时候 = when)',c:'new'},
+ {zh:'那',py:'nà',en:'then; in that case',c:'new'},
+ {zh:'不好意思',py:'bù hǎoyìsi',en:'excuse me; embarrassed',c:'new'},
+ {zh:'北京烤鸭',py:'Běijīng kǎoyā',en:'Peking (roast) Duck',c:'new'}
+];
+
+/* ============ READING passage (original) + 15 Q (WITH pinyin) ============ */
+const PASSAGE=[
+ {zh:'我叫高明，这是我第一次来北京旅游。',py:'Wǒ jiào Gāo Míng, zhè shì wǒ dì-yī cì lái Běijīng lǚyóu.'},
+ {zh:'我跟同学马丽一起来。',py:'Wǒ gēn tóngxué Mǎ Lì yìqǐ lái.'},
+ {zh:'林老师没有时间，让她的表姐王方来接我们。',py:'Lín lǎoshī méiyǒu shíjiān, ràng tā de biǎojiě Wáng Fāng lái jiē wǒmen.'},
+ {zh:'我们是坐飞机来的，早上已经到了。',py:'Wǒmen shì zuò fēijī lái de, zǎoshang yǐjīng dào le.'},
+ {zh:'王方请我们吃了北京烤鸭，很好吃。',py:'Wáng Fāng qǐng wǒmen chī le Běijīng kǎoyā, hěn hǎochī.'},
+ {zh:'她还给我们介绍了很多北京的地方。',py:'Tā hái gěi wǒmen jièshào le hěn duō Běijīng de dìfāng.'},
+ {zh:'我们的中文不太好，有时不太懂她的意思。',py:'Wǒmen de Zhōngwén bú tài hǎo, yǒushí bú tài dǒng tā de yìsi.'},
+ {zh:'晚上，朋友陈亮给我打电话，想请我帮个忙。',py:'Wǎnshang, péngyou Chén Liàng gěi wǒ dǎ diànhuà, xiǎng qǐng wǒ bāng ge máng.'},
+ {zh:'我说：“不好意思，我很累，那明天吧。”',py:'Wǒ shuō: “Bù hǎoyìsi, wǒ hěn lèi, nà míngtiān ba.”'}
+];
+const READ=[
+ {q:'高明第几次来北京？',qpy:'Gāo Míng dì-jǐ cì lái Běijīng?',opts:[{zh:'第一次',py:'first time'},{zh:'第二次',py:'second time'},{zh:'第三次',py:'third time'},{zh:'很多次',py:'many times'}],a:0,fb:'这是我第一次来北京 — the first time.'},
+ {q:'高明来北京做什么？',qpy:'Gāo Míng lái Běijīng zuò shénme?',opts:[{zh:'旅游',py:'to travel'},{zh:'工作',py:'to work'},{zh:'考试',py:'an exam'},{zh:'看医生',py:'see a doctor'}],a:0,fb:'来北京旅游 — to travel.'},
+ {q:'谁跟高明一起来？',qpy:'Shéi gēn Gāo Míng yìqǐ lái?',opts:[{zh:'同学马丽',py:'classmate Ma Li'},{zh:'林老师',py:'Teacher Lin'},{zh:'王方',py:'Wang Fang'},{zh:'陈亮',py:'Chen Liang'}],a:0,fb:'跟同学马丽一起来 — with classmate Ma Li.'},
+ {q:'林老师为什么没来接他们？',qpy:'Lín lǎoshī wèishénme méi lái jiē tāmen?',opts:[{zh:'没有时间',py:'no time'},{zh:'不认识路',py:"doesn't know the way"},{zh:'生病了',py:'is sick'},{zh:'在旅游',py:'is travelling'}],a:0,fb:'林老师没有时间 — no time.'},
+ {q:'谁来机场接他们？',qpy:'Shéi lái jīchǎng jiē tāmen?',opts:[{zh:'王方（林老师的表姐）',py:"Wang Fang, Lin's cousin"},{zh:'马丽',py:'Ma Li'},{zh:'陈亮',py:'Chen Liang'},{zh:'没有人',py:'nobody'}],a:0,fb:'让她的表姐王方来接 — cousin Wang Fang.'},
+ {q:'他们是怎么来北京的？',qpy:'Tāmen shì zěnme lái Běijīng de?',opts:[{zh:'坐飞机来的',py:'by plane'},{zh:'坐火车来的',py:'by train'},{zh:'打车来的',py:'by taxi'},{zh:'走路来的',py:'on foot'}],a:0,fb:'是坐飞机来的 — by plane (是…的 = manner).'},
+ {q:'他们什么时候到的？',qpy:'Tāmen shénme shíhou dào de?',opts:[{zh:'早上',py:'in the morning'},{zh:'中午',py:'at noon'},{zh:'晚上',py:'in the evening'},{zh:'昨天',py:'yesterday'}],a:0,fb:'早上已经到了 — already arrived in the morning.'},
+ {q:'王方请他们吃了什么？',qpy:'Wáng Fāng qǐng tāmen chī le shénme?',opts:[{zh:'北京烤鸭',py:'Peking Duck'},{zh:'面条',py:'noodles'},{zh:'饺子',py:'dumplings'},{zh:'米饭',py:'rice'}],a:0,fb:'请我们吃了北京烤鸭 — Peking Duck.'},
+ {q:'王方还为他们做了什么？',qpy:'Wáng Fāng hái wèi tāmen zuò le shénme?',opts:[{zh:'介绍了很多地方',py:'introduced many places'},{zh:'买了机票',py:'bought tickets'},{zh:'找了酒店',py:'found a hotel'},{zh:'打了车',py:'took a taxi'}],a:0,fb:'给我们介绍了很多地方 — introduced many places.'},
+ {q:'他们有时为什么不懂王方的意思？',qpy:'Wèishénme yǒushí bù dǒng?',opts:[{zh:'中文不太好',py:'Chinese not great'},{zh:'她说得太小声',py:'too quiet'},{zh:'太累了',py:'too tired'},{zh:'没听',py:"didn't listen"}],a:0,fb:'我们的中文不太好 — their Chinese isn’t good yet.'},
+ {q:'“有时”是什么意思？',qpy:'"Yǒushí" shì shénme yìsi?',opts:[{zh:'sometimes',py:'yǒushí'},{zh:'already',py:'yǐjīng'},{zh:'the first time',py:'dì-yī cì'},{zh:'to help',py:'bāngmáng'}],a:0,fb:'有时 = sometimes.'},
+ {q:'晚上谁给高明打电话？',qpy:'Wǎnshang shéi gěi Gāo Míng dǎ diànhuà?',opts:[{zh:'朋友陈亮',py:'friend Chen Liang'},{zh:'王方',py:'Wang Fang'},{zh:'林老师',py:'Teacher Lin'},{zh:'马丽',py:'Ma Li'}],a:0,fb:'朋友陈亮给我打电话 — friend Chen Liang.'},
+ {q:'陈亮想让高明做什么？',qpy:'Chén Liàng xiǎng ràng Gāo Míng zuò shénme?',opts:[{zh:'帮个忙',py:'do him a favor'},{zh:'一起旅游',py:'travel together'},{zh:'吃烤鸭',py:'eat duck'},{zh:'去机场',py:'go to airport'}],a:0,fb:'想请我帮个忙 — asked for a favor (请…帮忙).'},
+ {q:'高明怎么回答陈亮？',qpy:'Gāo Míng zěnme huídá?',opts:[{zh:'那明天吧',py:'then tomorrow'},{zh:'现在就来',py:'right now'},{zh:'不可以',py:'no way'},{zh:'我不懂',py:"don't understand"}],a:0,fb:'那明天吧 — then let’s make it tomorrow (那…吧).'},
+ {q:'“我们是坐飞机来的”强调什么？',qpy:'What does the 是…的 sentence emphasize?',opts:[{zh:'怎么来的（方式）',py:'the manner / how'},{zh:'谁来的',py:'who'},{zh:'吃什么',py:'what they ate'},{zh:'为什么来',py:'why'}],a:0,fb:'是…的 here emphasizes MANNER: how they came (by plane).'}
+];
+
+/* ============ LISTENING — 15 (NO pinyin in options) ============ */
+const LISTEN=[
+ {audio:'你是什么时候到的？',opts:[{zh:'你是什么时候到的？'},{zh:'你是坐什么来的？'},{zh:'你是跟谁来的？'},{zh:'你为什么来的？'}],a:0,fb:'什么时候到的 = when did you arrive (是…的, time).'},
+ {audio:'我是坐飞机来的。',opts:[{zh:'我是坐飞机来的。'},{zh:'我是坐火车来的。'},{zh:'我是打车来的。'},{zh:'我是走路来的。'}],a:0,fb:'坐飞机来的 = came by plane (manner).'},
+ {audio:'老师让我们说中文。',opts:[{zh:'老师让我们说中文。'},{zh:'老师叫我们回家。'},{zh:'老师请我们吃饭。'},{zh:'老师给我们打电话。'}],a:0,fb:'让我们说中文 = has us speak Chinese (pivotal 让).'},
+ {audio:'我想请你帮个忙。',opts:[{zh:'我想请你帮个忙。'},{zh:'我想请你吃饭。'},{zh:'我想让你回家。'},{zh:'我想给你打电话。'}],a:0,fb:'请你帮个忙 = ask you a favor (pivotal 请).'},
+ {audio:'你是他的学生吧？',opts:[{zh:'你是他的学生吧？'},{zh:'你是他的老师吧？'},{zh:'你是他的朋友吗？'},{zh:'你是他的表姐吧？'}],a:0,fb:'…吧？ = guessing/speculation.'},
+ {audio:'我们已经到北京了。',opts:[{zh:'我们已经到北京了。'},{zh:'我们明天到北京。'},{zh:'我们还没到北京。'},{zh:'我们要去北京。'}],a:0,fb:'已经…了 = already arrived.'},
+ {audio:'这是我第一次来北京。',opts:[{zh:'这是我第一次来北京。'},{zh:'这是我第二次来北京。'},{zh:'这是我第一次来上海。'},{zh:'这是他第一次来北京。'}],a:0,fb:'第一次 = the first time.'},
+ {audio:'不好意思，我有时不太懂。',opts:[{zh:'不好意思，我有时不太懂。'},{zh:'不好意思，我已经懂了。'},{zh:'谢谢你，我很懂。'},{zh:'没关系，我都懂。'}],a:0,fb:'有时不太懂 = sometimes I don’t quite understand.'},
+ {audio:'妈妈叫孩子回家。',opts:[{zh:'妈妈叫孩子回家。'},{zh:'妈妈让孩子学习。'},{zh:'妈妈请孩子吃饭。'},{zh:'妈妈给孩子打电话。'}],a:0,fb:'叫孩子回家 = tells the child to go home (pivotal 叫).'},
+ {audio:'太远了，那我们打车去吧。',opts:[{zh:'太远了，那我们打车去吧。'},{zh:'太近了，那我们走路去吧。'},{zh:'太远了，那我们坐飞机去吧。'},{zh:'太累了，那我们回家吧。'}],a:0,fb:'那…吧 = then let’s…; 打车 = take a taxi.'},
+ {audio:'她请我们吃了北京烤鸭。',opts:[{zh:'她请我们吃了北京烤鸭。'},{zh:'她请我们吃了饺子。'},{zh:'她给我们做了饭。'},{zh:'她让我们买了烤鸭。'}],a:0,fb:'请我们吃了北京烤鸭 = treated us to Peking Duck.'},
+ {audio:'我给朋友打电话。',opts:[{zh:'我给朋友打电话。'},{zh:'我给老师打电话。'},{zh:'我给朋友发短信。'},{zh:'我找朋友帮忙。'}],a:0,fb:'给朋友打电话 = call a friend.'},
+ {audio:'你是坐车来的吗？',opts:[{zh:'你是坐车来的吗？'},{zh:'你是走路来的吗？'},{zh:'你是打车来的吗？'},{zh:'你是坐飞机来的吗？'}],a:0,fb:'是坐车来的吗 = did you come by car? (是…的 question).'},
+ {audio:'我不是坐出租车来的。',opts:[{zh:'我不是坐出租车来的。'},{zh:'我是坐出租车来的。'},{zh:'我不是坐飞机来的。'},{zh:'我不想坐出租车。'}],a:0,fb:'不是…来的 — 是 cannot be dropped in the negative.'},
+ {audio:'有事你可以找我帮忙。',opts:[{zh:'有事你可以找我帮忙。'},{zh:'有事你可以给我打电话。'},{zh:'没事你可以回家。'},{zh:'有事你可以问老师。'}],a:0,fb:'找我帮忙 = come to me for help.'}
+];
+
+/* ============ GRAMMAR (Mandarin + pinyin) ============ */
+const GRAMMAR=[
+ {t:'语气助词"吧" (2)',tp:'yǔqì zhùcí "ba" — guessing',p:'Put 吧 (ba) at the end of a question to make a guess or supposition ("…right?"). You already think you know the answer.',pat:'[statement] + 吧 ？',ex:[{zh:'你是林老师吧？',py:'Nǐ shì Lín lǎoshī ba?',en:'You’re Teacher Lin, right?'},{zh:'她唱歌很好听吧？',py:'Tā chànggē hěn hǎotīng ba?',en:'She sings well, doesn’t she?'}]},
+ {t:'"是……的"句',tp:'shì…de — emphasis',p:'Use 是……的 to emphasize the time, place, or manner of a completed action. 是 may be dropped in statements/questions, but NOT in the negative (不是…的).',pat:'(是) + [time/place/manner] + verb + 的',ex:[{zh:'我是坐飞机来的。',py:'Wǒ shì zuò fēijī lái de.',en:'I came by plane. (manner)'},{zh:'你是什么时候到的？',py:'Nǐ shì shénme shíhou dào de?',en:'When did you arrive? (time)'},{zh:'我不是坐出租车来的。',py:'Wǒ bú shì zuò chūzūchē lái de.',en:'I did NOT come by taxi. (是 kept)'}]},
+ {t:'兼语句 请/让/叫',tp:'jiānyǔjù — pivotal sentences',p:'请 / 让 / 叫 + person + verb phrase means "ask / let / tell someone to do something". The person is object of the first verb and subject of the second.',pat:'Subj + 请/让/叫 + person + verb phrase',ex:[{zh:'我想请你帮个忙。',py:'Wǒ xiǎng qǐng nǐ bāng ge máng.',en:'I’d like to ask you a favor. (请)'},{zh:'老师让我们说中文。',py:'Lǎoshī ràng wǒmen shuō Zhōngwén.',en:'The teacher has us speak Chinese. (让)'},{zh:'妈妈叫孩子回家。',py:'Māma jiào háizi huí jiā.',en:'Mom tells the child to go home. (叫)'}]}
+];
+const GQUIZ=[
+ {q:'你 ___ 坐飞机来的吗？',qpy:'(是…的 question)',opts:[{zh:'是',py:'shì'},{zh:'在',py:'zài'},{zh:'很',py:'hěn'},{zh:'也',py:'yě'}],a:0,fb:'是…的 asks about manner: 你是坐飞机来的吗？'},
+ {q:'我不是坐出租车来 ___。',qpy:'(negative 是…的)',opts:[{zh:'的',py:'de'},{zh:'了',py:'le'},{zh:'吧',py:'ba'},{zh:'吗',py:'ma'}],a:0,fb:'…来的; in the negative, both 是 and 的 stay.'},
+ {q:'你是什么 ___ 到的？',qpy:'(when)',opts:[{zh:'时候',py:'shíhou'},{zh:'意思',py:'yìsi'},{zh:'地方',py:'dìfāng'},{zh:'次',py:'cì'}],a:0,fb:'什么时候 = when.'},
+ {q:'妈妈 ___ 孩子回家。',qpy:'(tell/have someone)',opts:[{zh:'叫',py:'jiào'},{zh:'是',py:'shì'},{zh:'已经',py:'yǐjīng'},{zh:'次',py:'cì'}],a:0,fb:'叫 + person + verb = tell someone to do (pivotal).'},
+ {q:'老师 ___ 我们说中文。',qpy:'(let/have)',opts:[{zh:'让',py:'ràng'},{zh:'找',py:'zhǎo'},{zh:'懂',py:'dǒng'},{zh:'那',py:'nà'}],a:0,fb:'让 = have / let someone do (pivotal).'},
+ {q:'我想 ___ 你帮个忙。',qpy:'(ask a favor)',opts:[{zh:'请',py:'qǐng'},{zh:'坐',py:'zuò'},{zh:'已经',py:'yǐjīng'},{zh:'有时',py:'yǒushí'}],a:0,fb:'请你帮忙 = ask you a favor (pivotal 请).'},
+ {q:'你是老师 ___ ？',qpy:'(making a guess)',opts:[{zh:'吧',py:'ba'},{zh:'的',py:'de'},{zh:'了',py:'le'},{zh:'次',py:'cì'}],a:0,fb:'…吧？ makes a guess: You’re the teacher, right?'},
+ {q:'我 ___ 到北京了。',qpy:'(already)',opts:[{zh:'已经',py:'yǐjīng'},{zh:'有时',py:'yǒushí'},{zh:'不好意思',py:'bù hǎoyìsi'},{zh:'那',py:'nà'}],a:0,fb:'已经…了 = already.'},
+ {q:'这是我第一 ___ 来北京。',qpy:'(measure word)',opts:[{zh:'次',py:'cì'},{zh:'个',py:'gè'},{zh:'位',py:'wèi'},{zh:'本',py:'běn'}],a:0,fb:'第一次 = the first time.'},
+ {q:'我 ___ 不太懂她的意思。',qpy:'(sometimes)',opts:[{zh:'有时',py:'yǒushí'},{zh:'已经',py:'yǐjīng'},{zh:'第一次',py:'dì-yī cì'},{zh:'那',py:'nà'}],a:0,fb:'有时不太懂 = sometimes I don’t quite understand.'},
+ {q:'林老师让表姐来机场 ___ 我们。',qpy:'(pick up)',opts:[{zh:'接',py:'jiē'},{zh:'找',py:'zhǎo'},{zh:'懂',py:'dǒng'},{zh:'介绍',py:'jièshào'}],a:0,fb:'接 = pick someone up.'},
+ {q:'我听不太 ___ 中文。',qpy:'(understand)',opts:[{zh:'懂',py:'dǒng'},{zh:'次',py:'cì'},{zh:'接',py:'jiē'},{zh:'那',py:'nà'}],a:0,fb:'听不懂 = can’t understand (by listening).'},
+ {q:'太远了，___ 我们打车去吧。',qpy:'(then / in that case)',opts:[{zh:'那',py:'nà'},{zh:'是',py:'shì'},{zh:'次',py:'cì'},{zh:'懂',py:'dǒng'}],a:0,fb:'那…吧 = then let’s…'},
+ {q:'我给朋友打 ___。',qpy:'(a phone call)',opts:[{zh:'电话',py:'diànhuà'},{zh:'烤鸭',py:'kǎoyā'},{zh:'意思',py:'yìsi'},{zh:'时候',py:'shíhou'}],a:0,fb:'打电话 = make a phone call.'},
+ {q:'你 ___ 在哪儿买的机票？',qpy:'(是…的, place)',opts:[{zh:'是',py:'shì'},{zh:'让',py:'ràng'},{zh:'已经',py:'yǐjīng'},{zh:'有时',py:'yǒushí'}],a:0,fb:'是在哪儿买的 = where did you buy it (place).'}
+];
+
+/* ============ SPEAKING — 8 prompts ============ */
+const SPEAK=[
+ {prompt:'Ask someone WHEN they arrived (use 是…的).',zh:'你是什么时候到的？',py:'Nǐ shì shénme shíhou dào de?',en:'When did you arrive?'},
+ {prompt:'Say HOW you came — by plane (use 是…的).',zh:'我是坐飞机来的。',py:'Wǒ shì zuò fēijī lái de.',en:'I came by plane.'},
+ {prompt:'Politely ask a friend for a favor (use 请).',zh:'我想请你帮个忙。',py:'Wǒ xiǎng qǐng nǐ bāng ge máng.',en:'I’d like to ask you a favor.'},
+ {prompt:'Make a guess: this person is the teacher (use 吧).',zh:'你是林老师吧？',py:'Nǐ shì Lín lǎoshī ba?',en:'You’re Teacher Lin, right?'},
+ {prompt:'Say you have already arrived in Beijing.',zh:'我已经到北京了。',py:'Wǒ yǐjīng dào Běijīng le.',en:'I have already arrived in Beijing.'},
+ {prompt:'Say it is your first time in Beijing.',zh:'这是我第一次来北京。',py:'Zhè shì wǒ dì-yī cì lái Běijīng.',en:'This is my first time in Beijing.'},
+ {prompt:'Apologize that you sometimes don’t understand.',zh:'不好意思，我有时不太懂。',py:'Bù hǎoyìsi, wǒ yǒushí bú tài dǒng.',en:'Sorry, sometimes I don’t quite understand.'},
+ {prompt:'Suggest taking a taxi because it is far (use 那…吧).',zh:'太远了，那我们打车去吧。',py:'Tài yuǎn le, nà wǒmen dǎchē qù ba.',en:'It’s far — then let’s take a taxi.'}
+];
+
+/* ============ WRITING — 8 sentence builders ============ */
+const WRITE=[
+ {en:'I came by plane.',py:'Wǒ shì zuò fēijī lái de.',ans:['我','是','坐','飞机','来','的','。']},
+ {en:'When did you arrive?',py:'Nǐ shì shénme shíhou dào de?',ans:['你','是','什么','时候','到','的','？']},
+ {en:'The teacher has us speak Chinese.',py:'Lǎoshī ràng wǒmen shuō Zhōngwén.',ans:['老师','让','我们','说','中文','。']},
+ {en:'I’d like to ask you a favor.',py:'Wǒ xiǎng qǐng nǐ bāng ge máng.',ans:['我','想','请','你','帮','个','忙','。']},
+ {en:'This is my first time in Beijing.',py:'Zhè shì wǒ dì-yī cì lái Běijīng.',ans:['这','是','我','第一','次','来','北京','。']},
+ {en:'I have already arrived in Beijing.',py:'Wǒ yǐjīng dào Běijīng le.',ans:['我','已经','到','北京','了','。']},
+ {en:'You’re the teacher, right?',py:'Nǐ shì lǎoshī ba?',ans:['你','是','老师','吧','？']},
+ {en:'Then let’s take a taxi.',py:'Nà wǒmen dǎchē qù ba.',ans:['那','我们','打车','去','吧','。']}
+];
+
+/* ============ SECTIONS / STATE ============ */
+const SECTIONS=[
+ {id:'flash',label:'抽认卡 Flashcards',scored:false},
+ {id:'read',label:'阅读 Reading',scored:true,total:READ.length},
+ {id:'listen',label:'听力 Listening',scored:true,total:LISTEN.length},
+ {id:'grammar',label:'语法 Grammar',scored:true,total:GQUIZ.length},
+ {id:'speak',label:'口语 Speaking',scored:true,total:SPEAK.length},
+ {id:'write',label:'写作 Writing',scored:true,total:WRITE.length}
+];
+const scores={read:0,listen:0,grammar:0,speak:0,write:0};
+const done={read:false,listen:false,grammar:false,speak:false,write:false};
+
+const nav=document.getElementById('nav');
+SECTIONS.forEach((s,i)=>{const b=document.createElement('button');b.className='nt'+(i===0?' on':'');b.id='nt-'+s.id;b.textContent=s.label;b.onclick=()=>showSection(s.id);nav.appendChild(b);});
+function renderScores(){
+ const row=document.getElementById('scoreRow');row.innerHTML='';let got=0,tot=0;
+ SECTIONS.filter(s=>s.scored).forEach(s=>{got+=scores[s.id];tot+=s.total;const d=document.createElement('div');d.className='sp';d.innerHTML='<div class="sv">'+scores[s.id]+'/'+s.total+'</div><div class="sl">'+s.label.split(' ')[1]+'</div>';row.appendChild(d);});
+ const ov=document.createElement('div');ov.className='sp ov';ov.innerHTML='<div class="sv">'+got+'/'+tot+'</div><div class="sl">Total</div>';row.appendChild(ov);
+ SECTIONS.forEach(s=>{if(s.scored){const nt=document.getElementById('nt-'+s.id);nt.classList.toggle('done',done[s.id]);}});
+}
+function showSection(id){document.querySelectorAll('.nt').forEach(n=>n.classList.remove('on'));document.getElementById('nt-'+id).classList.add('on');render(id);}
+function render(id){const c=document.getElementById('content');c.innerHTML='';const wrap=document.createElement('div');wrap.className='sec on';c.appendChild(wrap);({flash:renderFlash,read:renderRead,listen:renderListen,grammar:renderGrammar,speak:renderSpeak,write:renderWrite})[id](wrap);window.scrollTo(0,0);}
+
+/* ============ FLASHCARDS ============ */
+function renderFlash(w){
+ w.innerHTML='<div class="shead">抽认卡 · Flashcards</div><div class="ssub">Tap the card to flip. 🔊 hears the word. Mark the ones you know.</div>';
+ let idx=0;const known=new Array(VOCAB.length).fill(false);
+ const wrap=document.createElement('div');wrap.className='fc-wrap';w.appendChild(wrap);
+ const meta=document.createElement('div');meta.className='fc-meta';wrap.appendChild(meta);
+ const fc=document.createElement('div');fc.className='fc';wrap.appendChild(fc);
+ const btns=document.createElement('div');btns.className='fc-btns';wrap.appendChild(btns);
+ const dots=document.createElement('div');dots.className='fc-dots';wrap.appendChild(dots);
+ btns.innerHTML='<button class="cbtn bs" id="prev">← Prev</button><button class="cbtn bg" id="know">✓ I know it</button><button class="cbtn bl" id="next">Next →</button>';
+ function draw(){
+   const v=VOCAB[idx];
+   meta.innerHTML='<span>Card '+(idx+1)+' / '+VOCAB.length+'</span><span>Known: '+known.filter(Boolean).length+' / '+VOCAB.length+'</span>';
+   fc.className='fc';
+   fc.innerHTML='<div class="fc-inner"><div class="fc-face fc-front"><button class="fc-audio">🔊</button><div class="zh">'+v.zh+'</div><div class="tap">tap to flip</div></div><div class="fc-face fc-back"><button class="fc-audio">🔊</button><div class="py">'+v.py+'</div><div class="en">'+v.en+'</div><div class="tag">New HSK 2 · Lesson 1</div></div></div>';
+   fc.querySelectorAll('.fc-audio').forEach(b=>b.onclick=(e)=>{e.stopPropagation();say(v.zh);});
+   fc.onclick=()=>fc.classList.toggle('flip');
+   dots.innerHTML='';VOCAB.forEach((_,i)=>{const d=document.createElement('div');d.className='fcd'+(known[i]?' known':'')+(i===idx?' cur':'');dots.appendChild(d);});
+   btns.querySelector('#know').textContent=known[idx]?'✓ Known':'✓ I know it';
+ }
+ btns.querySelector('#prev').onclick=()=>{idx=(idx-1+VOCAB.length)%VOCAB.length;draw();};
+ btns.querySelector('#next').onclick=()=>{idx=(idx+1)%VOCAB.length;draw();};
+ btns.querySelector('#know').onclick=()=>{known[idx]=!known[idx];if(known[idx]&&idx<VOCAB.length-1){idx++;}draw();};
+ draw();
+ const grid=document.createElement('div');grid.className='vgrid';
+ VOCAB.forEach(v=>{const card=document.createElement('div');card.className='vc';card.innerHTML='<div class="zh">'+v.zh+'</div><div class="py">'+v.py+'</div><div class="en">'+v.en+'</div>';card.onclick=()=>say(v.zh);grid.appendChild(card);});
+ const h=document.createElement('div');h.className='ssub';h.style.marginTop='6px';h.textContent='Full Lesson 1 word list (tap to hear):';w.appendChild(h);w.appendChild(grid);
+}
+
+/* ============ READING (with pinyin) ============ */
+function renderRead(w){
+ w.innerHTML='<div class="shead">阅读 · Reading</div><div class="ssub">Read the passage (with pinyin), then answer 15 questions.</div><div class="info">Theme: <b>Gao Ming and Ma Li arrive in Beijing to travel</b>. A teacher’s cousin picks them up and treats them to Peking Duck. Watch for 是…的, 请/让/叫 and 吧.</div>';
+ const box=document.createElement('div');box.className='dbox';
+ box.innerHTML='<div class="dtitle"><span>短文 · 第一次来北京 (First time in Beijing)</span><button class="pb" id="playAll">▶ Play all</button></div>';
+ const p=document.createElement('div');p.className='passage';
+ PASSAGE.forEach(s=>{p.innerHTML+=s.zh+'<span class="py-line">'+s.py+'</span>';});
+ box.appendChild(p);w.appendChild(box);
+ box.querySelector('#playAll').onclick=()=>playSeq(PASSAGE.map(s=>s.zh));
+ const quiz=document.createElement('div');quiz.id='rquiz';w.appendChild(quiz);
+ runMCQ(READ,'read',quiz,true,false);
+}
+
+/* ============ LISTENING (no pinyin) ============ */
+function renderListen(w){
+ w.innerHTML='<div class="shead">听力 · Listening</div><div class="ssub">Press play, listen, then choose what you heard — Chinese only, no pinyin. 15 questions.</div><div class="info">Uses your browser voice. If you hear nothing, check volume or use Chrome/Edge with a Chinese voice installed. Use “slower” if it plays too fast.</div>';
+ const quiz=document.createElement('div');quiz.id='lquiz';w.appendChild(quiz);
+ runMCQ(LISTEN,'listen',quiz,false,true);
+}
+
+/* ============ GRAMMAR ============ */
+function renderGrammar(w){
+ w.innerHTML='<div class="shead">语法 · Grammar</div><div class="ssub">Study the 3 Lesson-1 points (Mandarin + pinyin), then do 15 exercises.</div>';
+ GRAMMAR.forEach(g=>{
+   const b=document.createElement('div');b.className='gb';
+   let ex=g.ex.map(e=>'<div class="ge"><div class="zh">'+e.zh+'</div><div class="py">'+e.py+'</div><div class="en">'+e.en+'</div></div>').join('');
+   b.innerHTML='<h3>'+g.t+' &nbsp;<span class="py">'+g.tp+'</span></h3><div class="gp">'+g.pat+'</div><p>'+g.p+'</p>'+ex;
+   w.appendChild(b);
+ });
+ const h=document.createElement('div');h.className='shead';h.style.marginTop='20px';h.textContent='语法练习 · Grammar Exercises (15)';w.appendChild(h);
+ const quiz=document.createElement('div');quiz.id='gquiz';w.appendChild(quiz);
+ runMCQ(GQUIZ,'grammar',quiz,true,false);
+}
+
+/* ============ GENERIC MCQ ENGINE ============ */
+function runMCQ(bank,key,mount,showPy,isListen){
+ let idx=0,correct=0,answered=false;
+ function draw(){
+   answered=false;mount.innerHTML='';
+   if(idx>=bank.length){finish();return;}
+   const item=bank[idx];
+   const prog=document.createElement('div');prog.className='qprog';prog.innerHTML='<div class="qpf" style="width:'+((idx)/bank.length*100)+'%"></div>';mount.appendChild(prog);
+   const meta=document.createElement('div');meta.className='qmeta';meta.innerHTML='<span>Question '+(idx+1)+' / '+bank.length+'</span><span>Score: '+correct+'</span>';mount.appendChild(meta);
+   const card=document.createElement('div');card.className='qcard';
+   let qhtml='';
+   if(isListen){qhtml='<button class="playbtn" id="pbtn">🔊 &nbsp;Play audio</button><button class="slowbtn" id="sbtn">🐢 Slower</button><div class="qq" style="text-align:center">你听到了什么？ / What did you hear?</div>';}
+   else{qhtml='<div class="qq"><span class="zh">'+item.q+'</span>'+(item.qpy?'<div class="py">'+item.qpy+'</div>':'')+'</div>';}
+   card.innerHTML=qhtml;
+   const opts=document.createElement('div');opts.className='opts';
+   item.opts.forEach((o,i)=>{const btn=document.createElement('button');btn.className='opt';btn.innerHTML='<span class="ozh">'+o.zh+'</span>'+(o.py?'<div class="opy">'+o.py+'</div>':'');btn.onclick=()=>choose(i,btn,opts,card,item);opts.appendChild(btn);});
+   card.appendChild(opts);
+   const fb=document.createElement('div');fb.className='fb';fb.id='fb';card.appendChild(fb);
+   mount.appendChild(card);
+   if(isListen){card.querySelector('#pbtn').onclick=()=>say(item.audio,0.85);card.querySelector('#sbtn').onclick=()=>say(item.audio,0.55);setTimeout(()=>say(item.audio,0.85),350);}
+ }
+ function choose(i,btn,opts,card,item){
+   if(answered)return;answered=true;
+   opts.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+   const fb=card.querySelector('#fb');
+   if(i===item.a){btn.classList.add('correct');correct++;fb.className='fb ok';fb.innerHTML='✓ 对 Correct! '+item.fb;}
+   else{btn.classList.add('wrong');opts.children[item.a].classList.add('correct');fb.className='fb no';fb.innerHTML='✗ 再看看。'+item.fb;}
+   const nb=document.createElement('button');nb.className='nextbtn';nb.textContent=idx<bank.length-1?'Next →':'Finish ✓';nb.onclick=()=>{idx++;draw();};card.appendChild(nb);
+ }
+ function finish(){
+   scores[key]=correct;done[key]=true;renderScores();
+   const pct=Math.round(correct/bank.length*100);
+   mount.innerHTML='<div class="done-card"><div>Section complete!</div><div class="big">'+correct+' / '+bank.length+'</div><div>'+pct+'% · '+(pct>=80?'很好！Excellent 👏':pct>=60?'不错！Keep going':'加油！Review &amp; retry')+'</div><button class="rb">↺ Try again</button></div>';
+   mount.querySelector('.rb').onclick=()=>{idx=0;correct=0;scores[key]=0;done[key]=false;renderScores();draw();};
+ }
+ draw();
+}
+
+/* ============ SPEAKING ============ */
+function renderSpeak(w){
+ w.innerHTML='<div class="shead">口语 · Speaking</div><div class="ssub">Read each prompt, say it out loud, then reveal &amp; hear the model. Mark yourself. 8 prompts.</div><div class="info">Speak first, <b>then</b> tap “Reveal model” to compare. Give yourself a point when your answer matches the pattern.</div>';
+ let idx=0,correct=0;
+ const dots=document.createElement('div');dots.className='sdots';w.appendChild(dots);
+ const card=document.createElement('div');card.className='spk-card';w.appendChild(card);
+ function drawDots(){dots.innerHTML='';SPEAK.forEach((s,i)=>{const d=document.createElement('div');d.className='sd'+(i<idx?' done':i===idx?' cur':'');dots.appendChild(d);});}
+ function draw(){
+   drawDots();
+   if(idx>=SPEAK.length){const pct=Math.round(correct/SPEAK.length*100);card.innerHTML='<div class="big" style="font-size:38px;font-weight:900;color:var(--teal)">'+correct+' / '+SPEAK.length+'</div><div style="font-weight:800;margin:6px 0">Speaking done · '+pct+'%</div><button class="cbtn br" id="rs">↺ Restart</button>';card.querySelector('#rs').onclick=()=>{idx=0;correct=0;scores.speak=0;done.speak=false;renderScores();draw();};return;}
+   const s=SPEAK[idx];
+   card.innerHTML='<div class="spk-prompt">🗣️ '+s.prompt+'</div><div id="model"><div class="spk-zh spk-hidden">'+s.zh+'</div><div class="spk-py spk-hidden">'+s.py+'</div><div class="spk-en spk-hidden">'+s.en+'</div></div><div class="btnrow"><button class="cbtn bo" id="reveal">👁 Reveal model</button><button class="cbtn bl" id="hear" disabled>🔊 Hear it</button></div><div class="btnrow" id="mark" style="display:none"><button class="cbtn bg" id="good">✓ I said it well</button><button class="cbtn bs" id="again">↻ Need practice</button></div>';
+   card.querySelector('#reveal').onclick=()=>{card.querySelectorAll('.spk-hidden').forEach(e=>e.classList.remove('spk-hidden'));card.querySelector('#hear').disabled=false;card.querySelector('#mark').style.display='flex';say(s.zh);};
+   card.querySelector('#hear').onclick=()=>say(s.zh);
+   card.querySelector('#good').onclick=()=>{correct++;next();};
+   card.querySelector('#again').onclick=()=>{next();};
+   function next(){idx++;scores.speak=correct;if(idx>=SPEAK.length)done.speak=true;renderScores();draw();}
+ }
+ draw();
+}
+
+/* ============ WRITING ============ */
+function renderWrite(w){
+ w.innerHTML='<div class="shead">写作 · Writing (build the sentence)</div><div class="ssub">Tap the word tiles in the correct order. No stroke drawing — this trains word order &amp; grammar. 8 questions.</div>';
+ let idx=0,correct=0;
+ const meta=document.createElement('div');meta.className='qmeta';w.appendChild(meta);
+ const card=document.createElement('div');card.className='qcard';w.appendChild(card);
+ function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+ function draw(){
+   if(idx>=WRITE.length){const pct=Math.round(correct/WRITE.length*100);meta.innerHTML='';card.className='done-card';card.innerHTML='<div>Writing complete!</div><div class="big">'+correct+' / '+WRITE.length+'</div><div>'+pct+'% · '+(pct>=80?'很好 👏':'加油!')+'</div><button class="rb">↺ Try again</button>';card.querySelector('.rb').onclick=()=>{idx=0;correct=0;scores.write=0;done.write=false;renderScores();card.className='qcard';draw();};return;}
+   const it=WRITE[idx];const built=[];const order=shuffle(it.ans);
+   meta.innerHTML='<span>Sentence '+(idx+1)+' / '+WRITE.length+'</span><span>Score: '+correct+'</span>';
+   card.className='qcard';
+   card.innerHTML='<div class="wq"><span class="en">'+it.en+'</span><div class="py">'+it.py+'</div></div><div class="wbuild" id="build"><span style="color:var(--muted);font-size:12px">Tap tiles below…</span></div><div class="wbank" id="bank"></div><div class="btnrow"><button class="cbtn bs" id="undo">← Undo</button><button class="cbtn bl" id="check">Check ✓</button></div><div class="fb" id="wfb"></div>';
+   const bank=card.querySelector('#bank'),build=card.querySelector('#build'),fb=card.querySelector('#wfb');
+   order.forEach((word)=>{const t=document.createElement('button');t.className='tile';t.textContent=word;t.onclick=()=>{if(t.classList.contains('used'))return;t.classList.add('used');built.push({word:word,el:t});paint();};bank.appendChild(t);});
+   function paint(){build.innerHTML='';if(!built.length){build.innerHTML='<span style="color:var(--muted);font-size:12px">Tap tiles below…</span>';return;}built.forEach(b=>{const s=document.createElement('span');s.className='tile inbuild';s.textContent=b.word;build.appendChild(s);});}
+   card.querySelector('#undo').onclick=()=>{const last=built.pop();if(last)last.el.classList.remove('used');paint();fb.className='fb';};
+   card.querySelector('#check').onclick=()=>{
+     const made=built.map(b=>b.word).join('');const want=it.ans.join('');
+     if(made===want){correct++;scores.write=correct;fb.className='fb ok';fb.innerHTML='✓ 对！'+it.ans.join(' ')+' &nbsp;<b>'+it.py+'</b>';say(want);}
+     else{fb.className='fb no';fb.innerHTML='✗ Not yet. Correct: <b>'+it.ans.join(' ')+'</b> — '+it.py;}
+     const nb=document.createElement('button');nb.className='nextbtn';nb.textContent=idx<WRITE.length-1?'Next →':'Finish ✓';nb.onclick=()=>{idx++;if(idx>=WRITE.length)done.write=true;renderScores();draw();};card.appendChild(nb);
+     card.querySelector('#check').disabled=true;card.querySelector('#undo').disabled=true;
+   };
+ }
+ draw();
+}
+
+/* ============ INIT ============ */
+renderScores();
+render('flash');
+</script>
+</body>
+</html>
