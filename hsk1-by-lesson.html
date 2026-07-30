@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New HSK Course 1 — Lesson Trainer (ChineseFrench · Aruna's Class)</title>
+<style>
+  :root{
+    --bg:#0f1220; --card:#1a1e33; --card2:#232845; --text:#eef1f8; --muted:#9aa3c0;
+    --line:#2c3255; --green:#2a9d8f; --accent:#e63946;
+    --lc:#ffd166; /* live lesson color, set by JS */
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#20264a,#0f1220 60%);
+    color:var(--text); min-height:100vh; display:flex; flex-direction:column;
+  }
+  header{text-align:center; padding:24px 16px 8px}
+  header h1{margin:0; font-size:1.45rem}
+  header h1 .zh{color:var(--lc)}
+  header p{margin:6px 0 0; color:var(--muted); font-size:.9rem}
+  .wrap{flex:1; width:100%; max-width:820px; margin:0 auto; padding:16px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px; box-shadow:0 10px 40px rgba(0,0,0,.35)}
+  h2.section{margin:2px 0 14px; font-size:1.05rem; color:var(--muted); font-weight:600; letter-spacing:.4px; text-transform:uppercase}
+
+  /* Lesson legend grid */
+  .lessons{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px}
+  .lesson{
+    cursor:pointer; border-radius:14px; padding:14px; border:1px solid var(--line);
+    background:linear-gradient(160deg,var(--card2),#1b2038); transition:.15s; position:relative; overflow:hidden;
+  }
+  .lesson:hover{transform:translateY(-3px)}
+  .lesson .swatch{width:100%; height:8px; border-radius:999px; margin-bottom:10px}
+  .lesson .num{font-size:.75rem; color:var(--muted); letter-spacing:.5px}
+  .lesson .name{font-weight:600; margin:2px 0 4px; line-height:1.2}
+  .lesson small{color:var(--muted)}
+  .lesson.all{background:linear-gradient(160deg,#2a2f52,#20264a)}
+
+  .modes{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:6px}
+  .mode{cursor:pointer; border:1px solid var(--line); background:var(--card2); border-radius:14px; padding:16px 10px; text-align:center; transition:.15s}
+  .mode:hover{transform:translateY(-3px); border-color:var(--lc)}
+  .mode .ico{font-size:1.7rem}
+  .mode h3{margin:8px 0 2px; font-size:1rem}
+  .mode small{color:var(--muted); font-size:.72rem}
+
+  .row{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap}
+  .pill{background:var(--card2); border:1px solid var(--line); border-radius:999px; padding:6px 14px; font-size:.85rem; color:var(--muted)}
+  .pill.lc{border-color:var(--lc); color:var(--lc)}
+  .btn{padding:11px 18px; border-radius:12px; border:none; cursor:pointer; font-size:.98rem; font-weight:600; background:var(--lc); color:#141830}
+  .btn.alt{background:var(--card2); color:var(--text); border:1px solid var(--line)}
+  .btn:disabled{opacity:.45; cursor:not-allowed}
+
+  .prompt{text-align:center; padding:26px 10px; border-radius:14px; background:var(--card2); border:1px dashed var(--lc); margin:16px 0}
+  .prompt .big{font-size:2.6rem; font-weight:700; letter-spacing:1px; color:var(--lc)}
+  .prompt .zh{font-size:3.1rem; margin:6px 0}
+  .prompt .sub{color:var(--muted); margin-top:8px}
+  .choices{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px}
+  .choice{text-align:left; padding:14px 16px; border-radius:12px; border:1px solid var(--line); background:var(--card2); color:var(--text); font-size:1rem; cursor:pointer; transition:.12s}
+  .choice:hover{border-color:var(--lc)}
+  .choice.correct{background:rgba(42,157,143,.25); border-color:var(--green)}
+  .choice.wrong{background:rgba(230,57,70,.22); border-color:var(--accent)}
+  input[type=text]{width:100%; padding:14px 16px; font-size:1.2rem; border-radius:12px; border:1px solid var(--lc); background:#0e1226; color:var(--text); text-align:center; letter-spacing:1px}
+  .feedback{min-height:26px; text-align:center; margin:12px 0; font-weight:600}
+  .feedback.ok{color:var(--green)} .feedback.no{color:#f4a261}
+  .controls{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:14px}
+  .bar{height:8px; background:var(--card2); border-radius:999px; overflow:hidden; margin:14px 0}
+  .bar>div{height:100%; background:var(--lc); width:0%}
+  .center{text-align:center}
+  .hidden{display:none}
+  .tag{font-size:.75rem; color:var(--muted)}
+
+  footer{text-align:center; padding:18px 12px 26px; color:var(--muted); font-size:.82rem; border-top:1px solid var(--line); margin-top:10px}
+  footer .brand{color:var(--lc); font-weight:600}
+  @media(max-width:560px){
+    .modes{grid-template-columns:repeat(2,1fr)} .choices{grid-template-columns:1fr}
+    .prompt .zh{font-size:2.5rem} .prompt .big{font-size:2rem}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="zh">新 HSK</span> Course 1 — Lesson Trainer</h1>
+  <p>5 key words per lesson · Listening · Speaking · Reading · Writing</p>
+</header>
+
+<div class="wrap">
+  <!-- HOME: pick lesson -->
+  <section id="home" class="card">
+    <h2 class="section">1 · Pick a lesson</h2>
+    <div class="lessons" id="lessonGrid"></div>
+  </section>
+
+  <!-- pick skill -->
+  <section id="skillPick" class="card hidden">
+    <div class="row" style="margin-bottom:14px">
+      <button class="btn alt" onclick="goHome()">← Lessons</button>
+      <span class="pill lc" id="skillLessonLabel"></span>
+    </div>
+    <h2 class="section">2 · Pick a skill</h2>
+    <div class="modes">
+      <div class="mode" onclick="startMode('listening')"><div class="ico">🎧</div><h3>Listening</h3><small>hear → meaning</small></div>
+      <div class="mode" onclick="startMode('speaking')"><div class="ico">🗣️</div><h3>Speaking</h3><small>say the word</small></div>
+      <div class="mode" onclick="startMode('reading')"><div class="ico">📖</div><h3>Reading</h3><small>pinyin → meaning</small></div>
+      <div class="mode" onclick="startMode('writing')"><div class="ico">✍️</div><h3>Writing</h3><small>meaning → type pinyin</small></div>
+    </div>
+    <div id="wordPeek" style="margin-top:18px"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="card hidden">
+    <div class="row">
+      <button class="btn alt" onclick="backToSkill()">← Skills</button>
+      <span class="pill lc" id="modeLabel"></span>
+      <span class="pill" id="score">Score 0 / 0</span>
+    </div>
+    <div class="bar"><div id="progress"></div></div>
+    <div class="prompt" id="promptBox"></div>
+    <div id="answerArea"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="controls">
+      <button class="btn alt" id="replayBtn" onclick="replayAudio()">🔊 Replay</button>
+      <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+    </div>
+  </section>
+
+  <!-- DONE -->
+  <section id="done" class="card hidden center">
+    <h2>Session complete 🎉</h2>
+    <p id="finalScore" style="font-size:1.3rem"></p>
+    <div class="controls">
+      <button class="btn" onclick="startMode(currentMode)">Practice again</button>
+      <button class="btn alt" onclick="backToSkill()">Another skill</button>
+      <button class="btn alt" onclick="goHome()">Another lesson</button>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div>制作 · <span class="brand">ChineseFrench — Aruna's Class</span></div>
+  <div class="tag">© 2026 ChineseFrench — Aruna's Class. All rights reserved.</div>
+</footer>
+
+<script>
+/* ===== Lesson metadata (color legend) ===== */
+const LESSONS=[
+ {n:1, name:"Greetings",           color:"#ff6b6b"},
+ {n:2, name:"Introductions",       color:"#f7934c"},
+ {n:3, name:"Countries & Family",  color:"#ffd166"},
+ {n:4, name:"Numbers & Family",    color:"#c5e063"},
+ {n:5, name:"Dates & Hobbies",     color:"#84dcc6"},
+ {n:6, name:"Shopping & Food",     color:"#43c59e"},
+ {n:7, name:"Time & Class",        color:"#3fbfd8"},
+ {n:8, name:"Describe & Act",      color:"#4d9de0"},
+ {n:9, name:"Places & Study",      color:"#6c8cff"},
+ {n:10,name:"Money & Shops",       color:"#9b8cff"},
+ {n:11,name:"Daily Routine",       color:"#c17fff"},
+ {n:12,name:"Weather & Health",    color:"#e879c7"},
+ {n:13,name:"Requests & Objects",  color:"#ff7fa3"},
+ {n:14,name:"Study Verbs",         color:"#ff9b85"},
+ {n:15,name:"Family & Travel",     color:"#f2c14e"}
+];
+
+/* ===== 5 key words per lesson (75 total) ===== */
+const VOCAB=[
+ // Lesson 1
+ {zh:"你好",py:"nǐ hǎo",en:"hello",l:1},
+ {zh:"谢谢",py:"xièxie",en:"thank you",l:1},
+ {zh:"老师",py:"lǎoshī",en:"teacher",l:1},
+ {zh:"学生",py:"xuésheng",en:"student",l:1},
+ {zh:"再见",py:"zàijiàn",en:"goodbye",l:1},
+ // Lesson 2
+ {zh:"我",py:"wǒ",en:"I; me",l:2},
+ {zh:"你",py:"nǐ",en:"you",l:2},
+ {zh:"是",py:"shì",en:"to be",l:2},
+ {zh:"什么",py:"shénme",en:"what",l:2},
+ {zh:"名字",py:"míngzi",en:"name",l:2},
+ // Lesson 3
+ {zh:"中国",py:"Zhōngguó",en:"China",l:3},
+ {zh:"人",py:"rén",en:"person; people",l:3},
+ {zh:"谁",py:"shéi",en:"who",l:3},
+ {zh:"忙",py:"máng",en:"busy",l:3},
+ {zh:"想",py:"xiǎng",en:"think; want; miss",l:3},
+ // Lesson 4
+ {zh:"家",py:"jiā",en:"family; home",l:4},
+ {zh:"妈妈",py:"māma",en:"mother",l:4},
+ {zh:"有",py:"yǒu",en:"have; there is/are",l:4},
+ {zh:"岁",py:"suì",en:"years old",l:4},
+ {zh:"两",py:"liǎng",en:"two (before measure words)",l:4},
+ // Lesson 5
+ {zh:"星期",py:"xīngqī",en:"week",l:5},
+ {zh:"喜欢",py:"xǐhuan",en:"like",l:5},
+ {zh:"月",py:"yuè",en:"month",l:5},
+ {zh:"做",py:"zuò",en:"do; make",l:5},
+ {zh:"会",py:"huì",en:"can; know how to",l:5},
+ // Lesson 6
+ {zh:"买",py:"mǎi",en:"buy",l:6},
+ {zh:"去",py:"qù",en:"go",l:6},
+ {zh:"好吃",py:"hǎochī",en:"delicious",l:6},
+ {zh:"米饭",py:"mǐfàn",en:"cooked rice",l:6},
+ {zh:"明天",py:"míngtiān",en:"tomorrow",l:6},
+ // Lesson 7
+ {zh:"看",py:"kàn",en:"look; watch; read",l:7},
+ {zh:"课",py:"kè",en:"class; lesson",l:7},
+ {zh:"里",py:"lǐ",en:"inside",l:7},
+ {zh:"下午",py:"xiàwǔ",en:"afternoon",l:7},
+ {zh:"小时",py:"xiǎoshí",en:"hour",l:7},
+ // Lesson 8
+ {zh:"漂亮",py:"piàoliang",en:"beautiful",l:8},
+ {zh:"小",py:"xiǎo",en:"small",l:8},
+ {zh:"走",py:"zǒu",en:"walk; leave",l:8},
+ {zh:"住",py:"zhù",en:"live; reside",l:8},
+ {zh:"一起",py:"yìqǐ",en:"together",l:8},
+ // Lesson 9
+ {zh:"朋友",py:"péngyou",en:"friend",l:9},
+ {zh:"学校",py:"xuéxiào",en:"school",l:9},
+ {zh:"书",py:"shū",en:"book",l:9},
+ {zh:"晚上",py:"wǎnshàng",en:"evening",l:9},
+ {zh:"学习",py:"xuéxí",en:"study",l:9},
+ // Lesson 10
+ {zh:"钱",py:"qián",en:"money",l:10},
+ {zh:"便宜",py:"piányi",en:"cheap; inexpensive",l:10},
+ {zh:"衣服",py:"yīfu",en:"clothes",l:10},
+ {zh:"商店",py:"shāngdiàn",en:"shop; store",l:10},
+ {zh:"苹果",py:"píngguǒ",en:"apple",l:10},
+ // Lesson 11
+ {zh:"起床",py:"qǐchuáng",en:"get up",l:11},
+ {zh:"睡觉",py:"shuìjiào",en:"sleep",l:11},
+ {zh:"问",py:"wèn",en:"ask",l:11},
+ {zh:"学",py:"xué",en:"study; learn",l:11},
+ {zh:"昨天",py:"zuótiān",en:"yesterday",l:11},
+ // Lesson 12
+ {zh:"天气",py:"tiānqì",en:"weather",l:12},
+ {zh:"热",py:"rè",en:"hot; warm",l:12},
+ {zh:"冷",py:"lěng",en:"cold",l:12},
+ {zh:"医生",py:"yīshēng",en:"doctor",l:12},
+ {zh:"喝",py:"hē",en:"drink",l:12},
+ // Lesson 13
+ {zh:"请",py:"qǐng",en:"please; invite",l:13},
+ {zh:"手机",py:"shǒujī",en:"mobile phone",l:13},
+ {zh:"面包",py:"miànbāo",en:"bread",l:13},
+ {zh:"问题",py:"wèntí",en:"question",l:13},
+ {zh:"先生",py:"xiānsheng",en:"Mr.; Sir",l:13},
+ // Lesson 14
+ {zh:"写",py:"xiě",en:"write",l:14},
+ {zh:"听",py:"tīng",en:"listen",l:14},
+ {zh:"开",py:"kāi",en:"open; start",l:14},
+ {zh:"字",py:"zì",en:"Chinese character; word",l:14},
+ {zh:"中午",py:"zhōngwǔ",en:"noon",l:14},
+ // Lesson 15
+ {zh:"机场",py:"jīchǎng",en:"airport",l:15},
+ {zh:"家人",py:"jiārén",en:"family member",l:15},
+ {zh:"男朋友",py:"nánpéngyou",en:"boyfriend",l:15},
+ {zh:"去年",py:"qùnián",en:"last year",l:15},
+ {zh:"年",py:"nián",en:"year",l:15}
+];
+
+/* ===== State ===== */
+let currentMode=null, currentLesson=null, pool=[], queue=[], idx=0, correct=0, answered=false, currentItem=null;
+
+/* ===== Helpers ===== */
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function stripTone(s){return s.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/['\s]/g,"").toLowerCase();}
+function show(id){["home","skillPick","quiz","done"].forEach(s=>document.getElementById(s).classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}
+function setColor(c){document.documentElement.style.setProperty("--lc",c);}
+
+/* ===== Speech ===== */
+let zhVoice=null;
+function pickVoice(){const vs=speechSynthesis.getVoices();zhVoice=vs.find(v=>/zh(-|_)CN/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||null;}
+if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function speak(t){if(!('speechSynthesis' in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="zh-CN";if(zhVoice)u.voice=zhVoice;u.rate=.85;speechSynthesis.speak(u);}
+function stopSpeech(){if('speechSynthesis' in window)speechSynthesis.cancel();}
+
+/* ===== Build lesson legend ===== */
+function buildLessonGrid(){
+  const g=document.getElementById("lessonGrid");
+  // All lessons card
+  const all=document.createElement("div");
+  all.className="lesson all";
+  all.innerHTML=`<div class="swatch" style="background:linear-gradient(90deg,#ff6b6b,#ffd166,#43c59e,#6c8cff,#e879c7)"></div>
+    <div class="num">MIXED</div><div class="name">All Lessons</div><small>${VOCAB.length} words</small>`;
+  all.onclick=()=>chooseLesson('all');
+  g.appendChild(all);
+  LESSONS.forEach(L=>{
+    const cnt=VOCAB.filter(v=>v.l===L.n).length;
+    const d=document.createElement("div");
+    d.className="lesson";
+    d.innerHTML=`<div class="swatch" style="background:${L.color}"></div>
+      <div class="num">LESSON ${L.n}</div><div class="name">${L.name}</div><small>${cnt} words</small>`;
+    d.onclick=()=>chooseLesson(L.n);
+    g.appendChild(d);
+  });
+}
+
+function chooseLesson(n){
+  currentLesson=n;
+  if(n==='all'){pool=VOCAB.slice();setColor("#ffd166");
+    document.getElementById("skillLessonLabel").textContent="All Lessons · "+pool.length+" words";}
+  else{const L=LESSONS.find(x=>x.n===n);pool=VOCAB.filter(v=>v.l===n);setColor(L.color);
+    document.getElementById("skillLessonLabel").textContent=`Lesson ${n} · ${L.name}`;}
+  // word peek list
+  const peek=document.getElementById("wordPeek");
+  peek.innerHTML=`<h2 class="section">Words in this set</h2>`+
+    `<div style="display:flex;flex-wrap:wrap;gap:8px">`+
+    pool.map(v=>`<span class="pill" style="border-color:var(--lc)"><b style="font-size:1.05rem">${v.zh}</b> ${v.py} · ${v.en}</span>`).join("")+
+    `</div>`;
+  show("skillPick");
+}
+
+/* ===== Quiz flow ===== */
+function startMode(mode){
+  currentMode=mode;
+  const n=Math.min(pool.length, currentLesson==='all'?15:pool.length);
+  queue=shuffle(pool).slice(0,n);
+  idx=0;correct=0;
+  const labels={listening:"🎧 Listening",speaking:"🗣️ Speaking",reading:"📖 Reading",writing:"✍️ Writing"};
+  document.getElementById("modeLabel").textContent=labels[mode];
+  show("quiz");renderQuestion();
+}
+function backToSkill(){stopSpeech();show("skillPick");}
+function goHome(){stopSpeech();show("home");}
+
+function renderQuestion(){
+  answered=false;currentItem=queue[idx];
+  const fb=document.getElementById("feedback");fb.textContent="";fb.className="feedback";
+  document.getElementById("nextBtn").disabled=true;
+  document.getElementById("score").textContent=`Score ${correct} / ${idx}`;
+  document.getElementById("progress").style.width=(idx/queue.length*100)+"%";
+  document.getElementById("replayBtn").style.display=(currentMode==="listening")?"inline-block":"none";
+  const promptBox=document.getElementById("promptBox");
+  const area=document.getElementById("answerArea");area.innerHTML="";
+
+  if(currentMode==="reading"){
+    promptBox.innerHTML=`<div class="big">${currentItem.py}</div><div class="sub">What does this mean in English?</div>`;
+    buildChoices(area,"en");
+  }else if(currentMode==="listening"){
+    promptBox.innerHTML=`<div class="zh" style="font-size:2rem">🔊 Listen…</div><div class="sub">Choose the English meaning</div>`;
+    buildChoices(area,"en");speak(currentItem.zh);
+  }else if(currentMode==="writing"){
+    promptBox.innerHTML=`<div class="big" style="font-size:1.8rem">${currentItem.en}</div><div class="sub">Type the pinyin word</div>`;
+    area.innerHTML=`<input type="text" id="typeInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type pinyin…">
+      <div class="controls"><button class="btn" onclick="checkTyped()">Check</button></div>
+      <div class="tag center" style="margin-top:8px">Tones optional — "hǎo" or "hao" both accepted</div>`;
+    const inp=document.getElementById("typeInput");inp.focus();
+    inp.addEventListener("keydown",e=>{if(e.key==="Enter"){answered?nextQuestion():checkTyped();}});
+  }else if(currentMode==="speaking"){
+    promptBox.innerHTML=`<div class="zh">${currentItem.zh}</div><div class="big" style="font-size:1.5rem">${currentItem.py}</div><div class="sub">${currentItem.en}</div>`;
+    const rec=('webkitSpeechRecognition' in window)||('SpeechRecognition' in window);
+    area.innerHTML=`<div class="controls">
+        <button class="btn alt" onclick="speak(currentItem.zh)">🔊 Hear it</button>
+        ${rec?`<button class="btn" id="micBtn" onclick="startRec()">🎙️ Speak now</button>`:``}
+        <button class="btn alt" onclick="revealSpeaking()">Reveal & continue</button>
+      </div>
+      ${rec?`<div class="tag center" style="margin-top:8px">Tap "Speak now", say the word, it will be checked</div>`
+           :`<div class="tag center" style="margin-top:8px">Speech recognition not supported here — use "Reveal & continue" to self-check.</div>`}`;
+  }
+}
+
+function buildChoices(area,field){
+  const others=shuffle(VOCAB.filter(v=>v[field]!==currentItem[field])).slice(0,3);
+  const opts=shuffle([currentItem,...others]);
+  const grid=document.createElement("div");grid.className="choices";
+  opts.forEach(o=>{const b=document.createElement("button");b.className="choice";b.textContent=o[field];b.onclick=()=>pickChoice(b,o,field);grid.appendChild(b);});
+  area.appendChild(grid);
+}
+function pickChoice(btn,opt,field){
+  if(answered)return;answered=true;
+  const isRight=opt[field]===currentItem[field];const fb=document.getElementById("feedback");
+  document.querySelectorAll(".choice").forEach(c=>{c.style.pointerEvents="none";if(c.textContent===currentItem[field])c.classList.add("correct");});
+  if(isRight){correct++;fb.textContent="✓ Correct!";fb.className="feedback ok";}
+  else{btn.classList.add("wrong");fb.innerHTML=`✗ Answer: <b>${currentItem.zh}</b> (${currentItem.py}) = ${currentItem.en}`;fb.className="feedback no";}
+  finishQuestion();
+}
+function checkTyped(){
+  if(answered)return;answered=true;
+  const val=document.getElementById("typeInput").value;const fb=document.getElementById("feedback");
+  const ok=stripTone(val)===stripTone(currentItem.py);
+  document.getElementById("typeInput").disabled=true;
+  if(ok){correct++;fb.innerHTML=`✓ Correct! <b>${currentItem.zh}</b> = ${currentItem.py}`;fb.className="feedback ok";}
+  else{fb.innerHTML=`✗ Answer: <b>${currentItem.zh}</b> = <b>${currentItem.py}</b> (${currentItem.en})`;fb.className="feedback no";}
+  finishQuestion();
+}
+function revealSpeaking(){
+  if(answered)return;answered=true;correct++;
+  const fb=document.getElementById("feedback");
+  fb.innerHTML=`<b>${currentItem.zh}</b> — ${currentItem.py} — ${currentItem.en}`;fb.className="feedback ok";
+  finishQuestion();
+}
+function startRec(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;
+  const r=new SR();r.lang="zh-CN";r.interimResults=false;r.maxAlternatives=3;
+  const mic=document.getElementById("micBtn");if(mic){mic.textContent="🎙️ Listening…";mic.disabled=true;}
+  const fb=document.getElementById("feedback");fb.textContent="Listening…";fb.className="feedback";
+  r.onresult=e=>{
+    const heard=Array.from(e.results[0]).map(a=>a.transcript).join(" ");
+    const match=Array.from(e.results[0]).some(a=>a.transcript.replace(/\s/g,"").includes(currentItem.zh));
+    if(answered)return;answered=true;
+    if(match){correct++;fb.innerHTML=`✓ Great! Heard "<b>${heard}</b>" = ${currentItem.zh} (${currentItem.py})`;fb.className="feedback ok";}
+    else{fb.innerHTML=`Heard "<b>${heard}</b>". Target: <b>${currentItem.zh}</b> (${currentItem.py})`;fb.className="feedback no";}
+    finishQuestion();
+  };
+  r.onerror=()=>{if(mic){mic.textContent="🎙️ Speak now";mic.disabled=false;}fb.textContent="Mic error — try again or use Reveal.";fb.className="feedback no";};
+  r.onend=()=>{if(mic&&!answered){mic.textContent="🎙️ Speak now";mic.disabled=false;}};
+  r.start();
+}
+function finishQuestion(){
+  document.getElementById("nextBtn").disabled=false;
+  document.getElementById("score").textContent=`Score ${correct} / ${idx+1}`;
+  document.getElementById("progress").style.width=((idx+1)/queue.length*100)+"%";
+}
+function replayAudio(){if(currentMode==="listening"||currentMode==="speaking")speak(currentItem.zh);}
+function nextQuestion(){idx++;if(idx>=queue.length){finish();return;}renderQuestion();}
+function finish(){
+  stopSpeech();
+  const pct=Math.round(correct/queue.length*100);
+  document.getElementById("finalScore").innerHTML=`You scored <b>${correct} / ${queue.length}</b> (${pct}%)`;
+  show("done");
+}
+
+buildLessonGrid();
+</script>
+</body>
+</html>
