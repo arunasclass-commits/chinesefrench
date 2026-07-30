@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New HSK Course 1 — Practice (ChineseFrench · Aruna's Class)</title>
+<style>
+  :root{
+    --bg:#0f1220; --card:#1a1e33; --card2:#232845; --accent:#e63946; --accent2:#f4a261;
+    --gold:#ffd166; --green:#2a9d8f; --text:#eef1f8; --muted:#9aa3c0; --line:#2c3255;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#20264a,#0f1220 60%);
+    color:var(--text); min-height:100vh; display:flex; flex-direction:column;
+  }
+  header{text-align:center; padding:26px 16px 10px}
+  header h1{margin:0; font-size:1.5rem; letter-spacing:.3px}
+  header .zh{color:var(--gold)}
+  header p{margin:6px 0 0; color:var(--muted); font-size:.9rem}
+  .wrap{flex:1; width:100%; max-width:760px; margin:0 auto; padding:16px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px; box-shadow:0 10px 40px rgba(0,0,0,.35)}
+  .modes{display:grid; grid-template-columns:repeat(2,1fr); gap:14px}
+  .mode{
+    cursor:pointer; border:1px solid var(--line); background:linear-gradient(160deg,var(--card2),#1b2038);
+    border-radius:16px; padding:20px; text-align:center; transition:.15s; user-select:none;
+  }
+  .mode:hover{transform:translateY(-3px); border-color:var(--accent)}
+  .mode .ico{font-size:2rem}
+  .mode h3{margin:10px 0 4px}
+  .mode small{color:var(--muted)}
+  .row{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap}
+  .pill{background:var(--card2); border:1px solid var(--line); border-radius:999px; padding:6px 14px; font-size:.85rem; color:var(--muted)}
+  .prompt{
+    text-align:center; padding:26px 10px; border-radius:14px; background:var(--card2);
+    border:1px dashed var(--line); margin:16px 0;
+  }
+  .prompt .big{font-size:2.6rem; font-weight:700; letter-spacing:1px; color:var(--gold)}
+  .prompt .zh{font-size:3.2rem; margin:6px 0}
+  .prompt .sub{color:var(--muted); margin-top:8px}
+  .choices{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px}
+  button{font-family:inherit}
+  .choice{
+    text-align:left; padding:14px 16px; border-radius:12px; border:1px solid var(--line);
+    background:var(--card2); color:var(--text); font-size:1rem; cursor:pointer; transition:.12s;
+  }
+  .choice:hover{border-color:var(--accent2)}
+  .choice.correct{background:rgba(42,157,143,.25); border-color:var(--green)}
+  .choice.wrong{background:rgba(230,57,70,.22); border-color:var(--accent)}
+  .btn{
+    padding:12px 20px; border-radius:12px; border:none; cursor:pointer; font-size:1rem; font-weight:600;
+    background:var(--accent); color:#fff;
+  }
+  .btn.alt{background:var(--card2); color:var(--text); border:1px solid var(--line)}
+  .btn.gold{background:var(--gold); color:#1a1e33}
+  .btn:disabled{opacity:.5; cursor:not-allowed}
+  input[type=text]{
+    width:100%; padding:14px 16px; font-size:1.2rem; border-radius:12px; border:1px solid var(--line);
+    background:#0e1226; color:var(--text); text-align:center; letter-spacing:1px;
+  }
+  .feedback{min-height:26px; text-align:center; margin:12px 0; font-weight:600}
+  .feedback.ok{color:var(--green)}
+  .feedback.no{color:var(--accent2)}
+  .controls{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:14px}
+  .bar{height:8px; background:var(--card2); border-radius:999px; overflow:hidden; margin:14px 0}
+  .bar>div{height:100%; background:linear-gradient(90deg,var(--accent),var(--gold)); width:0%}
+  .hidden{display:none}
+  .center{text-align:center}
+  footer{
+    text-align:center; padding:18px 12px 26px; color:var(--muted); font-size:.82rem;
+    border-top:1px solid var(--line); margin-top:10px;
+  }
+  footer .brand{color:var(--gold); font-weight:600}
+  .tag{font-size:.75rem; color:var(--muted)}
+  @media(max-width:520px){
+    .modes{grid-template-columns:1fr} .choices{grid-template-columns:1fr}
+    .prompt .zh{font-size:2.6rem} .prompt .big{font-size:2rem}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="zh">新 HSK</span> Course 1 — Vocabulary Practice</h1>
+  <p>Listening · Speaking · Reading · Writing</p>
+</header>
+
+<div class="wrap">
+  <!-- HOME -->
+  <section id="home" class="card">
+    <div class="row" style="margin-bottom:14px">
+      <span class="pill" id="poolInfo">Loading…</span>
+      <span class="pill">Choose a skill to begin</span>
+    </div>
+    <div class="modes">
+      <div class="mode" onclick="startMode('listening')">
+        <div class="ico">🎧</div><h3>Listening</h3>
+        <small>Hear the word, pick the English meaning</small>
+      </div>
+      <div class="mode" onclick="startMode('speaking')">
+        <div class="ico">🗣️</div><h3>Speaking</h3>
+        <small>Say the word aloud, check your pronunciation</small>
+      </div>
+      <div class="mode" onclick="startMode('reading')">
+        <div class="ico">📖</div><h3>Reading</h3>
+        <small>See the pinyin, choose the English meaning</small>
+      </div>
+      <div class="mode" onclick="startMode('writing')">
+        <div class="ico">✍️</div><h3>Writing</h3>
+        <small>See the English, type the pinyin word</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="card hidden">
+    <div class="row">
+      <button class="btn alt" onclick="goHome()">← Menu</button>
+      <span class="pill" id="modeLabel"></span>
+      <span class="pill" id="score">Score 0 / 0</span>
+    </div>
+    <div class="bar"><div id="progress"></div></div>
+
+    <div class="prompt" id="promptBox"></div>
+
+    <div id="answerArea"></div>
+    <div class="feedback" id="feedback"></div>
+
+    <div class="controls">
+      <button class="btn alt" id="replayBtn" onclick="replayAudio()">🔊 Replay</button>
+      <button class="btn gold" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+    </div>
+  </section>
+
+  <!-- DONE -->
+  <section id="done" class="card hidden center">
+    <h2>Session complete 🎉</h2>
+    <p id="finalScore" style="font-size:1.3rem"></p>
+    <div class="controls">
+      <button class="btn" onclick="startMode(currentMode)">Practice again</button>
+      <button class="btn alt" onclick="goHome()">Choose another skill</button>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div>制作 · <span class="brand">ChineseFrench — Aruna's Class</span></div>
+  <div class="tag">© 2026 ChineseFrench — Aruna's Class. All rights reserved.</div>
+</footer>
+
+<script>
+/* ===== Vocabulary (New HSK Course 1, items 62–277, H–Z) ===== */
+const VOCAB = [
+{zh:"国",py:"guó",en:"country"},
+{zh:"还",py:"hái",en:"also; still"},
+{zh:"孩子",py:"háizi",en:"child"},
+{zh:"好",py:"hǎo",en:"good"},
+{zh:"好吃",py:"hǎochī",en:"delicious"},
+{zh:"好看",py:"hǎokàn",en:"good-looking; nice"},
+{zh:"好听",py:"hǎotīng",en:"pleasant to hear"},
+{zh:"好玩儿",py:"hǎowánr",en:"fun; interesting"},
+{zh:"号",py:"hào",en:"number; date"},
+{zh:"喝",py:"hē",en:"drink"},
+{zh:"和",py:"hé",en:"and; with"},
+{zh:"很",py:"hěn",en:"very"},
+{zh:"后",py:"hòu",en:"after; behind"},
+{zh:"回",py:"huí",en:"return; go back"},
+{zh:"会",py:"huì",en:"can; know how to"},
+{zh:"火车",py:"huǒchē",en:"train"},
+{zh:"机场",py:"jīchǎng",en:"airport"},
+{zh:"鸡蛋",py:"jīdàn",en:"egg"},
+{zh:"几",py:"jǐ",en:"how many (small number)"},
+{zh:"家",py:"jiā",en:"family; home"},
+{zh:"家人",py:"jiārén",en:"family member"},
+{zh:"见",py:"jiàn",en:"see; meet"},
+{zh:"件",py:"jiàn",en:"measure word for clothes"},
+{zh:"饺子",py:"jiǎozi",en:"dumpling"},
+{zh:"叫",py:"jiào",en:"be called; call"},
+{zh:"接",py:"jiē",en:"pick up; receive"},
+{zh:"姐姐",py:"jiějie",en:"older sister"},
+{zh:"斤",py:"jīn",en:"jin (Chinese weight unit)"},
+{zh:"今年",py:"jīnnián",en:"this year"},
+{zh:"今天",py:"jīntiān",en:"today"},
+{zh:"九",py:"jiǔ",en:"nine"},
+{zh:"觉得",py:"juéde",en:"feel; think"},
+{zh:"开",py:"kāi",en:"open; start"},
+{zh:"开车",py:"kāichē",en:"drive"},
+{zh:"看",py:"kàn",en:"look; watch; read"},
+{zh:"看病",py:"kànbìng",en:"see a doctor"},
+{zh:"看见",py:"kànjiàn",en:"see"},
+{zh:"可以",py:"kěyǐ",en:"can; may"},
+{zh:"课",py:"kè",en:"class; lesson"},
+{zh:"口",py:"kǒu",en:"mouth; measure word for family members"},
+{zh:"块",py:"kuài",en:"yuan (colloquial); piece"},
+{zh:"来",py:"lái",en:"come"},
+{zh:"老师",py:"lǎoshī",en:"teacher"},
+{zh:"了",py:"le",en:"particle: completed action/change"},
+{zh:"冷",py:"lěng",en:"cold"},
+{zh:"里",py:"lǐ",en:"inside"},
+{zh:"两",py:"liǎng",en:"two (before measure words)"},
+{zh:"零",py:"líng",en:"zero"},
+{zh:"六",py:"liù",en:"six"},
+{zh:"妈妈",py:"māma",en:"mother"},
+{zh:"吗",py:"ma",en:"question particle"},
+{zh:"买",py:"mǎi",en:"buy"},
+{zh:"卖",py:"mài",en:"sell"},
+{zh:"忙",py:"máng",en:"busy"},
+{zh:"猫",py:"māo",en:"cat"},
+{zh:"没",py:"méi",en:"not (past/negative)"},
+{zh:"没关系",py:"méi guānxi",en:"it's okay; never mind"},
+{zh:"没事",py:"méi shì",en:"it's okay; no problem"},
+{zh:"没有",py:"méiyǒu",en:"do not have; there isn't"},
+{zh:"妹妹",py:"mèimei",en:"younger sister"},
+{zh:"们",py:"men",en:"plural suffix"},
+{zh:"米饭",py:"mǐfàn",en:"cooked rice"},
+{zh:"面包",py:"miànbāo",en:"bread"},
+{zh:"面条儿",py:"miàntiáor",en:"noodles"},
+{zh:"名字",py:"míngzi",en:"name"},
+{zh:"明年",py:"míngnián",en:"next year"},
+{zh:"明天",py:"míngtiān",en:"tomorrow"},
+{zh:"哪",py:"nǎ",en:"which"},
+{zh:"哪个",py:"nǎge",en:"which"},
+{zh:"哪里",py:"nǎlǐ",en:"where"},
+{zh:"哪儿",py:"nǎr",en:"where"},
+{zh:"哪些",py:"nǎxiē",en:"which; which ones"},
+{zh:"那",py:"nà",en:"that"},
+{zh:"那边",py:"nàbiān",en:"over there"},
+{zh:"那个",py:"nàge",en:"that"},
+{zh:"那里",py:"nàlǐ",en:"there"},
+{zh:"那儿",py:"nàr",en:"there"},
+{zh:"那些",py:"nàxiē",en:"those"},
+{zh:"男",py:"nán",en:"male; man"},
+{zh:"男朋友",py:"nánpéngyou",en:"boyfriend"},
+{zh:"呢",py:"ne",en:"sentence-ending particle"},
+{zh:"能",py:"néng",en:"can; be able to"},
+{zh:"你",py:"nǐ",en:"you"},
+{zh:"你好",py:"nǐ hǎo",en:"hello"},
+{zh:"你们",py:"nǐmen",en:"you (plural)"},
+{zh:"年",py:"nián",en:"year"},
+{zh:"您",py:"nín",en:"you (polite)"},
+{zh:"牛奶",py:"niúnǎi",en:"milk"},
+{zh:"女",py:"nǚ",en:"female; woman"},
+{zh:"女儿",py:"nǚ'ér",en:"daughter"},
+{zh:"女朋友",py:"nǚpéngyou",en:"girlfriend"},
+{zh:"女士",py:"nǚshì",en:"lady; madam"},
+{zh:"朋友",py:"péngyou",en:"friend"},
+{zh:"便宜",py:"piányi",en:"cheap; inexpensive"},
+{zh:"漂亮",py:"piàoliang",en:"beautiful"},
+{zh:"苹果",py:"píngguǒ",en:"apple"},
+{zh:"七",py:"qī",en:"seven"},
+{zh:"起床",py:"qǐchuáng",en:"get up"},
+{zh:"千",py:"qiān",en:"thousand"},
+{zh:"前",py:"qián",en:"front; before"},
+{zh:"前边",py:"qiánbian",en:"in front"},
+{zh:"钱",py:"qián",en:"money"},
+{zh:"请",py:"qǐng",en:"please; invite"},
+{zh:"请问",py:"qǐngwèn",en:"excuse me; may I ask"},
+{zh:"去",py:"qù",en:"go"},
+{zh:"去年",py:"qùnián",en:"last year"},
+{zh:"热",py:"rè",en:"hot; warm"},
+{zh:"人",py:"rén",en:"person; people"},
+{zh:"认识",py:"rènshi",en:"know; become acquainted with"},
+{zh:"日",py:"rì",en:"day (used in dates)"},
+{zh:"三",py:"sān",en:"three"},
+{zh:"商店",py:"shāngdiàn",en:"shop; store"},
+{zh:"上",py:"shàng",en:"on; above; get on"},
+{zh:"上班",py:"shàngbān",en:"go to work"},
+{zh:"上课",py:"shàngkè",en:"attend class"},
+{zh:"上午",py:"shàngwǔ",en:"morning"},
+{zh:"少",py:"shǎo",en:"few; little"},
+{zh:"谁",py:"shéi",en:"who"},
+{zh:"什么",py:"shénme",en:"what"},
+{zh:"生病",py:"shēngbìng",en:"become ill"},
+{zh:"声音",py:"shēngyīn",en:"voice; sound"},
+{zh:"十",py:"shí",en:"ten"},
+{zh:"时候",py:"shíhou",en:"time; moment"},
+{zh:"是",py:"shì",en:"to be"},
+{zh:"手机",py:"shǒujī",en:"mobile phone"},
+{zh:"书",py:"shū",en:"book"},
+{zh:"水",py:"shuǐ",en:"water"},
+{zh:"睡",py:"shuì",en:"sleep"},
+{zh:"睡觉",py:"shuìjiào",en:"sleep"},
+{zh:"四",py:"sì",en:"four"},
+{zh:"岁",py:"suì",en:"years old"},
+{zh:"他",py:"tā",en:"he"},
+{zh:"她",py:"tā",en:"she"},
+{zh:"它",py:"tā",en:"it"},
+{zh:"太",py:"tài",en:"too; very"},
+{zh:"泰国",py:"Tàiguó",en:"Thailand"},
+{zh:"天",py:"tiān",en:"day; sky"},
+{zh:"天气",py:"tiānqì",en:"weather"},
+{zh:"听",py:"tīng",en:"listen"},
+{zh:"听见",py:"tīngjiàn",en:"hear"},
+{zh:"同学",py:"tóngxué",en:"classmate"},
+{zh:"外边",py:"wàibian",en:"outside"},
+{zh:"玩",py:"wán",en:"play"},
+{zh:"晚上",py:"wǎnshàng",en:"evening"},
+{zh:"王老师",py:"Wáng lǎoshī",en:"Teacher Wang"},
+{zh:"喂",py:"wèi",en:"hello (telephone)"},
+{zh:"问",py:"wèn",en:"ask"},
+{zh:"问题",py:"wèntí",en:"question"},
+{zh:"我",py:"wǒ",en:"I; me"},
+{zh:"我们",py:"wǒmen",en:"we; us"},
+{zh:"五",py:"wǔ",en:"five"},
+{zh:"西安",py:"Xī'ān",en:"Xi'an"},
+{zh:"喜欢",py:"xǐhuan",en:"like"},
+{zh:"下",py:"xià",en:"fall (rain/snow); below"},
+{zh:"下班",py:"xiàbān",en:"get off work"},
+{zh:"下午",py:"xiàwǔ",en:"afternoon"},
+{zh:"下课",py:"xiàkè",en:"class is over"},
+{zh:"下雪",py:"xiàxuě",en:"snow"},
+{zh:"下雨",py:"xiàyǔ",en:"rain"},
+{zh:"先生",py:"xiānsheng",en:"Mr.; Sir"},
+{zh:"想",py:"xiǎng",en:"think; want; miss"},
+{zh:"小",py:"xiǎo",en:"small"},
+{zh:"小狗",py:"xiǎogǒu",en:"puppy"},
+{zh:"小朋友",py:"xiǎopéngyou",en:"child; little friend"},
+{zh:"小时",py:"xiǎoshí",en:"hour"},
+{zh:"写",py:"xiě",en:"write"},
+{zh:"谢谢",py:"xièxie",en:"thank you"},
+{zh:"星期",py:"xīngqī",en:"week"},
+{zh:"星期天",py:"Xīngqītiān",en:"Sunday"},
+{zh:"星期日",py:"Xīngqīrì",en:"Sunday"},
+{zh:"星期一",py:"Xīngqīyī",en:"Monday"},
+{zh:"星期二",py:"Xīngqī'èr",en:"Tuesday"},
+{zh:"星期三",py:"Xīngqīsān",en:"Wednesday"},
+{zh:"星期四",py:"Xīngqīsì",en:"Thursday"},
+{zh:"星期五",py:"Xīngqīwǔ",en:"Friday"},
+{zh:"星期六",py:"Xīngqīliù",en:"Saturday"},
+{zh:"学",py:"xué",en:"study; learn"},
+{zh:"学生",py:"xuésheng",en:"student"},
+{zh:"学习",py:"xuéxí",en:"study"},
+{zh:"学校",py:"xuéxiào",en:"school"},
+{zh:"雪",py:"xuě",en:"snow"},
+{zh:"医",py:"yī",en:"medicine"},
+{zh:"医生",py:"yīshēng",en:"doctor"},
+{zh:"衣服",py:"yīfu",en:"clothes"},
+{zh:"一",py:"yī",en:"one"},
+{zh:"一半",py:"yíbàn",en:"half"},
+{zh:"一点儿",py:"yìdiǎnr",en:"a little"},
+{zh:"一起",py:"yìqǐ",en:"together"},
+{zh:"一些",py:"yìxiē",en:"some"},
+{zh:"椅子",py:"yǐzi",en:"chair"},
+{zh:"有",py:"yǒu",en:"have; there is/are"},
+{zh:"有点儿",py:"yǒudiǎnr",en:"a little; rather"},
+{zh:"有的",py:"yǒude",en:"some"},
+{zh:"有些",py:"yǒuxiē",en:"some"},
+{zh:"雨",py:"yǔ",en:"rain"},
+{zh:"元",py:"yuán",en:"yuan (Chinese currency)"},
+{zh:"月",py:"yuè",en:"month"},
+{zh:"再",py:"zài",en:"again; then"},
+{zh:"再见",py:"zàijiàn",en:"goodbye"},
+{zh:"在",py:"zài",en:"at; in; on"},
+{zh:"怎么样",py:"zěnmeyàng",en:"how; how about"},
+{zh:"这",py:"zhè",en:"this"},
+{zh:"这边",py:"zhèbiān",en:"here; this side"},
+{zh:"这儿",py:"zhèr",en:"here"},
+{zh:"这些",py:"zhèxiē",en:"these"},
+{zh:"真",py:"zhēn",en:"really; truly"},
+{zh:"中国",py:"Zhōngguó",en:"China"},
+{zh:"中文",py:"Zhōngwén",en:"Chinese language"},
+{zh:"中午",py:"zhōngwǔ",en:"noon"},
+{zh:"住",py:"zhù",en:"live; reside"},
+{zh:"桌子",py:"zhuōzi",en:"table; desk"},
+{zh:"字",py:"zì",en:"Chinese character; word"},
+{zh:"走",py:"zǒu",en:"walk; leave"},
+{zh:"做",py:"zuò",en:"do; make"},
+{zh:"做饭",py:"zuòfàn",en:"cook"},
+{zh:"昨天",py:"zuótiān",en:"yesterday"}
+];
+
+/* ===== State ===== */
+const QUESTIONS_PER_SESSION = 12;
+let currentMode = null;
+let queue = [];
+let idx = 0;
+let correct = 0;
+let answered = false;
+let currentItem = null;
+
+/* ===== Helpers ===== */
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function stripTone(s){return s.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/['\s]/g,"").toLowerCase();}
+
+function show(id){["home","quiz","done"].forEach(s=>document.getElementById(s).classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}
+function goHome(){stopSpeech();show("home");}
+
+/* ===== Speech ===== */
+let zhVoice=null;
+function pickVoice(){
+  const vs=speechSynthesis.getVoices();
+  zhVoice=vs.find(v=>/zh(-|_)CN/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||null;
+}
+if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function speak(text){
+  if(!('speechSynthesis' in window))return;
+  stopSpeech();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="zh-CN"; if(zhVoice)u.voice=zhVoice; u.rate=.85;
+  speechSynthesis.speak(u);
+}
+function stopSpeech(){if('speechSynthesis' in window)speechSynthesis.cancel();}
+
+/* ===== Flow ===== */
+function startMode(mode){
+  currentMode=mode;
+  queue=shuffle(VOCAB).slice(0,QUESTIONS_PER_SESSION);
+  idx=0; correct=0;
+  const labels={listening:"🎧 Listening",speaking:"🗣️ Speaking",reading:"📖 Reading",writing:"✍️ Writing"};
+  document.getElementById("modeLabel").textContent=labels[mode];
+  show("quiz");
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered=false;
+  currentItem=queue[idx];
+  document.getElementById("feedback").textContent="";
+  document.getElementById("feedback").className="feedback";
+  document.getElementById("nextBtn").disabled=true;
+  document.getElementById("score").textContent=`Score ${correct} / ${idx}`;
+  document.getElementById("progress").style.width=((idx)/queue.length*100)+"%";
+  const replay=document.getElementById("replayBtn");
+  replay.style.display=(currentMode==="listening")?"inline-block":"none";
+
+  const promptBox=document.getElementById("promptBox");
+  const area=document.getElementById("answerArea");
+  area.innerHTML="";
+
+  if(currentMode==="reading"){
+    promptBox.innerHTML=`<div class="big">${currentItem.py}</div><div class="sub">What does this mean in English?</div>`;
+    buildChoices(area,"en");
+  }
+  else if(currentMode==="listening"){
+    promptBox.innerHTML=`<div class="zh" style="font-size:2rem">🔊 Listen…</div><div class="sub">Choose the English meaning</div>`;
+    buildChoices(area,"en");
+    speak(currentItem.zh);
+  }
+  else if(currentMode==="writing"){
+    promptBox.innerHTML=`<div class="big" style="color:var(--accent2);font-size:1.8rem">${currentItem.en}</div><div class="sub">Type the pinyin word</div>`;
+    area.innerHTML=`<input type="text" id="typeInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type pinyin…">
+      <div class="controls"><button class="btn" onclick="checkTyped()">Check</button></div>
+      <div class="tag center" style="margin-top:8px">Tones optional — "hǎo" or "hao" both accepted</div>`;
+    const inp=document.getElementById("typeInput");
+    inp.focus();
+    inp.addEventListener("keydown",e=>{if(e.key==="Enter"){answered?nextQuestion():checkTyped();}});
+  }
+  else if(currentMode==="speaking"){
+    promptBox.innerHTML=`<div class="zh">${currentItem.zh}</div><div class="big" style="font-size:1.6rem">${currentItem.py}</div><div class="sub">${currentItem.en}</div>`;
+    const rec=('webkitSpeechRecognition' in window)||('SpeechRecognition' in window);
+    area.innerHTML=`<div class="controls">
+        <button class="btn alt" onclick="speak(currentItem.zh)">🔊 Hear it</button>
+        ${rec?`<button class="btn" id="micBtn" onclick="startRec()">🎙️ Speak now</button>`:``}
+        <button class="btn gold" onclick="revealSpeaking()">Reveal & continue</button>
+      </div>
+      ${rec?`<div class="tag center" style="margin-top:8px">Tap "Speak now", say the word, and it will be checked</div>`
+           :`<div class="tag center" style="margin-top:8px">Speech recognition isn't supported in this browser — use "Reveal & continue" to self-check.</div>`}`;
+  }
+}
+
+function buildChoices(area,field){
+  const others=shuffle(VOCAB.filter(v=>v[field]!==currentItem[field])).slice(0,3);
+  const opts=shuffle([currentItem,...others]);
+  const grid=document.createElement("div");grid.className="choices";
+  opts.forEach(o=>{
+    const b=document.createElement("button");
+    b.className="choice";b.textContent=o[field];
+    b.onclick=()=>pickChoice(b,o,field);
+    grid.appendChild(b);
+  });
+  area.appendChild(grid);
+}
+
+function pickChoice(btn,opt,field){
+  if(answered)return;answered=true;
+  const isRight=opt[field]===currentItem[field];
+  const fb=document.getElementById("feedback");
+  document.querySelectorAll(".choice").forEach(c=>{
+    c.style.pointerEvents="none";
+    if(c.textContent===currentItem[field])c.classList.add("correct");
+  });
+  if(isRight){correct++;fb.textContent="✓ Correct!";fb.className="feedback ok";}
+  else{btn.classList.add("wrong");fb.innerHTML=`✗ Answer: <b>${currentItem.zh}</b> (${currentItem.py}) = ${currentItem.en}`;fb.className="feedback no";}
+  finishQuestion();
+}
+
+function checkTyped(){
+  if(answered)return;answered=true;
+  const val=document.getElementById("typeInput").value;
+  const fb=document.getElementById("feedback");
+  const target=currentItem.py;
+  const ok=stripTone(val)===stripTone(target);
+  document.getElementById("typeInput").disabled=true;
+  if(ok){correct++;fb.innerHTML=`✓ Correct! <b>${currentItem.zh}</b> = ${target}`;fb.className="feedback ok";}
+  else{fb.innerHTML=`✗ Answer: <b>${currentItem.zh}</b> = <b>${target}</b> (${currentItem.en})`;fb.className="feedback no";}
+  finishQuestion();
+}
+
+/* Speaking */
+function revealSpeaking(){
+  if(answered)return;answered=true;
+  correct++; // self-check credit
+  const fb=document.getElementById("feedback");
+  fb.innerHTML=`<b>${currentItem.zh}</b> — ${currentItem.py} — ${currentItem.en}`;
+  fb.className="feedback ok";
+  finishQuestion();
+}
+function startRec(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR)return;
+  const r=new SR();r.lang="zh-CN";r.interimResults=false;r.maxAlternatives=3;
+  const mic=document.getElementById("micBtn");if(mic){mic.textContent="🎙️ Listening…";mic.disabled=true;}
+  const fb=document.getElementById("feedback");fb.textContent="Listening…";fb.className="feedback";
+  r.onresult=e=>{
+    const heard=Array.from(e.results[0]).map(a=>a.transcript).join(" ");
+    const match=Array.from(e.results[0]).some(a=>a.transcript.replace(/\s/g,"").includes(currentItem.zh));
+    if(answered)return;answered=true;
+    if(match){correct++;fb.innerHTML=`✓ Great! Heard "<b>${heard}</b>" = ${currentItem.zh} (${currentItem.py})`;fb.className="feedback ok";}
+    else{fb.innerHTML=`Heard "<b>${heard}</b>". Target: <b>${currentItem.zh}</b> (${currentItem.py})`;fb.className="feedback no";}
+    finishQuestion();
+  };
+  r.onerror=()=>{if(mic){mic.textContent="🎙️ Speak now";mic.disabled=false;}fb.textContent="Mic error — try again or use Reveal.";fb.className="feedback no";};
+  r.onend=()=>{if(mic&&!answered){mic.textContent="🎙️ Speak now";mic.disabled=false;}};
+  r.start();
+}
+
+function finishQuestion(){
+  document.getElementById("nextBtn").disabled=false;
+  document.getElementById("score").textContent=`Score ${correct} / ${idx+1}`;
+  document.getElementById("progress").style.width=((idx+1)/queue.length*100)+"%";
+}
+
+function replayAudio(){if(currentMode==="listening"||currentMode==="speaking")speak(currentItem.zh);}
+
+function nextQuestion(){
+  idx++;
+  if(idx>=queue.length){finish();return;}
+  renderQuestion();
+}
+
+function finish(){
+  stopSpeech();
+  const pct=Math.round(correct/queue.length*100);
+  document.getElementById("finalScore").innerHTML=`You scored <b>${correct} / ${queue.length}</b> (${pct}%)`;
+  show("done");
+}
+
+document.getElementById("poolInfo").textContent=`${VOCAB.length} words · New HSK 1 (H–Z)`;
+</script>
+</body>
+</html>
