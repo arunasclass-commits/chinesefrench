@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aruna's Class · New HSK2 · 第一课 · Match (interactive)</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+:root{--ink:#12233f;--red:#c0392b;--gold:#d4af37;--teal:#0d9488;--blue:#1d6fa8;--purple:#6b21a8;--green:#059669;--light:#f0f4ff;--border:#e2e8f0;--muted:#8892a4;--shadow:0 8px 32px rgba(0,0,0,0.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--ink);min-height:100vh}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#2c1a5c 60%,#c0392b 100%);color:#fff;padding:20px 18px 22px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'配';position:absolute;font-family:'Noto Sans SC',sans-serif;font-size:170px;font-weight:900;color:rgba(255,255,255,0.06);top:-20px;left:50%;transform:translateX(-50%);pointer-events:none}
+.hero-badge{display:inline-block;background:rgba(212,175,55,0.2);border:1px solid rgba(212,175,55,0.5);color:var(--gold);font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:8px;position:relative}
+.hero h1{font-size:clamp(18px,5vw,28px);font-family:'Noto Sans SC',sans-serif;font-weight:900;position:relative}
+.hero-sub{font-size:12.5px;color:rgba(255,255,255,0.78);position:relative;margin-top:3px}
+.board{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.08);display:flex;justify-content:center;gap:8px;padding:10px;flex-wrap:wrap}
+.sc{border-radius:14px;padding:7px 14px;text-align:center;min-width:76px;border:2px solid var(--border)}
+.sc .v{font-size:20px;font-weight:900;line-height:1}
+.sc .l{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-top:2px}
+.sc.score{border-color:var(--gold);background:#fffbe9}.sc.score .v{color:#b8860b}
+.sc.ok{border-color:var(--green);background:#ecfdf5}.sc.ok .v{color:var(--green)}
+.sc.no{border-color:var(--red);background:#fef2f2}.sc.no .v{color:var(--red)}
+.sc.sec .v{color:var(--blue)}
+.wrap{max-width:720px;margin:0 auto;padding:16px 14px 70px}
+.bar{background:var(--border);border-radius:5px;height:7px;margin-bottom:12px;overflow:hidden}
+.barf{height:7px;border-radius:5px;background:linear-gradient(90deg,var(--red),var(--gold));transition:width .3s;width:0}
+.tip{background:#fef3c7;border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:9px 13px;margin-bottom:14px;font-size:12px;color:#7c5e10;font-weight:700;line-height:1.5}
+.sechead{font-size:15px;font-weight:900;color:var(--teal);margin-bottom:4px}
+.selhint{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mcol-h{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px;text-align:center}
+.mcol{display:flex;flex-direction:column;gap:8px}
+.mitem{border:2px solid var(--border);border-radius:10px;padding:10px 11px;cursor:pointer;transition:all .13s;background:#fff;font-weight:700;min-height:52px;display:flex;flex-direction:column;justify-content:center}
+.mitem.zh .han{font-family:'Noto Sans SC',sans-serif;font-size:19px;line-height:1.2}
+.mitem.zh .py{font-size:11px;color:var(--blue);font-weight:600;margin-top:1px}
+.mitem.en{font-size:13px;color:#334155;line-height:1.35}
+.mitem:hover:not(.matched){border-color:var(--blue)}
+.mitem.sel{border-color:var(--red);background:#fff5f5;box-shadow:0 0 0 3px rgba(192,57,43,.12)}
+.mitem.matched{background:#d1fae5;border-color:var(--green);color:#065f46;cursor:default;opacity:.9}
+.mitem.wrong{border-color:var(--red);background:#fee2e2;animation:shake .3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.done-card{background:linear-gradient(135deg,#c0392b,#8e2a20);color:#fff;border-radius:16px;padding:28px;text-align:center;box-shadow:var(--shadow)}
+.done-card .big{font-size:46px;font-weight:900;margin:6px 0}
+.done-card .sub{font-size:14px;font-weight:700;opacity:.95}
+.done-card .rb{margin-top:16px;padding:11px 26px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:9px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:14px}
+.footer{text-align:center;padding:20px;font-size:11px;color:var(--muted)}
+.footer b{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="hero-badge">Aruna's Class · ChineseFrench</div>
+  <h1>新 HSK 2 · 第一课 · 配对练习</h1>
+  <div class="hero-sub">Match the Chinese word to its English meaning · 答错扣一分 (−1 for wrong)</div>
+</div>
+<div class="board">
+  <div class="sc score"><div class="v" id="vScore">0</div><div class="l">得分 Score</div></div>
+  <div class="sc ok"><div class="v" id="vOk">0</div><div class="l">对 Correct</div></div>
+  <div class="sc no"><div class="v" id="vNo">0</div><div class="l">错 Wrong</div></div>
+  <div class="sc sec"><div class="v" id="vSec">1</div><div class="l">节 Section</div></div>
+</div>
+<div class="wrap">
+  <div class="tip">🔗 Tap a Chinese word, then tap its English meaning (or the other way round). Correct match = <b>+1</b>, wrong = <b>−1</b>. Tapping a Chinese word also plays its sound. Finish all <span id="tot"></span> words across 8 sections.</div>
+  <div class="bar"><div class="barf" id="barf"></div></div>
+  <div id="stage"></div>
+</div>
+<div class="footer">配对练习 · <b>新 HSK 教程 2 · 第一课</b> · <b>Aruna's Class</b></div>
+<script>
+const SECTIONS=[[{"zh": "请问", "py": "qǐngwèn", "en": "excuse me; may I ask"}, {"zh": "您", "py": "nín", "en": "you (polite)"}, {"zh": "是", "py": "shì", "en": "to be; is"}, {"zh": "王一飞", "py": "Wáng Yīfēi", "en": "Wang Yifei (name)"}, {"zh": "的", "py": "de", "en": "(attributive particle)"}, {"zh": "表姐", "py": "biǎojiě", "en": "older female cousin"}, {"zh": "吗", "py": "ma", "en": "(question particle)"}, {"zh": "你们", "py": "nǐmen", "en": "you (plural)"}, {"zh": "就", "py": "jiù", "en": "precisely; just"}, {"zh": "她", "py": "tā", "en": "she; her"}], [{"zh": "学生", "py": "xuésheng", "en": "student"}, {"zh": "吧", "py": "ba", "en": "(suggestion particle)"}, {"zh": "对", "py": "duì", "en": "correct; right"}, {"zh": "我", "py": "wǒ", "en": "I; me"}, {"zh": "白家月", "py": "Bái Jiāyuè", "en": "Bai Jiayue (name)"}, {"zh": "安妮", "py": "Ānnī", "en": "Annie (name)"}, {"zh": "好", "py": "hǎo", "en": "good; hello"}, {"zh": "叫", "py": "jiào", "en": "to be called; to tell"}, {"zh": "王一雪", "py": "Wáng Yīxuě", "en": "Wang Yixue (name)"}, {"zh": "给", "py": "gěi", "en": "to; to give"}], [{"zh": "打电话", "py": "dǎ diànhuà", "en": "to make a phone call"}, {"zh": "了", "py": "le", "en": "(completion particle)"}, {"zh": "让", "py": "ràng", "en": "to let; to have sb do"}, {"zh": "来", "py": "lái", "en": "to come"}, {"zh": "接", "py": "jiē", "en": "to pick up (sb)"}, {"zh": "谢谢", "py": "xièxie", "en": "thank you"}, {"zh": "不客气", "py": "bú kèqi", "en": "you're welcome"}, {"zh": "第一次", "py": "dì-yī cì", "en": "the first time"}, {"zh": "次", "py": "cì", "en": "time; occurrence"}, {"zh": "北京", "py": "Běijīng", "en": "Beijing"}], [{"zh": "我们", "py": "wǒmen", "en": "we; us"}, {"zh": "都", "py": "dōu", "en": "all; both"}, {"zh": "学", "py": "xué", "en": "to learn; to study"}, {"zh": "中文", "py": "Zhōngwén", "en": "Chinese (language)"}, {"zh": "不是", "py": "bú shì", "en": "no; is not"}, {"zh": "旅游", "py": "lǚyóu", "en": "to travel; tour"}, {"zh": "这", "py": "zhè", "en": "this"}, {"zh": "几", "py": "jǐ", "en": "a few; how many"}, {"zh": "天", "py": "tiān", "en": "day; sky"}, {"zh": "忙", "py": "máng", "en": "busy"}], [{"zh": "事", "py": "shì", "en": "matter; business"}, {"zh": "找", "py": "zhǎo", "en": "to look for"}, {"zh": "好的", "py": "hǎo de", "en": "OK; all right"}, {"zh": "喂", "py": "wéi", "en": "hello (on the phone)"}, {"zh": "明天", "py": "míngtiān", "en": "tomorrow"}, {"zh": "时间", "py": "shíjiān", "en": "time"}, {"zh": "想", "py": "xiǎng", "en": "to want; to think"}, {"zh": "请", "py": "qǐng", "en": "to invite; please"}, {"zh": "帮忙", "py": "bāngmáng", "en": "to help; do a favour"}, {"zh": "不好意思", "py": "bù hǎoyìsi", "en": "excuse me; embarrassed"}], [{"zh": "天中", "py": "Tiānzhōng", "en": "Tianzhong (name)"}, {"zh": "已经", "py": "yǐjīng", "en": "already"}, {"zh": "到", "py": "dào", "en": "to arrive; to reach"}, {"zh": "什么", "py": "shénme", "en": "what"}, {"zh": "时候", "py": "shíhou", "en": "time; moment"}, {"zh": "今天", "py": "jīntiān", "en": "today"}, {"zh": "早上", "py": "zǎoshang", "en": "(early) morning"}, {"zh": "可以", "py": "kěyǐ", "en": "can; may"}, {"zh": "李文", "py": "Lǐ Wén", "en": "Li Wen (name)"}, {"zh": "他", "py": "tā", "en": "he; him"}], [{"zh": "还", "py": "hái", "en": "still; also"}, {"zh": "在", "py": "zài", "en": "at; in; located"}, {"zh": "学校", "py": "xuéxiào", "en": "school"}, {"zh": "呢", "py": "ne", "en": "(particle)"}, {"zh": "那", "py": "nà", "en": "then; in that case"}, {"zh": "个", "py": "gè", "en": "(general measure word)"}, {"zh": "再见", "py": "zàijiàn", "en": "goodbye"}, {"zh": "老师", "py": "lǎoshī", "en": "teacher"}, {"zh": "姐姐", "py": "jiějie", "en": "older sister"}, {"zh": "吃", "py": "chī", "en": "to eat"}], [{"zh": "北京烤鸭", "py": "Běijīng kǎoyā", "en": "Peking (roast) duck"}, {"zh": "介绍", "py": "jièshào", "en": "to introduce"}, {"zh": "很多", "py": "hěn duō", "en": "many; a lot"}, {"zh": "东西", "py": "dōngxi", "en": "thing(s)"}, {"zh": "太", "py": "tài", "en": "too; excessively"}, {"zh": "有时", "py": "yǒushí", "en": "sometimes"}, {"zh": "懂", "py": "dǒng", "en": "to understand"}, {"zh": "意思", "py": "yìsi", "en": "meaning; idea"}]];
+const TOTAL=SECTIONS.reduce((a,s)=>a+s.length,0);
+let si=0,score=0,ok=0,no=0,matchedTotal=0;
+let zhVoice=null;
+function pickVoice(){const vs=speechSynthesis.getVoices();zhVoice=vs.find(v=>/zh|Chinese/i.test(v.lang+v.name))||null;}
+if('speechSynthesis'in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=0.85;if(zhVoice)u.voice=zhVoice;speechSynthesis.speak(u);}catch(e){}}
+function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function derange(n){if(n<2)return[...Array(n).keys()];let p;do{p=shuffle([...Array(n).keys()]);}while(p.some((v,i)=>v===i));return p;}
+function updateBoard(){document.getElementById('vScore').textContent=score;document.getElementById('vOk').textContent=ok;document.getElementById('vNo').textContent=no;document.getElementById('vSec').textContent=Math.min(si+1,SECTIONS.length);document.getElementById('barf').style.width=(matchedTotal/TOTAL*100)+'%';}
+
+function drawSection(){
+  const stage=document.getElementById('stage');
+  if(si>=SECTIONS.length){finish();return;}
+  const set=SECTIONS[si];const n=set.length;
+  const perm=derange(n); // english display order
+  let selZh=null,selEn=null,matched=0;
+  const card=document.createElement('div');
+  card.innerHTML='<div class="sechead">Section '+(si+1)+' / '+SECTIONS.length+'</div><div class="selhint">Match all '+n+' words. 汉字 ↔ meaning</div>';
+  const grid=document.createElement('div');grid.className='match-grid';
+  const left=document.createElement('div');left.innerHTML='<div class="mcol-h">中文 Chinese</div>';const lc=document.createElement('div');lc.className='mcol';left.appendChild(lc);
+  const right=document.createElement('div');right.innerHTML='<div class="mcol-h">意思 Meaning</div>';const rc=document.createElement('div');rc.className='mcol';right.appendChild(rc);
+  grid.appendChild(left);grid.appendChild(right);card.appendChild(grid);
+  stage.innerHTML='';stage.appendChild(card);
+  set.forEach((m,i)=>{const el=document.createElement('div');el.className='mitem zh';el.dataset.k=i;el.innerHTML='<div class="han">'+m.zh+'</div><div class="py">'+m.py+'</div>';el.onclick=()=>pickZh(el);lc.appendChild(el);});
+  perm.forEach(i=>{const m=set[i];const el=document.createElement('div');el.className='mitem en';el.dataset.k=i;el.textContent=m.en;el.onclick=()=>pickEn(el);rc.appendChild(el);});
+
+  function pickZh(el){if(el.classList.contains('matched'))return;lc.querySelectorAll('.mitem').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');selZh=el;say(set[+el.dataset.k].zh);evaluate();}
+  function pickEn(el){if(el.classList.contains('matched'))return;rc.querySelectorAll('.mitem').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');selEn=el;evaluate();}
+  function evaluate(){
+    if(!selZh||!selEn)return;
+    const a=selZh,b=selEn;
+    if(a.dataset.k===b.dataset.k){
+      a.classList.add('matched');b.classList.add('matched');a.classList.remove('sel');b.classList.remove('sel');
+      score++;ok++;matched++;matchedTotal++;selZh=null;selEn=null;updateBoard();
+      if(matched===n){setTimeout(()=>{si++;updateBoard();drawSection();},500);}
+    }else{
+      score--;no++;updateBoard();
+      a.classList.add('wrong');b.classList.add('wrong');
+      const x=a,y=b;selZh=null;selEn=null;
+      setTimeout(()=>{x.classList.remove('wrong','sel');y.classList.remove('wrong','sel');},350);
+    }
+  }
+}
+function finish(){
+  document.getElementById('barf').style.width='100%';
+  const pct=Math.round(ok/TOTAL*100);
+  const stage=document.getElementById('stage');
+  stage.innerHTML='<div class="done-card"><div>练习完成！All sections done!</div><div class="big">'+score+'</div><div class="sub">满分 '+TOTAL+' · 对 '+ok+' · 错 '+no+'（'+pct+'% 正确）</div><div class="sub" style="margin-top:8px">'+(pct>=80?'很好！👏':pct>=60?'不错，继续加油！':'再来一遍吧！')+'</div><button class="rb">↺ 再来一次 Restart</button></div>';
+  stage.querySelector('.rb').onclick=start;
+}
+function start(){si=0;score=0;ok=0;no=0;matchedTotal=0;document.getElementById('tot').textContent=TOTAL;updateBoard();drawSection();}
+start();
+</script>
+</body>
+</html>
