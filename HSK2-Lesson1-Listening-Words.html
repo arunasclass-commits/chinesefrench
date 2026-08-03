@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aruna's Class · New HSK2 · 第一课 · 听词选字</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+:root{--ink:#12233f;--red:#c0392b;--gold:#d4af37;--teal:#0d9488;--blue:#1d6fa8;--green:#059669;--light:#f0f4ff;--border:#e2e8f0;--muted:#8892a4;--shadow:0 8px 32px rgba(0,0,0,0.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--ink);min-height:100vh}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#2c1a5c 60%,#c0392b 100%);color:#fff;padding:20px 18px 24px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'听';position:absolute;font-family:'Noto Sans SC',sans-serif;font-size:170px;font-weight:900;color:rgba(255,255,255,0.06);top:-20px;left:50%;transform:translateX(-50%);pointer-events:none}
+.hero-badge{display:inline-block;background:rgba(212,175,55,0.2);border:1px solid rgba(212,175,55,0.5);color:var(--gold);font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:8px;position:relative}
+.hero h1{font-size:clamp(18px,5vw,28px);font-family:'Noto Sans SC',sans-serif;font-weight:900;position:relative}
+.hero-sub{font-size:12.5px;color:rgba(255,255,255,0.78);position:relative;margin-top:3px}
+.board{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.08);display:flex;justify-content:center;gap:8px;padding:10px;flex-wrap:wrap}
+.sc{border-radius:14px;padding:7px 14px;text-align:center;min-width:78px;border:2px solid var(--border)}
+.sc .v{font-size:20px;font-weight:900;line-height:1}
+.sc .l{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-top:2px}
+.sc.score{border-color:var(--gold);background:#fffbe9}.sc.score .v{color:#b8860b}
+.sc.ok{border-color:var(--green);background:#ecfdf5}.sc.ok .v{color:var(--green)}
+.sc.no{border-color:var(--red);background:#fef2f2}.sc.no .v{color:var(--red)}
+.sc.left .v{color:var(--blue)}
+.wrap{max-width:640px;margin:0 auto;padding:18px 14px 70px}
+.bar{background:var(--border);border-radius:5px;height:7px;margin-bottom:16px;overflow:hidden}
+.barf{height:7px;border-radius:5px;background:linear-gradient(90deg,var(--red),var(--gold));transition:width .3s;width:0}
+.card{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:26px 18px 22px;text-align:center}
+.playbtn{background:linear-gradient(135deg,var(--blue),#0c6fa8);color:#fff;border:none;border-radius:12px;padding:16px 30px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px;margin:0 auto 8px;transition:transform .15s}
+.playbtn:hover{transform:scale(1.04)}
+.slowbtn{display:block;margin:0 auto 6px;background:none;border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;font-size:12px;font-weight:800;color:var(--muted);cursor:pointer;font-family:'Nunito',sans-serif}
+.prompt{font-family:'Noto Sans SC',sans-serif;font-size:15px;font-weight:700;color:var(--muted);margin:14px 0 4px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.opt{background:#fff;border:2px solid var(--border);border-radius:12px;padding:20px 10px;font-family:'Noto Sans SC',sans-serif;font-size:30px;font-weight:700;cursor:pointer;transition:all .12s;color:var(--ink);min-height:74px}
+.opt:hover:not(.locked){border-color:var(--blue);transform:translateY(-1px)}
+.opt.correct{background:#d1fae5!important;border-color:var(--green)!important;color:#065f46!important}
+.opt.wrong{background:#fee2e2!important;border-color:var(--red)!important;color:#991b1b!important}
+.mark{margin-top:14px;font-family:'Noto Sans SC',sans-serif;font-size:22px;font-weight:900;min-height:30px}
+.mark.ok{color:var(--green)}.mark.no{color:var(--red)}
+.nextbtn{display:block;margin:14px auto 0;padding:13px 34px;background:var(--ink);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer}
+.done-card{background:linear-gradient(135deg,#c0392b,#8e2a20);color:#fff;border-radius:16px;padding:28px;text-align:center;box-shadow:var(--shadow)}
+.done-card .big{font-size:46px;font-weight:900;margin:6px 0}
+.done-card .sub{font-size:14px;font-weight:700;opacity:.95}
+.done-card .rb{margin-top:16px;padding:11px 26px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:9px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:14px}
+.tip{background:#fef3c7;border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:9px 13px;margin-bottom:14px;font-size:12px;color:#7c5e10;font-weight:700;line-height:1.55}
+.footer{text-align:center;padding:20px;font-size:11px;color:var(--muted)}
+.footer b{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="hero-badge">Aruna's Class · ChineseFrench</div>
+  <h1>新 HSK 2 · 第一课 · 听词选字</h1>
+  <div class="hero-sub">听发音，选对的汉字 · 答错扣一分</div>
+</div>
+<div class="board" id="board">
+  <div class="sc score"><div class="v" id="vScore">0</div><div class="l">得分 Score</div></div>
+  <div class="sc ok"><div class="v" id="vOk">0</div><div class="l">对 Correct</div></div>
+  <div class="sc no"><div class="v" id="vNo">0</div><div class="l">错 Wrong</div></div>
+  <div class="sc left"><div class="v" id="vLeft">0</div><div class="l">题 Q</div></div>
+</div>
+<div class="wrap">
+  <div class="tip">🎧 听录音，选正确的汉字。答对 +1，答错 −1。全部 <span id="tot"></span> 个词。</div>
+  <div class="bar"><div class="barf" id="barf"></div></div>
+  <div id="stage"></div>
+</div>
+<div class="footer">听力词汇练习 · <b>新 HSK 教程 2 · 第一课</b> · <b>Aruna's Class</b></div>
+<script>
+const ALL=["请问", "您", "是", "王一飞", "的", "表姐", "吗", "你们", "就", "她", "学生", "吧", "对", "我", "白家月", "安妮", "好", "叫", "王一雪", "给", "打电话", "了", "让", "来", "接", "谢谢", "不客气", "第一次", "次", "北京", "我们", "都", "学", "中文", "不是", "旅游", "这", "几", "天", "忙", "事", "找", "好的", "喂", "明天", "时间", "想", "请", "帮忙", "不好意思", "天中", "已经", "到", "什么", "时候", "今天", "早上", "可以", "李文", "他", "还", "在", "学校", "呢", "那", "个", "再见", "老师", "姐姐", "吃", "北京烤鸭", "介绍", "很多", "东西", "太", "有时", "懂", "意思"];
+let order=[],idx=0,score=0,ok=0,no=0,answered=false;
+let zhVoice=null;
+function pickVoice(){const vs=speechSynthesis.getVoices();zhVoice=vs.find(v=>/zh|Chinese/i.test(v.lang+v.name))||null;}
+if('speechSynthesis'in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function say(t,rate){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=rate||0.8;if(zhVoice)u.voice=zhVoice;speechSynthesis.speak(u);}catch(e){}}
+function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function start(){order=shuffle(ALL.map((_,i)=>i));idx=0;score=0;ok=0;no=0;document.getElementById('tot').textContent=ALL.length;updateBoard();draw();}
+function updateBoard(){document.getElementById('vScore').textContent=score;document.getElementById('vOk').textContent=ok;document.getElementById('vNo').textContent=no;document.getElementById('barf').style.width=(idx/ALL.length*100)+'%';}
+function makeOptions(ans){
+  const pool=ALL.filter(w=>w!==ans);
+  const sameLen=shuffle(pool.filter(w=>[...w].length===[...ans].length));
+  const rest=shuffle(pool.filter(w=>[...w].length!==[...ans].length));
+  const picks=[];
+  for(const w of sameLen){if(picks.length>=3)break;picks.push(w);}
+  for(const w of rest){if(picks.length>=3)break;picks.push(w);}
+  return shuffle(picks.concat([ans]));
+}
+function draw(){
+  answered=false;const stage=document.getElementById('stage');
+  if(idx>=ALL.length){finish();return;}
+  const ans=ALL[order[idx]];
+  const opts=makeOptions(ans);
+  const card=document.createElement('div');card.className='card';
+  card.innerHTML='<button class="playbtn" id="play">🔊 &nbsp;播放 Play</button><button class="slowbtn" id="slow">🐢 慢速 Slower</button><div class="prompt">你听到了哪个词？</div>';
+  const grid=document.createElement('div');grid.className='opts';
+  opts.forEach(w=>{const b=document.createElement('button');b.className='opt';b.textContent=w;b.onclick=()=>choose(w,ans,b,grid,card);grid.appendChild(b);});
+  card.appendChild(grid);
+  const mark=document.createElement('div');mark.className='mark';mark.id='mark';card.appendChild(mark);
+  stage.innerHTML='';stage.appendChild(card);
+  card.querySelector('#play').onclick=()=>say(ans);
+  card.querySelector('#slow').onclick=()=>say(ans,0.5);
+  document.getElementById('vLeft').textContent=(idx+1)+' / '+ALL.length;
+  setTimeout(()=>say(ans),350);
+}
+function choose(w,ans,btn,grid,card){
+  if(answered)return;answered=true;say(ans);
+  grid.querySelectorAll('.opt').forEach(o=>{o.classList.add('locked');if(o.textContent===ans)o.classList.add('correct');});
+  const mark=card.querySelector('#mark');
+  if(w===ans){score++;ok++;mark.className='mark ok';mark.textContent='✓ 对 (+1)';}
+  else{score--;no++;btn.classList.add('wrong');mark.className='mark no';mark.textContent='✗ 错 (−1)';}
+  updateBoard();
+  const nb=document.createElement('button');nb.className='nextbtn';nb.textContent=idx<ALL.length-1?'下一题 Next →':'看成绩 Finish ✓';nb.onclick=()=>{idx++;updateBoard();draw();};card.appendChild(nb);
+}
+function finish(){
+  document.getElementById('barf').style.width='100%';
+  const max=ALL.length;const pct=Math.round(ok/max*100);
+  const stage=document.getElementById('stage');
+  stage.innerHTML='<div class="done-card"><div>练习完成！</div><div class="big">'+score+'</div><div class="sub">满分 '+max+' · 对 '+ok+' · 错 '+no+'（'+pct+'% 正确）</div><div class="sub" style="margin-top:8px">'+(pct>=80?'很好！👏':pct>=60?'不错，继续加油！':'再听一遍吧！')+'</div><button class="rb">↺ 再来一次 Restart</button></div>';
+  stage.querySelector('.rb').onclick=start;
+}
+start();
+</script>
+</body>
+</html>
