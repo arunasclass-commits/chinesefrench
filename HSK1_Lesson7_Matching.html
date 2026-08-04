@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HSK 1 · Lesson 7 — 今天几号 · Match Game</title>
+<style>
+  :root{
+    --bg1:#fff7ed; --bg2:#ffe9d6; --bg3:#e0f7f4;
+    --ink:#7c2d12; --ink-soft:#9a5b3c;
+    --accent:#f97316;      /* orange */
+    --accent2:#0d9488;     /* teal   */
+    --accent3:#f43f5e;     /* rose   */
+    --card:#ffffff;
+    --card-border:#fed7aa;
+    --good:#16a34a; --good-bg:#dcfce7;
+    --bad:#dc2626;  --bad-bg:#fee2e2;
+    --sel:#0d9488;  --sel-bg:#ccfbf1;
+    --shadow:0 6px 18px rgba(124,45,18,.12);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:"Segoe UI",system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    color:var(--ink);
+    background:linear-gradient(135deg,var(--bg1),var(--bg2) 45%,var(--bg3));
+    min-height:100vh; padding:0 0 60px;
+  }
+  header.top{
+    background:rgba(255,255,255,.75); backdrop-filter:blur(6px);
+    padding:16px; display:flex; justify-content:center; gap:14px; flex-wrap:wrap;
+    box-shadow:0 2px 10px rgba(0,0,0,.05); position:sticky; top:0; z-index:20;
+  }
+  .stat{
+    background:#fff; border:2px solid var(--card-border); border-radius:14px;
+    min-width:78px; padding:8px 14px; text-align:center; box-shadow:var(--shadow);
+  }
+  .stat .num{font-size:26px; font-weight:800; line-height:1;}
+  .stat .lbl{font-size:11px; letter-spacing:.12em; color:var(--ink-soft); margin-top:4px; text-transform:uppercase;}
+  .stat.score .num{color:var(--accent);}
+  .stat.correct .num{color:var(--good);}
+  .stat.wrong .num{color:var(--bad);}
+  .stat.section .num{color:var(--accent2);}
+
+  .wrap{max-width:920px; margin:0 auto; padding:0 16px;}
+  .banner{
+    margin-top:22px; background:#fff9db; border:1px solid #fde68a; border-left:6px solid var(--accent);
+    border-radius:12px; padding:14px 18px; font-size:14.5px; line-height:1.5; color:#7c5b12;
+  }
+  .banner b{color:var(--accent3);}
+  .titlebar{display:flex; align-items:center; justify-content:center; position:relative; margin:26px 0 6px;}
+  .titlebar h1{font-size:26px; margin:0; text-align:center; color:var(--ink);}
+  .titlebar h1 .cn{color:var(--accent2);}
+  .backbtn{position:absolute; left:0; background:#fff; border:2px solid var(--card-border);
+    border-radius:10px; padding:8px 14px; font-size:14px; cursor:pointer; color:var(--ink); box-shadow:var(--shadow);}
+  .sub{text-align:center; color:var(--ink-soft); font-size:14px; margin-bottom:14px;}
+  .progress{height:10px; background:#ffe4cc; border-radius:99px; overflow:hidden; margin:6px 0 24px;}
+  .progress > i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width .4s ease;}
+
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:26px;}
+  .colhead{font-size:13px; letter-spacing:.14em; color:var(--ink-soft); text-transform:uppercase; text-align:center; margin-bottom:12px; font-weight:700;}
+  .stack{display:flex; flex-direction:column; gap:12px;}
+
+  .card{
+    background:var(--card); border:2px solid var(--card-border); border-radius:16px;
+    padding:16px 18px; cursor:pointer; box-shadow:var(--shadow); user-select:none;
+    transition:transform .12s ease, border-color .15s, background .15s, box-shadow .15s;
+  }
+  .card:hover{transform:translateY(-2px); box-shadow:0 10px 22px rgba(124,45,18,.16);}
+  .card .hz{font-size:30px; font-weight:800; letter-spacing:2px; line-height:1.1;}
+  .card .py{font-size:15px; color:var(--accent2); margin-top:4px;}
+  .card .en{font-size:18px; font-weight:600;}
+  .card.meaning{display:flex; align-items:center; min-height:64px;}
+  .card.selected{border-color:var(--sel); background:var(--sel-bg); transform:translateY(-2px);}
+  .card.good{border-color:var(--good); background:var(--good-bg); animation:pop .35s ease;}
+  .card.bad{border-color:var(--bad); background:var(--bad-bg); animation:shake .4s ease;}
+  .card.done{opacity:.28; pointer-events:none; filter:grayscale(.3);}
+  @keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.06)}100%{transform:scale(1)}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+
+  .toolbar{display:flex; justify-content:center; gap:12px; margin-top:26px; flex-wrap:wrap;}
+  .btn{border:none; border-radius:12px; padding:12px 22px; font-size:15px; font-weight:700; cursor:pointer; box-shadow:var(--shadow);}
+  .btn.primary{background:var(--accent); color:#fff;}
+  .btn.ghost{background:#fff; color:var(--ink); border:2px solid var(--card-border);}
+  .btn:disabled{opacity:.4; cursor:default;}
+
+  .toast{
+    position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(140%);
+    background:#fff; border-radius:16px; padding:16px 26px; box-shadow:0 12px 40px rgba(0,0,0,.2);
+    font-size:17px; font-weight:700; text-align:center; z-index:50; transition:transform .45s cubic-bezier(.2,1.3,.4,1); border:2px solid var(--accent2);
+  }
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .toast .big{font-size:22px; color:var(--accent2);}
+
+  /* lessons overlay */
+  .overlay{position:fixed; inset:0; background:rgba(124,45,18,.35); display:none; align-items:center; justify-content:center; z-index:60;}
+  .overlay.show{display:flex;}
+  .panel{background:#fff; border-radius:20px; padding:26px; max-width:440px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.3);}
+  .panel h2{margin:0 0 14px;}
+  .lessonlink{display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border:2px solid var(--card-border); border-radius:12px; margin-bottom:10px; cursor:pointer;}
+  .lessonlink:hover{border-color:var(--accent2); background:var(--sel-bg);}
+  .lessonlink .cur{font-size:12px; color:#fff; background:var(--accent); border-radius:99px; padding:3px 10px;}
+
+  @media(max-width:560px){
+    .card .hz{font-size:25px;} .card .en{font-size:16px;}
+    .cols{gap:14px;} .titlebar h1{font-size:20px;} .backbtn{position:static; margin-right:auto;}
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="stat score"><div class="num" id="s-score">0</div><div class="lbl">Score</div></div>
+  <div class="stat correct"><div class="num" id="s-correct">0</div><div class="lbl">Correct</div></div>
+  <div class="stat wrong"><div class="num" id="s-wrong">0</div><div class="lbl">Wrong</div></div>
+  <div class="stat section"><div class="num" id="s-section">1/2</div><div class="lbl">Section</div></div>
+</header>
+
+<div class="wrap">
+  <div class="banner">
+    🔗 Tap a Chinese word, then tap its English meaning (or the other way round). <b>Correct = +1</b>; a wrong tap costs nothing (no negative scores). Tapping a Chinese word also plays its sound. Vocabulary is from <b>HSK Standard Course 1 — Lesson 7 「今天几号」</b>, organised per dialogue in sections of 10.
+  </div>
+
+  <div class="titlebar">
+    <button class="backbtn" id="lessonsBtn">← Lessons</button>
+    <h1>Lesson 7: <span class="cn">今天几号</span> · What's the Date?</h1>
+  </div>
+  <div class="sub" id="sectionName">Section 1 — Dates &amp; Days of the Week</div>
+  <div class="progress"><i id="bar"></i></div>
+
+  <div class="cols">
+    <div>
+      <div class="colhead">中文 · Chinese</div>
+      <div class="stack" id="leftCol"></div>
+    </div>
+    <div>
+      <div class="colhead">意思 · Meaning</div>
+      <div class="stack" id="rightCol"></div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="btn ghost" id="prevBtn">◀ Previous</button>
+    <button class="btn ghost" id="restartBtn">↻ Restart Section</button>
+    <button class="btn primary" id="nextBtn">Next ▶</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="overlay" id="overlay">
+  <div class="panel">
+    <h2>📚 Lessons</h2>
+    <div class="lessonlink" onclick="location.href='HSK1_Lesson7_Matching.html'">
+      <span><b>Lesson 7</b> · 今天几号 (Dates)</span><span class="cur">Current</span>
+    </div>
+    <div class="lessonlink" onclick="location.href='HSK1_Lesson8_Matching.html'">
+      <span><b>Lesson 8</b> · 我想喝茶 (Wants &amp; Money)</span><span>→</span>
+    </div>
+    <div class="toolbar" style="margin-top:6px;">
+      <button class="btn ghost" onclick="document.getElementById('overlay').classList.remove('show')">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- Lesson 7 data: 2 sections of 10 pairs ---------- */
+const SECTIONS = [
+  {
+    name: "Section 1 — Dates & Days of the Week",
+    pairs: [
+      {hz:"今天", py:"jīntiān", en:"today"},
+      {hz:"昨天", py:"zuótiān", en:"yesterday"},
+      {hz:"明天", py:"míngtiān", en:"tomorrow"},
+      {hz:"号",  py:"hào",     en:"date (day of the month)"},
+      {hz:"月",  py:"yuè",     en:"month"},
+      {hz:"星期", py:"xīngqī",  en:"week"},
+      {hz:"星期二", py:"xīngqī èr", en:"Tuesday"},
+      {hz:"星期三", py:"xīngqī sān", en:"Wednesday"},
+      {hz:"星期四", py:"xīngqī sì",  en:"Thursday"},
+      {hz:"几",  py:"jǐ",      en:"how many / which"}
+    ]
+  },
+  {
+    name: "Section 2 — Dialogue Words & Places",
+    pairs: [
+      {hz:"请问", py:"qǐngwèn", en:"excuse me / may I ask"},
+      {hz:"是",  py:"shì",     en:"to be (is / am / are)"},
+      {hz:"呢",  py:"ne",      en:"(question particle)"},
+      {hz:"去",  py:"qù",      en:"to go"},
+      {hz:"看",  py:"kàn",     en:"to watch / to look"},
+      {hz:"电影", py:"diànyǐng",en:"movie / film"},
+      {hz:"日历", py:"rìlì",    en:"calendar"},
+      {hz:"银行", py:"yínháng", en:"bank"},
+      {hz:"星期一", py:"xīngqī yī", en:"Monday"},
+      {hz:"星期日", py:"xīngqī rì", en:"Sunday"}
+    ]
+  }
+];
+runGame(SECTIONS, "1/2");
+
+/* ---------- Engine (shared) ---------- */
+function runGame(sections, sectionLabelTotal){
+  let cur = 0, score = 0, correct = 0, wrong = 0;
+  let sel = null;           // {side, id, el}
+  let matchedThisSection = 0;
+  const totalPairsAll = sections.reduce((a,s)=>a+s.pairs.length,0);
+  let matchedAll = 0;
+
+  const $ = id => document.getElementById(id);
+  const leftCol=$("leftCol"), rightCol=$("rightCol");
+
+  function speak(t){
+    try{ if(window.speechSynthesis){ const u=new SpeechSynthesisUtterance(t); u.lang="zh-CN"; u.rate=0.8; speechSynthesis.cancel(); speechSynthesis.speak(u);} }catch(e){}
+  }
+  function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function updateStats(){
+    $("s-score").textContent=score; $("s-correct").textContent=correct;
+    $("s-wrong").textContent=wrong; $("s-section").textContent=(cur+1)+"/"+sections.length;
+    $("bar").style.width=(matchedAll/totalPairsAll*100)+"%";
+  }
+  function toast(html,ms=1600){const t=$("toast");t.innerHTML=html;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),ms);}
+
+  function render(){
+    const s=sections[cur];
+    $("sectionName").textContent=s.name;
+    leftCol.innerHTML=""; rightCol.innerHTML=""; sel=null; matchedThisSection=0;
+    const L=shuffle(s.pairs.map((p,i)=>({...p,id:i})));
+    const R=shuffle(s.pairs.map((p,i)=>({...p,id:i})));
+    L.forEach(p=>{
+      const c=document.createElement("div");
+      c.className="card chinese"; c.dataset.id=p.id; c.dataset.side="L";
+      c.innerHTML=`<div class="hz">${p.hz}</div><div class="py">${p.py}</div>`;
+      c.addEventListener("click",()=>{speak(p.hz);onPick(c);});
+      leftCol.appendChild(c);
+    });
+    R.forEach(p=>{
+      const c=document.createElement("div");
+      c.className="card meaning"; c.dataset.id=p.id; c.dataset.side="R";
+      c.innerHTML=`<div class="en">${p.en}</div>`;
+      c.addEventListener("click",()=>onPick(c));
+      rightCol.appendChild(c);
+    });
+    $("prevBtn").disabled = cur===0;
+    $("nextBtn").disabled = cur===sections.length-1;
+    updateStats();
+  }
+
+  function onPick(card){
+    if(card.classList.contains("done"))return;
+    const side=card.dataset.side, id=card.dataset.id;
+    if(!sel){ sel={side,id,el:card}; card.classList.add("selected"); return; }
+    if(sel.el===card){ card.classList.remove("selected"); sel=null; return; }
+    if(sel.side===side){ // reselect same side
+      sel.el.classList.remove("selected"); sel={side,id,el:card}; card.classList.add("selected"); return;
+    }
+    // opposite sides -> evaluate
+    if(sel.id===id){
+      card.classList.add("good"); sel.el.classList.add("good");
+      const a=card,b=sel.el; sel=null;
+      score++; correct++; matchedThisSection++; matchedAll++;
+      updateStats();
+      setTimeout(()=>{a.classList.add("done");b.classList.add("done");a.classList.remove("good");b.classList.remove("good");
+        if(matchedThisSection===sections[cur].pairs.length) sectionComplete();
+      },420);
+    } else {
+      card.classList.add("bad"); sel.el.classList.add("bad");
+      const a=card,b=sel.el; wrong++; updateStats();
+      setTimeout(()=>{a.classList.remove("bad","selected");b.classList.remove("bad","selected");},420);
+      sel=null;
+    }
+  }
+
+  function sectionComplete(){
+    if(cur<sections.length-1){
+      toast(`<div class="big">🎉 Section done!</div>Great work — moving to the next set…`,1700);
+      setTimeout(()=>{cur++;render();},1400);
+    } else {
+      toast(`<div class="big">🏆 Lesson complete!</div>Score ${score} · ${correct} correct · ${wrong} wrong`,4200);
+    }
+  }
+
+  $("nextBtn").onclick=()=>{ if(cur<sections.length-1){cur++;render();} };
+  $("prevBtn").onclick=()=>{ if(cur>0){cur--;render();} };
+  $("restartBtn").onclick=()=>{ // recount matched for this section back out
+    matchedAll-=matchedThisSection; render(); };
+  $("lessonsBtn").onclick=()=>$("overlay").classList.add("show");
+
+  render();
+}
+</script>
+</body>
+</html>
