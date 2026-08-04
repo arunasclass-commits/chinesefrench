@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chinese Match-the-Following · Easy Steps to Chinese 1 (Units 1–2)</title>
+<style>
+  :root{
+    --bg:#eef2ff; --card:#ffffff; --ink:#1f3a5f; --muted:#6b7a90;
+    --accent:#2aa198; --accent2:#3b82c4; --line:#e2e8f4;
+    --good:#16a34a; --goodbg:#dcfce7; --bad:#dc2626; --badbg:#fee2e2;
+    --sel:#f59e0b; --selbg:#fef3c7; --yellow:#fde68a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+       background:var(--bg);color:var(--ink);line-height:1.5;}
+  header.top{background:#fff;border-bottom:1px solid var(--line);padding:14px 16px;position:sticky;top:0;z-index:20;}
+  .scorebar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:820px;margin:0 auto;}
+  .chip{border:2px solid var(--line);border-radius:14px;padding:6px 16px;text-align:center;min-width:78px;background:#fff}
+  .chip b{display:block;font-size:22px;line-height:1}
+  .chip span{font-size:11px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase}
+  .chip.score{border-color:#f0c000}.chip.score b{color:#c99700}
+  .chip.correct{border-color:#7fd1a0}.chip.correct b{color:var(--good)}
+  .chip.wrong{border-color:#f2a9a9}.chip.wrong b{color:var(--bad)}
+  .chip.sec{border-color:#b9c6e6}.chip.sec b{color:var(--accent2)}
+  .wrap{max-width:820px;margin:0 auto;padding:18px 16px 60px;}
+  .banner{background:#fff8dc;border-left:5px solid var(--yellow);border-radius:8px;
+          padding:12px 16px;font-size:14px;color:#6b5e1f;margin-bottom:18px}
+  .banner b{color:#3f3610}
+  h1.title{font-size:20px;margin:6px 0 2px}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:16px}
+
+  /* lesson menu */
+  .lessons{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+  .lcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;
+         transition:transform .12s,box-shadow .12s;position:relative;overflow:hidden}
+  .lcard:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(40,80,140,.12)}
+  .lcard .unit{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--accent2);font-weight:700}
+  .lcard h3{margin:4px 0 2px;font-size:17px}
+  .lcard .cn{color:var(--muted);font-size:14px}
+  .lcard .meta{margin-top:10px;font-size:12px;color:var(--muted)}
+  .lcard .bar{height:6px;background:var(--line);border-radius:6px;margin-top:8px;overflow:hidden}
+  .lcard .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .lcard.done::after{content:"✓ done";position:absolute;top:10px;right:12px;font-size:11px;color:#fff;
+        background:var(--good);padding:2px 8px;border-radius:10px}
+
+  /* play view */
+  .playhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+  .btn{border:none;border-radius:10px;padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer}
+  .btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+  .btn.primary{background:var(--accent2);color:#fff}
+  .btn.primary:disabled{background:#b9c6e6;cursor:default}
+  .progress{height:8px;background:#dbe3f4;border-radius:8px;overflow:hidden;margin:8px 0 18px}
+  .progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s}
+  .colhead{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:8px}
+  .colhead div{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-align:center;font-weight:700}
+  .board{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .col{display:flex;flex-direction:column;gap:12px}
+  .tile{background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;
+        transition:.12s;min-height:64px;display:flex;flex-direction:column;justify-content:center}
+  .tile:hover{border-color:#b9c6e6}
+  .tile .hz{font-size:26px;font-weight:700;line-height:1.1}
+  .tile .py{font-size:14px;color:var(--accent2);margin-top:2px}
+  .tile .en{font-size:16px;font-weight:600}
+  .tile.sel{border-color:var(--sel);background:var(--selbg);box-shadow:0 0 0 3px rgba(245,158,11,.18)}
+  .tile.good{border-color:var(--good);background:var(--goodbg);color:var(--good);cursor:default;opacity:.85}
+  .tile.good .py{color:var(--good)}
+  .tile.bad{border-color:var(--bad);background:var(--badbg);animation:shake .3s}
+  .tile.hidden{visibility:hidden}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+  .done-msg{text-align:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;margin-top:18px}
+  .done-msg h2{margin:0 0 6px}
+  .hint{font-size:12px;color:var(--muted);text-align:center;margin-top:14px}
+  .hidden-el{display:none!important}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="scorebar">
+    <div class="chip score"><b id="sScore">0</b><span>Score</span></div>
+    <div class="chip correct"><b id="sCorrect">0</b><span>Correct</span></div>
+    <div class="chip wrong"><b id="sWrong">0</b><span>Wrong</span></div>
+    <div class="chip sec"><b id="sSec">–</b><span>Section</span></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="banner">
+    🔗 Tap a Chinese word, then tap its English meaning (or the other way round). <b>Correct = +1</b>; a wrong tap costs nothing (no negative scores). Tapping a Chinese word also plays its sound. Vocabulary is from <b>Easy Steps to Chinese 1 — Units 1 &amp; 2</b>, organised per lesson in sections of 5.
+  </div>
+
+  <!-- MENU -->
+  <div id="menu">
+    <h1 class="title">Match the Following · Units 1 &amp; 2</h1>
+    <div class="sub">Pick a lesson. Each lesson is split into match-the-following sections of 5 words.</div>
+    <div class="lessons" id="lessonGrid"></div>
+  </div>
+
+  <!-- PLAY -->
+  <div id="play" class="hidden-el">
+    <div class="playhead">
+      <button class="btn ghost" id="backBtn">← Lessons</button>
+      <h1 class="title" id="playTitle" style="flex:1;text-align:center"></h1>
+      <span style="width:90px"></span>
+    </div>
+    <div class="progress"><i id="progFill"></i></div>
+    <div class="colhead"><div>中文 Chinese</div><div>意思 Meaning</div></div>
+    <div class="board">
+      <div class="col" id="colL"></div>
+      <div class="col" id="colR"></div>
+    </div>
+    <div id="doneMsg" class="done-msg hidden-el"></div>
+    <div class="hint">💡 Click a card on either side to select it, then click its partner on the other side.</div>
+  </div>
+</div>
+
+<script>
+/* ---------- VOCABULARY: Easy Steps to Chinese 1, Units 1 & 2 ---------- */
+const LESSONS = [
+  { unit:"Unit 1", lesson:"Lesson 2", title:"Numbers", cn:"数字", words:[
+    {hz:"一",py:"yī",en:"one"},
+    {hz:"二",py:"èr",en:"two"},
+    {hz:"三",py:"sān",en:"three"},
+    {hz:"四",py:"sì",en:"four"},
+    {hz:"五",py:"wǔ",en:"five"},
+    {hz:"六",py:"liù",en:"six"},
+    {hz:"七",py:"qī",en:"seven"},
+    {hz:"八",py:"bā",en:"eight"},
+    {hz:"九",py:"jiǔ",en:"nine"},
+    {hz:"十",py:"shí",en:"ten"},
+  ]},
+  { unit:"Unit 1", lesson:"Lesson 3", title:"Greetings", cn:"问候", words:[
+    {hz:"您",py:"nín",en:"you (respectfully)"},
+    {hz:"好",py:"hǎo",en:"good; well"},
+    {hz:"您好",py:"nín hǎo",en:"hello"},
+    {hz:"你",py:"nǐ",en:"you"},
+    {hz:"再",py:"zài",en:"again"},
+    {hz:"见",py:"jiàn",en:"see"},
+    {hz:"再见",py:"zài jiàn",en:"good-bye"},
+    {hz:"叫",py:"jiào",en:"call"},
+    {hz:"什么",py:"shén me",en:"what"},
+    {hz:"名",py:"míng",en:"name"},
+    {hz:"字",py:"zì",en:"character; word"},
+    {hz:"名字",py:"míng zi",en:"name"},
+    {hz:"我",py:"wǒ",en:"I; me"},
+    {hz:"小",py:"xiǎo",en:"small"},
+    {hz:"月",py:"yuè",en:"moon; month"},
+    {hz:"大",py:"dà",en:"big"},
+    {hz:"生",py:"shēng",en:"be born; student"},
+  ]},
+  { unit:"Unit 2", lesson:"Lesson 4", title:"Dates", cn:"日期", words:[
+    {hz:"一月",py:"yī yuè",en:"January"},
+    {hz:"星",py:"xīng",en:"star"},
+    {hz:"期",py:"qī",en:"a period of time"},
+    {hz:"星期",py:"xīng qī",en:"week"},
+    {hz:"星期一",py:"xīng qī yī",en:"Monday"},
+    {hz:"天",py:"tiān",en:"the sky; day"},
+    {hz:"日",py:"rì",en:"sun; day"},
+    {hz:"星期天",py:"xīng qī tiān",en:"Sunday"},
+    {hz:"今",py:"jīn",en:"now; today"},
+    {hz:"今天",py:"jīn tiān",en:"today"},
+    {hz:"年",py:"nián",en:"year"},
+    {hz:"今年",py:"jīn nián",en:"this year"},
+    {hz:"是",py:"shì",en:"be"},
+    {hz:"号",py:"hào",en:"number (date)"},
+    {hz:"昨",py:"zuó",en:"yesterday"},
+    {hz:"昨天",py:"zuó tiān",en:"yesterday"},
+    {hz:"几",py:"jǐ",en:"how many"},
+    {hz:"明",py:"míng",en:"bright; next"},
+    {hz:"明天",py:"míng tiān",en:"tomorrow"},
+  ]},
+  { unit:"Unit 2", lesson:"Lesson 5", title:"Age", cn:"年龄", words:[
+    {hz:"在",py:"zài",en:"in; on"},
+    {hz:"出",py:"chū",en:"go or come out"},
+    {hz:"出生",py:"chū shēng",en:"be born"},
+    {hz:"的",py:"de",en:"of; 's"},
+    {hz:"生日",py:"shēng rì",en:"birthday"},
+    {hz:"王",py:"wáng",en:"king; a surname"},
+    {hz:"多",py:"duō",en:"many; much"},
+    {hz:"多大",py:"duō dà",en:"how old"},
+    {hz:"了",py:"le",en:"particle"},
+    {hz:"他",py:"tā",en:"he; him"},
+    {hz:"文",py:"wén",en:"culture; civilization"},
+    {hz:"岁",py:"suì",en:"year (of age)"},
+    {hz:"几岁",py:"jǐ suì",en:"how old"},
+    {hz:"她",py:"tā",en:"she; her"},
+  ]},
+  { unit:"Unit 2", lesson:"Lesson 6", title:"Telephone Numbers", cn:"电话号码", words:[
+    {hz:"家",py:"jiā",en:"family; home"},
+    {hz:"电",py:"diàn",en:"electricity"},
+    {hz:"电话",py:"diàn huà",en:"telephone"},
+    {hz:"话",py:"huà",en:"word; talk"},
+    {hz:"码",py:"mǎ",en:"number (code)"},
+    {hz:"号码",py:"hào mǎ",en:"number"},
+    {hz:"少",py:"shǎo",en:"few; little"},
+    {hz:"多少",py:"duō shǎo",en:"how many; how much"},
+    {hz:"住",py:"zhù",en:"live"},
+    {hz:"哪",py:"nǎ",en:"which; what"},
+    {hz:"儿",py:"ér",en:"suffix"},
+    {hz:"哪儿",py:"nǎr",en:"where"},
+    {hz:"北京",py:"běi jīng",en:"Beijing"},
+  ]},
+];
+
+const SECTION_SIZE = 5;
+
+/* ---------- state ---------- */
+let score=0, correct=0, wrong=0;
+let curLesson=null, sections=[], secIdx=0;
+let selSide=null, selEl=null, selWord=null;
+const doneLessons = {};   // lessonKey -> true
+
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function chunk(arr,n){const out=[];for(let i=0;i<arr.length;i+=n)out.push(arr.slice(i,i+n));return out;}
+function updateScore(){$("sScore").textContent=score;$("sCorrect").textContent=correct;$("sWrong").textContent=wrong;}
+function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang="zh-CN";u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}}
+
+/* ---------- menu ---------- */
+function renderMenu(){
+  const grid=$("lessonGrid");grid.innerHTML="";
+  LESSONS.forEach((L,i)=>{
+    const key=L.lesson;
+    const secs=chunk(L.words,SECTION_SIZE).length;
+    const d=document.createElement("div");
+    d.className="lcard"+(doneLessons[key]?" done":"");
+    d.innerHTML=`<div class="unit">${L.unit}</div>
+      <h3>${L.lesson}: ${L.title}</h3>
+      <div class="cn">${L.cn}</div>
+      <div class="meta">${L.words.length} words · ${secs} section${secs>1?"s":""} of ${SECTION_SIZE}</div>
+      <div class="bar"><i style="width:${doneLessons[key]?100:0}%"></i></div>`;
+    d.onclick=()=>startLesson(i);
+    grid.appendChild(d);
+  });
+}
+
+/* ---------- play ---------- */
+function startLesson(i){
+  curLesson=LESSONS[i];
+  sections=chunk(curLesson.words,SECTION_SIZE);
+  secIdx=0;
+  $("menu").classList.add("hidden-el");
+  $("play").classList.remove("hidden-el");
+  renderSection();
+}
+function renderSection(){
+  const sec=sections[secIdx];
+  $("playTitle").textContent=`${curLesson.lesson}: ${curLesson.title}`;
+  $("sSec").textContent=`${secIdx+1}/${sections.length}`;
+  $("progFill").style.width=((secIdx)/sections.length*100)+"%";
+  $("doneMsg").classList.add("hidden-el");
+  selSide=selEl=selWord=null;
+
+  const L=$("colL"), R=$("colR");
+  L.innerHTML="";R.innerHTML="";
+  sec.forEach(w=>{
+    const l=document.createElement("div");
+    l.className="tile";l.dataset.id=w.hz;
+    l.innerHTML=`<div class="hz">${w.hz}</div><div class="py">${w.py}</div>`;
+    l.onclick=()=>pick("L",l,w);
+    L.appendChild(l);
+  });
+  shuffle(sec).forEach(w=>{
+    const r=document.createElement("div");
+    r.className="tile";r.dataset.id=w.hz;
+    r.innerHTML=`<div class="en">${w.en}</div>`;
+    r.onclick=()=>pick("R",r,w);
+    R.appendChild(r);
+  });
+}
+function pick(side,el,word){
+  if(el.classList.contains("good"))return;
+  if(side==="L")speak(word.hz);
+  // clicking same side again -> reselect
+  if(selSide===side){
+    if(selEl)selEl.classList.remove("sel");
+    selEl=el;selWord=word;el.classList.add("sel");return;
+  }
+  if(!selSide){selSide=side;selEl=el;selWord=word;el.classList.add("sel");return;}
+  // we have a pair (opposite sides)
+  const other=selEl, otherWord=selWord;
+  if(otherWord.hz===word.hz){
+    el.classList.add("good");other.classList.remove("sel");other.classList.add("good");
+    score++;correct++;updateScore();
+    selSide=selEl=selWord=null;
+    checkComplete();
+  }else{
+    el.classList.add("bad");other.classList.add("bad");
+    wrong++;updateScore();
+    const a=el,b=other;
+    setTimeout(()=>{a.classList.remove("bad");b.classList.remove("bad","sel");},380);
+    selSide=selEl=selWord=null;
+  }
+}
+function checkComplete(){
+  const remaining=[...document.querySelectorAll("#colL .tile")].filter(t=>!t.classList.contains("good"));
+  if(remaining.length===0){
+    $("progFill").style.width=((secIdx+1)/sections.length*100)+"%";
+    const last=secIdx===sections.length-1;
+    if(last)doneLessons[curLesson.lesson]=true;
+    const dm=$("doneMsg");dm.classList.remove("hidden-el");
+    dm.innerHTML=last
+      ? `<h2>🎉 Lesson complete!</h2><p>You finished all ${sections.length} sections of ${curLesson.lesson}: ${curLesson.title}.</p>
+         <button class="btn primary" onclick="toMenu()">← Back to lessons</button>`
+      : `<h2>✅ Section ${secIdx+1} done!</h2><p>Nice work. Ready for the next 5?</p>
+         <button class="btn primary" onclick="nextSection()">Next section →</button>`;
+  }
+}
+function nextSection(){secIdx++;renderSection();}
+function toMenu(){
+  $("play").classList.add("hidden-el");
+  $("menu").classList.remove("hidden-el");
+  renderMenu();
+}
+$("backBtn").onclick=toMenu;
+
+updateScore();
+renderMenu();
+</script>
+</body>
+</html>
