@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<!--
+  Aruna's Classes · ChineseFrench — New HSK 3.0 Level 3 · Lessons 1 & 2
+  连线 · Match the Dialogues — tap to match each line to its reply.
+  Characters only: NO pinyin, NO English. Self-contained, offline.
+  © 2026 RRAruna Enterprises · ChineseFrench · Aruna's Classes. All Rights Reserved.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Aruna's Classes · ChineseFrench — 连线 Match the Dialogues (L1 & L2)</title>
+<style>
+:root{--red:#a2231d;--red-dark:#7a1a15;--gold:#c99a2e;--gold-light:#f3e3b3;--cream:#fbf6ea;--ink:#2b1a12;--green:#2e7d32;--green-bg:#e3f5e1;--gray:#8a7f6e;--radius:14px;--shadow:0 4px 14px rgba(122,26,21,.15);}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{font-family:"Segoe UI",Helvetica,Arial,sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;}
+.app-header{background:linear-gradient(135deg,var(--red),var(--red-dark));padding:14px 14px 12px;text-align:center;border-bottom:4px solid var(--gold);}
+.logo-wrap{max-width:480px;margin:0 auto 8px;} .logo-wrap svg{width:100%;height:auto;display:block;}
+.app-header .lesson-title{color:#fff;font-size:.95rem;margin-top:4px;font-weight:600;}
+.student-bar{max-width:720px;margin:8px auto 0;display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;}
+.student-bar input{padding:8px 12px;border-radius:20px;border:none;font-size:.9rem;width:190px;}
+.badge{background:var(--gold);color:var(--red-dark);font-weight:700;padding:6px 12px;border-radius:20px;font-size:.8rem;}
+nav.tabs{display:flex;gap:6px;padding:10px 10px 0;max-width:700px;margin:0 auto;justify-content:center;flex-wrap:wrap;}
+nav.tabs button{background:#fff;border:2px solid var(--gold);color:var(--red-dark);padding:9px 18px;border-radius:20px 20px 0 0;font-weight:700;font-size:.9rem;cursor:pointer;}
+nav.tabs button.active{background:var(--red);color:#fff;border-color:var(--red);}
+main{max-width:860px;margin:0 auto;padding:16px 14px 70px;}
+.board-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
+.board-title{font-size:1.15rem;font-weight:800;color:var(--red-dark);}
+.progress-pill{background:var(--gold-light);color:var(--red-dark);font-weight:700;padding:6px 14px;border-radius:20px;font-size:.85rem;}
+.instr{font-size:.84rem;color:var(--gray);background:var(--gold-light);padding:8px 12px;border-radius:8px;margin-bottom:14px;text-align:center;}
+.col-heads{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:6px;}
+.col-head{text-align:center;font-size:.8rem;font-weight:800;letter-spacing:.08em;color:var(--gray);text-transform:uppercase;}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.match-col{display:flex;flex-direction:column;gap:12px;}
+.mcard{
+  background:#fff;border:2px solid #e7dcc4;border-radius:14px;padding:16px 14px;min-height:64px;
+  display:flex;align-items:center;gap:10px;cursor:pointer;transition:transform .08s,border-color .15s,background .15s;
+  font-size:1.15rem;color:var(--ink);line-height:1.4;position:relative;
+}
+.mcard:hover:not(.matched){border-color:var(--gold);}
+.mcard:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+.mcard.zh{font-weight:700;color:var(--red-dark);}
+.mcard.sel{border-color:var(--red);background:#fdf3f2;transform:scale(1.01);box-shadow:0 2px 10px rgba(162,35,29,.18);}
+.mcard.matched{background:var(--green-bg);border-color:var(--green);color:var(--green);cursor:default;}
+.mcard.wrong{border-color:var(--red);background:#fbe3e1;animation:shake .35s;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+.pair-badge{
+  flex:0 0 auto;width:26px;height:26px;border-radius:50%;font-size:.85rem;font-weight:800;
+  display:inline-flex;align-items:center;justify-content:center;background:var(--gold);color:var(--red-dark);
+}
+.mcard.matched .pair-badge{background:var(--green);color:#fff;}
+.mcard.zh .pair-badge{background:var(--red);color:#fff;}
+.mcard.zh.matched .pair-badge{background:var(--green);color:#fff;}
+.btn{background:var(--red);color:#fff;border:none;padding:10px 16px;border-radius:16px;font-size:.85rem;cursor:pointer;font-weight:600;margin:3px;}
+.btn:hover{background:var(--red-dark);}
+.btn.outline{background:#fff;color:var(--red);border:2px solid var(--red);}
+.btn.gold{background:var(--gold);color:var(--red-dark);}
+.btn.big{font-size:1rem;padding:12px 26px;}
+.controls{text-align:center;margin-top:16px;}
+.done-card{background:#fff;border:1px solid var(--gold-light);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;text-align:center;margin-top:16px;}
+.done-card .big{font-size:1.5rem;font-weight:800;color:var(--green);}
+.footer-copy{text-align:center;color:var(--gray);font-size:.72rem;padding:16px 10px 40px;}
+.watermark{position:fixed;bottom:6px;right:10px;font-size:.62rem;color:rgba(122,26,21,.3);pointer-events:none;z-index:5;}
+@media (max-width:560px){.mcard{font-size:.98rem;padding:12px 10px;min-height:56px;} .board-title{font-size:1rem;}}
+</style>
+</head>
+<body>
+<div class="watermark">© 2026 ChineseFrench · Aruna's Classes</div>
+<header class="app-header">
+  <div class="logo-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1000" height="300" viewBox="0 0 1000 300">
+  <defs><linearGradient id="red" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a2231d"/><stop offset="1" stop-color="#7a1a15"/></linearGradient></defs>
+  <rect x="6" y="6" width="988" height="288" rx="34" fill="url(#red)" stroke="#c99a2e" stroke-width="7"/>
+  <circle cx="150" cy="150" r="98" fill="none" stroke="#c99a2e" stroke-width="6"/>
+  <circle cx="150" cy="150" r="86" fill="#fbf6ea"/>
+  <text x="150" y="150" font-family="Noto Serif CJK SC, serif" font-size="118" font-weight="700" fill="#a2231d" text-anchor="middle" dominant-baseline="central">语</text>
+  <text x="290" y="118" font-family="Georgia, serif" font-size="72" font-weight="700" fill="#fbf6ea">ChineseFrench</text>
+  <line x1="292" y1="150" x2="900" y2="150" stroke="#c99a2e" stroke-width="2"/>
+  <text x="290" y="196" font-family="Noto Serif CJK SC, serif" font-size="40" font-weight="700" fill="#f3e3b3">爱睿娜的课堂 · Aruna's Classes</text>
+  <text x="292" y="238" font-family="Georgia, serif" font-size="27" fill="#e8c98f">中文 Mandarin · Français · Deutsch · HSK Preparation</text>
+</svg>
+</div>
+  <div class="lesson-title">新 HSK 3.0 · 三级 · 第1–2课 · 连线 Match all Dialogues · Mandarin ↔ Meaning · sets of 5</div>
+  <div class="student-bar">
+    <input id="studentName" type="text" placeholder="Enter your name..." aria-label="Student name">
+    <span class="badge" id="badge">第1课 ✓0 · 第2课 ✓0</span>
+  </div>
+</header>
+<nav class="tabs" id="tabNav"></nav>
+<main id="mainArea"></main>
+<div class="footer-copy">
+  © 2026 RRAruna Enterprises · ChineseFrench · Aruna's Classes. All Rights Reserved.<br>
+  Tap a Mandarin sentence on the left, then tap its English meaning on the right. Characters only — no pinyin.
+</div>
+
+<script>
+const MATCH_DATA = [
+{
+ n:1, title:"第1课 · 我们去机场接你们",
+ lines:[
+  // 课文1 — 刘明 & 王一雪 chatting on the sofa
+  ["这是杨同乐吗？","Is this Yang Tongle?"],
+  ["他不是杨同乐，他叫李文。","He isn't Yang Tongle; his name is Li Wen."],
+  ["他是白家月的好朋友。","He's a good friend of Bai Jiayue."],
+  ["我还以为是同乐呢。","I thought it was Tongle."],
+  ["他们看上去有点儿像。","They look a little alike."],
+  ["他比同乐高，身高有一米八。","He's taller than Tongle — about 1.8 metres."],
+  ["看起来也比同乐瘦一点儿。","He also looks a bit thinner than Tongle."],
+  ["下个星期家月和李文要来北京。","Next week Jiayue and Li Wen are coming to Beijing."],
+  ["我去机场接他们。","I'll go to the airport to pick them up."],
+  ["我跟你一起去机场接他们吧。","Let me go with you to pick them up."],
+  // 课文2 — at baggage claim, 李文 & 白家月
+  ["我们的行李箱怎么还没出来？","Why hasn't our suitcase come out yet?"],
+  ["你别着急，再等一下。","Don't worry, wait a little longer."],
+  ["我的行李箱不见了！","My suitcase is missing!"],
+  ["你的行李箱是什么样的？","What does your suitcase look like?"],
+  ["是一个黑色的箱子。","It's a black suitcase."],
+  ["里面有很多重要的东西。","There are many important things inside."],
+  ["是不是有人拿错了？","Did someone take it by mistake?"],
+  ["我们去服务台问一问吧。","Let's go and ask at the service desk."],
+  // 课文3 — meeting at the airport
+  ["站在前面的那个人是李文吗？","Is that person standing in front Li Wen?"],
+  ["前面站着好几个人，你说的是哪个？","Several people are standing in front — which one do you mean?"],
+  ["那个高个子的年轻人。","That tall young man."],
+  ["他穿着黑衣服，短头发。","He's wearing black clothes and has short hair."],
+  ["我看见他了！","I see him!"],
+  // 课文4 — 李文's diary
+  ["今天我到了北京。","Today I arrived in Beijing."],
+  ["白家月和她的朋友来机场接我。","Bai Jiayue and her friend came to the airport to meet me."],
+  ["一出来我就看见了他们。","As soon as I came out, I saw them."],
+  ["他们带我去吃了中国菜，很好吃。","They took me to eat Chinese food; it was delicious."],
+ ]
+},
+{
+ n:2, title:"第2课 · 你们想吃什么就点什么",
+ lines:[
+  // 课文1 — ordering at the restaurant
+  ["家月、李文，你们看看菜单，想吃点儿什么？","Jiayue, Li Wen, look at the menu — what would you like to eat?"],
+  ["我都可以，你们点吧。","Anything's fine with me; you order."],
+  ["飞了这么远，我现在又饿又渴。","After such a long flight, I'm both hungry and thirsty now."],
+  ["你们喝什么饮料？","What would you like to drink?"],
+  ["好久没喝中国茶了，来绿茶吧。","I haven't had Chinese tea in ages — let's have green tea."],
+  ["没问题，你们看看还想吃什么。","No problem — see what else you'd like."],
+  // 课文2 — service, chopsticks/spoon/bowl
+  ["服务员，再给我们拿一双筷子、一个勺子和一个碗。","Waiter, please bring us another pair of chopsticks, a spoon and a bowl."],
+  ["好的，请等一下，我马上去拿。","Sure, one moment — I'll get them right away."],
+  ["这家饭馆的服务很热情。","The service at this restaurant is very warm."],
+  ["这里的饭菜又便宜又好吃。","The food here is both cheap and tasty."],
+  ["我们经常来，服务员都记住我们爱吃的菜了。","We come often, and the waiters remember the dishes we like."],
+  ["今天送您一些水果，慢用。","Today we'll give you some fruit — enjoy your meal."],
+  // 课文3 — takeout / phone menu
+  ["这个鸡肉饭太好吃了，我要再来吃一次。","This chicken rice is so good — I want to come again."],
+  ["你可以拿走这张菜单。","You can take this menu with you."],
+  ["不用拿菜单，在手机上就能看到。","No need for the menu — you can see it on your phone."],
+  ["也可以选好了让他们给你送。","You can also choose and have them deliver it to you."],
+  ["他们家还能送外卖？","They do takeout delivery too?"],
+  ["现在很多饭馆都能送外卖。","Many restaurants can deliver takeout now."],
+  ["想吃什么就点什么。","Order whatever you feel like."],
+  ["那真是太方便了！","That's really convenient!"],
+  // 课文4 — 李文's diary about food
+  ["这些年在国外，我很少自己做饭。","In these years abroad, I seldom cooked for myself."],
+  ["快要考试的时候又忙又累。","When exams were near, I was busy and tired."],
+  ["没时间出去吃饭，可能好几天只吃方便面。","With no time to eat out, I sometimes ate only instant noodles for days."],
+  ["现在回到中国了，每天能吃到妈妈做的饭。","Now I'm back in China and can eat my mother's cooking every day."],
+  ["妈妈只做几个简单的菜，我也非常爱吃。","Mum makes just a few simple dishes, and I love them very much."],
+  ["因为什么都没有妈妈做的饭好吃。","Because nothing is as tasty as the food my mother makes."],
+ ]
+},
+];
+</script>
+<script>
+const COPYRIGHT="© 2026 RRAruna Enterprises · ChineseFrench · Aruna's Classes. All Rights Reserved.";
+/* DATA injected below (matchdata.js). Chunked into SETS of 5. */
+
+const RAW = MATCH_DATA;   // [{n,title,lines:[[zh,en],...]}]
+// balanced split: aim for sets of 5, but absorb a small remainder so no set has <4 cards
+function balancedSets(lines){
+  const N=lines.length; if(N<=6) return [lines];
+  let k=Math.round(N/5); if(k<1)k=1;               // number of sets
+  const base=Math.floor(N/k), extra=N%k;           // distribute remainder
+  const out=[]; let idx=0;
+  for(let i=0;i<k;i++){ const sz=base+(i<extra?1:0); out.push(lines.slice(idx,idx+sz)); idx+=sz; }
+  return out;
+}
+const SETS=[];
+RAW.forEach(L=>{ balancedSets(L.lines).forEach((g,gi,arr)=>SETS.push({lesson:L.n,setIndex:gi,total:arr.length,lessonTitle:L.title,pairs:g})); });
+
+function skey(){const el=document.getElementById('studentName');const n=el?el.value.trim():'';return "aruna_matchall_"+(n?n.toLowerCase().replace(/\s+/g,'_'):'guest');}
+function loadP(){try{return Object.assign({done:{}},JSON.parse(localStorage.getItem(skey()))||{});}catch(e){return {done:{}};}}
+function saveP(p){try{localStorage.setItem(skey(),JSON.stringify(p));}catch(e){}}
+function shuffle(a){const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
+function setKey(s){return "L"+s.lesson+"S"+s.setIndex;}
+function updateBadge(){const p=loadP();document.getElementById('badge').textContent=`✓ ${Object.keys(p.done||{}).length} / ${SETS.length} sets`;}
+
+let cur=0;
+function initTabs(){
+  const p=loadP(); let html='';
+  RAW.forEach(L=>{
+    const items=SETS.map((s,i)=>({s,i})).filter(x=>x.s.lesson===L.n);
+    html+=`<div style="width:100%;text-align:center;font-size:.72rem;font-weight:800;color:var(--gray);margin:6px 0 2px;">第${L.n}课 Lesson ${L.n}</div>`;
+    html+=items.map(x=>`<button class="${x.i===cur?'active':''}" onclick="goSet(${x.i})">${(p.done&&p.done[setKey(x.s)])?'✓ ':''}Set ${x.s.setIndex+1}</button>`).join('');
+  });
+  document.getElementById('tabNav').innerHTML=html;
+}
+function goSet(i){cur=i;initTabs();startBoard();}
+
+/* ---- board state: one matched set keyed by pair id ---- */
+let B=null;
+function startBoard(){
+  const S=SETS[cur];
+  B={
+    left:S.pairs.map((p,i)=>({id:i,text:p[0]})),
+    right:shuffle(S.pairs.map((p,i)=>({id:i,text:p[1]}))),
+    doneL:{}, doneR:{}, num:{}, next:1, sel:null, mistakes:0
+  };
+  drawBoard();
+}
+function cardHtml(side,c){
+  const done = side==='L'? B.doneL[c.id] : B.doneR[c.id];
+  const selected = B.sel && B.sel.side===side && B.sel.id===c.id;
+  const cls=['mcard', side==='L'?'zh':'', done?'matched':'', selected?'sel':''].filter(Boolean).join(' ');
+  let badge='';
+  if(done) badge=`<span class="pair-badge">${B.num[c.id]}</span>`;
+  else if(side==='L') badge=`<span class="pair-badge">•</span>`;
+  return `<button class="${cls}" data-side="${side}" data-id="${c.id}" ${done?'disabled':''} onclick="tapCard('${side}',${c.id})">${badge}<span>${c.text}</span></button>`;
+}
+function drawBoard(){
+  const S=SETS[cur];
+  const done=Object.keys(B.doneL).length;
+  document.getElementById('mainArea').innerHTML=`
+    <div class="board-head">
+      <div class="board-title">${S.lessonTitle} · Set ${S.setIndex+1}/${S.total}</div>
+      <div class="progress-pill" id="prog">${done} / ${S.pairs.length} matched</div>
+    </div>
+    <div class="instr">Tap a Mandarin sentence on the left, then tap its English meaning on the right.</div>
+    <div class="col-heads"><div class="col-head">中文 · Mandarin</div><div class="col-head">意思 · Meaning</div></div>
+    <div class="match-grid">
+      <div class="match-col" id="colL">${B.left.map(c=>cardHtml('L',c)).join('')}</div>
+      <div class="match-col" id="colR">${B.right.map(c=>cardHtml('R',c)).join('')}</div>
+    </div>
+    <div class="controls"><button class="btn outline" onclick="startBoard()">↺ Shuffle &amp; restart</button></div>
+    <div id="doneSlot"></div>`;
+}
+function tapCard(side,id){
+  // ignore already-matched cards
+  if(side==='L' && B.doneL[id]) return;
+  if(side==='R' && B.doneR[id]) return;
+  if(!B.sel){ B.sel={side,id}; drawBoard(); return; }
+  if(B.sel.side===side){ B.sel = (B.sel.id===id)? null : {side,id}; drawBoard(); return; }
+  const leftId  = side==='L'? id : B.sel.id;
+  const rightId = side==='R'? id : B.sel.id;
+  if(leftId===rightId){                 // correct: same pair index
+    const n=B.next++;
+    B.doneL[leftId]=true; B.doneR[rightId]=true; B.num[leftId]=n; B.num[rightId]=n;
+    B.sel=null; drawBoard(); checkDone();
+  } else {                              // wrong: flash then clear
+    B.mistakes++;
+    const lEl=document.querySelector(`#colL .mcard[data-id="${leftId}"]`);
+    const rEl=document.querySelector(`#colR .mcard[data-id="${rightId}"]`);
+    [lEl,rEl].forEach(e=>{if(e){e.classList.remove('sel');e.classList.add('wrong');}});
+    B.sel=null;
+    setTimeout(()=>drawBoard(),400);
+  }
+}
+function checkDone(){
+  const S=SETS[cur];
+  if(Object.keys(B.doneL).length>=S.pairs.length){
+    const p=loadP(); p.done=p.done||{}; p.done[setKey(S)]=true; saveP(p); updateBadge(); initTabs();
+    const slot=document.getElementById('doneSlot');
+    const hasNext=cur<SETS.length-1;
+    if(slot){ slot.innerHTML=`
+      <div class="done-card">
+        <div class="big">🎉 全部连对了！All ${S.pairs.length} matched.</div>
+        <div style="color:var(--gray);margin:8px 0;">Mistakes this round: <strong>${B.mistakes}</strong></div>
+        <button class="btn big" onclick="startBoard()">↺ Play again</button>
+        ${hasNext?`<button class="btn gold big" onclick="goSet(${cur+1})">Next set →</button>`:'<div style="color:var(--green);font-weight:700;margin-top:8px;">You finished every set! 🏆</div>'}
+      </div>`;
+      slot.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  let saved=null;try{saved=localStorage.getItem('aruna_match_name');}catch(e){}
+  if(saved)document.getElementById('studentName').value=saved;
+  document.getElementById('studentName').addEventListener('change',()=>{try{localStorage.setItem('aruna_match_name',document.getElementById('studentName').value.trim());}catch(e){}updateBadge();});
+  initTabs(); startBoard(); updateBadge();
+  console.log(COPYRIGHT);
+});
+</script>
+</body>
+</html>
