@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chinese Quiz · Easy Steps to Chinese 1 (Units 1–2)</title>
+<style>
+  :root{--bg:#eef2ff;--ink:#1f3a5f;--muted:#6b7a90;--line:#e2e8f4;--accent:#2aa198;--accent2:#3b82c4;
+        --good:#16a34a;--goodbg:#dcfce7;--bad:#dc2626;--badbg:#fee2e2;--sel:#f59e0b;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink)}
+  header.top{background:#fff;border-bottom:1px solid var(--line);padding:14px 16px;position:sticky;top:0;z-index:10}
+  .scorebar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:760px;margin:0 auto}
+  .chip{border:2px solid var(--line);border-radius:14px;padding:6px 16px;text-align:center;min-width:76px;background:#fff}
+  .chip b{display:block;font-size:22px;line-height:1}.chip span{font-size:11px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase}
+  .chip.score b{color:#c99700}.chip.score{border-color:#f0c000}
+  .chip.correct b{color:var(--good)}.chip.correct{border-color:#7fd1a0}
+  .chip.wrong b{color:var(--bad)}.chip.wrong{border-color:#f2a9a9}
+  .chip.q b{color:var(--accent2)}.chip.q{border-color:#b9c6e6}
+  .wrap{max-width:760px;margin:0 auto;padding:18px 16px 60px}
+  .banner{background:#fff8dc;border-left:5px solid #fde68a;border-radius:8px;padding:12px 16px;font-size:14px;color:#6b5e1f;margin-bottom:18px}
+  h1{font-size:20px;margin:6px 0 2px}.sub{color:var(--muted);font-size:14px;margin-bottom:16px}
+  .lessons{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+  .lcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;transition:.12s}
+  .lcard:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(40,80,140,.12)}
+  .lcard .unit{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--accent2);font-weight:700}
+  .lcard h3{margin:4px 0 2px;font-size:17px}.lcard .cn{color:var(--muted);font-size:14px}
+  .lcard .meta{margin-top:8px;font-size:12px;color:var(--muted)}
+  .lcard.all{background:linear-gradient(135deg,#eaf7f5,#eaf1fb);border-color:#cfe6e2}
+  .btn{border:none;border-radius:10px;padding:10px 18px;font-size:15px;font-weight:600;cursor:pointer}
+  .btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+  .btn.primary{background:var(--accent2);color:#fff}
+  .playhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+  .progress{height:8px;background:#dbe3f4;border-radius:8px;overflow:hidden;margin:8px 0 20px}
+  .progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s}
+  .qcard{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px 20px;text-align:center;margin-bottom:18px}
+  .qprompt{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+  .qbig{font-size:64px;font-weight:800;line-height:1.05}
+  .qpy{font-size:20px;color:var(--accent2);margin-top:6px}
+  .qeng{font-size:34px;font-weight:800}
+  .sound{margin-top:12px;background:#eef6ff;border:1px solid #cfe0f5;color:var(--accent2);border-radius:20px;padding:6px 16px;font-size:14px;cursor:pointer}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .opt{background:#fff;border:2px solid var(--line);border-radius:14px;padding:16px;font-size:18px;cursor:pointer;transition:.12s;min-height:60px;display:flex;align-items:center;justify-content:center;text-align:center}
+  .opt .ohz{font-size:30px;font-weight:700}.opt .opy{font-size:13px;color:var(--accent2)}
+  .opt:hover{border-color:#b9c6e6}
+  .opt.good{border-color:var(--good);background:var(--goodbg);color:var(--good)}
+  .opt.bad{border-color:var(--bad);background:var(--badbg);color:var(--bad)}
+  .opt.disabled{pointer-events:none;opacity:.85}
+  .feedback{text-align:center;font-weight:700;min-height:26px;margin-top:14px}
+  .feedback.ok{color:var(--good)}.feedback.no{color:var(--bad)}
+  .next{text-align:center;margin-top:14px}
+  .result{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;text-align:center}
+  .result h2{margin:0 0 8px;font-size:26px}.result .big{font-size:44px;font-weight:800;color:var(--accent2)}
+  .stars{font-size:34px;margin:8px 0}
+  .hidden-el{display:none!important}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="scorebar">
+    <div class="chip score"><b id="sScore">0</b><span>Score</span></div>
+    <div class="chip correct"><b id="sCorrect">0</b><span>Correct</span></div>
+    <div class="chip wrong"><b id="sWrong">0</b><span>Wrong</span></div>
+    <div class="chip q"><b id="sQ">–</b><span>Question</span></div>
+  </div>
+</header>
+<div class="wrap">
+  <div class="banner">🧠 Read the word, then tap the correct answer. <b>Every right answer = +1</b> — wrong answers never lose points. Tap 🔊 to hear the Chinese. Vocabulary: <b>Easy Steps to Chinese 1, Units 1 &amp; 2</b>.</div>
+
+  <div id="menu">
+    <h1>Vocabulary Quiz · Units 1 &amp; 2</h1>
+    <div class="sub">Choose a lesson (or quiz everything). Each round has up to 10 questions, mixing "pick the meaning" and "pick the character".</div>
+    <div class="lessons" id="lessonGrid"></div>
+  </div>
+
+  <div id="play" class="hidden-el">
+    <div class="playhead">
+      <button class="btn ghost" id="backBtn">← Menu</button>
+      <h1 id="playTitle" style="flex:1;text-align:center;font-size:17px"></h1>
+      <span style="width:70px"></span>
+    </div>
+    <div class="progress"><i id="progFill"></i></div>
+    <div class="qcard" id="qcard"></div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="next"><button class="btn primary hidden-el" id="nextBtn">Next →</button></div>
+  </div>
+
+  <div id="results" class="hidden-el"></div>
+</div>
+
+<script>
+const LESSONS = [
+  { unit:"Unit 1", lesson:"Lesson 2", title:"Numbers", cn:"数字", words:[
+    {hz:"一",py:"yī",en:"one"},{hz:"二",py:"èr",en:"two"},{hz:"三",py:"sān",en:"three"},{hz:"四",py:"sì",en:"four"},{hz:"五",py:"wǔ",en:"five"},
+    {hz:"六",py:"liù",en:"six"},{hz:"七",py:"qī",en:"seven"},{hz:"八",py:"bā",en:"eight"},{hz:"九",py:"jiǔ",en:"nine"},{hz:"十",py:"shí",en:"ten"}]},
+  { unit:"Unit 1", lesson:"Lesson 3", title:"Greetings", cn:"问候", words:[
+    {hz:"您",py:"nín",en:"you (respectfully)"},{hz:"好",py:"hǎo",en:"good; well"},{hz:"您好",py:"nín hǎo",en:"hello"},{hz:"你",py:"nǐ",en:"you"},
+    {hz:"再",py:"zài",en:"again"},{hz:"见",py:"jiàn",en:"see"},{hz:"再见",py:"zài jiàn",en:"good-bye"},{hz:"叫",py:"jiào",en:"call"},
+    {hz:"什么",py:"shén me",en:"what"},{hz:"名",py:"míng",en:"name"},{hz:"字",py:"zì",en:"character; word"},{hz:"名字",py:"míng zi",en:"name"},
+    {hz:"我",py:"wǒ",en:"I; me"},{hz:"小",py:"xiǎo",en:"small"},{hz:"月",py:"yuè",en:"moon; month"},{hz:"大",py:"dà",en:"big"},{hz:"生",py:"shēng",en:"be born; student"}]},
+  { unit:"Unit 2", lesson:"Lesson 4", title:"Dates", cn:"日期", words:[
+    {hz:"一月",py:"yī yuè",en:"January"},{hz:"星",py:"xīng",en:"star"},{hz:"期",py:"qī",en:"a period of time"},{hz:"星期",py:"xīng qī",en:"week"},
+    {hz:"星期一",py:"xīng qī yī",en:"Monday"},{hz:"天",py:"tiān",en:"the sky; day"},{hz:"日",py:"rì",en:"sun; day"},{hz:"星期天",py:"xīng qī tiān",en:"Sunday"},
+    {hz:"今",py:"jīn",en:"now; today"},{hz:"今天",py:"jīn tiān",en:"today"},{hz:"年",py:"nián",en:"year"},{hz:"今年",py:"jīn nián",en:"this year"},
+    {hz:"是",py:"shì",en:"be"},{hz:"号",py:"hào",en:"number (date)"},{hz:"昨",py:"zuó",en:"yesterday"},{hz:"昨天",py:"zuó tiān",en:"yesterday"},
+    {hz:"几",py:"jǐ",en:"how many"},{hz:"明",py:"míng",en:"bright; next"},{hz:"明天",py:"míng tiān",en:"tomorrow"}]},
+  { unit:"Unit 2", lesson:"Lesson 5", title:"Age", cn:"年龄", words:[
+    {hz:"在",py:"zài",en:"in; on"},{hz:"出",py:"chū",en:"go or come out"},{hz:"出生",py:"chū shēng",en:"be born"},{hz:"的",py:"de",en:"of; 's"},{hz:"生日",py:"shēng rì",en:"birthday"},
+    {hz:"王",py:"wáng",en:"king; a surname"},{hz:"多",py:"duō",en:"many; much"},{hz:"多大",py:"duō dà",en:"how old"},{hz:"了",py:"le",en:"particle"},{hz:"他",py:"tā",en:"he; him"},
+    {hz:"文",py:"wén",en:"culture; civilization"},{hz:"岁",py:"suì",en:"year (of age)"},{hz:"几岁",py:"jǐ suì",en:"how old"},{hz:"她",py:"tā",en:"she; her"}]},
+  { unit:"Unit 2", lesson:"Lesson 6", title:"Telephone Numbers", cn:"电话号码", words:[
+    {hz:"家",py:"jiā",en:"family; home"},{hz:"电",py:"diàn",en:"electricity"},{hz:"电话",py:"diàn huà",en:"telephone"},{hz:"话",py:"huà",en:"word; talk"},
+    {hz:"码",py:"mǎ",en:"number (code)"},{hz:"号码",py:"hào mǎ",en:"number"},{hz:"少",py:"shǎo",en:"few; little"},{hz:"多少",py:"duō shǎo",en:"how many; how much"},
+    {hz:"住",py:"zhù",en:"live"},{hz:"哪",py:"nǎ",en:"which; what"},{hz:"儿",py:"ér",en:"suffix"},{hz:"哪儿",py:"nǎr",en:"where"},{hz:"北京",py:"běi jīng",en:"Beijing"}]},
+];
+const ALL = LESSONS.flatMap(L=>L.words);
+const QN = 10;
+
+let score=0,correct=0,wrong=0;
+let pool=[],order=[],qi=0,answered=false;
+const $=id=>document.getElementById(id);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const upd=()=>{$("sScore").textContent=score;$("sCorrect").textContent=correct;$("sWrong").textContent=wrong;};
+const speak=t=>{try{const u=new SpeechSynthesisUtterance(t);u.lang="zh-CN";u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}};
+
+function menu(){
+  const g=$("lessonGrid");g.innerHTML="";
+  const all=document.createElement("div");
+  all.className="lcard all";
+  all.innerHTML=`<div class="unit">Units 1 &amp; 2</div><h3>Mixed Challenge</h3><div class="cn">全部 · all words</div><div class="meta">${ALL.length} words · 10 random questions</div>`;
+  all.onclick=()=>start(ALL,"Mixed Challenge · Units 1 & 2");
+  g.appendChild(all);
+  LESSONS.forEach(L=>{
+    const d=document.createElement("div");d.className="lcard";
+    d.innerHTML=`<div class="unit">${L.unit}</div><h3>${L.lesson}: ${L.title}</h3><div class="cn">${L.cn}</div><div class="meta">${L.words.length} words</div>`;
+    d.onclick=()=>start(L.words,`${L.lesson}: ${L.title}`);
+    g.appendChild(d);
+  });
+}
+function start(words,title){
+  pool=words;order=shuffle(words).slice(0,Math.min(QN,words.length));qi=0;
+  $("menu").classList.add("hidden-el");$("results").classList.add("hidden-el");$("play").classList.remove("hidden-el");
+  $("playTitle").textContent=title;
+  render();
+}
+function render(){
+  answered=false;
+  $("nextBtn").classList.add("hidden-el");$("feedback").textContent="";$("feedback").className="feedback";
+  $("sQ").textContent=`${qi+1}/${order.length}`;
+  $("progFill").style.width=(qi/order.length*100)+"%";
+  const w=order[qi];
+  const dir=Math.random()<0.5?"toEng":"toHz"; // toEng: show char -> pick english; toHz: show english -> pick char
+  const qc=$("qcard"),opts=$("options");opts.innerHTML="";
+  const distract=shuffle(pool.filter(x=>x.hz!==w.hz)).slice(0,3);
+  const choices=shuffle([w,...distract]);
+  if(dir==="toEng"){
+    qc.innerHTML=`<div class="qprompt">What does this mean?</div><div class="qbig">${w.hz}</div><div class="qpy">${w.py}</div>
+      <div><button class="sound" onclick="speak('${w.hz}')">🔊 Play sound</button></div>`;
+    speak(w.hz);
+    choices.forEach(c=>{const o=document.createElement("div");o.className="opt";o.textContent=c.en;o.onclick=()=>answer(o,c,w);opts.appendChild(o);});
+  }else{
+    qc.innerHTML=`<div class="qprompt">Which character means…</div><div class="qeng">${w.en}</div>`;
+    choices.forEach(c=>{const o=document.createElement("div");o.className="opt";o.innerHTML=`<div><div class="ohz">${c.hz}</div><div class="opy">${c.py}</div></div>`;o.onclick=()=>answer(o,c,w);opts.appendChild(o);});
+  }
+}
+function answer(el,choice,w){
+  if(answered)return;answered=true;
+  [...$("options").children].forEach(o=>o.classList.add("disabled"));
+  if(choice.hz===w.hz){
+    el.classList.add("good");score++;correct++;upd();
+    $("feedback").textContent="✔ Correct!";$("feedback").className="feedback ok";
+    speak(w.hz);
+  }else{
+    el.classList.add("bad");wrong++;upd();
+    $("feedback").textContent=`✘ Answer: ${w.hz} (${w.py}) = ${w.en}`;$("feedback").className="feedback no";
+    [...$("options").children].forEach(o=>{if((o.textContent===w.en)||(o.querySelector&&o.querySelector(".ohz")&&o.querySelector(".ohz").textContent===w.hz))o.classList.add("good");});
+  }
+  $("nextBtn").classList.remove("hidden-el");
+}
+$("nextBtn").onclick=()=>{qi++;if(qi>=order.length)finish();else render();};
+$("backBtn").onclick=()=>{$("play").classList.add("hidden-el");$("menu").classList.remove("hidden-el");menu();};
+function finish(){
+  $("play").classList.add("hidden-el");
+  const total=order.length,got=order.length-0; // correct within round tracked via correct? use round score
+  const pct=Math.round((roundCorrect/total)*100);
+  let stars= pct>=90?"⭐⭐⭐": pct>=60?"⭐⭐":"⭐";
+  const r=$("results");r.classList.remove("hidden-el");
+  r.innerHTML=`<div class="result"><h2>Round complete!</h2>
+     <div class="stars">${stars}</div>
+     <div class="big">${roundCorrect} / ${total}</div>
+     <p style="color:var(--muted)">${pct}% correct this round · total score ${score}</p>
+     <button class="btn primary" onclick="location.reload()">Play again</button></div>`;
+}
+// track per-round correct
+let roundCorrect=0;
+const _answer=answer;
+answer=function(el,choice,w){const before=correct;_answer(el,choice,w);if(correct>before)roundCorrect++;};
+const _start=start;
+start=function(words,title){roundCorrect=0;_start(words,title);};
+
+upd();menu();
+</script>
+</body>
+</html>
