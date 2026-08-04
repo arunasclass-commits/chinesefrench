@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chinese Flashcards · Easy Steps to Chinese 1 (Units 1–2)</title>
+<style>
+  :root{--bg:#eef2ff;--ink:#1f3a5f;--muted:#6b7a90;--line:#e2e8f4;--accent:#2aa198;--accent2:#3b82c4;--good:#16a34a;--gold:#f59e0b;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink)}
+  header.top{background:#fff;border-bottom:1px solid var(--line);padding:14px 16px;text-align:center}
+  header.top h0,header.top .t{font-size:16px;font-weight:700}
+  .wrap{max-width:640px;margin:0 auto;padding:18px 16px 60px}
+  .banner{background:#fff8dc;border-left:5px solid #fde68a;border-radius:8px;padding:12px 16px;font-size:14px;color:#6b5e1f;margin-bottom:18px}
+  h1{font-size:20px;margin:6px 0 2px}.sub{color:var(--muted);font-size:14px;margin-bottom:16px}
+  .lessons{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+  .lcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;transition:.12s}
+  .lcard:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(40,80,140,.12)}
+  .lcard .unit{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--accent2);font-weight:700}
+  .lcard h3{margin:4px 0 2px;font-size:16px}.lcard .cn{color:var(--muted);font-size:14px}.lcard .meta{margin-top:8px;font-size:12px;color:var(--muted)}
+  .lcard.all{background:linear-gradient(135deg,#eaf7f5,#eaf1fb);border-color:#cfe6e2}
+  .btn{border:none;border-radius:10px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer}
+  .btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+  .btn.primary{background:var(--accent2);color:#fff}
+  .playhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+  .counts{text-align:center;color:var(--muted);font-size:13px;margin-bottom:6px}
+  .counts b{color:var(--ink)}
+  /* card flip */
+  .stage{perspective:1200px;margin:6px 0 18px}
+  .card{position:relative;width:100%;height:340px;transform-style:preserve-3d;transition:transform .5s;cursor:pointer}
+  .card.flipped{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;background:#fff;border:1px solid var(--line);border-radius:24px;
+        display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(40,80,140,.10);padding:20px}
+  .back{transform:rotateY(180deg);background:#f8fbff}
+  .hz{font-size:96px;font-weight:800;line-height:1}
+  .py{font-size:26px;color:var(--accent2);margin-top:10px}
+  .en{font-size:40px;font-weight:800;text-align:center}
+  .tap{position:absolute;bottom:14px;font-size:12px;color:var(--muted)}
+  .sound{position:absolute;top:14px;right:16px;background:#eef6ff;border:1px solid #cfe0f5;color:var(--accent2);border-radius:20px;padding:6px 14px;font-size:14px;cursor:pointer}
+  .controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .controls .btn{min-width:96px}
+  .know{background:#dcfce7;border:1px solid #86e0a8;color:var(--good)}
+  .again{background:#fee2e2;border:1px solid #f2a9a9;color:#b91c1c}
+  .toolbar{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+  .done{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px;text-align:center}
+  .hidden-el{display:none!important}
+</style>
+</head>
+<body>
+<header class="top"><div class="t">🃏 Chinese Flashcards · Units 1 &amp; 2</div></header>
+<div class="wrap">
+  <div class="banner">Flip the card to check yourself. Tap 🔊 to hear it. Mark <b>I know it</b> ✅ or <b>Practice again</b> 🔁 — "again" cards come back at the end of the deck.</div>
+
+  <div id="menu">
+    <h1>Pick a deck</h1>
+    <div class="sub">Cards show the character &amp; pinyin; flip to see the meaning. (Use "Meaning first" to reverse.)</div>
+    <div class="lessons" id="lessonGrid"></div>
+  </div>
+
+  <div id="play" class="hidden-el">
+    <div class="playhead">
+      <button class="btn ghost" id="backBtn">← Decks</button>
+      <div id="deckTitle" style="flex:1;text-align:center;font-weight:700"></div>
+      <button class="btn ghost" id="dirBtn">Meaning first</button>
+    </div>
+    <div class="counts"><b id="cLeft">0</b> to go · <b id="cKnow">0</b> known · <b id="cAgain">0</b> to review</div>
+    <div class="stage"><div class="card" id="card">
+      <div class="face front" id="front"></div>
+      <div class="face back" id="back"></div>
+    </div></div>
+    <div class="controls">
+      <button class="btn again" id="againBtn">🔁 Practice again</button>
+      <button class="btn ghost" id="flipBtn">↺ Flip</button>
+      <button class="btn know" id="knowBtn">✅ I know it</button>
+    </div>
+    <div class="toolbar"><button class="btn ghost" id="shuffleBtn">🔀 Shuffle deck</button></div>
+  </div>
+
+  <div id="done" class="hidden-el"></div>
+</div>
+
+<script>
+const LESSONS = [
+  { unit:"Unit 1", lesson:"Lesson 2", title:"Numbers", cn:"数字", words:[
+    {hz:"一",py:"yī",en:"one"},{hz:"二",py:"èr",en:"two"},{hz:"三",py:"sān",en:"three"},{hz:"四",py:"sì",en:"four"},{hz:"五",py:"wǔ",en:"five"},
+    {hz:"六",py:"liù",en:"six"},{hz:"七",py:"qī",en:"seven"},{hz:"八",py:"bā",en:"eight"},{hz:"九",py:"jiǔ",en:"nine"},{hz:"十",py:"shí",en:"ten"}]},
+  { unit:"Unit 1", lesson:"Lesson 3", title:"Greetings", cn:"问候", words:[
+    {hz:"您",py:"nín",en:"you (respectfully)"},{hz:"好",py:"hǎo",en:"good; well"},{hz:"您好",py:"nín hǎo",en:"hello"},{hz:"你",py:"nǐ",en:"you"},
+    {hz:"再",py:"zài",en:"again"},{hz:"见",py:"jiàn",en:"see"},{hz:"再见",py:"zài jiàn",en:"good-bye"},{hz:"叫",py:"jiào",en:"call"},
+    {hz:"什么",py:"shén me",en:"what"},{hz:"名",py:"míng",en:"name"},{hz:"字",py:"zì",en:"character; word"},{hz:"名字",py:"míng zi",en:"name"},
+    {hz:"我",py:"wǒ",en:"I; me"},{hz:"小",py:"xiǎo",en:"small"},{hz:"月",py:"yuè",en:"moon; month"},{hz:"大",py:"dà",en:"big"},{hz:"生",py:"shēng",en:"be born; student"}]},
+  { unit:"Unit 2", lesson:"Lesson 4", title:"Dates", cn:"日期", words:[
+    {hz:"一月",py:"yī yuè",en:"January"},{hz:"星",py:"xīng",en:"star"},{hz:"期",py:"qī",en:"a period of time"},{hz:"星期",py:"xīng qī",en:"week"},
+    {hz:"星期一",py:"xīng qī yī",en:"Monday"},{hz:"天",py:"tiān",en:"the sky; day"},{hz:"日",py:"rì",en:"sun; day"},{hz:"星期天",py:"xīng qī tiān",en:"Sunday"},
+    {hz:"今",py:"jīn",en:"now; today"},{hz:"今天",py:"jīn tiān",en:"today"},{hz:"年",py:"nián",en:"year"},{hz:"今年",py:"jīn nián",en:"this year"},
+    {hz:"是",py:"shì",en:"be"},{hz:"号",py:"hào",en:"number (date)"},{hz:"昨",py:"zuó",en:"yesterday"},{hz:"昨天",py:"zuó tiān",en:"yesterday"},
+    {hz:"几",py:"jǐ",en:"how many"},{hz:"明",py:"míng",en:"bright; next"},{hz:"明天",py:"míng tiān",en:"tomorrow"}]},
+  { unit:"Unit 2", lesson:"Lesson 5", title:"Age", cn:"年龄", words:[
+    {hz:"在",py:"zài",en:"in; on"},{hz:"出",py:"chū",en:"go or come out"},{hz:"出生",py:"chū shēng",en:"be born"},{hz:"的",py:"de",en:"of; 's"},{hz:"生日",py:"shēng rì",en:"birthday"},
+    {hz:"王",py:"wáng",en:"king; a surname"},{hz:"多",py:"duō",en:"many; much"},{hz:"多大",py:"duō dà",en:"how old"},{hz:"了",py:"le",en:"particle"},{hz:"他",py:"tā",en:"he; him"},
+    {hz:"文",py:"wén",en:"culture; civilization"},{hz:"岁",py:"suì",en:"year (of age)"},{hz:"几岁",py:"jǐ suì",en:"how old"},{hz:"她",py:"tā",en:"she; her"}]},
+  { unit:"Unit 2", lesson:"Lesson 6", title:"Telephone Numbers", cn:"电话号码", words:[
+    {hz:"家",py:"jiā",en:"family; home"},{hz:"电",py:"diàn",en:"electricity"},{hz:"电话",py:"diàn huà",en:"telephone"},{hz:"话",py:"huà",en:"word; talk"},
+    {hz:"码",py:"mǎ",en:"number (code)"},{hz:"号码",py:"hào mǎ",en:"number"},{hz:"少",py:"shǎo",en:"few; little"},{hz:"多少",py:"duō shǎo",en:"how many; how much"},
+    {hz:"住",py:"zhù",en:"live"},{hz:"哪",py:"nǎ",en:"which; what"},{hz:"儿",py:"ér",en:"suffix"},{hz:"哪儿",py:"nǎr",en:"where"},{hz:"北京",py:"běi jīng",en:"Beijing"}]},
+];
+const ALL=LESSONS.flatMap(L=>L.words);
+const $=id=>document.getElementById(id);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const speak=t=>{try{const u=new SpeechSynthesisUtterance(t);u.lang="zh-CN";u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}};
+
+let deck=[],idx=0,known=0,again=0,meaningFirst=false,deckTitle="";
+
+function menu(){
+  const g=$("lessonGrid");g.innerHTML="";
+  const all=document.createElement("div");all.className="lcard all";
+  all.innerHTML=`<div class="unit">Units 1 &amp; 2</div><h3>All words</h3><div class="cn">全部</div><div class="meta">${ALL.length} cards</div>`;
+  all.onclick=()=>start(ALL,"All words · Units 1 & 2");g.appendChild(all);
+  LESSONS.forEach(L=>{const d=document.createElement("div");d.className="lcard";
+    d.innerHTML=`<div class="unit">${L.unit}</div><h3>${L.lesson}: ${L.title}</h3><div class="cn">${L.cn}</div><div class="meta">${L.words.length} cards</div>`;
+    d.onclick=()=>start(L.words,`${L.lesson}: ${L.title}`);g.appendChild(d);});
+}
+function start(words,title){
+  deck=shuffle(words);idx=0;known=0;again=0;deckTitle=title;
+  $("menu").classList.add("hidden-el");$("done").classList.add("hidden-el");$("play").classList.remove("hidden-el");
+  $("deckTitle").textContent=title;
+  show();
+}
+function show(){
+  if(idx>=deck.length)return finish();
+  const w=deck[idx];
+  $("card").classList.remove("flipped");
+  const hzHTML=`<button class="sound" onclick="event.stopPropagation();speak('${w.hz}')">🔊</button>
+                <div class="hz">${w.hz}</div><div class="py">${w.py}</div><div class="tap">tap to flip</div>`;
+  const enHTML=`<div class="en">${w.en}</div><div class="tap">tap to flip</div>`;
+  if(!meaningFirst){$("front").innerHTML=hzHTML;$("back").innerHTML=enHTML;}
+  else{$("front").innerHTML=enHTML;$("back").innerHTML=hzHTML;}
+  if(!meaningFirst)speak(w.hz);
+  updateCounts();
+}
+function updateCounts(){
+  $("cLeft").textContent=Math.max(0,deck.length-idx);
+  $("cKnow").textContent=known;$("cAgain").textContent=again;
+}
+$("card").onclick=()=>$("card").classList.toggle("flipped");
+$("flipBtn").onclick=()=>$("card").classList.toggle("flipped");
+$("knowBtn").onclick=()=>{known++;idx++;show();};
+$("againBtn").onclick=()=>{again++;const w=deck[idx];deck.splice(idx,1);deck.push(w);show();};
+$("shuffleBtn").onclick=()=>{const rest=deck.slice(idx);deck=deck.slice(0,idx).concat(shuffle(rest));show();};
+$("dirBtn").onclick=()=>{meaningFirst=!meaningFirst;$("dirBtn").textContent=meaningFirst?"Character first":"Meaning first";show();};
+$("backBtn").onclick=()=>{$("play").classList.add("hidden-el");$("menu").classList.remove("hidden-el");menu();};
+function finish(){
+  $("play").classList.add("hidden-el");
+  const d=$("done");d.classList.remove("hidden-el");
+  d.innerHTML=`<div class="done"><h2>🎉 Deck finished!</h2>
+    <p>You marked <b>${known}</b> as known${again?` and practised <b>${again}</b> extra time(s)`:""}.</p>
+    <button class="btn primary" onclick="location.reload()">Choose another deck</button></div>`;
+}
+menu();
+</script>
+</body>
+</html>
