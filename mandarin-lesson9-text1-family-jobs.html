@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+<title>Lesson 9 · Text 1 — My Family &amp; Their Work | 我叫大生</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FFF8EE;
+  --ink:#20313A;
+  --teal:#0F6E6E;
+  --teal-dk:#0A4F4F;
+  --coral:#FF6B5A;
+  --sun:#FFC94A;
+  --plum:#6C4AB6;
+  --sky:#3FA9D6;
+  --leaf:#2FA96B;
+  --line:#E4D7C3;
+  --card:#FFFFFF;
+  --shadow:0 4px 0 rgba(32,49,58,.13);
+  --radius:18px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper);
+  background-image:radial-gradient(circle at 12% 8%, rgba(255,201,74,.16) 0 22%, transparent 23%),
+                   radial-gradient(circle at 88% 4%, rgba(63,169,214,.14) 0 18%, transparent 19%);
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:17px;line-height:1.5;
+  padding-bottom:90px;
+}
+.zh{font-family:'Noto Sans SC','Baloo 2',system-ui,sans-serif;font-weight:700}
+h1,h2,h3,.display{font-family:'Baloo 2','Nunito',system-ui,sans-serif;font-weight:800;letter-spacing:.2px}
+.wrap{max-width:860px;margin:0 auto;padding:0 14px}
+
+/* ---------- header ---------- */
+header{
+  background:linear-gradient(160deg,var(--teal) 0%,var(--teal-dk) 100%);
+  color:#fff;padding:14px 0 16px;border-bottom:6px solid var(--sun);
+  position:relative;overflow:hidden;
+}
+header:after{content:"🏙️";position:absolute;right:-6px;bottom:-14px;font-size:86px;opacity:.16}
+.hrow{display:flex;align-items:center;gap:12px}
+.panda{font-size:40px;line-height:1;filter:drop-shadow(0 3px 0 rgba(0,0,0,.2))}
+.htitle{font-size:1.32rem;margin:0;line-height:1.15}
+.hsub{font-size:.86rem;opacity:.92;margin:2px 0 0;font-weight:600}
+.scorebar{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.chip{
+  background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.3);
+  border-radius:999px;padding:5px 13px;font-weight:800;font-size:.85rem;
+  display:flex;align-items:center;gap:6px;
+}
+.xpbar{height:11px;background:rgba(255,255,255,.22);border-radius:99px;margin-top:10px;overflow:hidden;border:2px solid rgba(255,255,255,.3)}
+.xpfill{height:100%;background:linear-gradient(90deg,var(--sun),var(--coral));width:0%;transition:width .55s cubic-bezier(.3,1.4,.5,1);border-radius:99px}
+
+/* ---------- tabs ---------- */
+nav.tabs{
+  position:sticky;top:0;z-index:40;background:var(--paper);
+  border-bottom:3px solid var(--line);padding:9px 0;box-shadow:0 4px 12px rgba(32,49,58,.06);
+}
+.tabrow{display:flex;gap:8px}
+.tab{
+  flex:1;background:#fff;border:3px solid var(--line);border-radius:14px;
+  padding:8px 4px;font-family:'Baloo 2';font-weight:700;font-size:.8rem;
+  cursor:pointer;color:var(--ink);text-align:center;line-height:1.2;transition:.15s;
+}
+.tab b{display:block;font-size:1.02rem}
+.tab[aria-selected="true"]{background:var(--teal);color:#fff;border-color:var(--teal-dk);transform:translateY(-2px);box-shadow:var(--shadow)}
+.tab:focus-visible,button:focus-visible,.card:focus-visible{outline:4px solid var(--plum);outline-offset:2px}
+
+/* ---------- cards ---------- */
+.sechead{margin:18px 0 6px}
+.sechead h2{margin:0;font-size:1.35rem;color:var(--teal-dk)}
+.sechead p{margin:3px 0 0;font-size:.95rem;color:#5c6b73;font-weight:600}
+.actlist{display:grid;gap:11px;margin-top:14px}
+.actcard{
+  background:var(--card);border:3px solid var(--line);border-radius:var(--radius);
+  padding:13px 14px;display:flex;align-items:center;gap:13px;cursor:pointer;
+  box-shadow:var(--shadow);transition:.15s;text-align:left;width:100%;font-family:inherit;font-size:inherit;color:inherit;
+}
+.actcard:hover{transform:translateY(-3px);border-color:var(--teal)}
+.actcard .ico{font-size:31px;min-width:42px;text-align:center}
+.actcard .t{flex:1}
+.actcard .t b{display:block;font-family:'Baloo 2';font-size:1.06rem;line-height:1.2}
+.actcard .t span{font-size:.84rem;color:#61707a;font-weight:600}
+.actcard .st{font-size:.78rem;font-weight:800;color:var(--sun);white-space:nowrap;text-align:right}
+.actcard.done{border-color:var(--leaf);background:#F3FDF7}
+.actcard.done .st{color:var(--leaf)}
+
+.panel{background:var(--card);border:3px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-top:14px}
+.backbtn{
+  background:#fff;border:3px solid var(--line);border-radius:12px;padding:7px 14px;
+  font-family:'Baloo 2';font-weight:700;cursor:pointer;margin-top:14px;font-size:.95rem;
+}
+.backbtn:hover{border-color:var(--coral)}
+
+.howto{
+  background:#FFF3D6;border-left:7px solid var(--sun);border-radius:12px;
+  padding:11px 14px;margin:0 0 15px;font-size:.94rem;font-weight:600;
+}
+.howto b{display:block;font-family:'Baloo 2';font-size:1rem;margin-bottom:2px;color:#8a6100}
+
+/* ---------- word / flip cards ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:11px}
+.flip{perspective:900px;height:158px;cursor:pointer;border:0;background:none;padding:0;font:inherit}
+.flipin{position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d}
+.flip.on .flipin{transform:rotateY(180deg)}
+.face{
+  position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;border:3px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:7px;text-align:center;
+}
+.f-front{background:#fff}
+.f-front .em{font-size:42px}
+.f-front .en{font-size:.9rem;font-weight:800;color:var(--teal-dk);line-height:1.15}
+.f-front .tap{font-size:.68rem;color:#9aa7ae;font-weight:700}
+.f-back{background:linear-gradient(160deg,var(--teal),var(--teal-dk));color:#fff;transform:rotateY(180deg);border-color:var(--teal-dk)}
+.f-back .hz{font-size:2.1rem;line-height:1.1}
+.f-back .py{font-size:1rem;font-weight:800;color:var(--sun)}
+.f-back .en2{font-size:.8rem;opacity:.95;font-weight:700}
+.f-back .spk{background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.45);border-radius:99px;color:#fff;font-size:.75rem;padding:2px 10px;margin-top:3px;font-weight:800;cursor:pointer}
+
+/* ---------- quiz ---------- */
+.qtop{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:.85rem;color:#61707a;margin-bottom:9px}
+.progress{height:9px;background:#EFE6D6;border-radius:99px;overflow:hidden;margin-bottom:14px}
+.progress i{display:block;height:100%;background:var(--sky);transition:width .3s}
+.prompt{text-align:center;padding:14px 8px;background:#F6FBFB;border:3px dashed var(--line);border-radius:16px;margin-bottom:14px}
+.prompt .big{font-size:2.5rem;line-height:1.25}
+.prompt .bigpy{font-size:1.1rem;font-weight:800;color:var(--teal);margin-top:2px}
+.prompt .ask{font-size:1.02rem;font-weight:800;margin-top:6px}
+.prompt .asksub{font-size:.85rem;color:#61707a;font-weight:700}
+.opts{display:grid;gap:9px}
+.opt{
+  background:#fff;border:3px solid var(--line);border-radius:14px;padding:11px 13px;
+  cursor:pointer;font-family:inherit;font-size:1rem;text-align:center;transition:.12s;width:100%;color:inherit;
+}
+.opt .ozh{font-size:1.5rem;line-height:1.2}
+.opt .opy{font-size:.9rem;font-weight:800;color:var(--teal)}
+.opt .oen{font-size:.88rem;font-weight:700;color:#4a5a63}
+.opt:hover:not(:disabled){border-color:var(--sky);transform:translateY(-2px)}
+.opt.right{background:#E7FAEE;border-color:var(--leaf)}
+.opt.wrong{background:#FFECEA;border-color:var(--coral)}
+.opt:disabled{cursor:default}
+.fb{margin-top:12px;padding:11px 13px;border-radius:13px;font-weight:800;font-size:.96rem}
+.fb.ok{background:#E7FAEE;border:3px solid var(--leaf);color:#136B41}
+.fb.no{background:#FFECEA;border:3px solid var(--coral);color:#A82F22}
+.fb small{display:block;font-weight:700;font-size:.85rem;margin-top:3px;opacity:.9}
+
+.btn{
+  background:var(--teal);color:#fff;border:0;border-bottom:5px solid var(--teal-dk);
+  border-radius:14px;padding:11px 20px;font-family:'Baloo 2';font-weight:700;font-size:1.02rem;
+  cursor:pointer;transition:.12s;
+}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(2px);border-bottom-width:3px}
+.btn.coral{background:var(--coral);border-bottom-color:#C94435}
+.btn.sun{background:var(--sun);color:#4a3400;border-bottom-color:#C99A21}
+.btn.plum{background:var(--plum);border-bottom-color:#4B2F8A}
+.btn:disabled{background:#C9D2D6;border-bottom-color:#A8B3B8;cursor:not-allowed;color:#fff}
+.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+
+.result{text-align:center;padding:8px}
+.result .em{font-size:58px}
+.result h3{margin:6px 0 2px;font-size:1.5rem;color:var(--teal-dk)}
+.stars{font-size:32px;letter-spacing:4px;margin:4px 0}
+.review{background:#FFF3D6;border:3px solid var(--sun);border-radius:14px;padding:12px;margin-top:14px;text-align:left}
+.review h4{margin:0 0 8px;font-family:'Baloo 2';font-size:1.03rem}
+.rrow{display:flex;align-items:center;gap:10px;padding:8px;background:#fff;border-radius:11px;margin-bottom:7px;border:2px solid var(--line)}
+.rrow .rz{font-size:1.4rem;min-width:auto}
+.rrow .rt{flex:1;font-size:.86rem;font-weight:700;line-height:1.3}
+.rrow .rt i{display:block;font-style:normal;color:var(--teal);font-weight:800}
+.spkmini{background:var(--sky);color:#fff;border:0;border-radius:99px;width:36px;height:36px;font-size:16px;cursor:pointer;flex-shrink:0}
+
+/* ---------- read along ---------- */
+.line{
+  display:flex;align-items:flex-start;gap:11px;background:#fff;border:3px solid var(--line);
+  border-radius:14px;padding:11px;margin-bottom:9px;cursor:pointer;width:100%;text-align:left;font:inherit;color:inherit;transition:.12s;
+}
+.line:hover{border-color:var(--sky)}
+.line.heard{border-color:var(--leaf);background:#F3FDF7}
+.line .num{background:var(--teal);color:#fff;border-radius:9px;width:27px;height:27px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;flex-shrink:0}
+.line .lt{flex:1}
+.line .lz{font-size:1.42rem;line-height:1.4}
+.line .lp{font-size:.9rem;font-weight:800;color:var(--teal)}
+.line .le{font-size:.86rem;color:#5c6b73;font-weight:600}
+.line .ls{font-size:19px;color:var(--sky);flex-shrink:0}
+
+/* ---------- family scene ---------- */
+.scene{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+@media(min-width:560px){.scene{grid-template-columns:repeat(4,1fr)}}
+.person{
+  background:#fff;border:3px solid var(--line);border-radius:16px;padding:12px 6px;
+  cursor:pointer;text-align:center;font:inherit;color:inherit;transition:.12s;
+}
+.person:hover{transform:translateY(-3px);border-color:var(--coral)}
+.person.tapped{border-color:var(--leaf);background:#F3FDF7}
+.person .pe{font-size:44px;display:block}
+.person .pz{font-size:1.35rem;font-family:'Noto Sans SC';font-weight:700}
+.person .pp{font-size:.86rem;font-weight:800;color:var(--teal)}
+.person .pn{font-size:.78rem;color:#5c6b73;font-weight:700}
+
+/* ---------- match pairs ---------- */
+.matchwrap{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.mcol{display:grid;gap:9px;align-content:start}
+.mcell{
+  background:#fff;border:3px solid var(--line);border-radius:13px;padding:10px 6px;
+  cursor:pointer;font:inherit;color:inherit;text-align:center;transition:.12s;min-height:66px;
+}
+.mcell:hover:not(:disabled){border-color:var(--sky)}
+.mcell.sel{border-color:var(--plum);background:#F3EEFF;transform:scale(.97)}
+.mcell.matched{border-color:var(--leaf);background:#EAFBF1;opacity:.62;cursor:default}
+.mcell .mz{font-size:1.3rem;font-family:'Noto Sans SC';font-weight:700;line-height:1.2}
+.mcell .mp{font-size:.82rem;font-weight:800;color:var(--teal)}
+.mcell .me{font-size:26px}
+.mcell .men{font-size:.8rem;font-weight:700}
+
+/* ---------- builder ---------- */
+.slot{
+  min-height:64px;background:#F6FBFB;border:3px dashed var(--line);border-radius:14px;
+  padding:9px;display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:12px;
+}
+.slot:empty:before{content:"Tap the word tiles below in the right order";color:#9aa7ae;font-size:.85rem;font-weight:700}
+.tile{
+  background:#fff;border:3px solid var(--teal);border-radius:11px;padding:6px 11px;
+  cursor:pointer;font:inherit;color:inherit;text-align:center;line-height:1.15;
+}
+.tile .tz{font-size:1.24rem;font-family:'Noto Sans SC';font-weight:700}
+.tile .tp{font-size:.75rem;font-weight:800;color:var(--teal)}
+.tile.used{opacity:.28;cursor:default;border-color:var(--line)}
+.tile.inslot{border-color:var(--sun);background:#FFF9E8}
+.pool{display:flex;flex-wrap:wrap;gap:8px}
+.target{background:#FFF3D6;border-radius:12px;padding:10px 12px;margin-bottom:12px;font-weight:700;font-size:.95rem;border:3px solid var(--sun)}
+.target b{display:block;font-family:'Baloo 2';font-size:1.05rem}
+
+/* ---------- speaking ---------- */
+.saybox{background:#F3EEFF;border:3px solid var(--plum);border-radius:16px;padding:14px;margin-bottom:12px}
+.saybox .sz{font-size:1.6rem;font-family:'Noto Sans SC';font-weight:700;line-height:1.4}
+.saybox .sp{font-size:1rem;font-weight:800;color:var(--plum)}
+.saybox .se{font-size:.9rem;font-weight:700;color:#5c6b73}
+.gate{background:#FFF3D6;border:3px solid var(--sun);border-radius:14px;padding:12px;text-align:center;margin-bottom:14px;font-weight:800}
+.dots{font-size:24px;letter-spacing:6px;margin-top:5px}
+
+/* ---------- choice pills ---------- */
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{
+  background:#fff;border:3px solid var(--line);border-radius:99px;padding:8px 14px;
+  cursor:pointer;font:inherit;color:inherit;font-weight:700;font-size:.95rem;transition:.12s;
+}
+.pill:hover{border-color:var(--sky)}
+.pill.on{background:var(--teal);color:#fff;border-color:var(--teal-dk)}
+.pill .pz{font-family:'Noto Sans SC';font-weight:700}
+.qlabel{font-weight:800;font-family:'Baloo 2';font-size:1.05rem;margin:14px 0 7px}
+.qlabel:first-child{margin-top:0}
+
+.output{background:linear-gradient(160deg,var(--teal),var(--teal-dk));color:#fff;border-radius:16px;padding:16px;margin-top:14px}
+.output .oz{font-size:1.35rem;font-family:'Noto Sans SC';font-weight:700;line-height:1.75}
+.output .op{font-size:.92rem;color:var(--sun);font-weight:800;line-height:1.6;margin-top:8px}
+.output .oe{font-size:.88rem;opacity:.93;font-weight:600;line-height:1.6;margin-top:8px}
+
+/* ---------- overall board ---------- */
+.board{background:var(--card);border:3px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin:20px 0}
+.board h2{margin:0 0 4px;font-size:1.28rem;color:var(--teal-dk)}
+.brow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:2px dashed var(--line);font-weight:700;font-size:.92rem;gap:8px}
+.brow:last-of-type{border-bottom:0}
+.brow .bn{flex:1}
+.brow .bs{font-weight:800;color:var(--sun);white-space:nowrap}
+.brow.done .bs{color:var(--leaf)}
+.totals{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px}
+.tot{background:#F6FBFB;border:3px solid var(--line);border-radius:14px;padding:11px 4px;text-align:center}
+.tot b{display:block;font-family:'Baloo 2';font-size:1.5rem;color:var(--teal-dk);line-height:1.1}
+.tot span{font-size:.76rem;font-weight:700;color:#61707a}
+.medal{text-align:center;margin-top:14px;font-weight:800;font-size:1rem}
+.medal .mm{font-size:52px;display:block;line-height:1.1}
+
+.toast{
+  position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(120px);
+  background:var(--ink);color:#fff;padding:12px 20px;border-radius:99px;font-weight:800;
+  z-index:99;transition:transform .4s cubic-bezier(.2,1.5,.4,1);box-shadow:0 8px 22px rgba(0,0,0,.28);font-size:.95rem;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.note{font-size:.82rem;color:#7b8890;font-weight:700;margin-top:10px}
+.badge{display:inline-block;background:var(--plum);color:#fff;border-radius:99px;padding:2px 9px;font-size:.7rem;font-weight:800;vertical-align:middle;margin-left:5px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media(max-width:400px){.grid{grid-template-columns:repeat(2,1fr)}.flip{height:150px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="hrow">
+      <div class="panda" aria-hidden="true">🐼</div>
+      <div style="flex:1">
+        <h1 class="htitle">Lesson 9 · Text 1 — My Family &amp; Their Work</h1>
+        <p class="hsub">我叫大生 · Wǒ jiào Dàshēng · Learn with Panpan the Panda</p>
+      </div>
+    </div>
+    <div class="scorebar">
+      <div class="chip">⭐ <span id="cStars">0</span> stars</div>
+      <div class="chip">💎 <span id="cXp">0</span> XP</div>
+      <div class="chip">✅ <span id="cDone">0</span>/12 done</div>
+    </div>
+    <div class="xpbar" role="progressbar" aria-label="Overall progress"><div class="xpfill" id="xpFill"></div></div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap"><div class="tabrow" role="tablist">
+    <button class="tab" role="tab" data-sec="1" aria-selected="true"><b>1 · Words</b>Read &amp; Learn</button>
+    <button class="tab" role="tab" data-sec="2" aria-selected="false"><b>2 · Play</b>Family &amp; Jobs</button>
+    <button class="tab" role="tab" data-sec="3" aria-selected="false"><b>3 · Speak</b>All About Me</button>
+  </div></div>
+</nav>
+
+<div class="wrap"><main id="app"></main></div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   1. DATA
+   ========================================================= */
+
+// The 13 New Words from the Lesson 9 New Words box
+// en = the meaning printed in the book (shown on cards)
+// q  = the wording used in quiz options, kept distinct so two options
+//      can never mean the same thing
+const WORDS = [
+  {zh:"工",     py:"gōng",       en:"work",              q:"labour",              em:"🔨"},
+  {zh:"作",     py:"zuò",        en:"to do; to make",    q:"to do; to make",      em:"✍️"},
+  {zh:"工作",   py:"gōngzuò",    en:"work; job",         q:"a job; to work",      em:"💼"},
+  {zh:"也",     py:"yě",         en:"also; too",         q:"also; too",           em:"➕"},
+  {zh:"律",     py:"lǜ",         en:"law",               q:"law",                 em:"📜"},
+  {zh:"师",     py:"shī",        en:"teacher; master",   q:"master; expert",      em:"🎓"},
+  {zh:"律师",   py:"lǜshī",      en:"lawyer",            q:"lawyer",              em:"⚖️"},
+  {zh:"老",     py:"lǎo",        en:"old; experienced",  q:"old; experienced",    em:"👴"},
+  {zh:"老师",   py:"lǎoshī",     en:"teacher",           q:"teacher",             em:"👩‍🏫"},
+  {zh:"们",     py:"men",        en:"plural word (＋s)", q:"shows more than one", em:"👥"},
+  {zh:"我们",   py:"wǒmen",      en:"we; us",            q:"we; us",              em:"🙌"},
+  {zh:"一家人", py:"yì jiā rén", en:"the whole family",  q:"the whole family",    em:"👨‍👩‍👧‍👦"},
+  {zh:"上海",   py:"Shànghǎi",   en:"Shanghai",          q:"Shanghai",            em:"🏙️"}
+];
+
+// Text 1 — exactly as printed in the book
+const TEXT1 = [
+  {zh:"我叫大生。", py:"Wǒ jiào Dàshēng.", en:"My name is Dasheng."},
+  {zh:"这是我的一家。", py:"Zhè shì wǒ de yì jiā.", en:"This is my family."},
+  {zh:"我家有四口人：爸爸、妈妈、姐姐和我。", py:"Wǒ jiā yǒu sì kǒu rén: bàba, māma, jiějie hé wǒ.", en:"There are four people in my family: dad, mum, elder sister and me."},
+  {zh:"我爸爸工作，我妈妈也工作。", py:"Wǒ bàba gōngzuò, wǒ māma yě gōngzuò.", en:"My dad works, and my mum works too."},
+  {zh:"我爸爸是律师，我妈妈是老师。", py:"Wǒ bàba shì lǜshī, wǒ māma shì lǎoshī.", en:"My dad is a lawyer, my mum is a teacher."},
+  {zh:"我们一家人住在上海。", py:"Wǒmen yì jiā rén zhù zài Shànghǎi.", en:"Our whole family lives in Shanghai."}
+];
+
+// Dasheng's family (from the picture)
+const FAMILY = [
+  {zh:"爸爸", py:"bàba",   en:"dad",         em:"👨"},
+  {zh:"妈妈", py:"māma",   en:"mum",         em:"👩"},
+  {zh:"姐姐", py:"jiějie", en:"elder sister",em:"👧"},
+  {zh:"我",   py:"wǒ",     en:"me",          em:"👦"}
+];
+
+// Jobs — 律师 and 老师 are from the lesson; the rest are marked bonus
+const JOBS = [
+  {zh:"律师", py:"lǜshī",    en:"lawyer",  em:"⚖️", book:true},
+  {zh:"老师", py:"lǎoshī",   en:"teacher", em:"👩‍🏫", book:true},
+  {zh:"学生", py:"xuésheng", en:"student", em:"🎒", book:false},
+  {zh:"医生", py:"yīshēng",  en:"doctor",  em:"👨‍⚕️", book:false},
+  {zh:"工人", py:"gōngrén",  en:"worker",  em:"👷", book:false}
+];
+
+const CITIES = [
+  {zh:"上海", py:"Shànghǎi", en:"Shanghai", em:"🏙️"},
+  {zh:"金奈", py:"Jīnnài",   en:"Chennai",  em:"🌴"},
+  {zh:"香港", py:"Xiānggǎng",en:"Hong Kong",em:"🚢"},
+  {zh:"北京", py:"Běijīng",  en:"Beijing",  em:"🏯"},
+  {zh:"印度", py:"Yìndù",    en:"India",    em:"🇮🇳"}
+];
+
+/* =========================================================
+   2. STATE + SCORING
+   ========================================================= */
+const ACTS = [
+  {id:"a1",  sec:1, ico:"🃏", name:"Flip the Word Cards",     sub:"See the picture, then flip for the Chinese", xp:60},
+  {id:"a2",  sec:1, ico:"🇨🇳", name:"Chinese → English",       sub:"Read the character, choose the meaning",    xp:80},
+  {id:"a3",  sec:1, ico:"🔤", name:"English → Chinese",        sub:"Read the meaning, choose the character",    xp:80},
+  {id:"a4",  sec:1, ico:"🎧", name:"Listen and Choose",        sub:"Hear the word, tap what you heard",         xp:80},
+  {id:"a5",  sec:1, ico:"📖", name:"Read Text 1 Together",     sub:"Listen to all 6 lines, then answer",        xp:100},
+
+  {id:"a6",  sec:2, ico:"🏡", name:"Meet Dasheng's Family",    sub:"Tap each person and learn who they are",    xp:70},
+  {id:"a7",  sec:2, ico:"💼", name:"Match the Jobs",           sub:"Match the Chinese word to the picture",     xp:80},
+  {id:"a8",  sec:2, ico:"➕", name:"The Magic Word 也 (yě)",   sub:"Put 也 in the right place",                  xp:80},
+  {id:"a9",  sec:2, ico:"🧱", name:"Build the Sentence",       sub:"Tap the tiles in the right order",          xp:100},
+  {id:"a10", sec:2, ico:"🔍", name:"Character Detective",      sub:"Join two characters to make a word",        xp:80},
+
+  {id:"a11", sec:3, ico:"🗣️", name:"Say It Out Loud",         sub:"Listen 3 times, then say each line",        xp:100},
+  {id:"a12", sec:3, ico:"🌟", name:"All About My Family",      sub:"Build your own introduction",               xp:120}
+];
+const MAX_XP = ACTS.reduce((s,a)=>s+a.xp,0);
+
+const S = {sec:1, view:null, done:{}, stars:{}, flipped:{}, heard:{}, tapped:{}, gate:0};
+
+function award(id, stars, xpEarned){
+  const prev = S.stars[id] ?? -1;
+  if(stars > prev){ S.stars[id] = stars; }
+  S.done[id] = true;
+  paintScore();
+  toast(`+${xpEarned} XP  ${"⭐".repeat(stars)}`);
+}
+function totalXp(){
+  let t = 0;
+  ACTS.forEach(a=>{ if(S.stars[a.id] != null) t += Math.round(a.xp * (S.stars[a.id]/3)); });
+  return t;
+}
+function totalStars(){ return Object.values(S.stars).reduce((a,b)=>a+b,0); }
+function doneCount(){ return Object.keys(S.done).length; }
+
+function paintScore(){
+  document.getElementById("cStars").textContent = totalStars();
+  document.getElementById("cXp").textContent = totalXp();
+  document.getElementById("cDone").textContent = doneCount();
+  document.getElementById("xpFill").style.width = Math.min(100,(totalXp()/MAX_XP)*100) + "%";
+}
+
+let toastTimer=null;
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove("show"), 2100);
+}
+
+/* =========================================================
+   3. AUDIO — speech + happy sounds
+   ========================================================= */
+let voices = [];
+function loadVoices(){ try{ voices = speechSynthesis.getVoices() || []; }catch(e){ voices = []; } }
+if(typeof speechSynthesis !== "undefined"){
+  loadVoices();
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+function say(text, rate){
+  try{
+    if(typeof speechSynthesis === "undefined") return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "zh-CN"; u.rate = rate || 0.75; u.pitch = 1.05;
+    const v = voices.find(v=>/zh[-_]?CN/i.test(v.lang)) || voices.find(v=>/^zh/i.test(v.lang));
+    if(v) u.voice = v;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+let AC = null;
+function ac(){ try{ if(!AC) AC = new (window.AudioContext||window.webkitAudioContext)(); return AC; }catch(e){ return null; } }
+function tone(freq, start, dur, type, vol){
+  const c = ac(); if(!c) return;
+  const o = c.createOscillator(), g = c.createGain();
+  o.type = type||"sine"; o.frequency.value = freq;
+  g.gain.setValueAtTime(0, c.currentTime+start);
+  g.gain.linearRampToValueAtTime(vol||0.16, c.currentTime+start+0.02);
+  g.gain.exponentialRampToValueAtTime(0.001, c.currentTime+start+dur);
+  o.connect(g); g.connect(c.destination);
+  o.start(c.currentTime+start); o.stop(c.currentTime+start+dur+0.02);
+}
+const sfxGood = ()=>{ tone(659,0,.16,"sine"); tone(880,.10,.22,"sine"); };
+const sfxBad  = ()=>{ tone(233,0,.20,"triangle",.12); };
+const sfxWin  = ()=>{ [523,659,784,1047].forEach((f,i)=>tone(f,i*.11,.3,"sine",.15)); };
+
+/* =========================================================
+   4. HELPERS
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const el = (t,c,h)=>{ const n=document.createElement(t); if(c) n.className=c; if(h!=null) n.innerHTML=h; return n; };
+function shuffle(a){ const b=a.slice(); for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; }
+function starsFor(correct,total){
+  const p = total ? correct/total : 0;
+  return p >= 0.9 ? 3 : p >= 0.6 ? 2 : p > 0 ? 1 : 0;
+}
+function howto(title, body){
+  return `<div class="howto"><b>${title}</b>${body}</div>`;
+}
+
+/* =========================================================
+   5. GENERIC QUIZ ENGINE
+   Questions rebuild the DOM completely each time, so an
+   answer can never carry over to the next question.
+   ========================================================= */
+function runQuiz(host, cfg){
+  let i = 0, correct = 0;
+  const missed = [];
+
+  function draw(){
+    host.innerHTML = "";                       // full rebuild — no carry-over
+    if(i >= cfg.questions.length) return finish();
+    const q = cfg.questions[i];
+
+    const top = el("div","qtop",
+      `<span>Question ${i+1} of ${cfg.questions.length}</span><span>✅ ${correct} correct</span>`);
+    host.appendChild(top);
+
+    const pr = el("div","progress",`<i style="width:${(i/cfg.questions.length)*100}%"></i>`);
+    host.appendChild(pr);
+
+    const box = el("div","prompt");
+    if(q.listen){
+      const b = el("button","btn plum","🔊 Play the word");
+      b.onclick = ()=>say(q.audio);
+      box.appendChild(b);
+      box.appendChild(el("div","asksub","Tap to hear it as many times as you like"));
+    }else{
+      if(q.emoji) box.appendChild(el("div","big",q.emoji));
+      if(q.big)   box.appendChild(el("div","big zh",q.big));
+      if(q.bigpy) box.appendChild(el("div","bigpy",q.bigpy));
+    }
+    box.appendChild(el("div","ask",q.ask));
+    if(q.asksub) box.appendChild(el("div","asksub",q.asksub));
+    host.appendChild(box);
+    if(q.listen && q.autoplay !== false) setTimeout(()=>say(q.audio), 350);
+
+    const opts = el("div","opts");
+    const order = q.fixed ? q.options.map((_,k)=>k) : shuffle(q.options.map((_,k)=>k));
+    const buttons = [];
+    order.forEach(k=>{
+      const o = q.options[k];
+      const b = el("button","opt");
+      if(o.zh)  b.appendChild(el("div","ozh zh",o.zh));
+      if(o.py)  b.appendChild(el("div","opy",o.py));
+      if(o.en)  b.appendChild(el("div","oen",o.en));
+      b.onclick = ()=>pick(k,b,buttons,q);
+      buttons.push({k,b});
+      opts.appendChild(b);
+    });
+    host.appendChild(opts);
+  }
+
+  function pick(k, btn, buttons, q){
+    buttons.forEach(x=>{ x.b.disabled = true; });
+    const ok = (k === q.answer);
+    if(ok){ correct++; btn.classList.add("right"); sfxGood(); }
+    else{
+      btn.classList.add("wrong"); sfxBad();
+      const right = buttons.find(x=>x.k===q.answer);
+      if(right) right.b.classList.add("right");
+      missed.push(q);
+    }
+    if(q.audio) setTimeout(()=>say(q.audio), 260);
+
+    const fb = el("div","fb "+(ok?"ok":"no"));
+    fb.innerHTML = ok
+      ? `🎉 Correct! <small>${q.explain||""}</small>`
+      : `Not quite — the answer is <span class="zh">${q.options[q.answer].zh||q.options[q.answer].en}</span>. <small>${q.explain||""}</small>`;
+    host.appendChild(fb);
+
+    const row = el("div","btnrow");
+    const nx = el("button","btn", i === cfg.questions.length-1 ? "See my score →" : "Next question →");
+    nx.onclick = ()=>{ i++; draw(); };
+    row.appendChild(nx);
+    host.appendChild(row);
+    nx.focus();
+  }
+
+  function finish(){
+    const st = starsFor(correct, cfg.questions.length);
+    sfxWin();
+    host.innerHTML = "";
+    const r = el("div","result");
+    r.innerHTML = `<div class="em">${st===3?"🏆":st===2?"🎉":"💪"}</div>
+      <h3>${st===3?"Perfect! 太好了!":st===2?"Well done! 很好!":"Good try! 加油!"}</h3>
+      <div class="stars">${"⭐".repeat(st)}${"☆".repeat(3-st)}</div>
+      <p style="font-weight:700">You got <b>${correct}</b> out of <b>${cfg.questions.length}</b> right.</p>`;
+    host.appendChild(r);
+
+    if(missed.length){
+      const rev = el("div","review");
+      rev.appendChild(el("h4",null,"📌 Review these words once more"));
+      missed.forEach(q=>{
+        const a = q.options[q.answer];
+        const row = el("div","rrow");
+        row.innerHTML = `<div class="rz zh">${a.zh||"🔊"}</div>
+          <div class="rt">${a.py?`<i>${a.py}</i>`:""}${a.en||""}</div>`;
+        const sb = el("button","spkmini","🔊");
+        sb.onclick = ()=>say(q.audio || a.zh);
+        row.appendChild(sb);
+        rev.appendChild(row);
+      });
+      host.appendChild(rev);
+    }
+
+    const row = el("div","btnrow");
+    const again = el("button","btn sun","🔁 Play again");
+    again.onclick = ()=>{ i=0; correct=0; missed.length=0; draw(); };
+    const back = el("button","btn coral","← Back to the list");
+    back.onclick = ()=>render();
+    row.appendChild(again); row.appendChild(back);
+    host.appendChild(row);
+
+    award(cfg.id, st, Math.round(ACTS.find(a=>a.id===cfg.id).xp * st/3));
+  }
+
+  draw();
+}
+
+/* =========================================================
+   6. QUESTION BUILDERS
+   ========================================================= */
+// A word must never be offered against a word it is built from.
+// 工 and 工作 look and sound alike, so they never appear together;
+// same for 作/工作, 律/律师, 师/律师, 师/老师, 老/老师, 们/我们.
+function conflicts(a,b){
+  if(a.zh === b.zh) return true;
+  if(a.zh.includes(b.zh) || b.zh.includes(a.zh)) return true;
+  const stop = new Set(["a","to","the","as","in","is","are","and","of","more","than","one","shows"]);
+  const tok = s => new Set(String(s).toLowerCase().split(/[^a-z]+/).filter(t=>t && !stop.has(t)));
+  const ta = tok(a.q||a.en), tb = tok(b.q||b.en);
+  for(const t of ta) if(tb.has(t)) return true;   // same meaning word = ambiguous
+  return false;
+}
+// Build the option set one at a time so that NO two options in the same
+// question conflict — not just the distractors against the answer.
+function distract(pool, right, n){
+  const picked = [];
+  for(const c of shuffle(pool)){
+    if(picked.length >= n) break;
+    if(conflicts(c, right)) continue;
+    if(picked.some(p=>conflicts(c,p))) continue;
+    picked.push(c);
+  }
+  // Safety net: if the strict rule left too few, fill with anything that is
+  // at least not the answer and not already chosen.
+  if(picked.length < n){
+    for(const c of shuffle(pool)){
+      if(picked.length >= n) break;
+      if(c.zh === right.zh || picked.some(p=>p.zh===c.zh)) continue;
+      picked.push(c);
+    }
+  }
+  return picked;
+}
+function qZhToEn(){
+  return shuffle(WORDS).map(w=>{
+    const others = distract(WORDS,w,3);
+    const opts = shuffle([w,...others]).map(o=>({en:o.q||o.en}));
+    return {big:w.zh, bigpy:w.py, ask:"What does this mean?", asksub:"Choose the English meaning",
+            options:opts, answer:opts.findIndex(o=>o.en===(w.q||w.en)), audio:w.zh,
+            explain:`${w.zh} (${w.py}) = ${w.en}`};
+  });
+}
+function qEnToZh(){
+  return shuffle(WORDS).map(w=>{
+    const others = distract(WORDS,w,3);
+    const opts = shuffle([w,...others]).map(o=>({zh:o.zh,py:o.py}));
+    return {emoji:w.em, ask:`Which one means “${w.q||w.en}”?`, asksub:"Choose the Chinese word",
+            options:opts, answer:opts.findIndex(o=>o.zh===w.zh), audio:w.zh,
+            explain:`${w.zh} (${w.py}) = ${w.en}`};
+  });
+}
+function qListen(){
+  return shuffle(WORDS).map(w=>{
+    const others = distract(WORDS,w,3);
+    const opts = shuffle([w,...others]).map(o=>({zh:o.zh,py:o.py,en:o.en}));
+    return {listen:true, audio:w.zh, ask:"Which word did you hear?", asksub:"Tap 🔊 again if you need to",
+            options:opts, answer:opts.findIndex(o=>o.zh===w.zh),
+            explain:`${w.zh} (${w.py}) = ${w.en}`};
+  });
+}
+
+/* =========================================================
+   7. ACTIVITY SCREENS
+   ========================================================= */
+const SCREENS = {};
+
+/* --- A1 flip cards --- */
+SCREENS.a1 = host=>{
+  host.innerHTML = howto("How to play",
+    "You will see a picture and the English meaning. Tap the card to turn it over and see the Chinese character and its pinyin. Tap 🔊 to hear it. Turn over all 13 cards to finish.");
+  const count = el("div","note","Cards turned over: 0 of 13");
+  const g = el("div","grid");
+  const seen = {};
+  WORDS.forEach((w,idx)=>{
+    const c = el("button","flip");
+    c.innerHTML = `<div class="flipin">
+      <div class="face f-front"><div class="em">${w.em}</div><div class="en">${w.en}</div><div class="tap">tap to turn ↻</div></div>
+      <div class="face f-back"><div class="hz zh">${w.zh}</div><div class="py">${w.py}</div><div class="en2">${w.en}</div><button class="spk" type="button">🔊 hear it</button></div>
+    </div>`;
+    c.onclick = e=>{
+      if(e.target.classList.contains("spk")){ e.stopPropagation(); say(w.zh); return; }
+      c.classList.toggle("on");
+      if(c.classList.contains("on")){
+        say(w.zh);
+        if(!seen[idx]){ seen[idx]=1; count.textContent = `Cards turned over: ${Object.keys(seen).length} of 13`;
+          if(Object.keys(seen).length === WORDS.length){ sfxWin(); award("a1",3,60); count.textContent="🎉 All 13 cards turned over. Great job!"; }
+        }
+      }
+    };
+    g.appendChild(c);
+  });
+  host.appendChild(g);
+  host.appendChild(count);
+};
+
+/* --- A2 / A3 / A4 quizzes --- */
+SCREENS.a2 = h=>{ h.innerHTML = howto("How to play","Read the Chinese character and its pinyin. Then tap the English meaning. Get 12 or 13 right to win 3 stars."); const b=el("div"); h.appendChild(b); runQuiz(b,{id:"a2",questions:qZhToEn()}); };
+SCREENS.a3 = h=>{ h.innerHTML = howto("How to play","Look at the picture and read the English. Then tap the correct Chinese word. The pinyin is written under every character to help you."); const b=el("div"); h.appendChild(b); runQuiz(b,{id:"a3",questions:qEnToZh()}); };
+SCREENS.a4 = h=>{ h.innerHTML = howto("How to play","The word plays by itself. Listen carefully, then tap the word you heard. You can press 🔊 Play as many times as you want — nobody is counting!"); const b=el("div"); h.appendChild(b); runQuiz(b,{id:"a4",questions:qListen()}); };
+
+/* --- A5 read along + comprehension --- */
+SCREENS.a5 = host=>{
+  host.innerHTML = howto("How to read",
+    "Tap each line to hear it. Read the Chinese, then the pinyin, then the English. Listen to all 6 lines — then 4 questions will open up.");
+  const wrap = el("div");
+  TEXT1.forEach((l,i)=>{
+    const b = el("button","line");
+    b.innerHTML = `<div class="num">${i+1}</div>
+      <div class="lt"><div class="lz zh">${l.zh}</div><div class="lp">${l.py}</div><div class="le">${l.en}</div></div>
+      <div class="ls">🔊</div>`;
+    b.onclick = ()=>{
+      say(l.zh, 0.68);
+      b.classList.add("heard");
+      S.heard[i] = true;
+      if(Object.keys(S.heard).length === TEXT1.length) unlock();
+    };
+    wrap.appendChild(b);
+  });
+  host.appendChild(wrap);
+
+  const gate = el("div","gate","🔒 Listen to all 6 lines to open the questions");
+  host.appendChild(gate);
+  const qhost = el("div");
+  host.appendChild(qhost);
+
+  function unlock(){
+    if(qhost.dataset.open) return;
+    qhost.dataset.open = "1";
+    gate.innerHTML = "🔓 Well done! Here are the questions.";
+    sfxWin();
+    runQuiz(qhost,{id:"a5",questions:[
+      {big:"我家有四口人", bigpy:"Wǒ jiā yǒu sì kǒu rén", ask:"How many people are in Dasheng's family?", asksub:"大生家有几口人?",
+       options:[{zh:"三口人",py:"sān kǒu rén",en:"3 people"},{zh:"四口人",py:"sì kǒu rén",en:"4 people"},{zh:"五口人",py:"wǔ kǒu rén",en:"5 people"},{zh:"六口人",py:"liù kǒu rén",en:"6 people"}],
+       answer:1, audio:"我家有四口人", explain:"Dad, mum, elder sister and Dasheng = 四口人 sì kǒu rén."},
+      {emoji:"👨", ask:"What is Dasheng's dad's job?", asksub:"大生的爸爸是什么?",
+       options:[{zh:"老师",py:"lǎoshī",en:"teacher"},{zh:"律师",py:"lǜshī",en:"lawyer"},{zh:"医生",py:"yīshēng",en:"doctor"},{zh:"学生",py:"xuésheng",en:"student"}],
+       answer:1, audio:"我爸爸是律师", explain:"我爸爸是律师 — Wǒ bàba shì lǜshī."},
+      {emoji:"👩", ask:"What is Dasheng's mum's job?", asksub:"大生的妈妈是什么?",
+       options:[{zh:"老师",py:"lǎoshī",en:"teacher"},{zh:"律师",py:"lǜshī",en:"lawyer"},{zh:"工人",py:"gōngrén",en:"worker"},{zh:"学生",py:"xuésheng",en:"student"}],
+       answer:0, audio:"我妈妈是老师", explain:"我妈妈是老师 — Wǒ māma shì lǎoshī."},
+      {emoji:"🏙️", ask:"Where does the family live?", asksub:"他们一家人住在哪儿?",
+       options:[{zh:"香港",py:"Xiānggǎng",en:"Hong Kong"},{zh:"北京",py:"Běijīng",en:"Beijing"},{zh:"上海",py:"Shànghǎi",en:"Shanghai"},{zh:"金奈",py:"Jīnnài",en:"Chennai"}],
+       answer:2, audio:"我们一家人住在上海", explain:"我们一家人住在上海 — Wǒmen yì jiā rén zhù zài Shànghǎi."}
+    ]});
+  }
+};
+
+/* --- A6 family scene --- */
+SCREENS.a6 = host=>{
+  host.innerHTML = howto("How to play",
+    "This is Dasheng's family from the picture in your book. Tap each person to hear who they are. After you have tapped all four, three questions will open.");
+  const sc = el("div","scene");
+  FAMILY.forEach((p,i)=>{
+    const b = el("button","person");
+    b.innerHTML = `<span class="pe">${p.em}</span><span class="pz">${p.zh}</span><span class="pp">${p.py}</span><span class="pn">${p.en}</span>`;
+    b.onclick = ()=>{ say(p.zh); b.classList.add("tapped"); S.tapped[i]=true;
+      if(Object.keys(S.tapped).length === FAMILY.length) open(); };
+    sc.appendChild(b);
+  });
+  host.appendChild(sc);
+  const gate = el("div","gate","🔒 Tap all four people to open the questions");
+  host.appendChild(gate);
+  const q = el("div"); host.appendChild(q);
+
+  function open(){
+    if(q.dataset.open) return; q.dataset.open="1";
+    gate.innerHTML="🔓 You met the whole family. Now the questions!"; sfxWin();
+    runQuiz(q,{id:"a6",questions:[
+      {emoji:"👧", ask:"Who is 姐姐 (jiějie)?", asksub:"Choose the right person",
+       options:[{en:"elder sister"},{en:"younger brother"},{en:"mum"},{en:"grandpa"}], answer:0, audio:"姐姐",
+       explain:"姐姐 jiějie = elder sister. Dasheng has one elder sister."},
+      {big:"一家人", bigpy:"yì jiā rén", ask:"What does 一家人 mean?", asksub:"Look at the whole picture, not one person",
+       options:[{en:"one house"},{en:"the whole family"},{en:"one friend"},{en:"one city"}], answer:1, audio:"一家人",
+       explain:"一家人 yì jiā rén = all the members of one family."},
+      {big:"我们", bigpy:"wǒmen", ask:"我 means “I”. So what does 我们 mean?", asksub:"们 men makes a word mean more than one",
+       options:[{en:"we; us"},{en:"you"},{en:"they"},{en:"my"}], answer:0, audio:"我们",
+       explain:"我 wǒ = I. Add 们 men and you get 我们 wǒmen = we / us."}
+    ]});
+  }
+};
+
+/* --- A7 match pairs --- */
+SCREENS.a7 = host=>{
+  host.innerHTML = howto("How to play",
+    "Tap a Chinese word on the left, then tap its picture on the right. A correct pair turns green. Match all five to finish. 律师 and 老师 are from your book; the other three are bonus words.");
+  const wrap = el("div","matchwrap");
+  const left = el("div","mcol"), right = el("div","mcol");
+  const L = shuffle(JOBS), R = shuffle(JOBS);
+  let sel = null, matched = 0, tries = 0;
+
+  const status = el("div","note","Pairs matched: 0 of 5");
+
+  L.forEach(j=>{
+    const b = el("button","mcell");
+    b.innerHTML = `<div class="mz">${j.zh}</div><div class="mp">${j.py}</div>`;
+    b.dataset.k = j.zh;
+    b.onclick = ()=>{
+      if(b.classList.contains("matched")) return;
+      say(j.zh);
+      left.querySelectorAll(".mcell").forEach(x=>x.classList.remove("sel"));
+      b.classList.add("sel"); sel = {b, j};
+    };
+    left.appendChild(b);
+  });
+  R.forEach(j=>{
+    const b = el("button","mcell");
+    b.innerHTML = `<div class="me">${j.em}</div><div class="men">${j.en}</div>`;
+    b.dataset.k = j.zh;
+    b.onclick = ()=>{
+      if(!sel || b.classList.contains("matched")) return;
+      tries++;
+      if(sel.j.zh === j.zh){
+        sfxGood(); sel.b.classList.remove("sel");
+        sel.b.classList.add("matched"); b.classList.add("matched");
+        sel.b.disabled = true; b.disabled = true;
+        matched++; sel = null;
+        status.textContent = `Pairs matched: ${matched} of 5`;
+        if(matched === JOBS.length){
+          sfxWin();
+          const st = tries <= 6 ? 3 : tries <= 9 ? 2 : 1;
+          status.innerHTML = `🎉 All matched in ${tries} tries! ${"⭐".repeat(st)}`;
+          award("a7", st, Math.round(80*st/3));
+        }
+      }else{
+        sfxBad(); b.classList.add("wrong");
+        setTimeout(()=>b.classList.remove("wrong"), 480);
+        sel.b.classList.remove("sel"); sel = null;
+      }
+    };
+    right.appendChild(b);
+  });
+  wrap.appendChild(left); wrap.appendChild(right);
+  host.appendChild(wrap); host.appendChild(status);
+};
+
+/* --- A8 the word 也 --- */
+SCREENS.a8 = host=>{
+  host.innerHTML = howto("What 也 (yě) means",
+    "也 means <b>also / too</b>. In Chinese, 也 goes <b>before the verb</b>, not at the end like in English. " +
+    "我爸爸工作，我妈妈<b>也</b>工作。= My dad works, my mum works <b>too</b>. Choose the word that fills each gap.");
+  const b = el("div"); host.appendChild(b);
+  runQuiz(b,{id:"a8", questions:[
+    {big:"我爸爸工作，我妈妈＿工作。", bigpy:"Wǒ bàba gōngzuò, wǒ māma ＿ gōngzuò.", ask:"Which word goes in the gap?", asksub:"My dad works, my mum works too.",
+     options:[{zh:"也",py:"yě",en:"also"},{zh:"不",py:"bù",en:"not"},{zh:"和",py:"hé",en:"and"},{zh:"是",py:"shì",en:"is"}],
+     answer:0, audio:"我爸爸工作，我妈妈也工作", explain:"也 yě = also. It sits right before the verb 工作."},
+    {big:"我是学生，你＿是学生。", bigpy:"Wǒ shì xuésheng, nǐ ＿ shì xuésheng.", ask:"Which word goes in the gap?", asksub:"I am a student, you are a student too.",
+     options:[{zh:"也",py:"yě",en:"also"},{zh:"们",py:"men",en:"plural word"},{zh:"老",py:"lǎo",en:"old"},{zh:"叫",py:"jiào",en:"to be called"}],
+     answer:0, audio:"我是学生，你也是学生", explain:"也 comes before 是 shì."},
+    {big:"姐姐住在上海，我＿住在上海。", bigpy:"Jiějie zhù zài Shànghǎi, wǒ ＿ zhù zài Shànghǎi.", ask:"Which word goes in the gap?", asksub:"Elder sister lives in Shanghai, I live in Shanghai too.",
+     options:[{zh:"也",py:"yě",en:"also"},{zh:"什么",py:"shénme",en:"what"},{zh:"没有",py:"méiyǒu",en:"not have"},{zh:"几",py:"jǐ",en:"how many"}],
+     answer:0, audio:"姐姐住在上海，我也住在上海", explain:"也 goes before 住 zhù (to live)."},
+    {ask:"Which sentence is written correctly?", asksub:"Remember: 也 comes BEFORE the verb", fixed:true,
+     options:[{zh:"我妈妈也是老师。",py:"Wǒ māma yě shì lǎoshī.",en:"✔ 也 before 是"},
+              {zh:"我妈妈是老师也。",py:"Wǒ māma shì lǎoshī yě.",en:"✘ 也 at the end"},
+              {zh:"也我妈妈是老师。",py:"Yě wǒ māma shì lǎoshī.",en:"✘ 也 at the start"},
+              {zh:"我也妈妈是老师。",py:"Wǒ yě māma shì lǎoshī.",en:"✘ 也 after 我"}],
+     answer:0, audio:"我妈妈也是老师", explain:"Subject + 也 + verb. 我妈妈 + 也 + 是老师."},
+    {big:"我们＿一家人。", bigpy:"Wǒmen ＿ yì jiā rén.", ask:"Which word goes in the gap?", asksub:"We are one family.",
+     options:[{zh:"是",py:"shì",en:"are"},{zh:"也",py:"yě",en:"also"},{zh:"们",py:"men",en:"plural word"},{zh:"工",py:"gōng",en:"work"}],
+     answer:0, audio:"我们是一家人", explain:"Careful! This gap needs 是 shì (are), not 也. Read the English first."}
+  ]});
+};
+
+/* --- A9 sentence builder --- */
+SCREENS.a9 = host=>{
+  const SENTS = [
+    {parts:[["我","wǒ"],["家","jiā"],["有","yǒu"],["四口人","sì kǒu rén"]], en:"There are four people in my family.", py:"Wǒ jiā yǒu sì kǒu rén."},
+    {parts:[["我","wǒ"],["爸爸","bàba"],["是","shì"],["律师","lǜshī"]], en:"My dad is a lawyer.", py:"Wǒ bàba shì lǜshī."},
+    {parts:[["我","wǒ"],["妈妈","māma"],["也","yě"],["工作","gōngzuò"]], en:"My mum works too.", py:"Wǒ māma yě gōngzuò."},
+    {parts:[["我们","wǒmen"],["一家人","yì jiā rén"],["住在","zhù zài"],["上海","Shànghǎi"]], en:"Our whole family lives in Shanghai.", py:"Wǒmen yì jiā rén zhù zài Shànghǎi."}
+  ];
+  let idx = 0, score = 0;
+
+  function draw(){
+    host.innerHTML = howto("How to play",
+      "Read the English sentence. Then tap the word tiles one by one to build the same sentence in Chinese. Tap a tile in your answer box to take it back out. Press <b>Check my sentence</b> when you are ready.");
+    if(idx >= SENTS.length) return done();
+    const s = SENTS[idx];
+
+    host.appendChild(el("div","qtop",`<span>Sentence ${idx+1} of ${SENTS.length}</span><span>✅ ${score} correct</span>`));
+    host.appendChild(el("div","target",`<b>Build this sentence:</b>${s.en}`));
+
+    const slot = el("div","slot");
+    const pool = el("div","pool");
+    host.appendChild(slot); host.appendChild(pool);
+
+    const chosen = [];
+    const order = shuffle(s.parts.map((_,i)=>i));
+    const tiles = {};
+    order.forEach(k=>{
+      const [zh,py] = s.parts[k];
+      const t = el("button","tile",`<div class="tz">${zh}</div><div class="tp">${py}</div>`);
+      t.onclick = ()=>{
+        if(t.classList.contains("used")) return;
+        t.classList.add("used");
+        chosen.push(k);
+        const c = el("button","tile inslot",`<div class="tz">${zh}</div><div class="tp">${py}</div>`);
+        c.onclick = ()=>{
+          const p = chosen.indexOf(k);
+          if(p > -1) chosen.splice(p,1);
+          c.remove(); t.classList.remove("used");
+          check.disabled = chosen.length !== s.parts.length;
+        };
+        slot.appendChild(c);
+        say(zh);
+        check.disabled = chosen.length !== s.parts.length;
+      };
+      tiles[k] = t;
+      pool.appendChild(t);
+    });
+
+    const row = el("div","btnrow");
+    const check = el("button","btn","✓ Check my sentence");
+    check.disabled = true;
+    check.onclick = ()=>{
+      const ok = chosen.every((v,i)=>v === i);
+      check.disabled = true;
+      slot.querySelectorAll(".tile").forEach(t=>t.onclick = null);
+      pool.querySelectorAll(".tile").forEach(t=>t.onclick = null);
+      const fb = el("div","fb "+(ok?"ok":"no"));
+      if(ok){ score++; sfxGood();
+        fb.innerHTML = `🎉 Perfect! <span class="zh">${s.parts.map(p=>p[0]).join("")}</span><small>${s.py}<br>${s.en}</small>`;
+      }else{ sfxBad();
+        fb.innerHTML = `Almost! The right order is <span class="zh">${s.parts.map(p=>p[0]).join("")}</span><small>${s.py}<br>${s.en}</small>`;
+      }
+      host.appendChild(fb);
+      say(s.parts.map(p=>p[0]).join(""), 0.68);
+      const nx = el("button","btn coral", idx === SENTS.length-1 ? "See my score →" : "Next sentence →");
+      nx.onclick = ()=>{ idx++; draw(); };
+      const r2 = el("div","btnrow"); r2.appendChild(nx); host.appendChild(r2); nx.focus();
+    };
+    row.appendChild(check);
+
+    const clr = el("button","btn sun","↺ Clear");
+    clr.onclick = ()=>{ chosen.length = 0; slot.innerHTML=""; Object.values(tiles).forEach(t=>t.classList.remove("used")); check.disabled = true; };
+    row.appendChild(clr);
+    host.appendChild(row);
+  }
+
+  function done(){
+    const st = starsFor(score, SENTS.length); sfxWin();
+    host.innerHTML = "";
+    host.appendChild(el("div","result",
+      `<div class="em">${st===3?"🏆":"🎉"}</div><h3>${st===3?"Perfect sentences!":"Nice work!"}</h3>
+       <div class="stars">${"⭐".repeat(st)}${"☆".repeat(3-st)}</div>
+       <p style="font-weight:700">You built <b>${score}</b> of <b>${SENTS.length}</b> sentences correctly.</p>`));
+    const row = el("div","btnrow");
+    const again = el("button","btn sun","🔁 Play again"); again.onclick = ()=>{ idx=0; score=0; draw(); };
+    const back = el("button","btn coral","← Back to the list"); back.onclick = ()=>render();
+    row.appendChild(again); row.appendChild(back); host.appendChild(row);
+    award("a9", st, Math.round(100*st/3));
+  }
+  draw();
+};
+
+/* --- A10 character detective --- */
+SCREENS.a10 = host=>{
+  host.innerHTML = howto("How to play",
+    "Every word below is made of two characters. Read the English clue, then tap the two characters <b>in the right order</b> to build the word.");
+  const TARGETS = [
+    {zh:"工作", py:"gōngzuò", en:"work; job",  em:"💼", parts:["工","作"]},
+    {zh:"律师", py:"lǜshī",   en:"lawyer",     em:"⚖️", parts:["律","师"]},
+    {zh:"老师", py:"lǎoshī",  en:"teacher",    em:"👩‍🏫", parts:["老","师"]},
+    {zh:"我们", py:"wǒmen",   en:"we; us",     em:"🙌", parts:["我","们"]}
+  ];
+  const BANK = ["工","作","律","师","老","我","们","上"];
+  let idx = 0, score = 0;
+
+  function draw(){
+    host.innerHTML = howto("How to play",
+      "Every word below is made of two characters. Read the English clue, then tap the two characters <b>in the right order</b> to build the word.");
+    if(idx >= TARGETS.length) return done();
+    const t = TARGETS[idx];
+
+    host.appendChild(el("div","qtop",`<span>Word ${idx+1} of ${TARGETS.length}</span><span>✅ ${score} correct</span>`));
+    host.appendChild(el("div","target",`<b>${t.em} Build the word for:</b>${t.en}  <span style="color:#0F6E6E">(${t.py})</span>`));
+
+    const slot = el("div","slot");
+    const pool = el("div","pool");
+    host.appendChild(slot); host.appendChild(pool);
+
+    let picked = [];
+    const btns = [];
+    shuffle(BANK).forEach(ch=>{
+      const b = el("button","tile",`<div class="tz">${ch}</div>`);
+      b.onclick = ()=>{
+        if(picked.length >= 2 || b.classList.contains("used")) return;
+        b.classList.add("used"); picked.push({ch,b});
+        slot.appendChild(el("div","tile inslot",`<div class="tz">${ch}</div>`));
+        if(picked.length === 2) judge();
+      };
+      btns.push(b); pool.appendChild(b);
+    });
+
+    const clr = el("button","btn sun","↺ Clear");
+    clr.onclick = ()=>{ picked = []; slot.innerHTML=""; btns.forEach(b=>b.classList.remove("used")); };
+    const row = el("div","btnrow"); row.appendChild(clr); host.appendChild(row);
+
+    function judge(){
+      btns.forEach(b=>b.onclick = null); clr.disabled = true;
+      const made = picked.map(p=>p.ch).join("");
+      const ok = made === t.zh;
+      if(ok){ score++; sfxGood(); } else sfxBad();
+      const fb = el("div","fb "+(ok?"ok":"no"));
+      fb.innerHTML = ok
+        ? `🎉 Yes! <span class="zh">${t.zh}</span> = ${t.en}<small>${t.parts[0]} + ${t.parts[1]} → ${t.zh} (${t.py})</small>`
+        : `You made <span class="zh">${made}</span>. The word is <span class="zh">${t.zh}</span><small>${t.parts[0]} + ${t.parts[1]} → ${t.zh} (${t.py}) = ${t.en}</small>`;
+      host.appendChild(fb);
+      say(t.zh);
+      const nx = el("button","btn coral", idx === TARGETS.length-1 ? "See my score →" : "Next word →");
+      nx.onclick = ()=>{ idx++; draw(); };
+      const r2 = el("div","btnrow"); r2.appendChild(nx); host.appendChild(r2); nx.focus();
+    }
+  }
+  function done(){
+    const st = starsFor(score, TARGETS.length); sfxWin();
+    host.innerHTML = "";
+    host.appendChild(el("div","result",
+      `<div class="em">🔍</div><h3>${st===3?"Great detective work!":"Good detective work!"}</h3>
+       <div class="stars">${"⭐".repeat(st)}${"☆".repeat(3-st)}</div>
+       <p style="font-weight:700">You built <b>${score}</b> of <b>${TARGETS.length}</b> words correctly.</p>`));
+    const row = el("div","btnrow");
+    const again = el("button","btn sun","🔁 Play again"); again.onclick = ()=>{ idx=0; score=0; draw(); };
+    const back = el("button","btn coral","← Back to the list"); back.onclick = ()=>render();
+    row.appendChild(again); row.appendChild(back); host.appendChild(row);
+    award("a10", st, Math.round(80*st/3));
+  }
+  draw();
+};
+
+/* --- A11 speaking with 3-listen gate --- */
+SCREENS.a11 = host=>{
+  host.innerHTML = howto("How to practise speaking",
+    "First listen to the whole text <b>three times</b>. Then the speaking cards open. Read each line out loud, slowly and clearly, and tap <b>I said it!</b> when you have said it well.");
+  const full = TEXT1.map(l=>l.zh).join("");
+
+  const gate = el("div","gate");
+  gate.innerHTML = `Listen to the whole text 3 times to unlock speaking<div class="dots" id="dots">⚪⚪⚪</div>`;
+  host.appendChild(gate);
+
+  const lrow = el("div","btnrow");
+  const lbtn = el("button","btn plum","🔊 Listen to the whole text");
+  lbtn.onclick = ()=>{
+    say(full, 0.62);
+    S.gate = Math.min(3, S.gate+1);
+    document.getElementById("dots").textContent = "🔵".repeat(S.gate) + "⚪".repeat(3-S.gate);
+    if(S.gate >= 3) open();
+  };
+  lrow.appendChild(lbtn); host.appendChild(lrow);
+  const zone = el("div"); host.appendChild(zone);
+  if(S.gate >= 3) open();
+
+  function open(){
+    if(zone.dataset.open) return; zone.dataset.open = "1";
+    gate.innerHTML = "🔓 Speaking unlocked! Your turn to be Dasheng."; sfxWin();
+    let said = 0;
+    const counter = el("div","note","Lines said out loud: 0 of 6");
+    TEXT1.forEach(l=>{
+      const box = el("div","saybox");
+      box.innerHTML = `<div class="sz">${l.zh}</div><div class="sp">${l.py}</div><div class="se">${l.en}</div>`;
+      const r = el("div","btnrow");
+      const p = el("button","btn plum","🔊 Hear it again"); p.onclick = ()=>say(l.zh, 0.6);
+      const d = el("button","btn","🎤 I said it!");
+      d.onclick = ()=>{
+        d.disabled = true; d.textContent = "✅ Said it!"; sfxGood(); said++;
+        counter.textContent = `Lines said out loud: ${said} of 6`;
+        if(said === TEXT1.length){ sfxWin(); counter.innerHTML = "🎉 You read the whole text out loud. 太棒了!"; award("a11",3,100); }
+      };
+      r.appendChild(p); r.appendChild(d); box.appendChild(r);
+      zone.appendChild(box);
+    });
+    zone.appendChild(counter);
+  }
+};
+
+/* --- A12 build your own introduction (every answer is correct) --- */
+SCREENS.a12 = host=>{
+  host.innerHTML = howto("How this works",
+    "This is about <b>your</b> family, so there is no wrong answer. Choose what is true for you. Panpan will put your sentences together in Chinese, pinyin and English — then you can hear it and read it out loud.");
+
+  const NUMS = [["一","yī",1,"yì"],["二","èr",2],["三","sān",3],["四","sì",4],["五","wǔ",5],["六","liù",6],["七","qī",7],["八","bā",8]];
+  const pick = {size:null, dad:null, mum:null, city:null};
+
+  function group(label, items, key, render){
+    host.appendChild(el("div","qlabel",label));
+    const row = el("div","pills");
+    items.forEach(it=>{
+      const b = el("button","pill", render(it));
+      b.onclick = ()=>{
+        row.querySelectorAll(".pill").forEach(x=>x.classList.remove("on"));
+        b.classList.add("on"); pick[key] = it; say(it.zh || it[0]); update();
+      };
+      row.appendChild(b);
+    });
+    host.appendChild(row);
+  }
+
+  group("1. How many people are in your family? 你家有几口人？",
+    NUMS.map(n=>({zh:n[0],py:n[1],n:n[2],sy:n[3]||n[1]})), "size",
+    it=>`<span class="pz">${it.zh}</span> <span style="color:#0F6E6E">${it.py}</span> · ${it.n}`);
+
+  group("2. What does your dad do? 你爸爸是什么？",
+    JOBS, "dad", it=>`${it.em} <span class="pz">${it.zh}</span> <span style="color:#0F6E6E">${it.py}</span>`);
+
+  group("3. What does your mum do? 你妈妈是什么？",
+    JOBS, "mum", it=>`${it.em} <span class="pz">${it.zh}</span> <span style="color:#0F6E6E">${it.py}</span>`);
+
+  group("4. Where does your family live? 你们一家人住在哪儿？",
+    CITIES, "city", it=>`${it.em} <span class="pz">${it.zh}</span> <span style="color:#0F6E6E">${it.py}</span>`);
+
+  host.appendChild(el("div","note","律师 and 老师 come from your book. 学生, 医生 and 工人 are extra words so you can describe your own family."));
+  const out = el("div"); host.appendChild(out);
+
+  function update(){
+    out.innerHTML = "";
+    const {size,dad,mum,city} = pick;
+    if(!(size && dad && mum && city)){
+      out.appendChild(el("div","note",`Choose one answer in each of the 4 questions. Chosen so far: ${Object.values(pick).filter(Boolean).length} of 4.`));
+      return;
+    }
+    const zh = `我家有${size.zh}口人。我爸爸是${dad.zh}，我妈妈是${mum.zh}。我们一家人住在${city.zh}。`;
+    const py = `Wǒ jiā yǒu ${size.sy} kǒu rén. Wǒ bàba shì ${dad.py}, wǒ māma shì ${mum.py}. Wǒmen yì jiā rén zhù zài ${city.py}.`;
+    const en = `There are ${size.n} people in my family. My dad is a ${dad.en}, my mum is a ${mum.en}. Our whole family lives in ${city.en}.`;
+    const box = el("div","output");
+    box.innerHTML = `<div style="font-weight:800;font-size:.85rem;opacity:.85;margin-bottom:6px">⭐ YOUR INTRODUCTION</div>
+      <div class="oz">${zh}</div><div class="op">${py}</div><div class="oe">${en}</div>`;
+    const r = el("div","btnrow");
+    const p = el("button","btn sun","🔊 Hear my introduction"); p.onclick = ()=>say(zh, 0.62);
+    const d = el("button","btn coral","🎤 I said it out loud!");
+    d.onclick = ()=>{ d.disabled = true; d.textContent = "✅ Well done!"; sfxWin(); award("a12",3,120); };
+    r.appendChild(p); r.appendChild(d); box.appendChild(r);
+    out.appendChild(box);
+  }
+  update();
+};
+
+/* =========================================================
+   8. RENDER
+   ========================================================= */
+const SECINFO = {
+  1:{t:"Section 1 · Words and Reading", s:"Meet the 13 new words, then read Text 1 with Dasheng. Start here."},
+  2:{t:"Section 2 · Family, Jobs and Sentences", s:"Play with the words: who is who, what job is what, and how to build a sentence."},
+  3:{t:"Section 3 · Speaking and All About Me", s:"Say the text out loud, then make your very own family introduction."}
+};
+
+function render(){
+  const app = $("#app");
+  app.innerHTML = "";
+  S.view = null;
+
+  const info = SECINFO[S.sec];
+  const head = el("div","sechead",`<h2>${info.t}</h2><p>${info.s}</p>`);
+  app.appendChild(head);
+
+  const list = el("div","actlist");
+  ACTS.filter(a=>a.sec === S.sec).forEach(a=>{
+    const st = S.stars[a.id];
+    const b = el("button","actcard" + (S.done[a.id] ? " done":""));
+    b.innerHTML = `<div class="ico">${a.ico}</div>
+      <div class="t"><b>${a.name}</b><span>${a.sub}</span></div>
+      <div class="st">${st!=null ? "⭐".repeat(st)+"☆".repeat(3-st) : "☆☆☆"}<br>${a.xp} XP</div>`;
+    b.onclick = ()=>openAct(a.id);
+    list.appendChild(b);
+  });
+  app.appendChild(list);
+
+  if(S.sec === 3) app.appendChild(buildBoard());
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", String(+t.dataset.sec === S.sec)));
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function openAct(id){
+  const a = ACTS.find(x=>x.id===id);
+  const app = $("#app");
+  app.innerHTML = "";
+  S.view = id;
+  app.appendChild(el("div","sechead",`<h2>${a.ico} ${a.name}</h2><p>${a.sub} · worth up to ${a.xp} XP</p>`));
+  const panel = el("div","panel");
+  app.appendChild(panel);
+  SCREENS[id](panel);
+  const back = el("button","backbtn","← Back to Section " + a.sec);
+  back.onclick = ()=>render();
+  app.appendChild(back);
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function buildBoard(){
+  const b = el("div","board");
+  b.appendChild(el("h2",null,"🏅 My Overall Scoreboard"));
+  b.appendChild(el("p",null,"<span style='font-weight:700;font-size:.9rem;color:#5c6b73'>Every activity is worth up to 3 stars. Play again any time to get more.</span>"));
+  [1,2,3].forEach(sec=>{
+    b.appendChild(el("div","qlabel","Section " + sec));
+    ACTS.filter(a=>a.sec===sec).forEach(a=>{
+      const st = S.stars[a.id];
+      const r = el("div","brow" + (S.done[a.id] ? " done":""));
+      r.innerHTML = `<span>${a.ico}</span><span class="bn">${a.name}</span>
+        <span class="bs">${st!=null ? "⭐".repeat(st)+"☆".repeat(3-st) : "not played yet"}</span>`;
+      b.appendChild(r);
+    });
+  });
+  const t = el("div","totals");
+  t.innerHTML = `<div class="tot"><b>${totalStars()}</b><span>stars out of 36</span></div>
+    <div class="tot"><b>${totalXp()}</b><span>XP out of ${MAX_XP}</span></div>
+    <div class="tot"><b>${doneCount()}/12</b><span>activities played</span></div>`;
+  b.appendChild(t);
+
+  const pct = totalXp()/MAX_XP;
+  const m = pct >= .9 ? ["🏆","Gold! You are a Lesson 9 champion. 太棒了!"]
+          : pct >= .6 ? ["🥈","Silver! Very good. Replay a few games for gold."]
+          : pct >= .3 ? ["🥉","Bronze! A good start. Keep going!"]
+          : ["🎯","Play the activities to win your first medal."];
+  b.appendChild(el("div","medal",`<span class="mm">${m[0]}</span>${m[1]}`));
+  return b;
+}
+
+document.querySelectorAll(".tab").forEach(t=>{
+  t.onclick = ()=>{ S.sec = +t.dataset.sec; render(); };
+});
+
+paintScore();
+render();
+</script>
+</body>
+</html>
