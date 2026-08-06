@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>今天星期几？ Match the Words</title>
+<style>
+  :root{
+    --ink:#253238;
+    --paper:#FDF6E9;
+    --board:#3D6B63;
+    --board-deep:#2E524C;
+    --red:#D6353B;
+    --gold:#F2B705;
+    --rule:#D8CDB8;
+    --soft:#7C8A8F;
+    --han:"Kaiti SC","STKaiti","KaiTi","Songti SC","SimSun","Noto Serif CJK SC",serif;
+    --display:"Trebuchet MS","Segoe UI",Verdana,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    min-height:100vh;
+    font-family:var(--display);
+    background:repeating-linear-gradient(135deg,var(--board) 0 22px,var(--board-deep) 22px 44px);
+    padding:16px 12px 40px;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:760px;margin:0 auto}
+
+  header{text-align:center;margin-bottom:14px}
+  .title{font-family:var(--han);font-size:30px;color:#fff;letter-spacing:6px}
+  .title span{color:var(--gold)}
+  .sub{color:rgba(255,255,255,.72);font-size:12.5px;letter-spacing:1.6px;margin-top:2px}
+
+  .rounds{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
+  .tab{
+    background:rgba(255,255,255,.12);color:#fff;
+    border:1.5px solid rgba(255,255,255,.3);
+    border-radius:20px;padding:7px 16px;cursor:pointer;line-height:1.15;font-family:inherit;
+  }
+  .tab.on{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+  .tab b{font-family:var(--han);font-size:16px;display:block;font-weight:400}
+  .tab i{font-size:10px;letter-spacing:1px;opacity:.85;font-style:normal}
+
+  .bar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .track{flex:1;height:8px;background:rgba(0,0,0,.22);border-radius:4px;overflow:hidden}
+  .fill{height:100%;width:0;background:var(--gold);transition:width .4s ease}
+  .count{color:#fff;font-size:13px;min-width:42px;text-align:right}
+
+  .board{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:12px;padding:12px 10px;
+    display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;align-items:start;
+  }
+  .col{display:grid;gap:12px}
+  .col.right{padding-top:12px}
+
+  button.card{border:none;background:none;padding:0;width:100%;text-align:left;font-family:inherit;cursor:pointer;transition:opacity .35s,transform .18s}
+  button.card[disabled]{cursor:default;opacity:.42}
+  button.card.picked{transform:translateY(-3px)}
+  button:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:8px}
+
+  .rings{display:flex;justify-content:center;gap:6px;margin-bottom:-7px}
+  .rings i{width:5px;height:12px;border-radius:3px;background:#9AA5A8;box-shadow:inset 0 -2px 0 rgba(0,0,0,.18)}
+
+  .face{
+    background:var(--paper);border-radius:6px;border:1.5px solid var(--rule);
+    padding:14px 8px 12px;min-height:98px;position:relative;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    transition:border-color .18s,box-shadow .18s;
+  }
+  .picked .face{border-color:var(--red);box-shadow:0 0 0 3px rgba(214,53,59,.22),0 6px 0 var(--tint)}
+  .hanzi{font-family:var(--han);font-size:26px;color:var(--ink);letter-spacing:1px}
+  .hanzi em{color:var(--red);font-style:normal}
+  .art{font-size:28px;line-height:1}
+  .py{font-size:12px;color:var(--soft);letter-spacing:.4px;margin-top:1px}
+  .tick{position:absolute;top:4px;right:6px;color:var(--board);font-size:15px;font-weight:700}
+
+  .ans{
+    position:relative;background:#FFFDF7;border:1.5px solid var(--rule);border-radius:6px;
+    box-shadow:0 2px 0 rgba(0,0,0,.06);padding:10px 12px;min-height:98px;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:center;transition:border-color .18s,box-shadow .18s;
+  }
+  .picked .ans{border-color:var(--red);box-shadow:0 0 0 3px rgba(214,53,59,.22)}
+  .band{position:absolute;inset:0;background:var(--gold);opacity:.5;transform:scaleX(0);transform-origin:left center;transition:transform .45s cubic-bezier(.2,.8,.3,1)}
+  .matched .band{transform:scaleX(1)}
+  .en{position:relative;font-size:18px;font-weight:700;color:var(--ink);line-height:1.2}
+  .eg{position:relative;font-family:var(--han);font-size:13px;color:var(--ink);margin-top:3px;display:none}
+  .matched .eg{display:block}
+
+  @keyframes shk{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+  .shake{animation:shk .45s ease}
+  @keyframes pop{from{transform:scale(.7) rotate(-14deg);opacity:0}to{transform:scale(1) rotate(-8deg);opacity:1}}
+
+  .hint{color:rgba(255,255,255,.7);font-size:12.5px;text-align:center;margin-top:14px;line-height:1.6}
+
+  .result{margin-top:16px;background:var(--paper);border-radius:10px;padding:18px 16px;text-align:center;display:none}
+  .result.show{display:block}
+  .stamp{display:inline-block;border:3px solid var(--red);color:var(--red);font-family:var(--han);font-size:26px;padding:6px 14px;border-radius:6px;transform:rotate(-8deg);animation:pop .4s cubic-bezier(.2,1.4,.4,1) both}
+  .stars{margin-top:12px;font-size:20px;letter-spacing:4px}
+  .stars s{opacity:.25;text-decoration:none}
+  .meta{color:var(--soft);font-size:13px;margin-top:4px}
+  .actions{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+  .btn{border-radius:20px;padding:9px 20px;font-size:14px;cursor:pointer;font-family:inherit;border:1.5px solid transparent}
+  .btn.primary{background:var(--red);color:#fff}
+  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
+
+  @media (prefers-reduced-motion:reduce){
+    .shake,.stamp{animation:none!important}
+    .band,.fill{transition:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title">今天星期几<span>？</span></div>
+    <div class="sub">MATCH THE CARD TO THE WORD</div>
+  </header>
+
+  <div class="rounds" id="rounds"></div>
+
+  <div class="bar">
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <div class="count" id="count">0/7</div>
+  </div>
+
+  <div class="board">
+    <div class="col" id="left"></div>
+    <div class="col right" id="right"></div>
+  </div>
+
+  <p class="hint" id="hint">Tap a calendar card to hear it, then tap its meaning. Wrong pairs shake — try again.</p>
+
+  <div class="result" id="result">
+    <div class="stamp">全对！</div>
+    <div class="stars" id="stars"></div>
+    <div class="meta" id="meta"></div>
+    <div class="actions">
+      <button class="btn primary" id="again">Play again</button>
+      <button class="btn ghost" id="hearAll">🔊 Hear them all</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var DAYS = [
+    {id:"d1",hanzi:"星期一",pinyin:"Xīngqīyī",en:"Monday",tint:"#BFE3D8"},
+    {id:"d2",hanzi:"星期二",pinyin:"Xīngqī'èr",en:"Tuesday",tint:"#E7D2B8"},
+    {id:"d3",hanzi:"星期三",pinyin:"Xīngqīsān",en:"Wednesday",tint:"#C6C7E8"},
+    {id:"d4",hanzi:"星期四",pinyin:"Xīngqīsì",en:"Thursday",tint:"#D6E5B8"},
+    {id:"d5",hanzi:"星期五",pinyin:"Xīngqīwǔ",en:"Friday",tint:"#F0C4CE"},
+    {id:"d6",hanzi:"星期六",pinyin:"Xīngqīliù",en:"Saturday",tint:"#B9D9EE"},
+    {id:"d7",hanzi:"星期天",pinyin:"Xīngqītiān",en:"Sunday",tint:"#CBE7A8"}
+  ];
+
+  var WORDS = [
+    {id:"w1",hanzi:"生日",pinyin:"shēngrì",en:"birthday",art:"🎂",eg:"你的生日",tint:"#F6D3D8"},
+    {id:"w2",hanzi:"月",pinyin:"yuè",en:"month",art:"🌙",eg:"几月，1月",tint:"#D8DCF0"},
+    {id:"w3",hanzi:"号",pinyin:"hào",en:"date",art:"📅",eg:"几号，3号",tint:"#EBD9BB"},
+    {id:"w4",hanzi:"今天",pinyin:"jīntiān",en:"today",art:"☀️",eg:"今天星期几？",tint:"#FAE3B0"},
+    {id:"w5",hanzi:"星期",pinyin:"xīngqī",en:"week",art:"🗓️",eg:"今天星期五。",tint:"#C9E4DC"},
+    {id:"w6",hanzi:"明天",pinyin:"míngtiān",en:"tomorrow",art:"🌅",eg:"明天星期六。",tint:"#F5D2B8"},
+    {id:"w7",hanzi:"喜欢",pinyin:"xǐhuan",en:"to like",art:"❤️",eg:"不喜欢，很喜欢",tint:"#F0C9D6"}
+  ];
+
+  var ROUNDS = [
+    {key:"days",label:"星期",sub:"Days"},
+    {key:"words",label:"词语",sub:"Words"},
+    {key:"mix",label:"混合",sub:"Mixed"}
+  ];
+
+  var round="days", pool=[], matched=[], pickL=null, pickR=null, busy=false, tries=0;
+
+  var el = {
+    rounds:document.getElementById("rounds"),
+    left:document.getElementById("left"),
+    right:document.getElementById("right"),
+    fill:document.getElementById("fill"),
+    count:document.getElementById("count"),
+    hint:document.getElementById("hint"),
+    result:document.getElementById("result"),
+    stars:document.getElementById("stars"),
+    meta:document.getElementById("meta"),
+    again:document.getElementById("again"),
+    hearAll:document.getElementById("hearAll")
+  };
+
+  function shuffle(arr){
+    var a=arr.slice(),i,j,t;
+    for(i=a.length-1;i>0;i--){j=Math.floor(Math.random()*(i+1));t=a[i];a[i]=a[j];a[j]=t;}
+    return a;
+  }
+
+  function speak(text){
+    try{
+      if(!("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      var u=new SpeechSynthesisUtterance(text);
+      u.lang="zh-CN"; u.rate=0.75;
+      window.speechSynthesis.speak(u);
+    }catch(e){}
+  }
+
+  function buildTabs(){
+    el.rounds.innerHTML="";
+    ROUNDS.forEach(function(r){
+      var b=document.createElement("button");
+      b.className="tab"+(r.key===round?" on":"");
+      b.innerHTML="<b>"+r.label+"</b><i>"+r.sub+"</i>";
+      b.addEventListener("click",function(){ round=r.key; start(); });
+      el.rounds.appendChild(b);
+    });
+  }
+
+  function makePicture(item){
+    var btn=document.createElement("button");
+    btn.className="card"; btn.type="button";
+    btn.setAttribute("aria-label","Card "+item.hanzi);
+    btn.dataset.id=item.id;
+
+    var rings=document.createElement("div");
+    rings.className="rings";
+    rings.innerHTML="<i></i><i></i><i></i><i></i><i></i><i></i>";
+
+    var face=document.createElement("div");
+    face.className="face";
+    face.style.setProperty("--tint",item.tint);
+    face.style.boxShadow="0 5px 0 "+item.tint;
+
+    var body="";
+    if(item.id.charAt(0)==="d"){
+      body='<span class="hanzi">'+item.hanzi.slice(0,2)+'<em>'+item.hanzi.slice(2)+'</em></span>';
+    }else{
+      body='<span class="art">'+item.art+'</span><span class="hanzi">'+item.hanzi+'</span>';
+    }
+    face.innerHTML=body+'<span class="py">'+item.pinyin+'</span><span class="tick" style="display:none">✓</span>';
+
+    btn.appendChild(rings);
+    btn.appendChild(face);
+    btn.addEventListener("click",function(){ tapLeft(item,btn); });
+    return btn;
+  }
+
+  function makeAnswer(item){
+    var btn=document.createElement("button");
+    btn.className="card"; btn.type="button";
+    btn.dataset.id=item.id;
+    btn.innerHTML='<div class="ans"><span class="band"></span>'+
+      '<span class="en">'+item.en+'</span>'+
+      '<span class="eg">'+(item.eg||"")+'</span></div>';
+    btn.addEventListener("click",function(){ tapRight(item,btn); });
+    return btn;
+  }
+
+  function find(side,id){
+    return (side==="l"?el.left:el.right).querySelector('[data-id="'+id+'"]');
+  }
+
+  function clearPicks(){
+    if(pickL){ var a=find("l",pickL); if(a) a.classList.remove("picked"); }
+    if(pickR){ var b=find("r",pickR); if(b) b.classList.remove("picked"); }
+    pickL=null; pickR=null;
+  }
+
+  function tapLeft(item,btn){
+    if(busy||matched.indexOf(item.id)>-1) return;
+    speak(item.hanzi);
+    if(pickR){ check(item.id,pickR); return; }
+    if(pickL===item.id){ clearPicks(); return; }
+    clearPicks(); pickL=item.id; btn.classList.add("picked");
+  }
+
+  function tapRight(item,btn){
+    if(busy||matched.indexOf(item.id)>-1) return;
+    if(pickL){ check(pickL,item.id); return; }
+    if(pickR===item.id){ clearPicks(); return; }
+    clearPicks(); pickR=item.id; btn.classList.add("picked");
+  }
+
+  function check(l,r){
+    tries++;
+    var lb=find("l",l), rb=find("r",r);
+    if(l===r){
+      matched.push(l);
+      clearPicks();
+      lb.disabled=true; rb.disabled=true;
+      lb.querySelector(".tick").style.display="block";
+      rb.classList.add("matched");
+      progress();
+    }else{
+      busy=true;
+      lb.classList.add("shake"); rb.classList.add("shake");
+      setTimeout(function(){
+        lb.classList.remove("shake"); rb.classList.remove("shake");
+        clearPicks(); busy=false;
+      },500);
+    }
+  }
+
+  function progress(){
+    el.count.textContent=matched.length+"/"+pool.length;
+    el.fill.style.width=(matched.length/pool.length*100)+"%";
+    if(matched.length===pool.length) finish();
+  }
+
+  function finish(){
+    var stars = tries<=pool.length ? 3 : (tries<=pool.length+3 ? 2 : 1);
+    var s="";
+    for(var i=0;i<stars;i++) s+="★";
+    if(stars<3) s+="<s>"+new Array(4-stars).join("★")+"</s>";
+    el.stars.innerHTML=s;
+    el.meta.textContent=pool.length+" pairs · "+tries+" tries";
+    el.hint.style.display="none";
+    el.result.classList.add("show");
+    el.result.scrollIntoView({behavior:"smooth",block:"nearest"});
+  }
+
+  function start(){
+    matched=[]; pickL=null; pickR=null; busy=false; tries=0;
+    if(round==="days") pool=DAYS.slice();
+    else if(round==="words") pool=WORDS.slice();
+    else pool=shuffle(DAYS.concat(WORDS)).slice(0,7);
+
+    buildTabs();
+    el.left.innerHTML=""; el.right.innerHTML="";
+    shuffle(pool).forEach(function(it){ el.left.appendChild(makePicture(it)); });
+    shuffle(pool).forEach(function(it){ el.right.appendChild(makeAnswer(it)); });
+
+    el.result.classList.remove("show");
+    el.hint.style.display="block";
+    progress();
+  }
+
+  el.again.addEventListener("click",start);
+  el.hearAll.addEventListener("click",function(){
+    speak(pool.map(function(p){return p.hanzi;}).join("，"));
+  });
+
+  start();
+})();
+</script>
+</body>
+</html>
