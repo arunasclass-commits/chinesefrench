@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aruna's Class · New HSK2 · Lesson 2 · Flashcards & Build-the-Word</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+:root{--ink:#12233f;--red:#c0392b;--gold:#d4af37;--teal:#0d9488;--blue:#1d6fa8;--purple:#6b21a8;--green:#059669;--light:#f0f4ff;--border:#e2e8f0;--muted:#7a8699;--shadow:0 8px 32px rgba(0,0,0,.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--ink);min-height:100vh}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#123a5c 55%,#0d9488 100%);color:#fff;padding:20px 18px 22px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'字';position:absolute;font-family:'Noto Sans SC',sans-serif;font-size:170px;font-weight:900;color:rgba(255,255,255,.06);top:-20px;left:50%;transform:translateX(-50%);pointer-events:none}
+.badge{display:inline-block;background:rgba(212,175,55,.2);border:1px solid rgba(212,175,55,.5);color:var(--gold);font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:8px}
+.hero h1{font-family:'Noto Sans SC',sans-serif;font-size:clamp(18px,5vw,28px);font-weight:900}
+.hero .sub{font-size:12.5px;color:rgba(255,255,255,.78);margin-top:3px}
+.nav{display:flex;background:#fff;border-bottom:2px solid var(--border);position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.nt{flex:1;padding:13px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px}
+.nt.on{color:var(--red);border-bottom-color:var(--red)}
+.board{display:flex;justify-content:center;gap:8px;padding:10px;flex-wrap:wrap;background:#fff}
+.sc{border-radius:14px;padding:6px 14px;text-align:center;min-width:80px;border:2px solid var(--border)}
+.sc .v{font-size:19px;font-weight:900;line-height:1}
+.sc .l{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-top:2px}
+.sc.a{border-color:var(--gold);background:#fffbe9}.sc.a .v{color:#b8860b}
+.sc.b{border-color:var(--green);background:#ecfdf5}.sc.b .v{color:var(--green)}
+.sc.c .v{color:var(--blue)}
+.wrap{max-width:640px;margin:0 auto;padding:16px 14px 70px}
+.sec{display:none}.sec.on{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.meta{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:8px}
+.bar{background:var(--border);border-radius:5px;height:7px;margin-bottom:14px;overflow:hidden}
+.barf{height:7px;border-radius:5px;background:linear-gradient(90deg,var(--red),var(--gold));transition:width .3s;width:0}
+/* flashcards */
+.fc{perspective:1200px;height:280px;margin-bottom:14px;cursor:pointer}
+.fc-in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.fc.flip .fc-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.front{background:#fff;border:2px solid var(--border)}
+.back{background:linear-gradient(135deg,#0d9488,#0f766e);color:#fff;transform:rotateY(180deg)}
+.front .zh{font-family:'Noto Sans SC',sans-serif;font-size:64px;font-weight:900;line-height:1}
+.front .tap{font-size:11px;color:var(--muted);font-weight:700;margin-top:16px}
+.back .py{font-size:26px;font-weight:900;margin-bottom:6px}
+.back .en{font-size:15px;font-weight:700;text-align:center}
+.aud{position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;cursor:pointer}
+.row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.btn{padding:11px 16px;border:none;border-radius:9px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer}
+.bl{background:var(--blue);color:#fff}.bg{background:var(--green);color:#fff}.bs{background:#f1f5f9;color:#475569}.br{background:var(--red);color:#fff}.bo{background:#c05621;color:#fff}
+/* build */
+.prompt{text-align:center;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:18px;margin-bottom:12px}
+.prompt .en{font-size:22px;font-weight:900}
+.prompt .py{font-size:15px;color:var(--blue);font-weight:800;margin-top:2px}
+.slots{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+.slot{width:60px;height:60px;border:2px dashed var(--blue);border-radius:12px;background:#f8fbff;display:flex;align-items:center;justify-content:center}
+.slot.filled{border-style:solid;background:#fff}
+.bank{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;min-height:60px;margin-bottom:10px}
+.tile{width:60px;height:60px;border:2px solid var(--border);border-radius:12px;background:#fff;font-family:'Noto Sans SC',sans-serif;font-size:30px;font-weight:700;cursor:grab;display:flex;align-items:center;justify-content:center;user-select:none;box-shadow:0 2px 6px rgba(0,0,0,.08);color:var(--ink)}
+.tile:active{cursor:grabbing}
+.tile.drag{opacity:.4}
+.slot .tile{box-shadow:none;border-color:var(--teal)}
+.fb{margin:10px 0;padding:11px;border-radius:9px;font-size:14px;font-weight:800;text-align:center;display:none}
+.fb.ok{background:#d1fae5;color:#065f46;display:block}
+.fb.no{background:#fee2e2;color:#991b1b;display:block}
+.fb .zh{font-family:'Noto Sans SC',sans-serif;font-size:20px}
+.done{background:linear-gradient(135deg,#0d9488,#0f766e);color:#fff;border-radius:16px;padding:26px;text-align:center;box-shadow:var(--shadow)}
+.done .big{font-size:44px;font-weight:900;margin:6px 0}
+.done .rb{margin-top:14px;padding:11px 26px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:9px;font-weight:800;cursor:pointer}
+.tip{background:#fef3c7;border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:9px 13px;margin-bottom:14px;font-size:12px;color:#7c5e10;font-weight:700;line-height:1.5}
+.footer{text-align:center;padding:20px;font-size:11px;color:var(--muted)}
+.footer b{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="badge">Aruna's Class · ChineseFrench</div>
+  <h1>新 HSK 2 · 第二课 · 抽认卡 &amp; 组字</h1>
+  <div class="sub">75 words · Flashcards (scored) → drag-and-drop Build-the-Word (scored)</div>
+</div>
+<div class="nav">
+  <button class="nt on" id="nt-flash" onclick="show('flash')">① 抽认卡 Flashcards</button>
+  <button class="nt" id="nt-build" onclick="show('build')">② 组字 Build (drag &amp; drop)</button>
+</div>
+<div class="board">
+  <div class="sc a"><div class="v" id="vFlash">0</div><div class="l">卡 Flash</div></div>
+  <div class="sc b"><div class="v" id="vBuild">0</div><div class="l">组字 Build</div></div>
+  <div class="sc c"><div class="v" id="vTot">0/150</div><div class="l">Total</div></div>
+</div>
+<div class="wrap">
+  <div class="sec on" id="sec-flash"></div>
+  <div class="sec" id="sec-build"></div>
+</div>
+<div class="footer">75 words · New HSK Course 2 · Lesson 2 · <b>Aruna's Class</b></div>
+<script>
+const WORDS=[{"zh": "请问", "py": "qǐngwèn", "en": "excuse me; may I ask"}, {"zh": "这儿", "py": "zhèr", "en": "here"}, {"zh": "有", "py": "yǒu", "en": "to have; there is"}, {"zh": "到", "py": "dào", "en": "to; to arrive at"}, {"zh": "北京大学", "py": "Běijīng Dàxué", "en": "Peking University"}, {"zh": "的", "py": "de", "en": "(attributive particle)"}, {"zh": "公交车", "py": "gōngjiāochē", "en": "bus"}, {"zh": "吗", "py": "ma", "en": "(yes/no question particle)"}, {"zh": "但", "py": "dàn", "en": "but"}, {"zh": "车站", "py": "chēzhàn", "en": "(bus) stop; station"}, {"zh": "有点儿", "py": "yǒudiǎnr", "en": "a bit; a little"}, {"zh": "远", "py": "yuǎn", "en": "far"}, {"zh": "好", "py": "hǎo", "en": "good; easy to"}, {"zh": "打车", "py": "dǎchē", "en": "to take a taxi"}, {"zh": "谢谢", "py": "xièxie", "en": "thank you"}, {"zh": "我们", "py": "wǒmen", "en": "we; us"}, {"zh": "还是", "py": "háishi", "en": "had better; still"}, {"zh": "去", "py": "qù", "en": "to go"}, {"zh": "吧", "py": "ba", "en": "(suggestion particle)"}, {"zh": "没问题", "py": "méi wèntí", "en": "no problem"}, {"zh": "学校", "py": "xuéxiào", "en": "school"}, {"zh": "里", "py": "lǐ", "en": "inside; in"}, {"zh": "人", "py": "rén", "en": "person; people"}, {"zh": "真", "py": "zhēn", "en": "really; truly"}, {"zh": "多", "py": "duō", "en": "many; more than"}, {"zh": "啊", "py": "a", "en": "(exclamatory particle)"}, {"zh": "是", "py": "shì", "en": "to be; yes"}, {"zh": "名", "py": "míng", "en": "(measure word for people)"}, {"zh": "学生", "py": "xuésheng", "en": "student"}, {"zh": "呢", "py": "ne", "en": "(particle)"}, {"zh": "你", "py": "nǐ", "en": "you"}, {"zh": "怎么", "py": "zěnme", "en": "how"}, {"zh": "知道", "py": "zhīdào", "en": "to know"}, {"zh": "网上", "py": "wǎngshàng", "en": "online; on the internet"}, {"zh": "说", "py": "shuō", "en": "to say; to speak"}, {"zh": "还", "py": "hái", "en": "also; still"}, {"zh": "外国", "py": "wàiguó", "en": "foreign country"}, {"zh": "也", "py": "yě", "en": "also; too"}, {"zh": "想", "py": "xiǎng", "en": "to want; would like"}, {"zh": "来", "py": "lái", "en": "to come"}, {"zh": "学习", "py": "xuéxí", "en": "to study"}, {"zh": "那边", "py": "nàbiān", "en": "over there"}, {"zh": "就", "py": "jiù", "en": "just; right (then)"}, {"zh": "间", "py": "jiān", "en": "(measure word for rooms)"}, {"zh": "教室", "py": "jiàoshì", "en": "classroom"}, {"zh": "看", "py": "kàn", "en": "to look; to watch"}, {"zh": "一下", "py": "yíxià", "en": "briefly; (do) once"}, {"zh": "家", "py": "jiā", "en": "(measure word for shops); home"}, {"zh": "电影院", "py": "diànyǐngyuàn", "en": "cinema"}, {"zh": "不", "py": "bù", "en": "not; no"}, {"zh": "小", "py": "xiǎo", "en": "small"}, {"zh": "他们", "py": "tāmen", "en": "they; them"}, {"zh": "卖", "py": "mài", "en": "to sell"}, {"zh": "电影票", "py": "diànyǐngpiào", "en": "movie ticket"}, {"zh": "很", "py": "hěn", "en": "very"}, {"zh": "便宜", "py": "piányi", "en": "cheap; inexpensive"}, {"zh": "天哪", "py": "tiān na", "en": "goodness!; oh my"}, {"zh": "有的", "py": "yǒude", "en": "some (of them)"}, {"zh": "不到", "py": "bú dào", "en": "less than; not reaching"}, {"zh": "二十", "py": "èrshí", "en": "twenty"}, {"zh": "块钱", "py": "kuài qián", "en": "yuan (money)"}, {"zh": "那", "py": "nà", "en": "then; in that case"}, {"zh": "想不想", "py": "xiǎng bu xiǎng", "en": "want to or not?"}, {"zh": "个", "py": "gè", "en": "(general measure word)"}, {"zh": "电影", "py": "diànyǐng", "en": "movie; film"}, {"zh": "别", "py": "bié", "en": "don't"}, {"zh": "了", "py": "le", "en": "(change/completion particle)"}, {"zh": "好看", "py": "hǎokàn", "en": "good-looking; interesting"}, {"zh": "大", "py": "dà", "en": "big"}, {"zh": "漂亮", "py": "piàoliang", "en": "beautiful; pretty"}, {"zh": "里边", "py": "lǐbian", "en": "inside"}, {"zh": "贵", "py": "guì", "en": "expensive"}, {"zh": "时间", "py": "shíjiān", "en": "time"}, {"zh": "再", "py": "zài", "en": "again"}, {"zh": "过来", "py": "guòlái", "en": "to come over"}];
+const N=WORDS.length;
+let flashScore=0, buildScore=0;
+let zhVoice=null;
+function pickVoice(){const vs=speechSynthesis.getVoices();zhVoice=vs.find(v=>/zh|Chinese/i.test(v.lang+v.name))||null;}
+if('speechSynthesis'in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function say(t,r){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=r||0.85;if(zhVoice)u.voice=zhVoice;speechSynthesis.speak(u);}catch(e){}}
+function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function board(){document.getElementById('vFlash').textContent=flashScore;document.getElementById('vBuild').textContent=buildScore;document.getElementById('vTot').textContent=(flashScore+buildScore)+'/'+(2*N);}
+function show(id){['flash','build'].forEach(x=>{document.getElementById('nt-'+x).classList.toggle('on',x===id);document.getElementById('sec-'+x).classList.toggle('on',x===id);});}
+
+/* ---------- char pool for distractors ---------- */
+const POOL=[...new Set(WORDS.flatMap(w=>[...w.zh]))];
+function distractors(word,k){const own=new Set([...word.zh]);const pool=POOL.filter(c=>!own.has(c));return shuffle(pool).slice(0,k);}
+
+/* ================= FLASHCARDS ================= */
+function renderFlash(){
+ const w=document.getElementById('sec-flash');
+ let idx=0;const rated=new Array(N).fill(0); // 1 knew, -1 review
+ w.innerHTML='<div class="tip">Look at the character, guess the meaning, tap to flip &amp; hear it. Then mark <b>✓ I knew it</b> (+1) or <b>✗ Review</b>. '+N+' cards.</div>'
+  +'<div class="meta"><span id="fm"></span><span id="fs"></span></div><div class="bar"><div class="barf" id="fbar"></div></div>'
+  +'<div id="fcard"></div>';
+ function draw(){
+   const c=document.getElementById('fcard');
+   if(idx>=N){const c2=document.getElementById('fcard');c2.innerHTML='<div class="done"><div>Flashcards done!</div><div class="big">'+flashScore+' / '+N+'</div><div>known this run</div><button class="rb" onclick="location.reload()">↺ Restart all</button></div>';document.getElementById('fm').textContent='';document.getElementById('fbar').style.width='100%';return;}
+   const v=WORDS[idx];
+   document.getElementById('fm').textContent='Card '+(idx+1)+' / '+N;
+   document.getElementById('fs').textContent='Known: '+flashScore;
+   document.getElementById('fbar').style.width=(idx/N*100)+'%';
+   c.innerHTML='<div class="fc" id="fc"><div class="fc-in">'
+     +'<div class="face front"><button class="aud">🔊</button><div class="zh">'+v.zh+'</div><div class="tap">tap to flip</div></div>'
+     +'<div class="face back"><button class="aud">🔊</button><div class="py">'+v.py+'</div><div class="en">'+v.en+'</div></div>'
+     +'</div></div>'
+     +'<div class="row"><button class="btn bg" id="knew">✓ I knew it</button><button class="btn bs" id="rev">✗ Review</button></div>';
+   const fc=document.getElementById('fc');
+   fc.onclick=()=>fc.classList.toggle('flip');
+   c.querySelectorAll('.aud').forEach(b=>b.onclick=(e)=>{e.stopPropagation();say(v.zh);});
+   document.getElementById('knew').onclick=()=>{if(rated[idx]!==1){flashScore++;rated[idx]=1;board();}idx++;draw();};
+   document.getElementById('rev').onclick=()=>{idx++;draw();};
+ }
+ draw();
+}
+
+/* ================= BUILD (drag & drop) ================= */
+function renderBuild(){
+ const order=shuffle([...Array(N).keys()]);
+ let pos=0, answered=false, draggedEl=null;
+ const w=document.getElementById('sec-build');
+ w.innerHTML='<div class="tip">Read the meaning, then <b>drag</b> (or tap) the characters into the boxes in the right order to spell the word. Extra characters are decoys. +1 for each correct word. '+N+' words.</div>'
+  +'<div class="meta"><span id="bm"></span><span id="bs"></span></div><div class="bar"><div class="barf" id="bbar"></div></div>'
+  +'<div id="bstage"></div>';
+ function draw(){
+   answered=false;const st=document.getElementById('bstage');
+   if(pos>=N){st.innerHTML='<div class="done"><div>Build-the-Word complete!</div><div class="big">'+buildScore+' / '+N+'</div><div>'+Math.round(buildScore/N*100)+'% correct</div><button class="rb" onclick="location.reload()">↺ Restart all</button></div>';document.getElementById('bm').textContent='';document.getElementById('bbar').style.width='100%';return;}
+   const v=WORDS[order[pos]];const chars=[...v.zh];
+   document.getElementById('bm').textContent='Word '+(pos+1)+' / '+N;
+   document.getElementById('bs').textContent='Score: '+buildScore;
+   document.getElementById('bbar').style.width=(pos/N*100)+'%';
+   const tiles=shuffle(chars.concat(distractors(v,3)));
+   let html='<div class="prompt"><div class="en">'+v.en+'</div><div class="py">'+v.py+'</div>'
+     +'<button class="btn bl" id="hear" style="margin-top:10px">🔊 Hear</button></div>'
+     +'<div class="slots" id="slots">';
+   for(let i=0;i<chars.length;i++) html+='<div class="slot" data-i="'+i+'"></div>';
+   html+='</div><div class="bank" id="bank"></div><div class="fb" id="fb"></div>'
+     +'<div class="row"><button class="btn bs" id="clear">↺ Clear</button><button class="btn bo" id="check">Check ✓</button></div>';
+   st.innerHTML=html;
+   const bank=document.getElementById('bank'), slots=document.getElementById('slots');
+   tiles.forEach((ch,i)=>{const t=document.createElement('button');t.className='tile';t.textContent=ch;t.dataset.ch=ch;t.draggable=true;bank.appendChild(t);attach(t);});
+   // slot drop targets
+   slots.querySelectorAll('.slot').forEach(s=>{
+     s.addEventListener('dragover',e=>e.preventDefault());
+     s.addEventListener('drop',e=>{e.preventDefault();if(draggedEl)placeInSlot(draggedEl,s);});
+     s.addEventListener('click',()=>{const t=s.querySelector('.tile');if(t)returnToBank(t);});
+   });
+   bank.addEventListener('dragover',e=>e.preventDefault());
+   bank.addEventListener('drop',e=>{e.preventDefault();if(draggedEl)returnToBank(draggedEl);});
+   document.getElementById('hear').onclick=()=>say(v.zh);
+   document.getElementById('clear').onclick=()=>{slots.querySelectorAll('.slot .tile').forEach(t=>returnToBank(t));document.getElementById('fb').className='fb';};
+   document.getElementById('check').onclick=()=>check(v,slots);
+   function attach(t){
+     t.addEventListener('dragstart',e=>{draggedEl=t;t.classList.add('drag');});
+     t.addEventListener('dragend',()=>{t.classList.remove('drag');});
+     t.addEventListener('click',()=>{ if(answered) return; if(t.parentElement.classList.contains('slot')){returnToBank(t);} else {const empty=slots.querySelector('.slot:not(.filled)'); if(empty) placeInSlot(t,empty);} });
+   }
+   function placeInSlot(t,s){ if(answered) return; if(s.classList.contains('filled')){returnToBank(s.querySelector('.tile'));} s.appendChild(t); s.classList.add('filled'); }
+   function returnToBank(t){ const s=t.parentElement; if(s&&s.classList.contains('slot'))s.classList.remove('filled'); bank.appendChild(t); }
+ }
+ function check(v,slots){
+   if(answered) return;
+   const got=[...slots.querySelectorAll('.slot')].map(s=>{const t=s.querySelector('.tile');return t?t.dataset.ch:'';}).join('');
+   const fb=document.getElementById('fb');
+   if(got===v.zh){answered=true;buildScore++;board();fb.className='fb ok';fb.innerHTML='✓ 对 Correct! <span class="zh">'+v.zh+'</span> — '+v.py;say(v.zh);addNext();}
+   else{fb.className='fb no';fb.innerHTML='✗ Not yet — try again. (Correct: <span class="zh">'+v.zh+'</span>)';}
+ }
+ function addNext(){const st=document.getElementById('bstage');const b=document.createElement('button');b.className='btn br';b.style.cssText='display:block;margin:12px auto 0;padding:12px 30px';b.textContent=pos<N-1?'Next →':'Finish ✓';b.onclick=()=>{pos++;draw();};st.appendChild(b);}
+ draw();
+}
+
+/* init */
+renderFlash();renderBuild();board();
+</script>
+</body>
+</html>
