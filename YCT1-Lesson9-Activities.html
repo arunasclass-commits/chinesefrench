@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YCT 1 · Lesson 9 · What day is it today?</title>
+<style>
+  :root{
+    --t1:#e53935; --t2:#fb8c00; --t3:#43a047; --t4:#1e88e5; --t5:#9e9e9e;
+    --bg:#fef9f0; --card:#ffffff; --accent:#12b3a6; --accent2:#ff7aa2; --ink:#2b2b3a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    font-family:"Segoe UI","Comic Sans MS","Microsoft YaHei",system-ui,sans-serif;
+    margin:0; background:linear-gradient(160deg,#fef9f0,#eefaf7); color:var(--ink);
+  }
+  header{
+    background:linear-gradient(120deg,#12b3a6,#0f9d92); color:#fff;
+    padding:22px 20px; text-align:center; box-shadow:0 4px 14px rgba(0,0,0,.12);
+  }
+  header h1{margin:0; font-size:26px;}
+  header .cn{font-size:34px; margin:4px 0;}
+  header p{margin:2px 0 0; opacity:.9; font-size:14px;}
+  nav{
+    display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
+    padding:14px; position:sticky; top:0; z-index:50;
+    background:rgba(254,249,240,.95); backdrop-filter:blur(4px);
+    border-bottom:2px solid #e6e0d4;
+  }
+  nav button{
+    border:none; background:#fff; color:var(--ink); font-weight:700;
+    padding:9px 14px; border-radius:22px; cursor:pointer; font-size:14px;
+    box-shadow:0 2px 6px rgba(0,0,0,.1); transition:.15s;
+  }
+  nav button:hover{transform:translateY(-2px);}
+  nav button.active{background:var(--accent); color:#fff;}
+  section{max-width:900px; margin:26px auto; padding:0 16px;}
+  .sec-title{font-size:22px; font-weight:800; color:#0f9d92; margin:0 0 6px;}
+  .sec-sub{margin:0 0 18px; color:#6b6b7a; font-size:15px;}
+  .card{background:var(--card); border-radius:18px; padding:18px; box-shadow:0 4px 16px rgba(0,0,0,.08);}
+
+  /* Vocabulary grid */
+  .vocab-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:14px;}
+  .vcard{background:#fff; border:2px solid #f1ece0; border-radius:16px; padding:14px; text-align:center; transition:.15s;}
+  .vcard:hover{transform:translateY(-3px); box-shadow:0 6px 18px rgba(0,0,0,.1);}
+  .vcard .hanzi{font-size:34px; font-weight:800; color:#222;}
+  .vcard .py{font-size:16px; color:#0f9d92; font-weight:700; margin:2px 0;}
+  .vcard .en{font-size:14px; color:#666; margin-bottom:8px;}
+  .voice-btns{display:flex; gap:8px; justify-content:center;}
+  .voice-btns button{
+    border:none; border-radius:20px; padding:7px 12px; cursor:pointer; font-size:14px; font-weight:700; color:#fff;
+  }
+  .btn-m{background:#1e88e5;} .btn-f{background:#ff7aa2;}
+  .voice-btns button:active{transform:scale(.94);}
+  .playall{margin-bottom:14px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+  .playall button{border:none; padding:10px 16px; border-radius:22px; font-weight:700; cursor:pointer; color:#fff; background:var(--accent);}
+  .voice-note{font-size:12px; color:#999;}
+
+  /* Tone builder */
+  .tb-picker{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;}
+  .tb-picker button{border:2px solid #12b3a6; background:#fff; color:#0f9d92; font-weight:700;
+    padding:8px 12px; border-radius:14px; cursor:pointer; font-size:15px;}
+  .tb-picker button.active{background:#12b3a6; color:#fff;}
+  .tb-stage{min-height:230px; border-radius:16px; background:linear-gradient(180deg,#f4fbff,#eef6ff);
+    padding:16px; position:relative; overflow:hidden;}
+  .tb-meaning{text-align:center; font-size:20px; font-weight:800; min-height:28px; color:#0f9d92; margin-bottom:6px;}
+  .tb-falls{position:relative; height:120px;}
+  .fall{
+    position:absolute; top:-90px; font-size:40px; font-weight:800; opacity:0;
+    transition:top .7s cubic-bezier(.5,1.6,.6,1), opacity .3s;
+    text-align:center; width:110px;
+  }
+  .fall.show{opacity:1;}
+  .boxes{display:flex; gap:12px; justify-content:center; margin-top:12px; flex-wrap:wrap;}
+  .tbox{
+    width:110px; min-height:96px; border-radius:14px; background:#fff; border:3px dashed #cfe4ff;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:6px;
+    transition:.2s;
+  }
+  .tbox.filled{border-style:solid;}
+  .tbox .bh{font-size:34px; font-weight:800; line-height:1;}
+  .tbox .bp{font-size:14px; font-weight:700;}
+  .tbox .bm{font-size:12px; color:#666; margin-top:2px;}
+  .tb-controls{display:flex; gap:10px; justify-content:center; margin-top:16px; flex-wrap:wrap;}
+  .tb-controls button{border:none; padding:10px 18px; border-radius:22px; font-weight:700; cursor:pointer; color:#fff;}
+  .tone-legend{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:14px; font-size:13px;}
+  .tone-legend span{padding:3px 10px; border-radius:12px; color:#fff; font-weight:700;}
+
+  /* Match */
+  .match-sec{margin-bottom:22px;}
+  .match-head{font-weight:800; color:#0f9d92; margin-bottom:8px; font-size:17px;}
+  .match-wrap{display:grid; grid-template-columns:1fr 1fr; gap:26px;}
+  .col{display:flex; flex-direction:column; gap:10px;}
+  .col h4{margin:0 0 4px; text-align:center; color:#888; font-size:13px; letter-spacing:1px;}
+  .mitem{
+    padding:12px; border-radius:12px; background:#fff; border:2px solid #e7e1d5; cursor:pointer;
+    font-weight:700; text-align:center; transition:.12s; font-size:16px;
+  }
+  .mitem:hover{border-color:#12b3a6;}
+  .mitem.selected{background:#fff3cd; border-color:#ffb300;}
+  .mitem.done{background:#d6f5e6; border-color:#43a047; color:#2e7d32; cursor:default;}
+  .mitem.wrong{animation:shake .35s;}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+  .score{font-weight:800; color:#0f9d92;}
+
+  /* Fill blanks drag drop */
+  .fb-note{background:#fff8e1; border:2px solid #ffe082; border-radius:12px; padding:10px 14px; margin-bottom:16px; font-size:14px;}
+  .fb-note b{color:#e65100;}
+  .fb-row{display:flex; align-items:center; gap:10px; background:#fff; border-radius:12px; padding:10px 14px;
+    margin-bottom:10px; border:2px solid #eee; flex-wrap:wrap;}
+  .fb-fixed{font-size:30px; font-weight:800;}
+  .fb-slot{
+    width:60px; height:60px; border:3px dashed #ff9db5; border-radius:12px;
+    display:flex; align-items:center; justify-content:center; font-size:30px; font-weight:800; color:#ff5c8a;
+    background:#fff5f8;
+  }
+  .fb-slot.filled{border-style:solid; border-color:#43a047; background:#e8f8ee; color:#2e7d32;}
+  .fb-eq{font-size:16px; color:#888;}
+  .fb-en{font-weight:700; color:#0f9d92; font-size:16px;}
+  .fb-tone{font-size:12px; color:#999; margin-left:auto;}
+  .fb-tiles{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; padding:14px; background:#f1faf8; border-radius:14px; justify-content:center;}
+  .tile{
+    width:58px; height:58px; border-radius:12px; background:#12b3a6; color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:30px; font-weight:800; cursor:grab;
+    box-shadow:0 3px 8px rgba(0,0,0,.15); user-select:none; touch-action:none;
+  }
+  .tile.used{opacity:.25; cursor:default;}
+  .tile.dragging{opacity:.6;}
+  .fb-actions{margin-top:14px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+  .fb-actions button{border:none; padding:10px 16px; border-radius:22px; font-weight:700; cursor:pointer; color:#fff; background:var(--accent);}
+  .msg{font-weight:800;}
+  footer{text-align:center; padding:30px 16px; color:#9a9a9a; font-size:13px;}
+  @media(max-width:640px){
+    .match-wrap{gap:14px;}
+    .vocab-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Lesson 9</h1>
+  <div class="cn">今天星期几？</div>
+  <p>What day is it today? · YCT 1 · Standard Course</p>
+</header>
+
+<nav>
+  <button data-go="vocab" class="active">🔊 Vocabulary</button>
+  <button data-go="tones">🎬 Tone Builder</button>
+  <button data-go="match">🔗 Match It</button>
+  <button data-go="fill">🧩 Fill the Blanks</button>
+</nav>
+
+<!-- ============ 1. VOCABULARY (male + female voice) ============ -->
+<section id="vocab">
+  <h2 class="sec-title">1 · Vocabulary — Listen &amp; Repeat</h2>
+  <p class="sec-sub">Tap 👦 for a boy's voice and 👧 for a girl's voice. Every word of Lesson 9 is here.</p>
+  <div class="card">
+    <div class="playall">
+      <button id="playAllM">👦 Play all (boy)</button>
+      <button id="playAllF">👧 Play all (girl)</button>
+      <span class="voice-note" id="voiceStatus">Loading voices…</span>
+    </div>
+    <div class="vocab-grid" id="vocabGrid"></div>
+  </div>
+</section>
+
+<!-- ============ 2. TONE BUILDER ANIMATION ============ -->
+<section id="tones" style="display:none">
+  <h2 class="sec-title">2 · Tone Builder — Watch the word grow</h2>
+  <p class="sec-sub">Pick a word. Each syllable is its own little word with its own tone and meaning. Watch them drop
+     into their boxes one by one — and hear each sound — then read the whole meaning on top.</p>
+  <div class="card">
+    <div class="tb-picker" id="tbPicker"></div>
+    <div class="tb-stage">
+      <div class="tb-meaning" id="tbMeaning">Choose a word below ⬇️</div>
+      <div class="tb-falls" id="tbFalls"></div>
+      <div class="boxes" id="tbBoxes"></div>
+    </div>
+    <div class="tb-controls">
+      <button id="tbPlay" style="background:#12b3a6">▶ Play animation</button>
+      <button id="tbReplayVoice" style="background:#ff7aa2">🔊 Say whole word</button>
+    </div>
+    <div class="tone-legend">
+      <span style="background:var(--t1)">1st tone ˉ</span>
+      <span style="background:var(--t2)">2nd tone ˊ</span>
+      <span style="background:var(--t3)">3rd tone ˇ</span>
+      <span style="background:var(--t4)">4th tone ˋ</span>
+      <span style="background:var(--t5)">neutral ·</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. MATCH ============ -->
+<section id="match" style="display:none">
+  <h2 class="sec-title">3 · Match the Pinyin to the Meaning</h2>
+  <p class="sec-sub">20 words in 4 groups of 5. Tap a pinyin on the left, then tap its English meaning on the right.</p>
+  <div class="card">
+    <div style="margin-bottom:14px">Score: <span class="score" id="matchScore">0 / 20</span></div>
+    <div id="matchZone"></div>
+    <button id="matchReset" style="border:none;padding:10px 16px;border-radius:22px;font-weight:700;cursor:pointer;color:#fff;background:#ff7aa2;margin-top:6px">↻ Shuffle &amp; Reset</button>
+  </div>
+</section>
+
+<!-- ============ 4. FILL THE BLANKS ============ -->
+<section id="fill" style="display:none">
+  <h2 class="sec-title">4 · Fill the Blanks — Build the Days of the Week</h2>
+  <p class="sec-sub">Drag the right character into each blank to complete the day.</p>
+  <div class="card">
+    <div class="fb-note">
+      ⭐ <b>星 (xīng)</b> means <b>star</b>. &nbsp;<b>星期 (xīngqī)</b> = "star-period" = <b>week</b>.
+      Every day of the week starts with 星期, then you add its number (or 天 for Sunday).
+    </div>
+    <div id="fbRows"></div>
+    <div class="fb-tiles" id="fbTiles"></div>
+    <div class="fb-actions">
+      <button id="fbCheck">✓ Check answers</button>
+      <button id="fbReset" style="background:#ff7aa2">↻ Reset</button>
+      <span class="msg" id="fbMsg"></span>
+    </div>
+  </div>
+</section>
+
+<footer>YCT 1 · Lesson 9 · 今天星期几？ — Interactive practice sheet</footer>
+
+<script>
+/* ================= DATA ================= */
+const toneColor = {1:'#e53935',2:'#fb8c00',3:'#43a047',4:'#1e88e5',5:'#9e9e9e'};
+
+// Full lesson vocabulary
+const VOCAB = [
+  {hz:'星期一', py:'xīngqīyī',  en:'Monday'},
+  {hz:'星期二', py:"xīngqī'èr", en:'Tuesday'},
+  {hz:'星期三', py:'xīngqīsān', en:'Wednesday'},
+  {hz:'星期四', py:'xīngqīsì',  en:'Thursday'},
+  {hz:'星期五', py:'xīngqīwǔ',  en:'Friday'},
+  {hz:'星期六', py:'xīngqīliù', en:'Saturday'},
+  {hz:'星期天', py:'xīngqītiān',en:'Sunday'},
+  {hz:'星期',   py:'xīngqī',    en:'week'},
+  {hz:'今天',   py:'jīntiān',   en:'today'},
+  {hz:'明天',   py:'míngtiān',  en:'tomorrow'},
+  {hz:'昨天',   py:'zuótiān',   en:'yesterday'},
+  {hz:'生日',   py:'shēngrì',   en:'birthday'},
+  {hz:'月',     py:'yuè',       en:'month'},
+  {hz:'号',     py:'hào',       en:'date (day of month)'},
+  {hz:'喜欢',   py:'xǐhuan',    en:'to like'},
+  {hz:'几',     py:'jǐ',        en:'how many / which'},
+  {hz:'你',     py:'nǐ',        en:'you'},
+  {hz:'是',     py:'shì',       en:'to be (is / am / are)'},
+  {hz:'很',     py:'hěn',       en:'very'},
+  {hz:'不',     py:'bù',        en:'not / no'}
+];
+
+// Tone-builder words: each syllable = char, pinyin, tone number, meaning
+const TONE_WORDS = [
+  {hz:'星期一', en:'Monday',    syl:[['星','xīng',1,'star'],['期','qī',1,'period'],['一','yī',1,'one']]},
+  {hz:'星期二', en:'Tuesday',   syl:[['星','xīng',1,'star'],['期','qī',1,'period'],['二','èr',4,'two']]},
+  {hz:'星期三', en:'Wednesday', syl:[['星','xīng',1,'star'],['期','qī',1,'period'],['三','sān',1,'three']]},
+  {hz:'星期四', en:'Thursday',  syl:[['星','xīng',1,'star'],['期','qī',1,'period'],['四','sì',4,'four']]},
+  {hz:'星期五', en:'Friday',    syl:[['星','xīng',1,'star'],['期','qī',1,'period'],['五','wǔ',3,'five']]},
+  {hz:'星期六', en:'Saturday',  syl:[['星','xīng',1,'star'],['期','qī',1,'period'],['六','liù',4,'six']]},
+  {hz:'星期天', en:'Sunday',    syl:[['星','xīng',1,'star'],['期','qī',1,'period'],['天','tiān',1,'day/sky']]},
+  {hz:'今天',   en:'today',     syl:[['今','jīn',1,'now/present'],['天','tiān',1,'day']]},
+  {hz:'明天',   en:'tomorrow',  syl:[['明','míng',2,'bright/next'],['天','tiān',1,'day']]},
+  {hz:'昨天',   en:'yesterday', syl:[['昨','zuó',2,'past/yester-'],['天','tiān',1,'day']]},
+  {hz:'生日',   en:'birthday',  syl:[['生','shēng',1,'birth/live'],['日','rì',4,'day/sun']]}
+];
+
+/* ================= VOICE (male + female) ================= */
+let zhVoices=[], maleVoice=null, femaleVoice=null;
+function pickVoices(){
+  const all = speechSynthesis.getVoices();
+  zhVoices = all.filter(v=>/zh|cmn|chinese|普通话|中文/i.test((v.lang||'')+(v.name||'')));
+  // Try to name-match a female and a male Chinese voice
+  femaleVoice = zhVoices.find(v=>/female|xiaoxiao|xiaoyi|婷|ting|mei|yaoyao|huihui|女/i.test(v.name))
+             || zhVoices[0] || all.find(v=>/female/i.test(v.name)) || all[0] || null;
+  maleVoice   = zhVoices.find(v=>/male|yunyang|yunxi|kangkang|云|男/i.test(v.name) && v!==femaleVoice)
+             || zhVoices.find(v=>v!==femaleVoice) || zhVoices[0] || all[0] || null;
+  const status=document.getElementById('voiceStatus');
+  if(zhVoices.length===0){
+    status.textContent='No Chinese voice found on this device — install a Chinese (zh-CN) voice for best sound. Pitch is used to tell boy/girl apart.';
+  } else if(zhVoices.length===1){
+    status.textContent='1 Chinese voice found — boy/girl are made by changing the pitch.';
+  } else {
+    status.textContent=zhVoices.length+' Chinese voices found. 👦 = '+ (maleVoice?maleVoice.name:'—') +', 👧 = '+(femaleVoice?femaleVoice.name:'—');
+  }
+}
+speechSynthesis.onvoiceschanged = pickVoices;
+pickVoices();
+
+function speak(text, gender, rate){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='zh-CN'; u.rate=rate||0.8;
+  if(gender==='female'){ if(femaleVoice)u.voice=femaleVoice; u.pitch=1.5; }
+  else { if(maleVoice)u.voice=maleVoice; u.pitch=0.6; }
+  speechSynthesis.speak(u);
+  return u;
+}
+// Speak a list one after another
+function speakSequence(items, gender){
+  speechSynthesis.cancel();
+  items.forEach(t=>{
+    const u=new SpeechSynthesisUtterance(t);
+    u.lang='zh-CN'; u.rate=0.8;
+    if(gender==='female'){ if(femaleVoice)u.voice=femaleVoice; u.pitch=1.5; }
+    else { if(maleVoice)u.voice=maleVoice; u.pitch=0.6; }
+    speechSynthesis.speak(u);
+  });
+}
+
+/* ================= 1. VOCAB GRID ================= */
+const grid=document.getElementById('vocabGrid');
+VOCAB.forEach(v=>{
+  const d=document.createElement('div'); d.className='vcard';
+  d.innerHTML=`<div class="hanzi">${v.hz}</div>
+    <div class="py">${v.py}</div>
+    <div class="en">${v.en}</div>
+    <div class="voice-btns">
+      <button class="btn-m">👦 Boy</button>
+      <button class="btn-f">👧 Girl</button>
+    </div>`;
+  d.querySelector('.btn-m').onclick=()=>speak(v.hz,'male');
+  d.querySelector('.btn-f').onclick=()=>speak(v.hz,'female');
+  grid.appendChild(d);
+});
+document.getElementById('playAllM').onclick=()=>speakSequence(VOCAB.map(v=>v.hz),'male');
+document.getElementById('playAllF').onclick=()=>speakSequence(VOCAB.map(v=>v.hz),'female');
+
+/* ================= 2. TONE BUILDER ================= */
+const tbPicker=document.getElementById('tbPicker');
+const tbMeaning=document.getElementById('tbMeaning');
+const tbFalls=document.getElementById('tbFalls');
+const tbBoxes=document.getElementById('tbBoxes');
+let currentWord=TONE_WORDS[0];
+
+TONE_WORDS.forEach((w,i)=>{
+  const b=document.createElement('button');
+  b.textContent=w.hz;
+  b.onclick=()=>{ setWord(w); [...tbPicker.children].forEach(c=>c.classList.remove('active')); b.classList.add('active'); };
+  if(i===0)b.classList.add('active');
+  tbPicker.appendChild(b);
+});
+
+function setWord(w){
+  currentWord=w;
+  tbMeaning.textContent='';
+  tbFalls.innerHTML=''; tbBoxes.innerHTML='';
+  // empty boxes
+  w.syl.forEach(()=>{
+    const box=document.createElement('div'); box.className='tbox';
+    box.innerHTML='<div class="bh">&nbsp;</div>';
+    tbBoxes.appendChild(box);
+  });
+}
+setWord(currentWord);
+
+function playAnim(){
+  const w=currentWord;
+  tbMeaning.textContent='';
+  tbFalls.innerHTML='';
+  tbBoxes.innerHTML='';
+  const n=w.syl.length;
+  const boxes=[];
+  w.syl.forEach(()=>{
+    const box=document.createElement('div'); box.className='tbox';
+    box.innerHTML='<div class="bh">&nbsp;</div>';
+    tbBoxes.appendChild(box); boxes.push(box);
+  });
+  // create falling chars
+  const stageW = tbBoxes.getBoundingClientRect().width || 500;
+  w.syl.forEach((s,i)=>{
+    const [ch,py,tone,mean]=s;
+    setTimeout(()=>{
+      // falling element
+      const box=boxes[i];
+      const boxRect=box.getBoundingClientRect();
+      const parentRect=tbFalls.getBoundingClientRect();
+      const fall=document.createElement('div');
+      fall.className='fall';
+      fall.style.color=toneColor[tone];
+      fall.style.left=(boxRect.left-parentRect.left + boxRect.width/2 - 55)+'px';
+      fall.innerHTML=`<div>${ch}</div><div style="font-size:15px">${py}</div>`;
+      tbFalls.appendChild(fall);
+      requestAnimationFrame(()=>{ fall.classList.add('show'); fall.style.top='40px'; });
+      // sound for this syllable
+      speak(ch,'female',0.75);
+      // land into box
+      setTimeout(()=>{
+        fall.remove();
+        box.classList.add('filled');
+        box.style.borderColor=toneColor[tone];
+        box.innerHTML=`<div class="bh" style="color:${toneColor[tone]}">${ch}</div>
+          <div class="bp" style="color:${toneColor[tone]}">${py}</div>
+          <div class="bm">${mean}</div>`;
+        // after last syllable, show whole meaning + say full word
+        if(i===n-1){
+          setTimeout(()=>{
+            tbMeaning.textContent=`${w.hz} = ${w.en}`;
+            speak(w.hz,'male',0.8);
+          },500);
+        }
+      },850);
+    }, i*1500);
+  });
+}
+document.getElementById('tbPlay').onclick=playAnim;
+document.getElementById('tbReplayVoice').onclick=()=>speak(currentWord.hz,'female',0.75);
+
+/* ================= 3. MATCH ================= */
+// 4 sections of 5
+const MATCH_SECTIONS = [
+  {name:'Group A · Days 1', pairs:[
+    ['xīngqīyī','Monday'],['xīngqī’èr','Tuesday'],['xīngqīsān','Wednesday'],['xīngqīsì','Thursday'],['xīngqīwǔ','Friday']]},
+  {name:'Group B · Days 2 & Time', pairs:[
+    ['xīngqīliù','Saturday'],['xīngqītiān','Sunday'],['xīngqī','week'],['jīntiān','today'],['míngtiān','tomorrow']]},
+  {name:'Group C · Dates', pairs:[
+    ['zuótiān','yesterday'],['yuè','month'],['hào','date'],['shēngrì','birthday'],['jǐ','how many / which']]},
+  {name:'Group D · Useful words', pairs:[
+    ['xǐhuan','to like'],['nǐ','you'],['shì','to be (is)'],['hěn','very'],['bù','not']]}
+];
+let matchScore=0, totalPairs=20, selectedPy=null;
+const matchZone=document.getElementById('matchZone');
+const scoreEl=document.getElementById('matchScore');
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function buildMatch(){
+  matchZone.innerHTML=''; matchScore=0; selectedPy=null; updateScore();
+  MATCH_SECTIONS.forEach((sec,si)=>{
+    const wrap=document.createElement('div'); wrap.className='match-sec';
+    const left=shuffle(sec.pairs), right=shuffle(sec.pairs);
+    let leftHTML='<div class="col"><h4>PINYIN</h4>';
+    left.forEach(p=>{ leftHTML+=`<div class="mitem" data-py="${p[0]}" data-sec="${si}">${p[0]}</div>`; });
+    leftHTML+='</div>';
+    let rightHTML='<div class="col"><h4>ENGLISH</h4>';
+    right.forEach(p=>{ rightHTML+=`<div class="mitem" data-en="${p[1]}" data-key="${p[0]}" data-sec="${si}">${p[1]}</div>`; });
+    rightHTML+='</div>';
+    wrap.innerHTML=`<div class="match-head">${sec.name}</div><div class="match-wrap">${leftHTML}${rightHTML}</div>`;
+    matchZone.appendChild(wrap);
+  });
+  matchZone.querySelectorAll('[data-py]').forEach(el=>el.onclick=()=>selectPy(el));
+  matchZone.querySelectorAll('[data-en]').forEach(el=>el.onclick=()=>selectEn(el));
+}
+function selectPy(el){
+  if(el.classList.contains('done'))return;
+  matchZone.querySelectorAll('[data-py].selected').forEach(x=>x.classList.remove('selected'));
+  selectedPy=el; el.classList.add('selected');
+}
+function selectEn(el){
+  if(el.classList.contains('done')||!selectedPy)return;
+  if(el.dataset.key===selectedPy.dataset.py){
+    el.classList.add('done'); selectedPy.classList.add('done');
+    selectedPy.classList.remove('selected'); selectedPy=null;
+    matchScore++; updateScore();
+  } else {
+    el.classList.add('wrong'); const s=selectedPy;
+    setTimeout(()=>{el.classList.remove('wrong'); if(s)s.classList.remove('selected');},400);
+    selectedPy=null;
+  }
+}
+function updateScore(){ scoreEl.textContent=matchScore+' / '+totalPairs; if(matchScore===totalPairs) scoreEl.textContent+=' 🎉 Perfect!'; }
+document.getElementById('matchReset').onclick=buildMatch;
+buildMatch();
+
+/* ================= 4. FILL THE BLANKS (drag & drop) ================= */
+const FB_DAYS = [
+  {ans:'一', full:'星期一', en:'Monday',    tone:'一 yī · 1st tone'},
+  {ans:'二', full:'星期二', en:'Tuesday',   tone:'二 èr · 4th tone'},
+  {ans:'三', full:'星期三', en:'Wednesday', tone:'三 sān · 1st tone'},
+  {ans:'四', full:'星期四', en:'Thursday',  tone:'四 sì · 4th tone'},
+  {ans:'五', full:'星期五', en:'Friday',    tone:'五 wǔ · 3rd tone'},
+  {ans:'六', full:'星期六', en:'Saturday',  tone:'六 liù · 4th tone'},
+  {ans:'天', full:'星期天', en:'Sunday',    tone:'天 tiān · 1st tone'}
+];
+const fbRows=document.getElementById('fbRows');
+const fbTiles=document.getElementById('fbTiles');
+const fbMsg=document.getElementById('fbMsg');
+
+function buildFill(){
+  fbMsg.textContent=''; fbRows.innerHTML=''; fbTiles.innerHTML='';
+  FB_DAYS.forEach((d,i)=>{
+    const row=document.createElement('div'); row.className='fb-row';
+    row.innerHTML=`<span class="fb-fixed">星期</span>
+      <div class="fb-slot" data-ans="${d.ans}" data-i="${i}"></div>
+      <span class="fb-eq">=</span>
+      <span class="fb-en">${d.en}</span>
+      <span class="fb-tone" style="display:none">${d.tone}</span>`;
+    fbRows.appendChild(row);
+  });
+  // tiles shuffled
+  shuffle(FB_DAYS.map(d=>d.ans)).forEach(ch=>{
+    const t=document.createElement('div'); t.className='tile'; t.textContent=ch; t.draggable=true; t.dataset.ch=ch;
+    fbTiles.appendChild(t);
+  });
+  wireDnD();
+}
+
+function wireDnD(){
+  const slots=fbRows.querySelectorAll('.fb-slot');
+  const tiles=fbTiles.querySelectorAll('.tile');
+  let dragged=null;
+
+  tiles.forEach(t=>{
+    t.addEventListener('dragstart',e=>{ if(t.classList.contains('used')){e.preventDefault();return;} dragged=t; t.classList.add('dragging'); e.dataTransfer.setData('text',t.dataset.ch); });
+    t.addEventListener('dragend',()=>{ t.classList.remove('dragging'); dragged=null; });
+    // touch support
+    t.addEventListener('touchstart',e=>{ if(!t.classList.contains('used')) dragged=t; },{passive:true});
+  });
+  slots.forEach(s=>{
+    s.addEventListener('dragover',e=>e.preventDefault());
+    s.addEventListener('drop',e=>{ e.preventDefault(); if(dragged) dropInto(s,dragged); });
+    // touch: tap slot after tapping tile
+    s.addEventListener('touchend',e=>{ if(dragged){ e.preventDefault(); dropInto(s,dragged);} },{passive:false});
+    s.addEventListener('click',()=>{ if(dragged) dropInto(s,dragged); });
+  });
+}
+function dropInto(slot,tile){
+  if(slot.dataset.filledBy){ // return previous tile
+    const prev=fbTiles.querySelector('.tile[data-ch="'+slot.dataset.filledBy+'"].used');
+    if(prev) prev.classList.remove('used');
+  }
+  slot.textContent=tile.dataset.ch;
+  slot.classList.add('filled');
+  slot.dataset.filledBy=tile.dataset.ch;
+  tile.classList.add('used');
+  // clear a tile that may have been used elsewhere for same char handled above
+}
+document.getElementById('fbCheck').onclick=()=>{
+  const slots=fbRows.querySelectorAll('.fb-slot'); let ok=0, filled=0;
+  slots.forEach(s=>{
+    const tone=s.parentElement.querySelector('.fb-tone');
+    if(s.textContent){ filled++;
+      if(s.textContent===s.dataset.ans){ s.style.borderColor='#43a047'; s.style.color='#2e7d32'; s.style.background='#e8f8ee'; ok++; tone.style.display='inline'; }
+      else { s.style.borderColor='#e53935'; s.style.color='#e53935'; s.style.background='#fdecea'; tone.style.display='none'; }
+    }
+  });
+  if(ok===FB_DAYS.length){ fbMsg.style.color='#2e7d32'; fbMsg.textContent='🎉 All correct! 星期 + number = the day.'; speak('星期一星期二星期三','female',0.85);}
+  else { fbMsg.style.color='#e65100'; fbMsg.textContent=`${ok} / ${FB_DAYS.length} correct — keep going!`; }
+};
+document.getElementById('fbReset').onclick=buildFill;
+buildFill();
+
+/* ================= NAV ================= */
+const secs=['vocab','tones','match','fill'];
+document.querySelectorAll('nav button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    secs.forEach(s=>document.getElementById(s).style.display = (s===b.dataset.go?'block':'none'));
+    speechSynthesis.cancel();
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+});
+</script>
+</body>
+</html>
