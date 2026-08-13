@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New HSK 1 · Lesson 10 — 这儿的苹果真便宜!</title>
+<style>
+  :root{
+    --red:#d64541; --red-dark:#b3322f; --pink:#fdeceb; --pink2:#fbe0de;
+    --ink:#2b2b2b; --muted:#7a7a7a; --green:#2e9e5b; --green-bg:#e5f6ec;
+    --gold:#e6a817; --card:#ffffff; --line:#f0d5d3; --bg:#fff6f5;
+    --shadow:0 6px 20px rgba(180,60,55,.12);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:linear-gradient(180deg,#fff6f5,#fdeceb 60%,#fff);color:var(--ink);line-height:1.5}
+  .wrap{max-width:960px;margin:0 auto;padding:18px 16px 60px}
+  header{background:linear-gradient(120deg,var(--red),var(--red-dark));color:#fff;border-radius:18px;
+    padding:22px 24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  header .lesson-badge{display:inline-block;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);
+    border-radius:8px;padding:3px 12px;font-size:13px;letter-spacing:1px;margin-bottom:8px}
+  header h1{margin:2px 0 2px;font-size:30px;letter-spacing:2px}
+  header .pin{opacity:.9;font-size:14px;margin-top:4px}
+  header .en{opacity:.85;font-size:15px;font-style:italic}
+  header .big{position:absolute;right:-6px;top:-16px;font-size:130px;font-weight:800;opacity:.13;line-height:1}
+
+  nav{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 14px}
+  nav button{flex:1 1 auto;min-width:130px;border:none;cursor:pointer;padding:12px 10px;border-radius:12px;
+    background:#fff;color:var(--red-dark);font-size:15px;font-weight:600;border:1px solid var(--line);
+    box-shadow:0 2px 6px rgba(180,60,55,.06);transition:.15s}
+  nav button:hover{transform:translateY(-1px)}
+  nav button.active{background:var(--red);color:#fff;border-color:var(--red)}
+
+  .panel{display:none;animation:fade .25s ease}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .panel-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+  .panel-head h2{font-size:19px;margin:0;color:var(--red-dark)}
+  .panel-head p{margin:0;color:var(--muted);font-size:13px}
+  .btn{cursor:pointer;border:none;background:var(--red);color:#fff;padding:9px 16px;border-radius:10px;
+    font-size:14px;font-weight:600;box-shadow:0 2px 8px rgba(180,60,55,.2);transition:.15s}
+  .btn:hover{background:var(--red-dark)}
+  .btn.ghost{background:#fff;color:var(--red-dark);border:1px solid var(--line)}
+  .btn.small{padding:6px 12px;font-size:13px}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+  /* Flashcards */
+  .fc-stage{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .flashcard{width:100%;max-width:420px;height:340px;perspective:1400px;cursor:pointer}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d}
+  .flashcard.flipped .fc-inner{transform:rotateY(180deg)}
+  .fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;background:var(--card);
+    box-shadow:var(--shadow);border:1px solid var(--line);display:flex;flex-direction:column;
+    align-items:center;justify-content:center;padding:22px;text-align:center}
+  .fc-front .char{font-size:96px;color:var(--red-dark);line-height:1}
+  .fc-front .hint{margin-top:14px;color:var(--muted);font-size:13px}
+  .fc-back{transform:rotateY(180deg);justify-content:flex-start;align-items:stretch}
+  .fc-back .char{font-size:46px;color:var(--red-dark);text-align:center;margin-bottom:2px}
+  .fc-back .pin{text-align:center;font-size:22px;color:var(--gold);font-weight:600}
+  .fc-back .mean{text-align:center;font-size:16px;margin:6px 0 12px}
+  .fc-back .ety-label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--red);
+    border-top:1px dashed var(--line);padding-top:10px;margin-bottom:4px}
+  .fc-back .ety{font-size:14px;color:#444;text-align:left;overflow:auto}
+  .fc-controls{display:flex;align-items:center;gap:14px}
+  .counter{font-size:14px;color:var(--muted);min-width:70px;text-align:center}
+  .progress{width:100%;max-width:420px;height:7px;background:var(--pink2);border-radius:6px;overflow:hidden}
+  .progress > i{display:block;height:100%;background:var(--red);width:0;transition:.3s}
+
+  /* generic cards grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+
+  /* Drag & drop */
+  .dd-cols{display:grid;grid-template-columns:1fr;gap:20px}
+  @media(min-width:640px){.dd-cols{grid-template-columns:1fr 1fr}}
+  .dd-targets{display:flex;flex-direction:column;gap:10px}
+  .dd-target{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);
+    border-radius:12px;padding:10px 12px;min-height:60px}
+  .dd-target .mean{flex:1;font-size:15px}
+  .dd-slot{width:78px;min-height:44px;border:2px dashed var(--pink2);border-radius:10px;display:flex;
+    align-items:center;justify-content:center;background:var(--pink);font-size:26px;color:var(--red-dark);transition:.15s}
+  .dd-slot.over{border-color:var(--red);background:var(--pink2)}
+  .dd-slot.correct{border-style:solid;border-color:var(--green);background:var(--green-bg)}
+  .dd-slot.wrong{border-style:solid;border-color:var(--red);background:#fde3e2}
+  .dd-bank{display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start;background:#fff;border:1px solid var(--line);
+    border-radius:12px;padding:14px;min-height:120px}
+  .chip{cursor:grab;user-select:none;background:linear-gradient(160deg,#fff,#fbeceb);border:1px solid var(--line);
+    border-radius:10px;padding:8px 14px;font-size:26px;color:var(--red-dark);box-shadow:0 2px 6px rgba(180,60,55,.1)}
+  .chip:active{cursor:grabbing}
+  .chip.dragging{opacity:.4}
+  .chip.used{visibility:hidden}
+
+  /* Match the following */
+  .match-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .match-col{display:flex;flex-direction:column;gap:10px}
+  .match-item{cursor:pointer;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;
+    font-size:16px;text-align:center;transition:.15s}
+  .match-item.char{font-size:26px;color:var(--red-dark)}
+  .match-item.selected{border-color:var(--red);background:var(--pink2);transform:scale(1.02)}
+  .match-item.matched{background:var(--green-bg);border-color:var(--green);color:var(--green);
+    cursor:default;opacity:.75}
+  .match-item.matched.char{color:var(--green)}
+  .match-item.shake{animation:shake .35s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+  /* Fill in blanks */
+  .fib-q{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+  .fib-sent{font-size:20px;line-height:1.9;margin-bottom:10px}
+  .fib-sent .blank{display:inline-block;min-width:70px;border-bottom:2px solid var(--red);
+    text-align:center;color:var(--red-dark);font-weight:700;padding:0 6px}
+  .fib-sent .blank.filled{border-bottom-color:var(--green);color:var(--green)}
+  .fib-en{color:var(--muted);font-size:13px;margin-bottom:12px}
+  .fib-opts{display:flex;flex-wrap:wrap;gap:8px}
+  .opt{cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;
+    font-size:18px;color:var(--red-dark);transition:.15s}
+  .opt:hover{background:var(--pink)}
+  .opt.chosen{background:var(--red);color:#fff;border-color:var(--red)}
+  .opt.correct{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+  .opt.wrong{background:#fde3e2;border-color:var(--red);color:var(--red)}
+  .opt.disabled{pointer-events:none;opacity:.85}
+
+  /* Audio speaker */
+  .speaker{cursor:pointer;border:none;background:var(--pink);color:var(--red-dark);border-radius:50%;
+    width:46px;height:46px;font-size:22px;box-shadow:0 2px 8px rgba(180,60,55,.18);transition:.15s;
+    display:inline-flex;align-items:center;justify-content:center}
+  .speaker:hover{background:var(--red);color:#fff}
+  .speaker.big{width:58px;height:58px;font-size:28px}
+  .speaker.playing{animation:pulse .6s infinite;background:var(--red);color:#fff}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+  .audio-row{display:flex;justify-content:center;margin-bottom:8px}
+
+  /* Choose-the-meaning quiz */
+  .quiz-card{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);
+    padding:24px 22px;text-align:center;max-width:520px;margin:0 auto}
+  .quiz-word{font-size:66px;color:var(--red-dark);line-height:1.1}
+  .quiz-pin{color:var(--gold);font-size:20px;font-weight:600;margin-top:2px}
+  .quiz-ask{color:var(--muted);font-size:14px;margin:16px 0 12px}
+  .quiz-opts{display:flex;flex-direction:column;gap:10px}
+  .qopt{cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:12px;padding:13px 16px;
+    font-size:16px;transition:.15s;text-align:left}
+  .qopt:hover{background:var(--pink)}
+  .qopt.correct{background:var(--green-bg);border-color:var(--green);color:var(--green);font-weight:600}
+  .qopt.wrong{background:#fde3e2;border-color:var(--red);color:var(--red)}
+  .qopt.disabled{pointer-events:none}
+  .quiz-next{margin-top:16px;display:flex;justify-content:center}
+  .audio-note{color:var(--muted);font-size:12px;text-align:center;margin-top:10px}
+
+  .score{font-weight:700;color:var(--red-dark)}
+  .banner{display:none;background:var(--green-bg);border:1px solid var(--green);color:var(--green);
+    border-radius:12px;padding:12px 16px;font-weight:600;margin-bottom:14px;text-align:center}
+  .banner.show{display:block}
+  footer{margin-top:34px;text-align:center;color:var(--muted);font-size:12px}
+  .pill{display:inline-block;background:var(--pink2);color:var(--red-dark);border-radius:20px;
+    padding:3px 12px;font-size:12px;margin-left:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="big">10</div>
+    <div class="lesson-badge">NEW HSK 1 · LESSON 10</div>
+    <h1>这儿的苹果真便宜!</h1>
+    <div class="pin">Zhèr de píngguǒ zhēn piányi!</div>
+    <div class="en">The apples here are really affordable! · 23 new words</div>
+  </header>
+
+  <nav>
+    <button data-tab="cards" class="active">🎴 Flashcards</button>
+    <button data-tab="drag">✋ Drag &amp; Drop</button>
+    <button data-tab="choose">🔊 Choose Meaning</button>
+    <button data-tab="match">🔗 Match</button>
+    <button data-tab="fill">✏️ Fill in Blanks</button>
+  </nav>
+
+  <!-- FLASHCARDS -->
+  <section id="cards" class="panel active">
+    <div class="panel-head">
+      <div><h2>Flashcards <span class="pill" id="fc-pill">1 / 23</span></h2>
+        <p>Tap the card to flip: character → pinyin, meaning &amp; etymology.</p></div>
+      <div class="toolbar">
+        <button class="btn ghost small" id="fc-shuffle">🔀 Shuffle</button>
+        <button class="btn ghost small" id="fc-reset">↺ Reset order</button>
+      </div>
+    </div>
+    <div class="fc-stage">
+      <div class="progress"><i id="fc-bar"></i></div>
+      <div class="flashcard" id="flashcard">
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <div class="audio-row"><button class="speaker big" id="fc-speak" title="Listen">🔊</button></div>
+            <div class="char" id="fc-char">杯子</div>
+            <div class="hint">tap card to flip ↻</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="char" id="fc-bchar">杯子</div>
+            <div class="pin" id="fc-pin">bēizi</div>
+            <div class="mean" id="fc-mean">cup; glass</div>
+            <div class="ety-label">Etymology</div>
+            <div class="ety" id="fc-ety"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-controls">
+        <button class="btn" id="fc-prev">‹ Prev</button>
+        <span class="counter" id="fc-counter">1 / 23</span>
+        <button class="btn" id="fc-next">Next ›</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- DRAG & DROP -->
+  <section id="drag" class="panel">
+    <div class="panel-head">
+      <div><h2>Drag &amp; Drop the Characters</h2>
+        <p>Drag each character from the bank into the box that matches its meaning.</p></div>
+      <div class="toolbar">
+        <span class="score" id="dd-score"></span>
+        <button class="btn ghost small" id="dd-check">✓ Check</button>
+        <button class="btn small" id="dd-new">New round</button>
+      </div>
+    </div>
+    <div class="banner" id="dd-banner">🎉 All correct! Great job.</div>
+    <div class="dd-cols">
+      <div class="dd-targets" id="dd-targets"></div>
+      <div>
+        <p style="margin:0 0 8px;color:var(--muted);font-size:13px">Character bank — drag from here:</p>
+        <div class="dd-bank" id="dd-bank"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHOOSE THE MEANING (audio multiple choice) -->
+  <section id="choose" class="panel">
+    <div class="panel-head">
+      <div><h2>Choose the Meaning <span class="pill" id="qz-pill">1 / 23</span></h2>
+        <p>Listen to the word, read the Mandarin, then choose the correct English meaning.</p></div>
+      <div class="toolbar">
+        <span class="score" id="qz-score">0 correct</span>
+        <button class="btn small" id="qz-new">↺ New round</button>
+      </div>
+    </div>
+    <div class="progress" style="max-width:520px;margin:0 auto 16px"><i id="qz-bar"></i></div>
+    <div class="banner" id="qz-banner"></div>
+    <div class="quiz-card" id="qz-card">
+      <div class="audio-row"><button class="speaker big" id="qz-speak" title="Listen">🔊</button></div>
+      <div class="quiz-word" id="qz-word">杯子</div>
+      <div class="quiz-pin" id="qz-pin">bēizi</div>
+      <div class="quiz-ask">What does this word mean?</div>
+      <div class="quiz-opts" id="qz-opts"></div>
+      <div class="quiz-next"><button class="btn" id="qz-next" style="display:none">Next ›</button></div>
+      <div class="audio-note">🔊 Tap the speaker to hear it again (audio uses your browser's Chinese voice).</div>
+    </div>
+  </section>
+
+  <!-- MATCH -->
+  <section id="match" class="panel">
+    <div class="panel-head">
+      <div><h2>Match the Following</h2>
+        <p>Click a character on the left, then its meaning on the right.</p></div>
+      <div class="toolbar">
+        <span class="score" id="mt-score"></span>
+        <button class="btn small" id="mt-new">New round</button>
+      </div>
+    </div>
+    <div class="banner" id="mt-banner">🎉 Perfect match! All pairs found.</div>
+    <div class="match-cols">
+      <div class="match-col" id="mt-left"></div>
+      <div class="match-col" id="mt-right"></div>
+    </div>
+  </section>
+
+  <!-- FILL IN BLANKS -->
+  <section id="fill" class="panel">
+    <div class="panel-head">
+      <div><h2>Fill in the Blanks</h2>
+        <p>Choose the character or word that best completes each sentence.</p></div>
+      <div class="toolbar">
+        <span class="score" id="fib-score"></span>
+        <button class="btn small" id="fib-reset">↺ Try again</button>
+      </div>
+    </div>
+    <div class="banner" id="fib-banner"></div>
+    <div id="fib-list"></div>
+  </section>
+
+  <footer>New HSK Course 1 · Lesson 10 — interactive study app · characters, pinyin &amp; etymology</footer>
+</div>
+
+<script>
+/* ---------- DATA: Lesson 10 vocabulary (23 new words) ---------- */
+const VOCAB = [
+ {c:"杯子",p:"bēizi",m:"cup; glass",e:"杯 = 木 (wood/tree) + 不 (phonetic) — cups were once carved from wood. 子 is a common noun suffix (originally ‘child’)."},
+ {c:"售货员",p:"shòuhuòyuán",m:"shop assistant; salesperson",e:"Literally ‘sell (售) – goods (货) – person (员)’. 货 and 员 both contain 贝 (cowrie shell = money)."},
+ {c:"这边",p:"zhèbiān",m:"here; this side",e:"这 (this) + 边 ‘side/edge’, which carries the 辶 ‘walk’ radical — a place you move toward."},
+ {c:"钱",p:"qián",m:"money",e:"钅/金 (metal, gold) radical + 戋 (phonetic). Refers to metal coins used as currency."},
+ {c:"这些",p:"zhèxiē",m:"these",e:"这 (this) + 些 ‘some’ (此 phonetic + 二 ‘two/plural’). Marks a plural group nearby."},
+ {c:"块",p:"kuài",m:"measure word for money; lump",e:"土 (earth) radical — originally a ‘clod/lump of earth’, later the spoken measure for a unit of money (yuan)."},
+ {c:"那些",p:"nàxiē",m:"those",e:"那 (that) + 些 ‘some’. The distant counterpart of 这些 (these)."},
+ {c:"这儿",p:"zhèr",m:"here",e:"这 (this) + 儿 (‑er suffix, from 儿 ‘child’, drawn as a person’s legs). Northern spoken form for ‘here’."},
+ {c:"水果",p:"shuǐguǒ",m:"fruit",e:"水 (water — pictograph of a flowing stream) + 果 (fruit — a picture of fruit 田 sitting on a tree 木)."},
+ {c:"少",p:"shǎo",m:"few; little",e:"Built on 小 ‘small’ with an extra stroke — the idea of an amount reduced to ‘few, little’."},
+ {c:"斤",p:"jīn",m:"jin (unit ≈ 500 g)",e:"A pictograph of an axe/adze; borrowed as a standard weight unit still used in markets today."},
+ {c:"苹果",p:"píngguǒ",m:"apple",e:"苹 = 艹 (grass/plant) radical + 平 (phonetic ‘píng’) + 果 ‘fruit’ — literally the ‘píng fruit’."},
+ {c:"便宜",p:"piányi",m:"cheap; affordable",e:"便 (亻 person + 更) ‘convenient’ + 宜 (宀 roof + 且) ‘suitable, fitting’ — a fitting, easy price."},
+ {c:"商店",p:"shāngdiàn",m:"shop; store",e:"商 ‘trade, commerce’ + 店 (广 building/shelter radical + 占 phonetic) ‘shop’ — a building for trade."},
+ {c:"衣服",p:"yīfu",m:"clothes",e:"衣 (a pictograph of a robe with collar and sleeves) + 服 ‘garment; to wear’."},
+ {c:"件",p:"jiàn",m:"measure word: piece / item",e:"亻 (person) + 牛 (ox) — dividing an ox into parts; hence a ‘piece / individual item’, used for clothing and matters."},
+ {c:"元",p:"yuán",m:"yuan (unit of currency)",e:"A pictograph of a person with the head stressed → ‘head, first, primary’. Adopted as the base unit of currency."},
+ {c:"怎么样",p:"zěnmeyàng",m:"how; how about",e:"怎 (乍 phonetic + 心 heart) ‘how’ + 么 (particle) + 样 ‘manner, appearance’ (木 wood + 羊 phonetic)."},
+ {c:"贵",p:"guì",m:"expensive",e:"Contains 贝 (cowrie shell = money) at the base — something of high monetary value, i.e. expensive."},
+ {c:"穿",p:"chuān",m:"to wear; put on",e:"穴 (cave/hole) + 牙 (tooth) — ‘to bore through a hole’; extended to threading the body through clothing = ‘to wear’."},
+ {c:"女",p:"nǚ",m:"female; woman",e:"An ancient pictograph of a woman kneeling with hands folded. One of the oldest characters and a common radical."},
+ {c:"男",p:"nán",m:"male; man",e:"田 (field) + 力 (strength / a plow) — the one who applies strength in the fields; ‘man’."},
+ {c:"那儿",p:"nàr",m:"there; that place",e:"那 (that) + 儿 (‑er suffix). The distant counterpart of 这儿 (here)."}
+];
+
+/* ---------- helpers ---------- */
+const $=(s,el=document)=>el.querySelector(s);
+const $$=(s,el=document)=>[...el.querySelectorAll(s)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ---------- audio (Chinese text-to-speech) ---------- */
+let zhVoice=null;
+function pickVoice(){
+  const vs=speechSynthesis.getVoices();
+  zhVoice=vs.find(v=>/zh[-_]CN/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||
+          vs.find(v=>/chinese|mandarin/i.test(v.name))||null;
+}
+if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function speak(text,btn){
+  if(!('speechSynthesis' in window))return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='zh-CN'; u.rate=.85; if(zhVoice)u.voice=zhVoice;
+  if(btn){btn.classList.add('playing');u.onend=u.onerror=()=>btn.classList.remove('playing');}
+  speechSynthesis.speak(u);
+}
+
+/* ---------- tabs ---------- */
+$$("nav button").forEach(b=>b.addEventListener("click",()=>{
+  $$("nav button").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+  $$(".panel").forEach(p=>p.classList.remove("active"));
+  $("#"+b.dataset.tab).classList.add("active");
+}));
+
+/* ================= FLASHCARDS ================= */
+let fcOrder=VOCAB.map((_,i)=>i), fcIdx=0;
+const flashcard=$("#flashcard");
+function renderCard(){
+  const w=VOCAB[fcOrder[fcIdx]];
+  flashcard.classList.remove("flipped");
+  $("#fc-char").textContent=w.c;
+  $("#fc-bchar").textContent=w.c;
+  $("#fc-pin").textContent=w.p;
+  $("#fc-mean").textContent=w.m;
+  $("#fc-ety").textContent=w.e;
+  const label=(fcIdx+1)+" / "+VOCAB.length;
+  $("#fc-counter").textContent=label; $("#fc-pill").textContent=label;
+  $("#fc-bar").style.width=((fcIdx+1)/VOCAB.length*100)+"%";
+}
+flashcard.addEventListener("click",()=>flashcard.classList.toggle("flipped"));
+$("#fc-next").addEventListener("click",()=>{fcIdx=(fcIdx+1)%VOCAB.length;renderCard();});
+$("#fc-prev").addEventListener("click",()=>{fcIdx=(fcIdx-1+VOCAB.length)%VOCAB.length;renderCard();});
+$("#fc-shuffle").addEventListener("click",()=>{fcOrder=shuffle(fcOrder);fcIdx=0;renderCard();});
+$("#fc-reset").addEventListener("click",()=>{fcOrder=VOCAB.map((_,i)=>i);fcIdx=0;renderCard();});
+$("#fc-speak").addEventListener("click",e=>{e.stopPropagation();speak(VOCAB[fcOrder[fcIdx]].c,$("#fc-speak"));});
+renderCard();
+
+/* ================= CHOOSE THE MEANING (audio MC quiz) ================= */
+let qzQueue=[], qzPos=0, qzRight=0, qzAnswered=false;
+function newQuizRound(){
+  qzQueue=shuffle(VOCAB.map((_,i)=>i)); qzPos=0; qzRight=0;
+  $("#qz-banner").classList.remove("show");
+  renderQuiz();
+}
+function renderQuiz(){
+  qzAnswered=false;
+  const w=VOCAB[qzQueue[qzPos]];
+  $("#qz-word").textContent=w.c;
+  $("#qz-pin").textContent=w.p;
+  $("#qz-next").style.display="none";
+  const label=(qzPos+1)+" / "+qzQueue.length;
+  $("#qz-pill").textContent=label;
+  $("#qz-score").textContent=qzRight+" correct";
+  $("#qz-bar").style.width=(qzPos/qzQueue.length*100)+"%";
+  // build 4 English-meaning options (1 correct + 3 distractors)
+  const others=shuffle(VOCAB.filter(v=>v.m!==w.m)).slice(0,3).map(v=>v.m);
+  const opts=shuffle([w.m,...others]);
+  const box=$("#qz-opts"); box.innerHTML="";
+  opts.forEach(txt=>{
+    const b=document.createElement("div"); b.className="qopt"; b.textContent=txt;
+    b.addEventListener("click",()=>{
+      if(qzAnswered)return; qzAnswered=true;
+      $$(".qopt",box).forEach(x=>x.classList.add("disabled"));
+      if(txt===w.m){b.classList.add("correct");qzRight++;}
+      else{b.classList.add("wrong");$$(".qopt",box).forEach(x=>{if(x.textContent===w.m)x.classList.add("correct");});}
+      $("#qz-score").textContent=qzRight+" correct";
+      $("#qz-next").style.display="inline-block";
+      $("#qz-bar").style.width=((qzPos+1)/qzQueue.length*100)+"%";
+    });
+    box.appendChild(b);
+  });
+  // auto-play the word (works after first user interaction on the page)
+  speak(w.c,$("#qz-speak"));
+}
+$("#qz-speak").addEventListener("click",()=>speak(VOCAB[qzQueue[qzPos]].c,$("#qz-speak")));
+$("#qz-next").addEventListener("click",()=>{
+  qzPos++;
+  if(qzPos>=qzQueue.length){
+    const bn=$("#qz-banner");
+    bn.textContent="🎉 Round complete! You got "+qzRight+" of "+qzQueue.length+" right. Tap ‘New round’ to repeat.";
+    bn.classList.add("show");
+    $("#qz-bar").style.width="100%";
+    $("#qz-next").style.display="none";
+    return;
+  }
+  renderQuiz();
+});
+$("#qz-new").addEventListener("click",newQuizRound);
+newQuizRound();
+
+/* ================= DRAG & DROP ================= */
+const DD_N=6; let ddSet=[];
+function buildDrag(){
+  ddSet=shuffle(VOCAB.map((_,i)=>i)).slice(0,DD_N);
+  $("#dd-banner").classList.remove("show"); $("#dd-score").textContent="";
+  const targets=$("#dd-targets"); targets.innerHTML="";
+  ddSet.forEach(i=>{
+    const w=VOCAB[i];
+    const row=document.createElement("div");
+    row.className="dd-target";
+    row.innerHTML=`<div class="dd-slot" data-answer="${i}"></div><div class="mean"><b>${w.p}</b><br>${w.m}</div>`;
+    targets.appendChild(row);
+  });
+  const bank=$("#dd-bank"); bank.innerHTML="";
+  shuffle(ddSet).forEach(i=>{
+    const w=VOCAB[i];
+    const chip=document.createElement("div");
+    chip.className="chip"; chip.draggable=true; chip.textContent=w.c; chip.dataset.id=i;
+    bank.appendChild(chip);
+  });
+  wireDrag();
+}
+function wireDrag(){
+  let dragged=null;
+  $$("#dd-bank .chip, #dd-slot .chip").forEach(()=>{});
+  function attachChip(chip){
+    chip.addEventListener("dragstart",e=>{dragged=chip;chip.classList.add("dragging");e.dataTransfer.setData("text",chip.dataset.id);});
+    chip.addEventListener("dragend",()=>{dragged=null;chip.classList.remove("dragging");});
+  }
+  $$(".chip").forEach(attachChip);
+  $$(".dd-slot").forEach(slot=>{
+    slot.addEventListener("dragover",e=>{e.preventDefault();slot.classList.add("over");});
+    slot.addEventListener("dragleave",()=>slot.classList.remove("over"));
+    slot.addEventListener("drop",e=>{
+      e.preventDefault();slot.classList.remove("over","correct","wrong");
+      const chip=$(".chip[data-id='"+e.dataTransfer.getData("text")+"']");
+      if(!chip)return;
+      // if slot already has a chip, send it back to bank
+      const existing=slot.querySelector(".chip");
+      if(existing)$("#dd-bank").appendChild(existing);
+      slot.appendChild(chip);
+    });
+  });
+  // allow dropping back onto the bank
+  const bank=$("#dd-bank");
+  bank.addEventListener("dragover",e=>e.preventDefault());
+  bank.addEventListener("drop",e=>{
+    e.preventDefault();
+    const chip=$(".chip[data-id='"+e.dataTransfer.getData("text")+"']");
+    if(chip)bank.appendChild(chip);
+  });
+}
+$("#dd-check").addEventListener("click",()=>{
+  let right=0;
+  $$(".dd-slot").forEach(slot=>{
+    slot.classList.remove("correct","wrong");
+    const chip=slot.querySelector(".chip");
+    if(!chip)return;
+    if(chip.dataset.id===slot.dataset.answer){slot.classList.add("correct");right++;}
+    else slot.classList.add("wrong");
+  });
+  $("#dd-score").textContent=right+" / "+DD_N+" correct";
+  if(right===DD_N)$("#dd-banner").classList.add("show");
+});
+$("#dd-new").addEventListener("click",buildDrag);
+buildDrag();
+
+/* ================= MATCH THE FOLLOWING ================= */
+const MT_N=6; let mtSel=null, mtDone=0, mtTotal=MT_N;
+function buildMatch(){
+  const set=shuffle(VOCAB.map((_,i)=>i)).slice(0,MT_N);
+  mtSel=null; mtDone=0; $("#mt-banner").classList.remove("show");
+  $("#mt-score").textContent="0 / "+MT_N;
+  const left=$("#mt-left"), right=$("#mt-right");
+  left.innerHTML=""; right.innerHTML="";
+  set.forEach(i=>{
+    const w=VOCAB[i];
+    const l=document.createElement("div");
+    l.className="match-item char"; l.textContent=w.c; l.dataset.id=i;
+    left.appendChild(l);
+  });
+  shuffle(set).forEach(i=>{
+    const w=VOCAB[i];
+    const r=document.createElement("div");
+    r.className="match-item"; r.innerHTML=`<b>${w.p}</b> — ${w.m}`; r.dataset.id=i;
+    right.appendChild(r);
+  });
+  $$("#mt-left .match-item, #mt-right .match-item").forEach(it=>{
+    it.addEventListener("click",()=>onMatchClick(it));
+  });
+}
+function onMatchClick(it){
+  if(it.classList.contains("matched"))return;
+  const side=it.parentElement.id;
+  if(!mtSel){mtSel=it;it.classList.add("selected");return;}
+  if(mtSel===it){it.classList.remove("selected");mtSel=null;return;}
+  if(mtSel.parentElement.id===side){ // same column, switch selection
+    mtSel.classList.remove("selected");mtSel=it;it.classList.add("selected");return;
+  }
+  // different columns -> evaluate
+  if(mtSel.dataset.id===it.dataset.id){
+    mtSel.classList.remove("selected");
+    mtSel.classList.add("matched"); it.classList.add("matched");
+    mtSel=null; mtDone++;
+    $("#mt-score").textContent=mtDone+" / "+MT_N;
+    if(mtDone===MT_N)$("#mt-banner").classList.add("show");
+  }else{
+    const a=mtSel,b=it;
+    a.classList.add("shake");b.classList.add("shake");
+    setTimeout(()=>{a.classList.remove("shake","selected");b.classList.remove("shake");},350);
+    mtSel=null;
+  }
+}
+$("#mt-new").addEventListener("click",buildMatch);
+buildMatch();
+
+/* ================= FILL IN THE BLANKS ================= */
+/* Sentences drawn from the Lesson 10 text & comprehensive exercises */
+const FIB=[
+ {parts:["请问，这本书","钱?"],en:"Excuse me, how much is this book?",answer:"多少",opts:["多少","怎么样","块","女"]},
+ {parts:["这个杯子五","钱一个。"],en:"This cup is five yuan (kuai) each.",answer:"块",opts:["块","斤","件","元"]},
+ {parts:["售货员：","苹果很好吃，你买一些吧。"],en:"Salesperson: These apples are tasty, buy some.",answer:"这些",opts:["这些","那儿","少","贵"]},
+ {parts:["安妮：这件衣服","? 白家月：很好看。"],en:"Annie: How about this piece of clothing? Bai Jiayue: It looks great.",answer:"怎么样",opts:["怎么样","便宜","商店","水果"]},
+ {parts:["这儿的","真不少!"],en:"There is really a lot of fruit here!",answer:"水果",opts:["水果","衣服","杯子","那些"]},
+ {parts:["我想买两","苹果。"],en:"I'd like to buy two jin of apples.",answer:"斤",opts:["斤","件","块","元"]},
+ {parts:["这儿的苹果真","!"],en:"The apples here are really cheap!",answer:"便宜",opts:["便宜","贵","少","男"]},
+ {parts:["这些是","孩子穿的衣服。"],en:"These are clothes for girls (female children).",answer:"女",opts:["女","男","元","钱"]}
+];
+function buildFib(){
+  const list=$("#fib-list"); list.innerHTML="";
+  $("#fib-banner").classList.remove("show");
+  window._fibDone=0; window._fibRight=0;
+  $("#fib-score").textContent="0 / "+FIB.length;
+  FIB.forEach((q,qi)=>{
+    const card=document.createElement("div"); card.className="fib-q";
+    const sent=document.createElement("div"); sent.className="fib-sent";
+    sent.innerHTML=q.parts[0]+' <span class="blank" id="blank-'+qi+'">?</span> '+(q.parts[1]||"");
+    const en=document.createElement("div"); en.className="fib-en"; en.textContent=q.en;
+    const opts=document.createElement("div"); opts.className="fib-opts";
+    shuffle(q.opts).forEach(o=>{
+      const b=document.createElement("div"); b.className="opt"; b.textContent=o;
+      b.addEventListener("click",()=>{
+        if(b.classList.contains("disabled"))return;
+        const blank=$("#blank-"+qi);
+        const optEls=$$(".opt",opts);
+        optEls.forEach(x=>x.classList.add("disabled"));
+        if(o===q.answer){
+          b.classList.add("correct"); blank.textContent=o; blank.classList.add("filled");
+          window._fibRight++;
+        }else{
+          b.classList.add("wrong"); blank.textContent=o;
+          optEls.forEach(x=>{if(x.textContent===q.answer)x.classList.add("correct");});
+        }
+        window._fibDone++;
+        $("#fib-score").textContent=window._fibRight+" / "+FIB.length;
+        if(window._fibDone===FIB.length){
+          const bn=$("#fib-banner");
+          bn.textContent="Done! You got "+window._fibRight+" of "+FIB.length+" right.";
+          bn.classList.add("show");
+        }
+      });
+      opts.appendChild(b);
+    });
+    card.appendChild(sent);card.appendChild(en);card.appendChild(opts);
+    list.appendChild(card);
+  });
+}
+$("#fib-reset").addEventListener("click",buildFib);
+buildFib();
+</script>
+</body>
+</html>
