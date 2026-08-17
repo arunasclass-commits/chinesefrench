@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🇫🇷 French Time &amp; Dates — Fun Club!</title>
+<style>
+:root{
+  --p1:#ff4d6d; --p2:#ffb703; --p3:#06d6a0; --p4:#4cc9f0; --p5:#9b5de5; --p6:#ff8fab;
+  --ink:#2b2d42; --soft:#fff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; padding:0 0 60px 0;
+  font-family:"Comic Sans MS","Chalkboard SE","Trebuchet MS",Verdana,sans-serif;
+  font-size:18px; color:var(--ink);
+  background:linear-gradient(135deg,#ffe0ec 0%,#e0f7ff 40%,#e6ffe9 75%,#fff6d6 100%);
+  background-attachment:fixed;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:900px;margin:0 auto;padding:12px}
+header{
+  background:linear-gradient(90deg,#ff4d6d,#ffb703,#06d6a0,#4cc9f0,#9b5de5);
+  color:#fff;border-radius:22px;padding:16px 18px;text-align:center;
+  box-shadow:0 8px 0 rgba(0,0,0,.12);margin-bottom:10px;
+}
+header h1{margin:0;font-size:27px;text-shadow:2px 2px 0 rgba(0,0,0,.2)}
+header p{margin:6px 0 0;font-size:15px;opacity:.95}
+
+/* score bar */
+.scorebar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.chip{background:#fff;border-radius:999px;padding:8px 15px;font-weight:bold;font-size:16px;
+  box-shadow:0 4px 0 rgba(0,0,0,.12);border:3px solid #fff}
+.chip.s{border-color:var(--p2)} .chip.t{border-color:var(--p3)} .chip.u{border-color:var(--p5)}
+
+.voicebar{background:#fff;border-radius:18px;padding:10px 14px;margin:8px 0;
+  box-shadow:0 4px 0 rgba(0,0,0,.10);font-size:15px;text-align:center}
+.voicebar select{font-size:15px;padding:5px;border-radius:10px;border:2px solid var(--p4);max-width:230px}
+#voiceNote{font-size:13px;color:#666;margin-top:5px}
+
+nav{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:12px 0}
+nav button{
+  font-family:inherit;font-size:15px;font-weight:bold;cursor:pointer;
+  border:none;border-radius:999px;padding:11px 15px;color:#fff;
+  box-shadow:0 4px 0 rgba(0,0,0,.18);transition:transform .1s;
+}
+nav button:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18)}
+nav button:nth-child(1){background:var(--p1)}
+nav button:nth-child(2){background:var(--p2)}
+nav button:nth-child(3){background:var(--p3)}
+nav button:nth-child(4){background:var(--p4)}
+nav button:nth-child(5){background:var(--p5)}
+nav button:nth-child(6){background:var(--p6)}
+nav button:nth-child(7){background:#ff9e00}
+nav button.active{outline:4px solid #fff;transform:scale(1.06)}
+
+section{display:none}
+section.on{display:block;animation:pop .3s}
+@keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+
+.card{background:#fff;border-radius:20px;padding:16px;margin:12px 0;
+  box-shadow:0 6px 0 rgba(0,0,0,.10)}
+h2{margin:4px 0 10px;font-size:22px}
+.hint{background:#fff8dc;border-left:8px solid var(--p2);border-radius:12px;padding:10px 13px;
+  font-size:15.5px;margin:10px 0}
+
+/* ---------- FLASHCARDS ---------- */
+.flash{
+  background:linear-gradient(145deg,#fff,#fff);
+  border:6px solid var(--p4);border-radius:26px;min-height:210px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:20px;cursor:pointer;user-select:none;
+  box-shadow:0 8px 0 rgba(0,0,0,.12);transition:transform .15s;
+}
+.flash:active{transform:scale(.98)}
+.flash .fr{font-size:38px;font-weight:bold;color:var(--p1);line-height:1.15}
+.flash .en{font-size:26px;color:var(--p3);font-weight:bold;margin-top:8px}
+.flash .cat{font-size:14px;background:#eef;border-radius:999px;padding:4px 12px;margin-bottom:10px;color:#556}
+.flash .tip{font-size:15px;color:#777;margin-top:10px;font-style:italic}
+.flash .tap{font-size:15px;color:#aaa;margin-top:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+.btn{font-family:inherit;font-size:16px;font-weight:bold;cursor:pointer;border:none;
+  border-radius:16px;padding:11px 17px;color:#fff;background:var(--p5);
+  box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18)}
+.btn.b1{background:var(--p1)} .btn.b2{background:var(--p2);color:#4a3200}
+.btn.b3{background:var(--p3)} .btn.b4{background:var(--p4)}
+.btn.small{font-size:14px;padding:8px 12px}
+select.filt{font-size:15px;padding:8px;border-radius:12px;border:3px solid var(--p5);font-family:inherit}
+
+/* ---------- QUIZ / OPTIONS ---------- */
+.q{font-size:21px;font-weight:bold;margin:6px 0 12px}
+.opts{display:grid;gap:9px}
+.opt{background:#f4f7ff;border:4px solid #dfe6ff;border-radius:16px;padding:13px 15px;
+  font-size:18px;cursor:pointer;font-family:inherit;text-align:left;transition:transform .1s}
+.opt:hover{border-color:var(--p4)}
+.opt:active{transform:scale(.99)}
+.opt.right{background:#d8ffe9;border-color:var(--p3);font-weight:bold}
+.opt.wrong{background:#ffe0e6;border-color:var(--p1)}
+.opt:disabled{cursor:default}
+.fb{font-size:19px;font-weight:bold;margin-top:12px;min-height:28px}
+.fb.good{color:#009e6d} .fb.bad{color:#d90429}
+.prog{background:#eee;border-radius:999px;height:16px;overflow:hidden;margin:8px 0}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--p3),var(--p4));width:0%}
+
+/* ---------- MATCH ---------- */
+.matchgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.mcard{background:#fff;border:4px solid var(--p6);border-radius:16px;padding:13px 8px;
+  font-size:17px;text-align:center;cursor:pointer;font-family:inherit;font-weight:bold;
+  min-height:56px;display:flex;align-items:center;justify-content:center}
+.mcard.fr{border-color:var(--p1);color:var(--p1)}
+.mcard.en{border-color:var(--p4);color:#1a6f8f}
+.mcard.sel{background:#fff3bf;transform:scale(1.04)}
+.mcard.done{background:#d8ffe9;border-color:var(--p3);color:#008f63;opacity:.75;cursor:default}
+
+/* ---------- TRUE / FALSE ---------- */
+.tfstat{font-size:20px;margin:8px 0 14px;line-height:1.4}
+.tfbtns{display:flex;gap:12px;justify-content:center}
+.tfbtns .btn{font-size:20px;padding:14px 26px}
+
+/* ---------- DRAG & DROP ---------- */
+.pool{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;background:#fff8dc;
+  border:4px dashed var(--p2);border-radius:18px;padding:12px;margin:10px 0;min-height:60px}
+.chipw{background:var(--p5);color:#fff;font-weight:bold;font-size:17px;border-radius:14px;
+  padding:9px 15px;cursor:grab;box-shadow:0 4px 0 rgba(0,0,0,.18);user-select:none}
+.chipw.sel{outline:4px solid var(--p2);transform:scale(1.07)}
+.chipw.used{opacity:.25;pointer-events:none}
+.sent{background:#f4f7ff;border-radius:16px;padding:14px;margin:9px 0;font-size:19px;line-height:2.1}
+.slot{display:inline-block;min-width:110px;border-bottom:5px solid var(--p4);
+  text-align:center;padding:2px 8px;color:#aaa;cursor:pointer;border-radius:6px}
+.slot.filled{color:#008f63;border-color:var(--p3);background:#d8ffe9;font-weight:bold;border-bottom-style:solid}
+.slot.shake{animation:shk .3s}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.eng{font-size:14px;color:#888;display:block;line-height:1.3}
+
+/* ---------- LISTEN ---------- */
+.bigplay{font-size:44px;background:var(--p1);color:#fff;border:none;border-radius:50%;
+  width:110px;height:110px;cursor:pointer;box-shadow:0 7px 0 rgba(0,0,0,.2);display:block;margin:10px auto}
+.bigplay:active{transform:translateY(4px);box-shadow:0 3px 0 rgba(0,0,0,.2)}
+
+/* ---------- PROGRESS ---------- */
+.stars{font-size:32px;letter-spacing:3px;text-align:center;line-height:1.5}
+.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:center}
+.stat{background:#fff;border-radius:18px;padding:14px;box-shadow:0 5px 0 rgba(0,0,0,.10);border-top:8px solid var(--p4)}
+.stat b{display:block;font-size:30px;color:var(--p1)}
+.stat span{font-size:14px;color:#666}
+
+/* confetti */
+#conf{position:fixed;inset:0;pointer-events:none;z-index:99;overflow:hidden}
+.cf{position:absolute;font-size:26px;animation:fall 1.6s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:0}}
+
+@media(max-width:520px){
+  header h1{font-size:22px}
+  .flash .fr{font-size:31px}
+  .matchgrid{gap:6px}
+  .mcard{font-size:15px}
+}
+</style>
+</head>
+<body>
+<div id="conf"></div>
+<div class="wrap">
+
+<header>
+  <h1>🇫🇷 French Time &amp; Dates — Fun Club!</h1>
+  <p>Tell the time ⏰ · Say the date 📅 · Count like a champion 🔢</p>
+</header>
+
+<div class="scorebar">
+  <div class="chip s">⭐ Score: <span id="scoreN">0</span></div>
+  <div class="chip t">🏅 Stars: <span id="starN">0</span></div>
+  <div class="chip u">🔥 Streak: <span id="streakN">1</span> day</div>
+</div>
+
+<div class="voicebar">
+  ⚙️ French voice: <select id="voiceSel"></select>
+  <button class="btn small b4" id="voiceTest">🔊 Test</button>
+  <div id="voiceNote"></div>
+</div>
+
+<nav>
+  <button data-t="t1" class="active">🎴 Flashcards</button>
+  <button data-t="t2">✅ Choose</button>
+  <button data-t="t3">🔗 Match</button>
+  <button data-t="t4">⚖️ True/False</button>
+  <button data-t="t5">🧩 Drag &amp; Drop</button>
+  <button data-t="t6">🎧 Listen</button>
+  <button data-t="t7">🏆 My Score</button>
+</nav>
+
+<!-- ================= FLASHCARDS ================= -->
+<section id="t1" class="on">
+  <div class="card">
+    <h2>🎴 50 Magic Flashcards</h2>
+    <div class="hint">Tap the big card to flip it! 🔊 makes it talk in French.</div>
+    <div class="row">
+      <select class="filt" id="fcFilter">
+        <option value="all">🌈 All 50 cards</option>
+        <option value="Number">🔢 Numbers (1–35)</option>
+        <option value="Order">🥇 Ordinal numbers</option>
+        <option value="Month">📅 Months</option>
+        <option value="Time">⏰ Time words</option>
+      </select>
+    </div>
+    <div class="prog"><i id="fcBar"></i></div>
+    <div style="text-align:center;font-size:15px;color:#666" id="fcCount">Card 1 of 50</div>
+    <div class="flash" id="fcCard">
+      <div class="cat" id="fcCat">…</div>
+      <div class="fr" id="fcFr">…</div>
+      <div class="en" id="fcEn" style="display:none">…</div>
+      <div class="tip" id="fcTip" style="display:none"></div>
+      <div class="tap" id="fcTap">👆 tap to flip</div>
+    </div>
+    <div class="row">
+      <button class="btn b1" id="fcPrev">⬅️ Back</button>
+      <button class="btn b4" id="fcSay">🔊 Say it!</button>
+      <button class="btn b2" id="fcShuf">🔀 Shuffle</button>
+      <button class="btn b3" id="fcNext">Next ➡️</button>
+    </div>
+    <div class="row">
+      <button class="btn small b3" id="fcKnow">😀 I know this one! (+5)</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MULTIPLE CHOICE ================= -->
+<section id="t2">
+  <div class="card">
+    <h2>✅ Choose the Correct One</h2>
+    <div class="hint">Pick the right French answer. Every correct one = <b>+10 points</b>! 🎉</div>
+    <div class="prog"><i id="mcBar"></i></div>
+    <div style="font-size:15px;color:#666" id="mcCount"></div>
+    <div class="q" id="mcQ">…</div>
+    <div class="opts" id="mcOpts"></div>
+    <div class="fb" id="mcFb"></div>
+    <div class="row"><button class="btn b3" id="mcNext">Next question ➡️</button>
+      <button class="btn small b2" id="mcRestart">🔁 Start again</button></div>
+  </div>
+</section>
+
+<!-- ================= MATCH ================= -->
+<section id="t3">
+  <div class="card">
+    <h2>🔗 Match the Following</h2>
+    <div class="hint">Tap a <b style="color:#ff4d6d">pink French word</b>, then tap its <b style="color:#1a6f8f">blue English partner</b>. +10 each! 💙</div>
+    <div class="row">
+      <button class="btn small b1" data-mr="0">📅 Months</button>
+      <button class="btn small b4" data-mr="1">⏰ Time words</button>
+      <button class="btn small b5" style="background:#9b5de5" data-mr="2">🥇 Ordinals</button>
+      <button class="btn small b2" data-mr="3">🔢 Numbers</button>
+    </div>
+    <div class="fb" id="maFb"></div>
+    <div class="matchgrid" id="maGrid"></div>
+  </div>
+</section>
+
+<!-- ================= TRUE / FALSE ================= -->
+<section id="t4">
+  <div class="card">
+    <h2>⚖️ True or False?</h2>
+    <div class="hint">Read it. Think. Then tap ✅ VRAI (true) or ❌ FAUX (false)!</div>
+    <div class="prog"><i id="tfBar"></i></div>
+    <div style="font-size:15px;color:#666" id="tfCount"></div>
+    <div class="tfstat" id="tfQ">…</div>
+    <div class="tfbtns">
+      <button class="btn b3" id="tfT">✅ VRAI</button>
+      <button class="btn b1" id="tfF">❌ FAUX</button>
+    </div>
+    <div class="fb" id="tfFb"></div>
+    <div class="row"><button class="btn b4" id="tfNext">Next ➡️</button>
+      <button class="btn small b2" id="tfRestart">🔁 Start again</button></div>
+  </div>
+</section>
+
+<!-- ================= DRAG & DROP ================= -->
+<section id="t5">
+  <div class="card">
+    <h2>🧩 Fill in the Blanks — Drag &amp; Drop</h2>
+    <div class="hint">Drag a purple word into the empty line. On a phone? Just <b>tap the word, then tap the line</b>! 👆</div>
+    <div class="pool" id="ddPool"></div>
+    <div id="ddSents"></div>
+    <div class="fb" id="ddFb"></div>
+    <div class="row"><button class="btn b2" id="ddReset">🔁 Clear all</button></div>
+  </div>
+</section>
+
+<!-- ================= LISTEN ================= -->
+<section id="t6">
+  <div class="card">
+    <h2>🎧 Listen and Choose</h2>
+    <div class="hint">Press the big red button, listen to the French, then choose what it means! 🔊</div>
+    <div class="prog"><i id="liBar"></i></div>
+    <div style="font-size:15px;color:#666" id="liCount"></div>
+    <button class="bigplay" id="liPlay">🔊</button>
+    <div style="text-align:center;font-size:15px;color:#888" id="liAgain">Tap to hear it again 🔁</div>
+    <div class="opts" id="liOpts" style="margin-top:14px"></div>
+    <div class="fb" id="liFb"></div>
+    <div class="row"><button class="btn b3" id="liNext">Next ➡️</button>
+      <button class="btn small b2" id="liRestart">🔁 Start again</button></div>
+  </div>
+</section>
+
+<!-- ================= PROGRESS ================= -->
+<section id="t7">
+  <div class="card">
+    <h2>🏆 My Score Board</h2>
+    <div class="stars" id="starRow">⭐</div>
+    <div class="statgrid" style="margin-top:12px">
+      <div class="stat"><b id="pScore">0</b><span>Total points</span></div>
+      <div class="stat" style="border-color:var(--p3)"><b id="pRight">0</b><span>Correct answers</span></div>
+      <div class="stat" style="border-color:var(--p2)"><b id="pCards">0</b><span>Flashcards learned</span></div>
+      <div class="stat" style="border-color:var(--p5)"><b id="pStreak">1</b><span>Day streak 🔥</span></div>
+    </div>
+    <div class="fb good" id="pMsg" style="text-align:center;margin-top:14px"></div>
+    <div class="row"><button class="btn b1" id="pReset">🗑️ Reset everything</button></div>
+  </div>
+  <div class="card">
+    <h2>📖 Quick Helper Chart</h2>
+    <div class="hint"><b>⏰ Telling time</b><br>
+      2:15 → <b>deux heures et quart</b><br>
+      5:30 → <b>cinq heures et demie</b><br>
+      10:45 → <b>onze heures moins le quart</b><br>
+      9:12 → <b>neuf heures douze</b><br>
+      12:00 noon → <b>midi</b> · 12:00 night → <b>minuit</b><br>
+      After the half hour, French counts <i>backwards</i>: 4:35 → <b>cinq heures moins vingt-cinq</b>
+    </div>
+    <div class="hint" style="border-color:var(--p1)"><b>📅 Dates</b><br>
+      Use normal counting numbers: <b>le 2 mars</b> = le deux mars.<br>
+      Only the 1st is special: <b>le premier août</b>.<br>
+      Months are <b>small letters</b> in French: janvier, not Janvier!<br>
+      Kings &amp; queens: <b>Napoléon I<sup>er</sup></b> (premier), but <b>Charles VII</b> (sept).<br>
+      Centuries use ordinals: <b>le dix-neuvième siècle</b>.
+    </div>
+  </div>
+</section>
+
+<div style="text-align:center;font-size:14px;color:#777;margin-top:16px">
+  Made for young French explorers 🐣 — bon courage !
+</div>
+</div>
+
+<script>
+/* =========================================================
+   1) MUTABLE STATE  (all let declarations first)
+   ========================================================= */
+let frVoice=null, allVoices=[];
+let fcList=[], fcIdx=0, fcFlipped=false;
+let mcOrder=[], mcIdx=0, mcLocked=false;
+let tfOrder=[], tfIdx=0, tfLocked=false;
+let liOrder=[], liIdx=0, liLocked=false;
+let maRound=0, maSel=null, maSelEl=null, maLeft=0;
+let ddSel=null, ddSelEl=null;
+
+/* =========================================================
+   2) SAVED DATA
+   ========================================================= */
+const DATA=(function(){try{return JSON.parse(localStorage.getItem('frkids')||'{}');}catch(e){return {};}})();
+DATA.score=DATA.score||0;
+DATA.right=DATA.right||0;
+DATA.cards=DATA.cards||{};
+const TODAY=new Date().toISOString().slice(0,10);
+if(DATA.last!==TODAY){
+  const y=new Date(Date.now()-864e5).toISOString().slice(0,10);
+  DATA.streak=(DATA.last===y)?((DATA.streak||0)+1):1;
+  DATA.last=TODAY;
+}
+function save(){try{localStorage.setItem('frkids',JSON.stringify(DATA));}catch(e){}}
+
+/* =========================================================
+   3) CONTENT DATA
+   ========================================================= */
+/* --- 50 FLASHCARDS: [french, english, category, tip] --- */
+const CARDS=[
+ ["un","1 — one","Number","Say: uhn"],
+ ["deux","2 — two","Number","Say: duh"],
+ ["trois","3 — three","Number","Say: trwah"],
+ ["quatre","4 — four","Number","Say: KAT-ruh"],
+ ["cinq","5 — five","Number","Say: sank"],
+ ["six","6 — six","Number","Say: seess"],
+ ["sept","7 — seven","Number","The p is silent: set"],
+ ["huit","8 — eight","Number","Say: weet"],
+ ["neuf","9 — nine","Number","Say: nuhf"],
+ ["dix","10 — ten","Number","Say: deess"],
+ ["onze","11 — eleven","Number","Say: onz"],
+ ["douze","12 — twelve","Number","Say: dooz"],
+ ["treize","13 — thirteen","Number","Say: trez"],
+ ["quatorze","14 — fourteen","Number","le 14 juillet is French National Day!"],
+ ["quinze","15 — fifteen","Number","Say: kanz"],
+ ["dix-huit","18 — eighteen","Number","10 + 8 = dix-huit"],
+ ["dix-neuf","19 — nineteen","Number","10 + 9 = dix-neuf"],
+ ["vingt","20 — twenty","Number","The g and t are silent: van"],
+ ["vingt-cinq","25 — twenty-five","Number","Used for Christmas: le 25 décembre"],
+ ["trente","30 — thirty","Number","Say: tront"],
+
+ ["premier","1st — first (boy word)","Order","le premier août = August 1st"],
+ ["première","1st — first (girl word)","Order","la première chaise = the first chair"],
+ ["deuxième","2nd — second","Order","le deuxième compartiment"],
+ ["troisième","3rd — third","Order","Add -ième to the number"],
+ ["quatrième","4th — fourth","Order","quatre → quatrième"],
+ ["cinquième","5th — fifth","Order","le cinquième acte = Act 5"],
+ ["septième","7th — seventh","Order","Charles VII = Charles sept"],
+ ["onzième","11th — eleventh","Order","onze → onzième"],
+ ["dix-neuvième","19th — nineteenth","Order","le dix-neuvième siècle = the 19th century"],
+
+ ["janvier","January","Month","le onze janvier = January 11th"],
+ ["février","February","Month","le douze février"],
+ ["mars","March","Month","le deux mars"],
+ ["avril","April","Month","Small letter — always!"],
+ ["mai","May","Month","The shortest month name"],
+ ["juin","June","Month","Say: zhwan"],
+ ["juillet","July","Month","le quatorze juillet 1789"],
+ ["août","August","Month","Say: oot"],
+ ["septembre","September","Month","Back to school! la rentrée"],
+ ["octobre","October","Month","Say: ok-TOH-bruh"],
+ ["novembre","November","Month","le onze novembre"],
+ ["décembre","December","Month","le vingt-cinq décembre = Christmas 🎄"],
+
+ ["une heure","one o'clock / an hour","Time","The h is silent: ün ur"],
+ ["midi","12:00 noon ☀️","Time","No word for 'hours' with midi"],
+ ["minuit","12:00 midnight 🌙","Time","mi + nuit = middle of the night"],
+ ["et quart","quarter past (:15)","Time","deux heures et quart = 2:15"],
+ ["et demie","half past (:30)","Time","cinq heures et demie = 5:30"],
+ ["moins le quart","quarter to (:45)","Time","onze heures moins le quart = 10:45"],
+ ["moins","minus / to","Time","cinq heures moins vingt-cinq = 4:35"],
+ ["du matin","in the morning","Time","huit heures du matin = 8 a.m."],
+ ["du soir","in the evening","Time","neuf heures du soir = 9 p.m. 🌆"]
+];
+
+/* --- MULTIPLE CHOICE --- */
+const MCQ=[
+ ["How do you say 2:15 in French?",["deux heures et quart","deux heures et demie","deux heures moins le quart"],0,"et quart = quarter past ⏰"],
+ ["How do you say 'the 1st of August'?",["le premier août","le un août","le première août"],0,"Only the 1st uses premier!"],
+ ["What is 12:00 at night in French?",["minuit","midi","douze heures du matin"],0,"minuit = middle of the night 🌙"],
+ ["How do you say 5:30?",["cinq heures et demie","cinq heures et quart","six heures et demie"],0,"et demie = half past"],
+ ["How do you say 10:45?",["onze heures moins le quart","dix heures et quart","onze heures et quart"],0,"French says 'eleven minus a quarter'!"],
+ ["How do you say 'December 25th'?",["le vingt-cinq décembre","le vingt-cinquième décembre","décembre le vingt-cinq"],0,"Dates use counting numbers 🎄"],
+ ["How do you write 'Napoleon I' in French?",["Napoléon premier","Napoléon un","Napoléon unième"],0,"Kings use premier for the 1st"],
+ ["How do you say 'the 19th century'?",["le dix-neuvième siècle","le dix-neuf siècle","le siècle dix-neuf"],0,"Centuries use ordinals ⏳"],
+ ["How do you say 1:05?",["une heure cinq","un heure cinq","une heure et cinq"],0,"heure is a girl word → une heure"],
+ ["How do you say 8:20?",["huit heures vingt","huit heures moins vingt","vingt heures huit"],0,"Before :30 we just add the minutes"],
+ ["How do you say 4:35?",["cinq heures moins vingt-cinq","quatre heures trente-cinq et demie","quatre heures moins vingt-cinq"],0,"After :30, count back from the NEXT hour"],
+ ["How do you say 'Charles VII'?",["Charles sept","Charles septième","Charles le sept"],0,"Only the 1st is special — the rest are normal numbers"],
+ ["How do you say 'the 11th of November'?",["le onze novembre","le onzième novembre","novembre onze"],0,"le onze novembre 🇫🇷"],
+ ["What does 'neuf heures moins vingt' mean?",["8:40","9:20","9:40"],0,"20 minutes BEFORE nine o'clock"],
+ ["How do you say 'in 1944'?",["en mil neuf cent quarante-quatre","dans 1944","à mil neuf cent quarante-quatre"],0,"Years use 'en'"]
+];
+
+/* --- MATCH ROUNDS --- */
+const MATCH=[
+ [["janvier","January"],["mars","March"],["juillet","July"],["août","August"],["novembre","November"],["décembre","December"]],
+ [["midi","noon ☀️"],["minuit","midnight 🌙"],["et quart","quarter past"],["et demie","half past"],["moins le quart","quarter to"],["une heure","one o'clock"]],
+ [["premier","1st"],["deuxième","2nd"],["cinquième","5th"],["septième","7th"],["onzième","11th"],["dix-neuvième","19th"]],
+ [["quatre","4"],["sept","7"],["onze","11"],["quinze","15"],["vingt","20"],["trente","30"]]
+];
+
+/* --- TRUE / FALSE --- */
+const TF=[
+ ["'le premier mai' means 'the 1st of May'.",true,"Yes! premier = first 🌷"],
+ ["'minuit' means 12 o'clock in the daytime.",false,"No — minuit is midnight 🌙. Noon is midi ☀️."],
+ ["'cinq heures et demie' means 5:30.",true,"Correct! et demie = half past ⏰"],
+ ["'onze heures moins le quart' means 11:15.",false,"It means 10:45 — a quarter BEFORE eleven."],
+ ["In French, months start with a CAPITAL letter.",false,"Nope! We write janvier, mars, décembre — all small ✏️"],
+ ["For dates we say 'le deux mars', not 'le deuxième mars'.",true,"Right! Dates use counting numbers 📅"],
+ ["'Napoléon premier' is the correct way to say Napoleon I.",true,"Yes — the 1st is always premier 👑"],
+ ["'le quatorze juillet' is France's national day.",true,"Bastille Day — fireworks! 🎆"],
+ ["'et quart' means 'half past'.",false,"'et quart' = quarter past. Half past is 'et demie'."],
+ ["'le dix-neuvième siècle' means 'the 19th century'.",true,"Perfect! Centuries use ordinals ⏳"],
+ ["'huit heures vingt' means 8:20.",true,"Before the half hour, just add the minutes 👍"],
+ ["'sept' is pronounced with a loud P sound.",false,"The p is silent — say 'set' 🤫"]
+];
+
+/* --- DRAG & DROP --- */
+const DDWORDS=["et","quart","moins","midi","minuit","premier","vingt-cinq","demie","heures","treize"];
+const DD=[
+ ["Nous entrons dans l'appartement à neuf heures ___ demie.","et","We go into the flat at half past nine (9:30)."],
+ ["Il a fait une promenade à trois heures et ___.","quart","He went for a walk at a quarter past three (3:15)."],
+ ["Il nous a montré la capitale à onze heures ___ le quart.","moins","He showed us the capital at 10:45."],
+ ["Le concert commence à ___ (12:00 ☀️).","midi","The concert starts at noon."],
+ ["Les enfants dorment à ___ (12:00 🌙).","minuit","The children are asleep at midnight."],
+ ["C'est le ___ août — la fête !","premier","It's the 1st of August — party time!"],
+ ["Le train part à une heure ___.","vingt-cinq","The train leaves at 1:25."],
+ ["Nous visiterons le musée à deux heures et ___.","demie","We will visit the museum at 2:30."]
+];
+
+/* --- LISTEN & CHOOSE --- */
+const LI=[
+ ["deux heures et quart",["2:15","2:45","3:15"],0],
+ ["cinq heures et demie",["5:30","5:15","6:30"],0],
+ ["minuit",["12:00 midnight 🌙","12:00 noon ☀️","1:00 a.m."],0],
+ ["le quatorze juillet",["July 14th","July 4th","June 14th"],0],
+ ["le premier janvier",["January 1st","January 11th","June 1st"],0],
+ ["onze heures moins le quart",["10:45","11:15","11:45"],0],
+ ["huit heures vingt",["8:20","8:40","20:08"],0],
+ ["le vingt-cinq décembre",["December 25th","December 5th","November 25th"],0],
+ ["une heure cinq",["1:05","1:15","5:01"],0],
+ ["midi moins dix",["11:50 a.m.","12:10 p.m.","10:12"],0],
+ ["le dix-neuvième siècle",["the 19th century","the 9th century","1990"],0],
+ ["neuf heures moins vingt",["8:40","9:20","9:40"],0]
+];
+
+/* =========================================================
+   4) HELPERS
+   ========================================================= */
+function $(id){return document.getElementById(id);}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+function say(t,rate){
+  if(!('speechSynthesis' in window)||!t)return;
+  try{
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(String(t));
+    u.lang="fr-FR";
+    if(frVoice)u.voice=frVoice;
+    u.rate=rate||0.82;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+function loadV(){
+  if(!('speechSynthesis' in window))return;
+  try{allVoices=speechSynthesis.getVoices()||[];}catch(e){allVoices=[];}
+  const fr=allVoices.filter(function(v){return /fr(-|_)|french|français/i.test((v.lang||"")+" "+(v.name||""));});
+  const sel=$('voiceSel');
+  let saved=NaN;try{saved=parseInt(localStorage.getItem('frkids_voice'));}catch(e){}
+  const list=fr.length?fr:allVoices;
+  if(sel){
+    sel.innerHTML=list.length
+      ? list.map(function(v){return '<option value="'+allVoices.indexOf(v)+'">'+v.name+' ('+v.lang+')</option>';}).join("")
+      : '<option value="-1">(no voice found)</option>';
+  }
+  let idx=(!isNaN(saved)&&allVoices[saved]&&/fr/i.test(allVoices[saved].lang))?saved:(fr.length?allVoices.indexOf(fr[0]):-1);
+  if(idx>=0){frVoice=allVoices[idx];if(sel)sel.value=idx;}else{frVoice=null;}
+  const n=$('voiceNote');
+  if(n)n.textContent=fr.length?('✓ Using '+frVoice.name):'⚠️ No French voice on this device — sound may be in English. Ask a grown-up to add a French voice in settings.';
+  if(sel&&!sel._wired){
+    sel._wired=1;
+    sel.addEventListener('change',function(){
+      const i=+sel.value; frVoice=i>=0?allVoices[i]:null;
+      try{localStorage.setItem('frkids_voice',i);}catch(e){}
+      say('Bonjour ! Je parle français.',0.85);
+    });
+  }
+}
+
+function confetti(){
+  const box=$('conf'); if(!box)return;
+  const emo=['🎉','⭐','🌟','🎈','🥳','✨','🏆','💫'];
+  for(let i=0;i<18;i++){
+    const s=document.createElement('div');
+    s.className='cf';
+    s.textContent=emo[Math.floor(Math.random()*emo.length)];
+    s.style.left=Math.random()*100+'%';
+    s.style.top='-40px';
+    s.style.animationDelay=(Math.random()*0.5)+'s';
+    box.appendChild(s);
+    setTimeout(function(){if(s.parentNode)s.parentNode.removeChild(s);},2400);
+  }
+}
+
+function addScore(n,isRight){
+  const before=Math.floor(DATA.score/100);
+  DATA.score+=n;
+  if(isRight)DATA.right+=1;
+  const after=Math.floor(DATA.score/100);
+  save(); renderScore();
+  if(after>before)confetti();
+}
+
+function renderScore(){
+  const stars=Math.floor(DATA.score/100);
+  if($('scoreN'))$('scoreN').textContent=DATA.score;
+  if($('starN'))$('starN').textContent=stars;
+  if($('streakN'))$('streakN').textContent=DATA.streak||1;
+  if($('pScore'))$('pScore').textContent=DATA.score;
+  if($('pRight'))$('pRight').textContent=DATA.right;
+  if($('pCards'))$('pCards').textContent=Object.keys(DATA.cards).length;
+  if($('pStreak'))$('pStreak').textContent=DATA.streak||1;
+  if($('starRow')){
+    let s='';
+    for(let i=0;i<Math.min(stars,15);i++)s+='⭐';
+    for(let i=stars;i<10;i++)s+='☆';
+    $('starRow').textContent=s||'☆☆☆☆☆☆☆☆☆☆';
+  }
+  if($('pMsg')){
+    let m='Keep going — every star needs 100 points! 💪';
+    if(stars>=1)m='Nice work! You have '+stars+' star'+(stars>1?'s':'')+'! 🌟';
+    if(stars>=5)m='Wow — 5 stars! You are a French time expert! 🥇';
+    if(stars>=10)m='INCREDIBLE! 10 stars! Champion de France! 🏆🇫🇷';
+    $('pMsg').textContent=m;
+  }
+}
+
+/* =========================================================
+   5) FLASHCARDS
+   ========================================================= */
+function fcBuild(){
+  const f=$('fcFilter')?$('fcFilter').value:'all';
+  fcList=CARDS.filter(function(c){return f==='all'||c[2]===f;});
+  fcIdx=0; fcFlipped=false; fcRender();
+}
+function fcRender(){
+  if(!fcList.length)return;
+  const c=fcList[fcIdx];
+  $('fcCat').textContent=({Number:'🔢 Number',Order:'🥇 Ordinal',Month:'📅 Month',Time:'⏰ Time word'})[c[2]]||c[2];
+  $('fcFr').textContent=c[0];
+  $('fcEn').textContent=c[1];
+  $('fcTip').textContent='💡 '+c[3];
+  $('fcEn').style.display=fcFlipped?'block':'none';
+  $('fcTip').style.display=fcFlipped?'block':'none';
+  $('fcTap').textContent=fcFlipped?'👆 tap to hide':'👆 tap to flip';
+  $('fcCount').textContent='Card '+(fcIdx+1)+' of '+fcList.length;
+  $('fcBar').style.width=Math.round((fcIdx+1)/fcList.length*100)+'%';
+}
+function fcMove(d){fcIdx=(fcIdx+d+fcList.length)%fcList.length;fcFlipped=false;fcRender();say(fcList[fcIdx][0]);}
+
+/* =========================================================
+   6) MULTIPLE CHOICE
+   ========================================================= */
+function mcStart(){mcOrder=shuffle(MCQ.map(function(_,i){return i;}));mcIdx=0;mcRender();}
+function mcRender(){
+  mcLocked=false; $('mcFb').textContent=''; $('mcFb').className='fb';
+  if(mcIdx>=mcOrder.length){
+    $('mcQ').textContent='🎉 All done! You finished every question!';
+    $('mcOpts').innerHTML=''; $('mcCount').textContent='';
+    $('mcBar').style.width='100%'; confetti(); return;
+  }
+  const q=MCQ[mcOrder[mcIdx]];
+  $('mcCount').textContent='Question '+(mcIdx+1)+' of '+mcOrder.length;
+  $('mcBar').style.width=Math.round(mcIdx/mcOrder.length*100)+'%';
+  $('mcQ').textContent=q[0];
+  const opts=q[1].map(function(txt,i){return {txt:String(txt),ok:i===q[2]};});
+  shuffle(opts);
+  const box=$('mcOpts'); box.innerHTML='';
+  opts.forEach(function(o){
+    const b=document.createElement('button');
+    b.className='opt'; b.textContent=o.txt;
+    b.addEventListener('click',function(){
+      if(mcLocked)return; mcLocked=true;
+      const all=box.querySelectorAll('.opt');
+      all.forEach(function(x){x.disabled=true;});
+      if(o.ok){
+        b.classList.add('right'); addScore(10,true);
+        $('mcFb').textContent='🎉 Bravo ! +10 points — '+q[3];
+        $('mcFb').className='fb good'; say(o.txt);
+      }else{
+        b.classList.add('wrong');
+        all.forEach(function(x){if(x.textContent===String(q[1][q[2]]))x.classList.add('right');});
+        $('mcFb').textContent='Oops! The answer is "'+q[1][q[2]]+'" — '+q[3];
+        $('mcFb').className='fb bad'; say(String(q[1][q[2]]));
+      }
+    });
+    box.appendChild(b);
+  });
+}
+
+/* =========================================================
+   7) MATCH
+   ========================================================= */
+function maStart(r){
+  maRound=r; maSel=null; maSelEl=null;
+  const pairs=MATCH[r];
+  maLeft=pairs.length;
+  const left=shuffle(pairs.map(function(p,i){return {t:p[0],i:i,side:'fr'};}));
+  const right=shuffle(pairs.map(function(p,i){return {t:p[1],i:i,side:'en'};}));
+  const grid=$('maGrid'); grid.innerHTML='';
+  $('maFb').textContent='Tap a French word, then its English partner! 🔗';
+  $('maFb').className='fb';
+  for(let k=0;k<pairs.length;k++){
+    grid.appendChild(maCard(left[k]));
+    grid.appendChild(maCard(right[k]));
+  }
+}
+function maCard(o){
+  const b=document.createElement('button');
+  b.className='mcard '+o.side; b.textContent=o.t; b.dataset.i=o.i; b.dataset.side=o.side;
+  b.addEventListener('click',function(){
+    if(b.classList.contains('done'))return;
+    if(o.side==='fr')say(o.t);
+    if(maSelEl===b){b.classList.remove('sel');maSelEl=null;maSel=null;return;}
+    if(!maSelEl){maSelEl=b;maSel=o;b.classList.add('sel');return;}
+    if(maSel.side===o.side){maSelEl.classList.remove('sel');maSelEl=b;maSel=o;b.classList.add('sel');return;}
+    if(maSel.i===o.i){
+      b.classList.add('done'); b.classList.remove('sel');
+      maSelEl.classList.add('done'); maSelEl.classList.remove('sel');
+      maSelEl=null; maSel=null; maLeft--;
+      addScore(10,true);
+      if(maLeft===0){$('maFb').textContent='🏆 Perfect! All matched! Try another set!';$('maFb').className='fb good';confetti();}
+      else{$('maFb').textContent='✅ Yes! +10 points. '+maLeft+' left to go!';$('maFb').className='fb good';}
+    }else{
+      maSelEl.classList.remove('sel'); maSelEl=null; maSel=null;
+      $('maFb').textContent='Not quite — try again! 🙂';
+      $('maFb').className='fb bad';
+    }
+  });
+  return b;
+}
+
+/* =========================================================
+   8) TRUE / FALSE
+   ========================================================= */
+function tfStart(){tfOrder=shuffle(TF.map(function(_,i){return i;}));tfIdx=0;tfRender();}
+function tfRender(){
+  tfLocked=false; $('tfFb').textContent=''; $('tfFb').className='fb';
+  if(tfIdx>=tfOrder.length){
+    $('tfQ').textContent='🎉 You answered them all! Super travail !';
+    $('tfCount').textContent=''; $('tfBar').style.width='100%'; confetti(); return;
+  }
+  const q=TF[tfOrder[tfIdx]];
+  $('tfQ').textContent=q[0];
+  $('tfCount').textContent='Statement '+(tfIdx+1)+' of '+tfOrder.length;
+  $('tfBar').style.width=Math.round(tfIdx/tfOrder.length*100)+'%';
+}
+function tfAnswer(v){
+  if(tfLocked)return;
+  if(tfIdx>=tfOrder.length)return;
+  tfLocked=true;
+  const q=TF[tfOrder[tfIdx]];
+  if(v===q[1]){addScore(10,true);$('tfFb').textContent='🎉 Correct! +10 — '+q[2];$('tfFb').className='fb good';}
+  else{$('tfFb').textContent='Not this time. The answer is '+(q[1]?'VRAI ✅':'FAUX ❌')+' — '+q[2];$('tfFb').className='fb bad';}
+}
+
+/* =========================================================
+   9) DRAG & DROP
+   ========================================================= */
+function ddStart(){
+  ddSel=null; ddSelEl=null;
+  $('ddFb').textContent='Drag or tap a word into each blank line! 🧩';
+  $('ddFb').className='fb';
+  const pool=$('ddPool'); pool.innerHTML='';
+  shuffle(DDWORDS.slice()).forEach(function(w){
+    const c=document.createElement('div');
+    c.className='chipw'; c.textContent=w; c.draggable=true; c.dataset.w=w;
+    c.addEventListener('dragstart',function(e){try{e.dataTransfer.setData('text/plain',w);}catch(err){}});
+    c.addEventListener('click',function(){
+      if(ddSelEl)ddSelEl.classList.remove('sel');
+      if(ddSelEl===c){ddSelEl=null;ddSel=null;return;}
+      ddSelEl=c; ddSel=w; c.classList.add('sel');
+    });
+    pool.appendChild(c);
+  });
+  const box=$('ddSents'); box.innerHTML='';
+  DD.forEach(function(s,i){
+    const d=document.createElement('div');
+    d.className='sent';
+    const parts=s[0].split('___');
+    const a=document.createElement('span'); a.textContent=(i+1)+'. '+parts[0];
+    const slot=document.createElement('span');
+    slot.className='slot'; slot.textContent='______'; slot.dataset.ans=s[1];
+    const b=document.createElement('span'); b.textContent=parts[1]||'';
+    const eng=document.createElement('span'); eng.className='eng'; eng.textContent='🇬🇧 '+s[2];
+    slot.addEventListener('dragover',function(e){e.preventDefault();});
+    slot.addEventListener('drop',function(e){
+      e.preventDefault();
+      let w=''; try{w=e.dataTransfer.getData('text/plain');}catch(err){}
+      ddTry(slot,w);
+    });
+    slot.addEventListener('click',function(){ if(ddSel)ddTry(slot,ddSel); });
+    d.appendChild(a); d.appendChild(slot); d.appendChild(b); d.appendChild(eng);
+    box.appendChild(d);
+  });
+}
+function ddTry(slot,w){
+  if(!w||slot.classList.contains('filled'))return;
+  if(w===slot.dataset.ans){
+    slot.textContent=w; slot.classList.add('filled');
+    addScore(10,true);
+    $('ddFb').textContent='🎉 Yes! +10 points!'; $('ddFb').className='fb good';
+    say(slot.parentNode.textContent.replace(/^\d+\.\s*/,'').replace(/🇬🇧.*/,''));
+    if(ddSelEl){ddSelEl.classList.remove('sel');ddSelEl=null;ddSel=null;}
+    const total=$('ddSents').querySelectorAll('.slot').length;
+    const done=$('ddSents').querySelectorAll('.slot.filled').length;
+    if(done===total){$('ddFb').textContent='🏆 All blanks filled! Champion !';confetti();}
+  }else{
+    slot.classList.add('shake');
+    setTimeout(function(){slot.classList.remove('shake');},320);
+    $('ddFb').textContent='Hmm, that word does not fit here. Try another! 🙂';
+    $('ddFb').className='fb bad';
+  }
+}
+
+/* =========================================================
+   10) LISTEN & CHOOSE
+   ========================================================= */
+function liStart(){liOrder=shuffle(LI.map(function(_,i){return i;}));liIdx=0;liRender();}
+function liRender(){
+  liLocked=false; $('liFb').textContent=''; $('liFb').className='fb';
+  if(liIdx>=liOrder.length){
+    $('liOpts').innerHTML=''; $('liCount').textContent='';
+    $('liFb').textContent='🎉 Great listening! You finished them all!';
+    $('liFb').className='fb good'; $('liBar').style.width='100%'; confetti(); return;
+  }
+  const q=LI[liOrder[liIdx]];
+  $('liCount').textContent='Sound '+(liIdx+1)+' of '+liOrder.length;
+  $('liBar').style.width=Math.round(liIdx/liOrder.length*100)+'%';
+  const box=$('liOpts'); box.innerHTML='';
+  const opts=q[1].map(function(t,i){return {t:t,ok:i===q[2]};});
+  shuffle(opts);
+  opts.forEach(function(o){
+    const b=document.createElement('button');
+    b.className='opt'; b.textContent=o.t;
+    b.addEventListener('click',function(){
+      if(liLocked)return; liLocked=true;
+      const all=box.querySelectorAll('.opt');
+      all.forEach(function(x){x.disabled=true;});
+      if(o.ok){
+        b.classList.add('right'); addScore(10,true);
+        $('liFb').textContent='🎉 Correct! You heard "'+q[0]+'" — +10 points!';
+        $('liFb').className='fb good';
+      }else{
+        b.classList.add('wrong');
+        all.forEach(function(x){if(x.textContent===q[1][q[2]])x.classList.add('right');});
+        $('liFb').textContent='It was "'+q[0]+'" = '+q[1][q[2]]+'. Listen again! 👂';
+        $('liFb').className='fb bad';
+      }
+    });
+    box.appendChild(b);
+  });
+  say(q[0]);
+}
+
+/* =========================================================
+   11) WIRING
+   ========================================================= */
+function wire(){
+  /* tabs */
+  document.querySelectorAll('nav button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('nav button').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      document.querySelectorAll('section').forEach(function(s){s.classList.remove('on');});
+      const sec=document.getElementById(b.dataset.t);
+      if(sec)sec.classList.add('on');
+      if('speechSynthesis' in window){try{speechSynthesis.cancel();}catch(e){}}
+      renderScore();
+    });
+  });
+
+  $('voiceTest').addEventListener('click',function(){say('Bonjour ! Il est deux heures et quart.',0.85);});
+
+  /* flashcards */
+  $('fcCard').addEventListener('click',function(){fcFlipped=!fcFlipped;fcRender();if(fcFlipped)say(fcList[fcIdx][0]);});
+  $('fcNext').addEventListener('click',function(){fcMove(1);});
+  $('fcPrev').addEventListener('click',function(){fcMove(-1);});
+  $('fcSay').addEventListener('click',function(){say(fcList[fcIdx][0]);});
+  $('fcShuf').addEventListener('click',function(){shuffle(fcList);fcIdx=0;fcFlipped=false;fcRender();});
+  $('fcFilter').addEventListener('change',fcBuild);
+  $('fcKnow').addEventListener('click',function(){
+    const key=fcList[fcIdx][0];
+    if(!DATA.cards[key]){DATA.cards[key]=1;addScore(5,false);}
+    save(); renderScore(); fcMove(1);
+  });
+
+  /* mcq */
+  $('mcNext').addEventListener('click',function(){mcIdx++;mcRender();});
+  $('mcRestart').addEventListener('click',mcStart);
+
+  /* match */
+  document.querySelectorAll('[data-mr]').forEach(function(b){
+    b.addEventListener('click',function(){maStart(+b.dataset.mr);});
+  });
+
+  /* true false */
+  $('tfT').addEventListener('click',function(){tfAnswer(true);});
+  $('tfF').addEventListener('click',function(){tfAnswer(false);});
+  $('tfNext').addEventListener('click',function(){tfIdx++;tfRender();});
+  $('tfRestart').addEventListener('click',tfStart);
+
+  /* drag drop */
+  $('ddReset').addEventListener('click',ddStart);
+
+  /* listen */
+  $('liPlay').addEventListener('click',function(){
+    if(liIdx<liOrder.length)say(LI[liOrder[liIdx]][0]);
+  });
+  $('liNext').addEventListener('click',function(){liIdx++;liRender();});
+  $('liRestart').addEventListener('click',liStart);
+
+  /* reset */
+  $('pReset').addEventListener('click',function(){
+    DATA.score=0;DATA.right=0;DATA.cards={};save();renderScore();
+    $('pMsg').textContent='All clear! Ready for a fresh start 🌱';
+  });
+}
+
+/* =========================================================
+   12) INIT  — everything is defined above this point
+   ========================================================= */
+if('speechSynthesis' in window){
+  try{speechSynthesis.onvoiceschanged=loadV;}catch(e){}
+}
+wire();
+loadV();
+fcBuild();
+mcStart();
+tfStart();
+liStart();
+maStart(0);
+ddStart();
+renderScore();
+save();
+</script>
+</body>
+</html>
