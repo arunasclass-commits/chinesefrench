@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aruna's Class · New HSK2 · Lesson 1 · Hanzi Practice</title>
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.7/dist/hanzi-writer.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+:root{--ink:#12233f;--red:#c0392b;--gold:#d4af37;--teal:#0d9488;--blue:#1d6fa8;--purple:#6b21a8;--green:#059669;--light:#f0f4ff;--border:#e2e8f0;--muted:#7a8699;--shadow:0 8px 32px rgba(0,0,0,.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--ink);min-height:100vh}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#2c1a5c 60%,#c0392b 100%);color:#fff;padding:18px 16px 20px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'字';position:absolute;font-family:'Noto Sans SC';font-size:150px;font-weight:900;color:rgba(255,255,255,.06);top:-16px;left:50%;transform:translateX(-50%)}
+.badge{display:inline-block;background:rgba(212,175,55,.2);border:1px solid rgba(212,175,55,.5);color:var(--gold);font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:8px}
+.hero h1{font-family:'Noto Sans SC';font-size:clamp(17px,4.5vw,26px);font-weight:900}
+.hero .sub{font-size:12.5px;color:rgba(255,255,255,.8);margin-top:3px}
+.board{display:flex;justify-content:center;gap:7px;padding:9px;flex-wrap:wrap;background:#fff;position:sticky;top:0;z-index:60;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sc{border-radius:13px;padding:5px 12px;text-align:center;min-width:70px;border:2px solid var(--border)}
+.sc .v{font-size:17px;font-weight:900;line-height:1}.sc .l{font-size:8.5px;font-weight:800;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.sc.t{border-color:var(--gold);background:#fffbe9}.sc.t .v{color:#b8860b}
+.sc.w{border-color:var(--teal);background:#ecfdf5}.sc.w .v{color:var(--teal)}
+.sc.r{border-color:var(--blue);background:#eef6ff}.sc.r .v{color:var(--blue)}
+.nav{display:flex;background:#fff;border-bottom:2px solid var(--border);overflow-x:auto;position:sticky;top:52px;z-index:55}
+.nt{flex-shrink:0;padding:11px 12px;border:none;background:none;font-family:'Nunito';font-size:12px;font-weight:800;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.nt.on{color:var(--red);border-bottom-color:var(--red)}
+.wrap{max-width:820px;margin:0 auto;padding:16px 14px 70px}
+.sec{display:none}.sec.on{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.meta{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:8px}
+.bar{background:var(--border);border-radius:5px;height:7px;margin-bottom:12px;overflow:hidden}
+.barf{height:7px;border-radius:5px;background:linear-gradient(90deg,var(--red),var(--gold));width:0;transition:width .3s}
+/* write layout */
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:680px){.wgrid{grid-template-columns:1fr}}
+.wcard{background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:14px;text-align:center}
+.wcard h3{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;color:var(--teal);margin-bottom:8px}
+.hz{width:210px;height:210px;margin:0 auto;border:2px solid var(--border);border-radius:12px;background:
+ linear-gradient(#eab8b0,#eab8b0) center/1px 100% no-repeat,
+ linear-gradient(#eab8b0,#eab8b0) center/100% 1px no-repeat,#fff}
+.row{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.btn{padding:9px 14px;border:none;border-radius:9px;font-family:'Nunito';font-size:12.5px;font-weight:800;cursor:pointer}
+.bl{background:var(--blue);color:#fff}.bg{background:var(--teal);color:#fff}.bs{background:#f1f5f9;color:#475569}.br{background:var(--red);color:#fff}.bo{background:#c05621;color:#fff}
+.wcount{font-size:13px;font-weight:800;color:var(--ink);margin-top:8px}
+.wcount b{color:var(--red)}
+.info{background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:14px 16px;margin-top:12px;text-align:center}
+.info .big{font-family:'Noto Sans SC';font-size:40px;font-weight:900}
+.info .py{font-size:16px;color:var(--blue);font-weight:800}
+.info .en{font-size:14px;color:var(--ink);font-weight:700;margin-top:2px}
+.navc{display:flex;gap:8px;justify-content:space-between;margin:12px 0}
+.nbtn{flex:1;padding:12px;border:none;border-radius:10px;font-family:'Nunito';font-weight:800;cursor:pointer;background:var(--ink);color:#fff}
+.nbtn:disabled{opacity:.4}
+.dots{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer}
+.dot.cur{background:var(--red);transform:scale(1.3)}.dot.done{background:var(--teal)}
+/* mcq */
+.qcard{background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:20px;text-align:center}
+.qbig{font-family:'Noto Sans SC';font-size:72px;font-weight:900;margin:6px 0}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.opt{background:#fff;border:2px solid var(--border);border-radius:11px;padding:14px;font-family:'Nunito';font-size:15px;font-weight:800;cursor:pointer;color:var(--ink)}
+.opt.zh{font-family:'Noto Sans SC';font-size:30px}
+.opt:hover:not(.lock){border-color:var(--blue)}
+.opt.ok{background:#d1fae5!important;border-color:var(--green)!important;color:#065f46!important}
+.opt.no{background:#fee2e2!important;border-color:var(--red)!important;color:#991b1b!important}
+.fb{margin-top:12px;padding:10px;border-radius:9px;font-weight:800;display:none}
+.fb.ok{background:#d1fae5;color:#065f46;display:block}.fb.no{background:#fee2e2;color:#991b1b;display:block}
+.nextb{display:block;margin:12px auto 0;padding:11px 30px;background:var(--ink);color:#fff;border:none;border-radius:9px;font-weight:800;cursor:pointer}
+.tf{display:flex;gap:10px;justify-content:center;margin-top:14px}
+.tf .btn{padding:14px 30px;font-size:15px}
+/* fill drag */
+.fillword{display:flex;gap:8px;justify-content:center;margin:16px 0;flex-wrap:wrap}
+.fchar{font-family:'Noto Sans SC';font-size:44px;font-weight:900}
+.fslot{width:60px;height:60px;border:2px dashed var(--blue);border-radius:12px;background:#f8fbff;display:flex;align-items:center;justify-content:center}
+.fslot.filled{border-style:solid}
+.bank{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.tile{width:56px;height:56px;border:2px solid var(--border);border-radius:12px;background:#fff;font-family:'Noto Sans SC';font-size:28px;font-weight:700;cursor:grab;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.done-card{background:linear-gradient(135deg,#0d9488,#0f766e);color:#fff;border-radius:16px;padding:24px;text-align:center;box-shadow:var(--shadow)}
+.done-card .big{font-size:40px;font-weight:900;margin:6px 0}
+.done-card .rb{margin-top:12px;padding:10px 24px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:9px;font-weight:800;cursor:pointer}
+/* match */
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mcol{display:flex;flex-direction:column;gap:8px}
+.mh{font-size:11px;font-weight:800;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:4px}
+.mi{border:2px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;font-weight:700;min-height:50px;display:flex;align-items:center;justify-content:center;text-align:center}
+.mi.zh{font-family:'Noto Sans SC';font-size:26px}
+.mi.en{font-size:13px}
+.mi.sel{border-color:var(--red);background:#fff5f5}
+.mi.matched{background:#d1fae5;border-color:var(--green);color:#065f46;opacity:.85;cursor:default}
+.mi.wrong{border-color:var(--red);background:#fee2e2;animation:shk .3s}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.tip{background:#fff7e6;border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:8px 12px;margin-bottom:12px;font-size:12px;color:#7c5e10;font-weight:700;line-height:1.5}
+.footer{text-align:center;padding:18px;font-size:11px;color:var(--muted)}
+.footer b{color:var(--red)}
+svg.ety{width:100%;max-width:420px;height:auto;display:block;margin:0 auto}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="badge">Aruna's Class · ChineseFrench</div>
+  <h1>新 HSK 2 · 第一课 · 汉字练习 Hanzi Practice</h1>
+  <div class="sub">Lesson 1 · <b id="totc">98</b> characters · write · etymology · recognize</div>
+</div>
+<div class="board">
+  <div class="sc t"><div class="v" id="vTot">98</div><div class="l">字 Chars</div></div>
+  <div class="sc w"><div class="v" id="vWrite">0</div><div class="l">写 Written×10</div></div>
+  <div class="sc r"><div class="v" id="vRec">0</div><div class="l">认 Recognise</div></div>
+</div>
+<div class="nav" id="nav"></div>
+<div class="wrap">
+  <div class="sec on" id="s-write"></div>
+  <div class="sec" id="s-meaning"></div>
+  <div class="sec" id="s-sound"></div>
+  <div class="sec" id="s-tf"></div>
+  <div class="sec" id="s-fill"></div>
+  <div class="sec" id="s-match"></div>
+</div>
+<div class="footer">New HSK Course 2 · Lesson 1 · 98 Hanzi · stroke data by Hanzi Writer · <b>Aruna's Class</b></div>
+<script>
+const CHARS=[{"c": "请", "py": "qǐng", "en": "to invite; please", "ety": "讠 speech radical + 青 qīng (phonetic)"}, {"c": "问", "py": "wèn", "en": "to ask", "ety": "门 mén door (phonetic) around 口 mouth"}, {"c": "您", "py": "nín", "en": "you (polite)", "ety": "你 nǐ 'you' over 心 heart — respectful 'you'"}, {"c": "是", "py": "shì", "en": "to be; yes; correct", "ety": "日 sun + 正 straight; ideograph 'this/correct'"}, {"c": "王", "py": "wáng", "en": "king; surname", "ety": "three horizontals (heaven–man–earth) joined by one line"}, {"c": "一", "py": "yī", "en": "one", "ety": "a single horizontal stroke"}, {"c": "飞", "py": "fēi", "en": "to fly", "ety": "pictograph of a bird flapping in flight"}, {"c": "的", "py": "de", "en": "(possessive particle)", "ety": "白 white + 勺 ladle (phonetic)"}, {"c": "表", "py": "biǎo", "en": "surface; cousin; watch", "ety": "originally a fur coat (毛 + 衣); 'outer' → cousin"}, {"c": "姐", "py": "jiě", "en": "elder sister", "ety": "女 woman radical + 且 qiě (phonetic)"}, {"c": "吗", "py": "ma", "en": "(question particle)", "ety": "口 mouth radical + 马 mǎ (phonetic)"}, {"c": "你", "py": "nǐ", "en": "you", "ety": "亻 person radical + 尔 (phonetic)"}, {"c": "们", "py": "men", "en": "(plural for people)", "ety": "亻 person radical + 门 mén (phonetic)"}, {"c": "就", "py": "jiù", "en": "then; just; precisely", "ety": "京 tall building + 尤; 'to go up to'"}, {"c": "她", "py": "tā", "en": "she; her", "ety": "女 woman radical + 也 (phonetic)"}, {"c": "学", "py": "xué", "en": "to learn; study", "ety": "child 子 under a roof learning (hands + 冖)"}, {"c": "生", "py": "shēng", "en": "to be born; student; life", "ety": "pictograph of a sprout growing from the ground 土"}, {"c": "吧", "py": "ba", "en": "(suggestion particle)", "ety": "口 mouth radical + 巴 bā (phonetic)"}, {"c": "对", "py": "duì", "en": "correct; right; toward", "ety": "hand 寸 + 又; 'to face/answer correctly'"}, {"c": "我", "py": "wǒ", "en": "I; me", "ety": "originally a hand holding a weapon (戈); borrowed for 'I'"}, {"c": "白", "py": "bái", "en": "white; surname", "ety": "pictograph of a candle flame / sunlight = bright, white"}, {"c": "家", "py": "jiā", "en": "home; family", "ety": "宀 roof over 豕 pig — a household"}, {"c": "月", "py": "yuè", "en": "moon; month", "ety": "pictograph of a crescent moon"}, {"c": "安", "py": "ān", "en": "peace; safe", "ety": "女 woman under 宀 roof = safe, peaceful"}, {"c": "妮", "py": "nī", "en": "girl (in names)", "ety": "女 woman radical + 尼 ní (phonetic)"}, {"c": "好", "py": "hǎo", "en": "good; well", "ety": "女 woman + 子 child = 'good'"}, {"c": "叫", "py": "jiào", "en": "to call; to be named", "ety": "口 mouth radical + 丩 jiū (phonetic)"}, {"c": "雪", "py": "xuě", "en": "snow", "ety": "雨 rain radical over 彐 (a hand) — sweepable rain = snow"}, {"c": "给", "py": "gěi", "en": "to give; for", "ety": "纟 silk radical + 合 hé (phonetic)"}, {"c": "打", "py": "dǎ", "en": "to hit; to do (verb)", "ety": "扌 hand radical + 丁 dīng (phonetic)"}, {"c": "电", "py": "diàn", "en": "electricity", "ety": "originally 雨 + lightning streak; simplified 电"}, {"c": "话", "py": "huà", "en": "speech; words", "ety": "讠 speech radical + 舌 tongue"}, {"c": "了", "py": "le", "en": "(completed-action particle)", "ety": "pictograph of a swaddled child with bound arms"}, {"c": "让", "py": "ràng", "en": "to let; to have (sb do)", "ety": "讠 speech radical + 上 (phonetic)"}, {"c": "来", "py": "lái", "en": "to come", "ety": "pictograph of a wheat plant; borrowed for 'come'"}, {"c": "接", "py": "jiē", "en": "to receive; to pick up", "ety": "扌 hand radical + 妾 (phonetic)"}, {"c": "谢", "py": "xiè", "en": "to thank", "ety": "讠 speech radical + 射 shè (phonetic)"}, {"c": "不", "py": "bù", "en": "not; no", "ety": "pictograph of a flower calyx; borrowed for negation"}, {"c": "客", "py": "kè", "en": "guest", "ety": "宀 roof + 各 gè (phonetic) — one who comes under your roof"}, {"c": "气", "py": "qì", "en": "air; gas; qi", "ety": "pictograph of rising vapour / breath"}, {"c": "第", "py": "dì", "en": "(ordinal prefix)", "ety": "⺮ bamboo + 弟 dì (phonetic) — marks sequence"}, {"c": "次", "py": "cì", "en": "time; order; next", "ety": "冫 ice + 欠 yawn; 'second/next in order'"}, {"c": "北", "py": "běi", "en": "north", "ety": "two people standing back to back = 'back' → north"}, {"c": "京", "py": "jīng", "en": "capital", "ety": "pictograph of a tall building on a hill = capital city"}, {"c": "都", "py": "dōu", "en": "all; (also dū: capital)", "ety": "者 + 阝 (city) — a gathering, 'all'"}, {"c": "中", "py": "zhōng", "en": "middle; center; China", "ety": "a line drawn through the center of a target"}, {"c": "文", "py": "wén", "en": "writing; culture", "ety": "pictograph of crossed lines / a pattern = writing"}, {"c": "旅", "py": "lǚ", "en": "to travel", "ety": "banner 方 with people gathered = a travelling group"}, {"c": "游", "py": "yóu", "en": "to travel; to swim", "ety": "氵 water radical + 斿 (phonetic)"}, {"c": "这", "py": "zhè", "en": "this", "ety": "辶 walking radical + 文 (phonetic)"}, {"c": "几", "py": "jǐ", "en": "how many; a few", "ety": "pictograph of a small table; borrowed for 'how many'"}, {"c": "天", "py": "tiān", "en": "sky; day", "ety": "一 (sky) over 大 (a person) = what is above people"}, {"c": "忙", "py": "máng", "en": "busy", "ety": "忄 heart radical + 亡 wáng (phonetic)"}, {"c": "事", "py": "shì", "en": "matter; affair; business", "ety": "a hand holding a writing brush = official business"}, {"c": "找", "py": "zhǎo", "en": "to look for", "ety": "扌 hand radical + 戈 (phonetic)"}, {"c": "喂", "py": "wèi", "en": "hello (on phone); to feed", "ety": "口 mouth radical + 畏 wèi (phonetic)"}, {"c": "明", "py": "míng", "en": "bright; clear", "ety": "日 sun + 月 moon = bright"}, {"c": "时", "py": "shí", "en": "time; hour", "ety": "日 sun radical + 寸 (phonetic) — measuring the sun"}, {"c": "间", "py": "jiān", "en": "between; room; (measure)", "ety": "日 sun seen through 门 a door = a gap/space"}, {"c": "想", "py": "xiǎng", "en": "to think; to want", "ety": "相 xiāng (phonetic) over 心 heart"}, {"c": "帮", "py": "bāng", "en": "to help", "ety": "originally 封 + 巾; 'to assist / a group'"}, {"c": "意", "py": "yì", "en": "meaning; idea; wish", "ety": "音 sound over 心 heart = what the heart sounds out"}, {"c": "思", "py": "sī", "en": "to think", "ety": "田 (brain/field) over 心 heart = thinking"}, {"c": "已", "py": "yǐ", "en": "already", "ety": "a variant of 巳; borrowed for 'already, stop'"}, {"c": "经", "py": "jīng", "en": "to pass through; already", "ety": "纟 silk radical + 巠 (phonetic) — warp threads"}, {"c": "到", "py": "dào", "en": "to arrive; to reach", "ety": "至 to arrive + 刂 knife (phonetic dāo)"}, {"c": "什", "py": "shén", "en": "what (什么)", "ety": "亻 person radical + 十 ten (phonetic)"}, {"c": "么", "py": "me", "en": "(interrogative suffix)", "ety": "simplified form of 麼; a grammatical suffix"}, {"c": "候", "py": "hòu", "en": "time; to wait", "ety": "亻 person radical + 侯 hóu (phonetic)"}, {"c": "今", "py": "jīn", "en": "today; now", "ety": "pictograph of a covering / 'present moment'"}, {"c": "早", "py": "zǎo", "en": "early; morning", "ety": "日 sun over 十 = sun risen above the horizon"}, {"c": "上", "py": "shàng", "en": "up; above; on", "ety": "a mark above a baseline = 'above'"}, {"c": "可", "py": "kě", "en": "can; may", "ety": "口 mouth + 丂 = to approve, 'can'"}, {"c": "以", "py": "yǐ", "en": "by means of; with", "ety": "originally a plough; 'to use, by means of'"}, {"c": "李", "py": "lǐ", "en": "plum; surname Li", "ety": "木 tree + 子 child = plum tree"}, {"c": "他", "py": "tā", "en": "he; him", "ety": "亻 person radical + 也 (phonetic)"}, {"c": "还", "py": "hái", "en": "still; also; (huán: return)", "ety": "辶 walking radical + 不 (phonetic)"}, {"c": "在", "py": "zài", "en": "at; in; (to be) located", "ety": "土 earth + 才 (phonetic) — to exist somewhere"}, {"c": "校", "py": "xiào", "en": "school", "ety": "木 tree/wood radical + 交 jiāo (phonetic)"}, {"c": "呢", "py": "ne", "en": "(particle)", "ety": "口 mouth radical + 尼 ní (phonetic)"}, {"c": "那", "py": "nà", "en": "that; then", "ety": "阝 (city) + 冉 (phonetic) — 'that (place)'"}, {"c": "个", "py": "gè", "en": "(general measure word)", "ety": "pictograph of a single bamboo stalk = one item"}, {"c": "再", "py": "zài", "en": "again; once more", "ety": "一 + 冉; 'a second time'"}, {"c": "见", "py": "jiàn", "en": "to see; to meet", "ety": "目 eye over 儿 legs = a person looking"}, {"c": "老", "py": "lǎo", "en": "old", "ety": "pictograph of an old person with long hair and a cane"}, {"c": "师", "py": "shī", "en": "teacher; master", "ety": "阜 + 帀; originally an army, then 'master'"}, {"c": "吃", "py": "chī", "en": "to eat", "ety": "口 mouth radical + 乞 qǐ (phonetic)"}, {"c": "烤", "py": "kǎo", "en": "to roast; to bake", "ety": "火 fire radical + 考 kǎo (phonetic)"}, {"c": "鸭", "py": "yā", "en": "duck", "ety": "甲 jiǎ (phonetic) + 鸟 bird"}, {"c": "介", "py": "jiè", "en": "to introduce; between", "ety": "pictograph of a person 人 between boundaries"}, {"c": "绍", "py": "shào", "en": "to introduce; to continue", "ety": "纟 silk radical + 召 zhào (phonetic)"}, {"c": "很", "py": "hěn", "en": "very", "ety": "彳 step radical + 艮 (phonetic)"}, {"c": "多", "py": "duō", "en": "many; much; more than", "ety": "two 夕 (evening) stacked = piling up = many"}, {"c": "东", "py": "dōng", "en": "east", "ety": "sun 日 rising behind a tree 木 (trad. 東) = east"}, {"c": "西", "py": "xī", "en": "west", "ety": "pictograph of a bird's nest / basket; borrowed for west"}, {"c": "太", "py": "tài", "en": "too; very; greatest", "ety": "大 'big' with an extra dot = 'very big, too'"}, {"c": "有", "py": "yǒu", "en": "to have; there is", "ety": "a hand 又 holding meat 月 = to possess"}, {"c": "懂", "py": "dǒng", "en": "to understand", "ety": "忄 heart radical + 董 dǒng (phonetic)"}];
+const FILL=[{"w": ["请", "问"], "py": "qǐngwèn", "bi": 1}, {"w": ["表", "姐"], "py": "biǎojiě", "bi": 0}, {"w": ["学", "生"], "py": "xuésheng", "bi": 1}, {"w": ["谢", "谢"], "py": "xièxie", "bi": 0}, {"w": ["北", "京"], "py": "Běijīng", "bi": 1}, {"w": ["中", "文"], "py": "Zhōngwén", "bi": 0}, {"w": ["旅", "游"], "py": "lǚyóu", "bi": 1}, {"w": ["明", "天"], "py": "míngtiān", "bi": 0}, {"w": ["时", "间"], "py": "shíjiān", "bi": 1}, {"w": ["帮", "忙"], "py": "bāngmáng", "bi": 0}, {"w": ["意", "思"], "py": "yìsi", "bi": 1}, {"w": ["已", "经"], "py": "yǐjīng", "bi": 0}, {"w": ["什", "么"], "py": "shénme", "bi": 1}, {"w": ["时", "候"], "py": "shíhou", "bi": 0}, {"w": ["今", "天"], "py": "jīntiān", "bi": 0}, {"w": ["早", "上"], "py": "zǎoshang", "bi": 1}, {"w": ["可", "以"], "py": "kěyǐ", "bi": 0}, {"w": ["学", "校"], "py": "xuéxiào", "bi": 1}, {"w": ["再", "见"], "py": "zàijiàn", "bi": 0}, {"w": ["老", "师"], "py": "lǎoshī", "bi": 1}, {"w": ["介", "绍"], "py": "jièshào", "bi": 0}, {"w": ["东", "西"], "py": "dōngxi", "bi": 1}, {"w": ["电", "话"], "py": "diànhuà", "bi": 0}, {"w": ["接", "朋", "友"], "py": "jiē péngyou", "bi": 0}, {"w": ["北", "京", "烤", "鸭"], "py": "Běijīng kǎoyā", "bi": 2}, {"w": ["很", "多"], "py": "hěnduō", "bi": 1}];
+const N=CHARS.length;
+let recScore=0;
+const writes=new Array(N).fill(0);
+function mastered(){return writes.filter(x=>x>=10).length;}
+function board(){document.getElementById('vTot').textContent=N;document.getElementById('vWrite').textContent=mastered();document.getElementById('vRec').textContent=recScore;}
+let zhVoice=null;
+function pv(){const vs=speechSynthesis.getVoices();zhVoice=vs.find(v=>/zh|Chinese/i.test(v.lang+v.name))||null;}
+if('speechSynthesis'in window){pv();speechSynthesis.onvoiceschanged=pv;}
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=0.8;if(zhVoice)u.voice=zhVoice;speechSynthesis.speak(u);}catch(e){}}
+function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+const TABS=[['write','✍️ 写字 Write'],['meaning','🧠 Meaning'],['sound','🔊 Sound→字'],['tf','✅ True/False'],['fill','🧩 Fill-blank'],['match','🔗 Match']];
+const nav=document.getElementById('nav');
+TABS.forEach((t,i)=>{const b=document.createElement('button');b.className='nt'+(i===0?' on':'');b.id='nt-'+t[0];b.textContent=t[1];b.onclick=()=>show(t[0]);nav.appendChild(b);});
+function show(id){TABS.forEach(t=>{document.getElementById('nt-'+t[0]).classList.toggle('on',t[0]===id);document.getElementById('s-'+t[0]).classList.toggle('on',t[0]===id);});window.scrollTo(0,0);}
+
+/* ===== ETYMOLOGY SVG ===== */
+function etySVG(o){
+  const lines=[];const words=o.ety.split(' ');let line='';
+  words.forEach(w=>{if((line+' '+w).length>34){lines.push(line);line=w;}else line=(line?line+' ':'')+w;});
+  if(line)lines.push(line);
+  let ty=150;const tl=lines.map(l=>{const s='<text x="210" y="'+ty+'" text-anchor="middle" font-family="Nunito,sans-serif" font-size="13" fill="#334155">'+l.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</text>';ty+=18;return s;}).join('');
+  return '<svg class="ety" viewBox="0 0 420 '+(ty+14)+'" xmlns="http://www.w3.org/2000/svg">'
+    +'<rect x="1" y="1" width="418" height="'+(ty+12)+'" rx="14" fill="#fff" stroke="#e2e8f0"/>'
+    +'<rect x="20" y="20" width="90" height="90" rx="10" fill="#fef3c7" stroke="#d4af37"/>'
+    +'<text x="65" y="88" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="64" font-weight="900" fill="#12233f">'+o.c+'</text>'
+    +'<text x="135" y="52" font-family="Nunito,sans-serif" font-size="22" font-weight="900" fill="#1d6fa8">'+o.py+'</text>'
+    +'<text x="135" y="78" font-family="Nunito,sans-serif" font-size="15" font-weight="700" fill="#12233f">'+o.en.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</text>'
+    +'<text x="135" y="104" font-family="Nunito,sans-serif" font-size="11" font-weight="800" fill="#b8860b">ETYMOLOGY / 字源</text>'
+    +tl+'</svg>';
+}
+
+/* ===== WRITE TAB ===== */
+let idx=0, modelW=null, quizW=null, hintOn=true;
+function renderWrite(){
+ const w=document.getElementById('s-write');
+ w.innerHTML='<div class="tip">Watch the stroke order on the left, then write it 10× on the right. Toggle the outline hint. Stroke data loads from the internet (Hanzi Writer).</div>'
+  +'<div class="meta"><span id="wm"></span><span id="ws"></span></div><div class="bar"><div class="barf" id="wbar"></div></div>'
+  +'<div class="wgrid">'
+  +'<div class="wcard"><h3>① 笔顺 Stroke order</h3><div class="hz" id="modelBox"></div><div class="row"><button class="btn bl" id="animate">▶ Animate</button><button class="btn bs" id="hear">🔊 Hear</button></div></div>'
+  +'<div class="wcard"><h3>② 写 10 次 Write ×10</h3><div class="hz" id="quizBox"></div><div class="row"><button class="btn bo" id="hint">👁 Hint: on</button><button class="btn bs" id="redo">↺ Restart char</button></div><div class="wcount" id="wc"></div></div>'
+  +'</div>'
+  +'<div class="info" id="etybox"></div>'
+  +'<div class="navc"><button class="nbtn" id="prev">← Prev</button><button class="nbtn" id="next">Next →</button></div>'
+  +'<div class="dots" id="wdots"></div>';
+ w.querySelector('#prev').onclick=()=>{if(idx>0){idx--;drawWrite();}};
+ w.querySelector('#next').onclick=()=>{if(idx<N-1){idx++;drawWrite();}};
+ w.querySelector('#animate').onclick=()=>{if(modelW)modelW.animateCharacter();};
+ w.querySelector('#hear').onclick=()=>say(CHARS[idx].c);
+ w.querySelector('#hint').onclick=()=>{hintOn=!hintOn;w.querySelector('#hint').textContent='👁 Hint: '+(hintOn?'on':'off');if(quizW){hintOn?quizW.showOutline():quizW.hideOutline();}};
+ w.querySelector('#redo').onclick=()=>{writes[idx]=0;board();mountQuiz();updateWC();};
+ drawWrite();
+}
+function drawWrite(){
+ const o=CHARS[idx];
+ document.getElementById('wm').textContent='Character '+(idx+1)+' / '+N+'  ·  '+o.c+' '+o.py;
+ document.getElementById('ws').textContent='Mastered: '+mastered()+' / '+N;
+ document.getElementById('wbar').style.width=((idx+1)/N*100)+'%';
+ document.getElementById('etybox').innerHTML=etySVG(o);
+ const dots=document.getElementById('wdots');dots.innerHTML='';CHARS.forEach((_,i)=>{const d=document.createElement('div');d.className='dot'+(i===idx?' cur':writes[i]>=10?' done':'');d.onclick=()=>{idx=i;drawWrite();};dots.appendChild(d);});
+ document.getElementById('hint').textContent='👁 Hint: '+(hintOn?'on':'off');
+ mountModel();mountQuiz();updateWC();
+}
+function mountModel(){const el=document.getElementById('modelBox');el.innerHTML='';if(!window.HanziWriter){el.innerHTML='<div style="padding:80px 8px;color:#94a3b8;font-size:12px">Stroke data needs internet</div>';return;}modelW=HanziWriter.create(el,CHARS[idx].c,{width:206,height:206,padding:10,showCharacter:false,showOutline:true,strokeColor:'#12233f',outlineColor:'#d7dee8',strokeAnimationSpeed:1,delayBetweenStrokes:120});modelW.animateCharacter();}
+function mountQuiz(){const el=document.getElementById('quizBox');el.innerHTML='';if(!window.HanziWriter){el.innerHTML='<div style="padding:80px 8px;color:#94a3b8;font-size:12px">Stroke data needs internet</div>';return;}quizW=HanziWriter.create(el,CHARS[idx].c,{width:206,height:206,padding:10,showCharacter:false,showOutline:hintOn,strokeColor:'#0d9488',drawingColor:'#c0392b',drawingWidth:22,showHintAfterMisses:3});startQuiz();}
+function startQuiz(){if(!quizW)return;quizW.quiz({onComplete:()=>{writes[idx]++;board();updateWC();if(writes[idx]<10){setTimeout(()=>{quizW.hideCharacter();startQuiz();},350);}else{updateWC(true);}}});}
+function updateWC(done){const el=document.getElementById('wc');const n=Math.min(writes[idx],10);el.innerHTML='Written: <b>'+n+'</b> / 10 '+(writes[idx]>=10?'✓ mastered!':'');}
+
+/* ===== GENERIC MCQ (meaning / sound) ===== */
+function runMCQ(mountId,mode){
+ const mount=document.getElementById(mountId);
+ const order=shuffle([...Array(N).keys()]);let p=0,correct=0,answered=false;
+ const isSound=(mode==='sound');
+ mount.innerHTML='<div class="tip">'+(isSound?'Press ▶, listen, then pick the character you heard — no pinyin.':'Look at the character and choose its meaning — no pinyin.')+' All '+N+' characters. +1 each.</div>'
+  +'<div class="meta"><span id="'+mountId+'-m"></span><span id="'+mountId+'-s"></span></div><div class="bar"><div class="barf" id="'+mountId+'-bar"></div></div><div id="'+mountId+'-q"></div>';
+ function draw(){
+   answered=false;const q=document.getElementById(mountId+'-q');
+   if(p>=N){q.innerHTML='<div class="done-card"><div>Section done!</div><div class="big">'+correct+' / '+N+'</div><button class="rb" onclick="location.reload()">↺ Restart</button></div>';document.getElementById(mountId+'-m').textContent='';document.getElementById(mountId+'-bar').style.width='100%';return;}
+   const o=CHARS[order[p]];
+   document.getElementById(mountId+'-m').textContent='Q '+(p+1)+' / '+N;
+   document.getElementById(mountId+'-s').textContent='Score: '+correct;
+   document.getElementById(mountId+'-bar').style.width=(p/N*100)+'%';
+   let opts;
+   if(isSound){opts=shuffle([o].concat(shuffle(CHARS.filter(x=>x.c!==o.c)).slice(0,3)));}
+   else{opts=shuffle([o].concat(shuffle(CHARS.filter(x=>x.en!==o.en)).slice(0,3)));}
+   let html='<div class="qcard">';
+   if(isSound){html+='<button class="btn bl" id="play" style="font-size:15px;padding:14px 26px">▶ Play sound</button><div style="font-size:13px;color:#7a8699;font-weight:800;margin-top:10px">Which character did you hear?</div>';}
+   else{html+='<div class="qbig">'+o.c+'</div><div style="font-size:12px;color:#7a8699;font-weight:800">What does it mean?</div>';}
+   html+='<div class="opts">'+opts.map((x,i)=>'<button class="opt'+(isSound?' zh':'')+'" data-i="'+i+'">'+(isSound?x.c:x.en)+'</button>').join('')+'</div><div class="fb" id="'+mountId+'-fb"></div></div>';
+   q.innerHTML=html;
+   if(isSound){const pl=document.getElementById('play');pl.onclick=()=>say(o.c);setTimeout(()=>say(o.c),300);}
+   const btns=q.querySelectorAll('.opt');
+   btns.forEach(b=>b.onclick=()=>{
+     if(answered)return;answered=true;
+     const chosen=opts[+b.dataset.i];const ok=(isSound?chosen.c===o.c:chosen.en===o.en);
+     btns.forEach(x=>{x.classList.add('lock');const xo=opts[+x.dataset.i];if((isSound?xo.c===o.c:xo.en===o.en))x.classList.add('ok');});
+     const fb=document.getElementById(mountId+'-fb');
+     if(ok){correct++;recScore++;board();fb.className='fb ok';fb.innerHTML='✓ '+o.c+' = '+o.en+' ('+o.py+')';}
+     else{b.classList.add('no');fb.className='fb no';fb.innerHTML='✗ '+o.c+' = '+o.en+' ('+o.py+')';}
+     say(o.c);
+     const nb=document.createElement('button');nb.className='nextb';nb.textContent=p<N-1?'Next →':'Finish ✓';nb.onclick=()=>{p++;draw();};q.querySelector('.qcard').appendChild(nb);
+   });
+ }
+ draw();
+}
+
+/* ===== TRUE / FALSE ===== */
+function runTF(){
+ const mount=document.getElementById('s-tf');
+ const order=shuffle([...Array(N).keys()]);let p=0,correct=0,answered=false;
+ mount.innerHTML='<div class="tip">Is the meaning shown correct for the character? Answer 对 (True) or 错 (False). '+N+' items.</div>'
+  +'<div class="meta"><span id="tfm"></span><span id="tfs"></span></div><div class="bar"><div class="barf" id="tfbar"></div></div><div id="tfq"></div>';
+ function draw(){
+   answered=false;const q=document.getElementById('tfq');
+   if(p>=N){q.innerHTML='<div class="done-card"><div>True/False done!</div><div class="big">'+correct+' / '+N+'</div><button class="rb" onclick="location.reload()">↺ Restart</button></div>';document.getElementById('tfm').textContent='';document.getElementById('tfbar').style.width='100%';return;}
+   const o=CHARS[order[p]];const showTrue=Math.random()<0.5;
+   const shown=showTrue?o:shuffle(CHARS.filter(x=>x.en!==o.en))[0];
+   const meaning=showTrue?o.en:shown.en;
+   document.getElementById('tfm').textContent='Q '+(p+1)+' / '+N;document.getElementById('tfs').textContent='Score: '+correct;document.getElementById('tfbar').style.width=(p/N*100)+'%';
+   q.innerHTML='<div class="qcard"><div class="qbig">'+o.c+'</div><div style="font-size:16px;font-weight:800">means &ldquo;'+meaning+'&rdquo; ?</div><div class="tf"><button class="btn bg" id="t">对 True</button><button class="btn br" id="f">错 False</button></div><div class="fb" id="tffb"></div></div>';
+   function ans(choseTrue){if(answered)return;answered=true;const ok=(choseTrue===showTrue);const fb=document.getElementById('tffb');if(ok){correct++;recScore++;board();fb.className='fb ok';fb.innerHTML='✓ Correct! '+o.c+' = '+o.en+' ('+o.py+')';}else{fb.className='fb no';fb.innerHTML='✗ '+o.c+' actually = '+o.en+' ('+o.py+')';}say(o.c);const nb=document.createElement('button');nb.className='nextb';nb.textContent=p<N-1?'Next →':'Finish ✓';nb.onclick=()=>{p++;draw();};q.querySelector('.qcard').appendChild(nb);}
+   document.getElementById('t').onclick=()=>ans(true);document.getElementById('f').onclick=()=>ans(false);
+ }
+ draw();
+}
+
+/* ===== FILL BLANK (drag & drop) ===== */
+function runFill(){
+ const mount=document.getElementById('s-fill');
+ const order=shuffle([...Array(FILL.length).keys()]);let p=0,correct=0,answered=false,dragged=null;
+ mount.innerHTML='<div class="tip">Drag (or tap) the correct character into the blank. The pinyin tells you the word; only the missing character is blank. '+FILL.length+' items.</div>'
+  +'<div class="meta"><span id="flm"></span><span id="fls"></span></div><div class="bar"><div class="barf" id="flbar"></div></div><div id="flq"></div>';
+ function draw(){
+   answered=false;const q=document.getElementById('flq');
+   if(p>=FILL.length){q.innerHTML='<div class="done-card"><div>Fill-blank done!</div><div class="big">'+correct+' / '+FILL.length+'</div><button class="rb" onclick="location.reload()">↺ Restart</button></div>';document.getElementById('flm').textContent='';document.getElementById('flbar').style.width='100%';return;}
+   const it=FILL[order[p]];const ans=it.w[it.bi];
+   document.getElementById('flm').textContent='Q '+(p+1)+' / '+FILL.length;document.getElementById('fls').textContent='Score: '+correct;document.getElementById('flbar').style.width=(p/FILL.length*100)+'%';
+   let wordHtml='<div class="fillword">';
+   it.w.forEach((ch,i)=>{wordHtml+=(i===it.bi)?'<div class="fslot" id="slot"></div>':'<span class="fchar">'+ch+'</span>';});
+   wordHtml+='</div>';
+   const opts=shuffle([ans].concat(shuffle(CHARS.map(x=>x.c).filter(c=>!it.w.includes(c))).slice(0,3)));
+   let bank='<div class="bank" id="bank">'+opts.map(c=>'<button class="tile" draggable="true" data-c="'+c+'">'+c+'</button>').join('')+'</div>';
+   q.innerHTML='<div class="qcard"><div style="font-size:15px;font-weight:800;color:#1d6fa8">'+it.py+'</div>'+wordHtml+bank+'<div class="fb" id="flfb"></div><button class="btn bo" id="check" style="margin-top:6px">Check ✓</button></div>';
+   const slot=document.getElementById('slot');const bankEl=document.getElementById('bank');
+   q.querySelectorAll('.tile').forEach(t=>{
+     t.addEventListener('dragstart',()=>dragged=t);
+     t.addEventListener('click',()=>{if(answered)return;if(t.parentElement===slot){bankEl.appendChild(t);slot.classList.remove('filled');}else{if(slot.firstChild)bankEl.appendChild(slot.firstChild);slot.appendChild(t);slot.classList.add('filled');}});
+   });
+   slot.addEventListener('dragover',e=>e.preventDefault());
+   slot.addEventListener('drop',e=>{e.preventDefault();if(dragged){if(slot.firstChild)bankEl.appendChild(slot.firstChild);slot.appendChild(dragged);slot.classList.add('filled');}});
+   document.getElementById('check').onclick=()=>{
+     if(answered)return;const got=slot.firstChild?slot.firstChild.dataset.c:'';const fb=document.getElementById('flfb');
+     if(got===ans){answered=true;correct++;recScore++;board();fb.className='fb ok';fb.innerHTML='✓ '+it.w.join('')+' — '+it.py;say(it.w.join(''));const nb=document.createElement('button');nb.className='nextb';nb.textContent=p<FILL.length-1?'Next →':'Finish ✓';nb.onclick=()=>{p++;draw();};q.querySelector('.qcard').appendChild(nb);}
+     else{fb.className='fb no';fb.innerHTML='✗ Not yet — try again.';}
+   };
+ }
+ draw();
+}
+
+/* ===== MATCH (no pinyin), sets of 5 ===== */
+function runMatch(){
+ const mount=document.getElementById('s-match');
+ const sets=[];for(let i=0;i<N;i+=5)sets.push([...Array(Math.min(5,N-i)).keys()].map(k=>i+k));
+ let si=0,total=0;
+ mount.innerHTML='<div class="tip">Tap a character, then tap its meaning (no pinyin). Green = matched. '+sets.length+' sets from all '+N+' characters.</div>'
+  +'<div class="meta"><span id="mmm"></span><span id="mms"></span></div><div id="mmq"></div>';
+ function draw(){
+   const q=document.getElementById('mmq');
+   if(si>=sets.length){q.innerHTML='<div class="done-card"><div>Matching done!</div><div class="big">'+total+' / '+N+'</div><button class="rb" onclick="location.reload()">↺ Restart</button></div>';document.getElementById('mmm').textContent='';return;}
+   const grp=sets[si].map(i=>CHARS[i]);
+   document.getElementById('mmm').textContent='Set '+(si+1)+' / '+sets.length;document.getElementById('mms').textContent='Matched: '+total+' / '+N;
+   let sel=null,matched=0;
+   let html='<div class="mgrid"><div><div class="mh">汉字</div><div class="mcol" id="L"></div></div><div><div class="mh">Meaning</div><div class="mcol" id="R"></div></div></div>';
+   q.innerHTML=html;
+   const L=document.getElementById('L'),R=document.getElementById('R');
+   grp.forEach((o,i)=>{const e=document.createElement('div');e.className='mi zh';e.textContent=o.c;e.dataset.k=i;e.onclick=()=>pickL(e);L.appendChild(e);});
+   shuffle(grp.map((_,i)=>i)).forEach(i=>{const o=grp[i];const e=document.createElement('div');e.className='mi en';e.textContent=o.en;e.dataset.k=i;e.onclick=()=>pickR(e);R.appendChild(e);});
+   let selL=null,selR=null;
+   function pickL(e){if(e.classList.contains('matched'))return;L.querySelectorAll('.mi').forEach(x=>x.classList.remove('sel'));e.classList.add('sel');selL=e;say(grp[+e.dataset.k].c);ev();}
+   function pickR(e){if(e.classList.contains('matched'))return;R.querySelectorAll('.mi').forEach(x=>x.classList.remove('sel'));e.classList.add('sel');selR=e;ev();}
+   function ev(){if(!selL||!selR)return;const a=selL,b=selR;if(a.dataset.k===b.dataset.k){a.classList.add('matched');b.classList.add('matched');a.classList.remove('sel');b.classList.remove('sel');matched++;total++;recScore++;board();document.getElementById('mms').textContent='Matched: '+total+' / '+N;selL=selR=null;if(matched===grp.length)setTimeout(()=>{si++;draw();},450);}else{a.classList.add('wrong');b.classList.add('wrong');const x=a,y=b;selL=selR=null;setTimeout(()=>{x.classList.remove('wrong','sel');y.classList.remove('wrong','sel');},350);}}
+ }
+ draw();
+}
+
+/* init */
+board();renderWrite();
+runMCQ('s-meaning','meaning');
+runMCQ('s-sound','sound');
+runTF();runFill();runMatch();
+</script>
+</body>
+</html>
