@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSK2 旅游 Travel Dialogue — Study Hub</title>
+<style>
+  *{box-sizing:border-box}
+  body{background:#fff;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:17px;color:#222;margin:0;padding-bottom:60px}
+  header{background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;padding:22px 16px 16px}
+  header h1{margin:0 0 4px;font-size:22px}
+  header p{margin:0;opacity:.9;font-size:14px}
+  .wrap{max-width:640px;margin:0 auto;padding:0 14px}
+  .voicebar{background:#fff2;border-radius:10px;padding:8px 10px;margin-top:12px;font-size:13px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .voicebar select{max-width:150px}
+  #voiceNote{width:100%;font-size:12px;opacity:.9}
+  nav{position:sticky;top:0;background:#fff;z-index:10;display:flex;gap:6px;overflow-x:auto;padding:10px 14px;border-bottom:1px solid #eee}
+  nav button{border:none;background:#f3f4f6;color:#555;padding:9px 14px;border-radius:999px;font-size:14px;white-space:nowrap;cursor:pointer}
+  nav button.active{background:#ef4444;color:#fff}
+  section{display:none;padding:16px 0}
+  section.on{display:block}
+  .card{background:#fff;border:1px solid #eee;border-left:5px solid #ef4444;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px #0001}
+  .card h3{margin:0 0 8px;font-size:17px}
+  .hanzi{font-size:34px;font-weight:600}
+  .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .spk{border:none;background:#fef3c7;border-radius:50%;width:38px;height:38px;font-size:17px;cursor:pointer}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  .opt{border:2px solid #e5e7eb;background:#fafafa;border-radius:10px;padding:10px;text-align:center;cursor:pointer;font-size:16px}
+  .opt.correct{border-color:#16a34a;background:#dcfce7}
+  .opt.wrong{border-color:#dc2626;background:#fee2e2}
+  .opt.dim{opacity:.5;pointer-events:none}
+  .tfbtns{display:flex;gap:10px;margin-top:10px}
+  .tfbtn{flex:1;border:2px solid #e5e7eb;background:#fafafa;border-radius:10px;padding:10px;cursor:pointer;font-weight:600}
+  .tfbtn.correct{border-color:#16a34a;background:#dcfce7}
+  .tfbtn.wrong{border-color:#dc2626;background:#fee2e2}
+  .fb{font-size:13px;margin-top:6px;min-height:16px;color:#555}
+  .pinline{color:#0369a1;font-size:14px;margin-bottom:6px}
+  .sentence{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+  .tok{font-size:26px;min-width:34px;text-align:center;padding:4px 2px;border-bottom:2px solid transparent}
+  .blank{width:38px;height:38px;border:2px dashed #f97316;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:24px;background:#fff7ed;cursor:pointer}
+  .blank.filled{border-style:solid;background:#fff}
+  .blank.correct{border-color:#16a34a;background:#dcfce7}
+  .blank.wrong{border-color:#dc2626;background:#fee2e2}
+  .bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;padding:10px;background:#f8fafc;border-radius:10px}
+  .tile{font-size:22px;padding:6px 12px;background:#fff;border:2px solid #cbd5e1;border-radius:8px;cursor:grab;user-select:none}
+  .tile.used{opacity:.3;pointer-events:none}
+  .tile.sel{border-color:#f97316;background:#ffedd5}
+  .checkbtn{margin-top:12px;border:none;background:#0ea5e9;color:#fff;padding:9px 16px;border-radius:8px;cursor:pointer;font-size:15px}
+  .barwrap{background:#eee;border-radius:999px;height:12px;overflow:hidden;margin:10px 0}
+  #bar{background:linear-gradient(90deg,#f97316,#ef4444);height:100%;width:0%;transition:width .3s}
+  .streak{font-size:15px;margin-top:6px}
+  .en{color:#666;font-size:14px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>新HSK教程2 · 旅游 Travel Dialogue</h1>
+    <p>Liu Ming &amp; Wang Yixue plan a trip — practice every syllable, sentence and phrase.</p>
+    <div class="voicebar">
+      ⚙ Chinese voice:
+      <select id="voiceSel"></select>
+      <button class="spk" id="testBtn" style="width:auto;border-radius:8px;padding:6px 12px">🔊 Test</button>
+      <div id="voiceNote"></div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <button data-t="tab1" class="active">拼音 Match</button>
+  <button data-t="tab2">对/错 True-False</button>
+  <button data-t="tab3">填空 Fill-in</button>
+  <button data-t="tab4">意思 Meaning</button>
+  <button data-t="tab5">进度 Progress</button>
+</nav>
+
+<main class="wrap">
+
+  <section id="tab1" class="on">
+    <div class="card" style="border-left-color:#0ea5e9">
+      <p class="en">Tap a character's speaker, then choose its correct pinyin from 4 options.</p>
+    </div>
+    <div id="pinyinList"></div>
+  </section>
+
+  <section id="tab2">
+    <div class="card" style="border-left-color:#16a34a">
+      <p class="en">Based on the dialogue: is each statement True or False?</p>
+    </div>
+    <div id="tfList"></div>
+  </section>
+
+  <section id="tab3">
+    <div class="card" style="border-left-color:#f97316">
+      <p class="en">Read the pinyin, then drag (or tap) the correct character into each blank.</p>
+    </div>
+    <div id="fillList"></div>
+  </section>
+
+  <section id="tab4">
+    <div class="card" style="border-left-color:#a855f7">
+      <p class="en">Choose the Mandarin word or phrase that matches the English meaning.</p>
+    </div>
+    <div id="meanList"></div>
+  </section>
+
+  <section id="tab5">
+    <div class="card" style="border-left-color:#ef4444">
+      <h3>Your Progress</h3>
+      <div class="barwrap"><div id="bar"></div></div>
+      <div id="pct">0% complete</div>
+      <div class="streak" id="streakMsg"></div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* ============ STATE (declared first — temporal dead zone rule) ============ */
+let zhVoice = null;
+let allVoices = [];
+let selectedTile = null; // {bankId, tileIdx, char}
+
+/* ============ DATA ============ */
+const CHARS = [
+  ["我","wǒ"],["们","men"],["找","zhǎo"],["个","gè"],["时","shí"],["间","jiān"],
+  ["去","qù"],["旅","lǚ"],["游","yóu"],["怎","zěn"],["么","me"],["样","yàng"],
+  ["好","hǎo"],["啊","a"],["也","yě"],["很","hěn"],["想","xiǎng"],["一","yī"],
+  ["起","qǐ"],["出","chū"],["玩","wán"],["你","nǐ"],["哪","nǎ"],["儿","r"],
+  ["还","hái"],["没","méi"],["呢","ne"],["那","nà"],["再","zài"],["了","le"],
+  ["来","lái"],["买","mǎi"],["票","piào"]
+];
+const ALL_PINYIN = CHARS.map(c=>c[1]);
+
+const TF = [
+  ["Liu Ming wants to find time to travel.", true],
+  ["Wang Yixue does not want to go traveling with Liu Ming.", false],
+  ["Wang Yixue already knows exactly where she wants to go.", false],
+  ["Liu Ming asks Wang Yixue where she wants to go.", true],
+  ["Wang Yixue says she has not decided yet.", true],
+  ["Liu Ming tells Wang Yixue to stop thinking about it.", false],
+  ["Liu Ming will buy the tickets once Wang Yixue decides.", true],
+  ["Wang Yixue says she wants to go out and have fun together.", true]
+];
+
+const FILL = [
+  { pinyin:"Wǒmen zhǎo ge shíjiān qù lǚyóu, zěnmeyàng?",
+    english:"Let us find time to travel, how about it?",
+    tokens:["我","们","找","个","时","间","去","旅","游","，","怎","么","样","？"],
+    blankIdx:[2,7], distract:["走","看"] },
+  { pinyin:"Hǎo a, wǒ yě hěn xiǎng yìqǐ chūqù wán.",
+    english:"Great, I also really want to go out and have fun together.",
+    tokens:["好","啊","，","我","也","很","想","一","起","出","去","玩","。"],
+    blankIdx:[8,11], distract:["坐","喝"] },
+  { pinyin:"Nà nǐ zài xiǎng yi xiǎng, nǐ xiǎng hǎo le, wǒ lái mǎi piào.",
+    english:"Then think it over again, once you have decided, I will buy the tickets.",
+    tokens:["那","你","再","想","一","想","，","你","想","好","了","，","我","来","买","票","。"],
+    blankIdx:[2,14], distract:["等","换"] }
+];
+
+const MEAN = [
+  ["to travel / go on a trip", "旅游", ["旅游","买票","出去","时间"]],
+  ["how about it?", "怎么样", ["怎么样","还没","一起","很想"]],
+  ["together", "一起", ["一起","再想","没想","时间"]],
+  ["go out and have fun", "出去玩", ["出去玩","找时间","想好了","买票"]],
+  ["to decide / make up one's mind", "想好", ["想好","还没","再想","出去"]],
+  ["buy tickets", "买票", ["买票","旅游","出去玩","一起"]],
+  ["find time", "找时间", ["找时间","出去玩","想好","还没"]],
+  ["not yet", "还没", ["还没","一起","买票","旅游"]]
+];
+
+const MILESTONES = ["pinyinDone","tfDone","fillDone","meanDone"];
+
+const APP = (()=>{ try{ return JSON.parse(localStorage.getItem("hsk2app")||"{}"); }catch(e){ return {}; } })();
+const today = new Date().toISOString().slice(0,10);
+if(APP.last!==today){
+  const y = new Date(Date.now()-864e5).toISOString().slice(0,10);
+  APP.streak = (APP.last===y) ? ((APP.streak||0)+1) : 1;
+  APP.last = today;
+}
+APP.done = APP.done || {};
+
+/* ============ HELPERS ============ */
+function save(){ try{ localStorage.setItem("hsk2app", JSON.stringify(APP)); }catch(e){} }
+function markMilestone(part, id){
+  APP.done[id] = 1;
+  // track sub-progress per part out of total items, stored as count
+  APP["cnt_"+part] = (APP["cnt_"+part]||0);
+  save();
+  renderProg();
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function pickDistractors(correct, pool, n){
+  const filtered = pool.filter(p=>p!==correct);
+  return shuffle(filtered).slice(0,n);
+}
+function say(text, rate){
+  if(!("speechSynthesis" in window) || !text) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "zh-CN";
+  if(zhVoice) u.voice = zhVoice;
+  u.rate = rate || 0.85;
+  speechSynthesis.speak(u);
+}
+
+/* ============ VOICE PICKER ============ */
+function loadVoices(){
+  if(!("speechSynthesis" in window)) return;
+  allVoices = speechSynthesis.getVoices();
+  const zh = allVoices.filter(v=>/zh|chinese|mandarin/i.test(v.lang+" "+v.name));
+  const sel = document.getElementById("voiceSel");
+  let saved = NaN; try{ saved = parseInt(localStorage.getItem("hsk2_voice")); }catch(e){}
+  const list = zh.length ? zh : allVoices;
+  if(sel){
+    sel.innerHTML = list.length
+      ? list.map(v=>"<option value=\""+allVoices.indexOf(v)+"\">"+v.name+" ("+v.lang+")</option>").join("")
+      : "<option value=\"-1\">(no voice found)</option>";
+  }
+  let idx = (!isNaN(saved) && allVoices[saved] && /zh/i.test(allVoices[saved].lang)) ? saved : (zh.length ? allVoices.indexOf(zh[0]) : -1);
+  if(idx>=0){ zhVoice = allVoices[idx]; if(sel) sel.value = idx; } else { zhVoice = null; }
+  if(sel && !sel._wired){
+    sel._wired = 1;
+    sel.addEventListener("change", ()=>{
+      const i = +sel.value;
+      zhVoice = i>=0 ? allVoices[i] : null;
+      try{ localStorage.setItem("hsk2_voice", i); }catch(e){}
+      say("你好", 0.85);
+    });
+  }
+  const note = document.getElementById("voiceNote");
+  if(note) note.textContent = zh.length ? ("✓ "+zhVoice.name) : "⚠ No Chinese voice installed on this device — try another browser or add one in system settings.";
+}
+if("speechSynthesis" in window){ speechSynthesis.onvoiceschanged = loadVoices; }
+
+/* ============ TAB 1: PINYIN MATCH ============ */
+function renderPinyin(){
+  const box = document.getElementById("pinyinList");
+  box.innerHTML = "";
+  CHARS.forEach((c,i)=>{
+    const [hanzi, correct] = c;
+    const opts = shuffle([correct, ...pickDistractors(correct, ALL_PINYIN, 3)]);
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.borderLeftColor = "#0ea5e9";
+    card.innerHTML =
+      "<div class=\"row\">"
+      + "<button class=\"spk\" data-say=\""+hanzi+"\">🔊</button>"
+      + "<span class=\"hanzi\">"+hanzi+"</span>"
+      + "</div>"
+      + "<div class=\"opts\" data-char=\""+i+"\">"
+      + opts.map(o=>"<div class=\"opt\" data-val=\""+o+"\">"+o+"</div>").join("")
+      + "</div>"
+      + "<div class=\"fb\"></div>";
+    box.appendChild(card);
+
+    card.querySelector("[data-say]").addEventListener("click", ()=> say(hanzi, 0.8));
+
+    const optsBox = card.querySelector(".opts");
+    const fb = card.querySelector(".fb");
+    optsBox.addEventListener("click", (e)=>{
+      const t = e.target.closest(".opt");
+      if(!t || optsBox.classList.contains("locked")) return;
+      optsBox.classList.add("locked");
+      const val = t.dataset.val;
+      [...optsBox.children].forEach(o=>{
+        o.classList.add("dim");
+        if(o.dataset.val===correct) o.classList.add("correct");
+      });
+      if(val===correct){
+        fb.textContent = "对了! 🌿 Correct.";
+        markMilestone("pinyin", "pin"+i);
+      } else {
+        t.classList.remove("dim"); t.classList.add("wrong");
+        fb.textContent = "Not quite — "+hanzi+" is "+correct+".";
+        markMilestone("pinyin", "pin"+i);
+      }
+    });
+  });
+}
+
+/* ============ TAB 2: TRUE / FALSE ============ */
+function renderTF(){
+  const box = document.getElementById("tfList");
+  box.innerHTML = "";
+  TF.forEach((item,i)=>{
+    const [stmt, answer] = item;
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.borderLeftColor = "#16a34a";
+    card.innerHTML =
+      "<h3>"+stmt+"</h3>"
+      + "<div class=\"tfbtns\" data-i=\""+i+"\">"
+      + "<button class=\"tfbtn\" data-val=\"true\">True</button>"
+      + "<button class=\"tfbtn\" data-val=\"false\">False</button>"
+      + "</div>"
+      + "<div class=\"fb\"></div>";
+    box.appendChild(card);
+    const btnRow = card.querySelector(".tfbtns");
+    const fb = card.querySelector(".fb");
+    btnRow.addEventListener("click",(e)=>{
+      const b = e.target.closest(".tfbtn");
+      if(!b || btnRow.classList.contains("locked")) return;
+      btnRow.classList.add("locked");
+      const chose = b.dataset.val === "true";
+      [...btnRow.children].forEach(x=>{
+        if((x.dataset.val==="true")===answer) x.classList.add("correct");
+      });
+      if(chose!==answer) b.classList.add("wrong");
+      fb.textContent = (chose===answer) ? "对了! 🌿 Correct." : ("Actually: "+(answer?"True":"False")+".");
+      markMilestone("tf","tf"+i);
+    });
+  });
+}
+
+/* ============ TAB 3: FILL-IN DRAG/TAP ============ */
+function renderFill(){
+  const box = document.getElementById("fillList");
+  box.innerHTML = "";
+  FILL.forEach((item,fi)=>{
+    const correctChars = item.blankIdx.map(bi=>item.tokens[bi]);
+    const bankChars = shuffle([...correctChars, ...item.distract]);
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.borderLeftColor = "#f97316";
+    const sentSpan = item.tokens.map((tok,ti)=>{
+      if(item.blankIdx.includes(ti)){
+        const bi = item.blankIdx.indexOf(ti);
+        return "<span class=\"blank\" data-fi=\""+fi+"\" data-slot=\""+bi+"\" data-answer=\""+tok+"\"></span>";
+      }
+      return "<span class=\"tok\">"+tok+"</span>";
+    }).join("");
+
+    card.innerHTML =
+      "<div class=\"pinline\">"+item.pinyin+"</div>"
+      + "<div class=\"en\">"+item.english+"</div>"
+      + "<button class=\"spk\" data-say=\""+item.tokens.filter((t,ti)=>!["，","。","？"].includes(t)||true).join("")+"\">🔊</button>"
+      + "<div class=\"sentence\">"+sentSpan+"</div>"
+      + "<div class=\"bank\" data-fi=\""+fi+"\">"
+      + bankChars.map((c,ci)=>"<div class=\"tile\" draggable=\"true\" data-fi=\""+fi+"\" data-tile=\""+ci+"\" data-char=\""+c+"\">"+c+"</div>").join("")
+      + "</div>"
+      + "<button class=\"checkbtn\" data-fi=\""+fi+"\">Check ✓</button>"
+      + "<div class=\"fb\"></div>";
+    box.appendChild(card);
+
+    card.querySelector("[data-say]").addEventListener("click", ()=>{
+      const sentence = item.tokens.join("").replace(/，|。|？/g,(m)=>m);
+      say(sentence, 0.75);
+    });
+
+    const bank = card.querySelector(".bank");
+    const blanks = [...card.querySelectorAll(".blank")];
+    const fb = card.querySelector(".fb");
+
+    function tileClick(tileEl){
+      if(tileEl.classList.contains("used")) return;
+      [...bank.children].forEach(t=>t.classList.remove("sel"));
+      tileEl.classList.add("sel");
+      selectedTile = {fi, tileEl, char: tileEl.dataset.char};
+    }
+    bank.addEventListener("click",(e)=>{
+      const t = e.target.closest(".tile");
+      if(t) tileClick(t);
+    });
+    bank.addEventListener("dragstart",(e)=>{
+      const t = e.target.closest(".tile");
+      if(t){ e.dataTransfer.setData("text/plain", t.dataset.tile); tileClick(t); }
+    });
+
+    blanks.forEach(bl=>{
+      bl.addEventListener("click", ()=>{
+        if(!selectedTile || selectedTile.fi!==fi) return;
+        if(bl.classList.contains("filled")) return;
+        bl.textContent = selectedTile.char;
+        bl.dataset.filledChar = selectedTile.char;
+        bl.dataset.tileRef = selectedTile.tileEl.dataset.tile;
+        bl.classList.add("filled");
+        selectedTile.tileEl.classList.add("used");
+        selectedTile.tileEl.classList.remove("sel");
+        selectedTile = null;
+      });
+      bl.addEventListener("dragover",(e)=> e.preventDefault());
+      bl.addEventListener("drop",(e)=>{
+        e.preventDefault();
+        if(bl.classList.contains("filled")) return;
+        const tileIdx = e.dataTransfer.getData("text/plain");
+        const tileEl = bank.querySelector(".tile[data-tile=\""+tileIdx+"\"]");
+        if(!tileEl || tileEl.classList.contains("used")) return;
+        bl.textContent = tileEl.dataset.char;
+        bl.dataset.filledChar = tileEl.dataset.char;
+        bl.classList.add("filled");
+        tileEl.classList.add("used");
+      });
+    });
+
+    card.querySelector(".checkbtn").addEventListener("click", ()=>{
+      let allCorrect = true;
+      blanks.forEach(bl=>{
+        if(!bl.classList.contains("filled")){ allCorrect=false; return; }
+        if(bl.dataset.filledChar === bl.dataset.answer){ bl.classList.add("correct"); }
+        else { bl.classList.add("wrong"); allCorrect=false; }
+      });
+      if(allCorrect){
+        fb.textContent = "对了! 🌿 The full sentence is correct.";
+        markMilestone("fill","fill"+fi);
+      } else {
+        fb.textContent = "Some blanks are not right yet — check the red ones and try again.";
+      }
+    });
+  });
+}
+
+/* ============ TAB 4: MEANING MCQ ============ */
+function renderMeaning(){
+  const box = document.getElementById("meanList");
+  box.innerHTML = "";
+  MEAN.forEach((item,i)=>{
+    const [english, correct, opts] = item;
+    const shown = shuffle(opts);
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.borderLeftColor = "#a855f7";
+    card.innerHTML =
+      "<h3>"+english+"</h3>"
+      + "<div class=\"opts\" data-i=\""+i+"\">"
+      + shown.map(o=>"<div class=\"opt\" data-val=\""+o+"\">"+o+"</div>").join("")
+      + "</div>"
+      + "<div class=\"fb\"></div>";
+    box.appendChild(card);
+    const optsBox = card.querySelector(".opts");
+    const fb = card.querySelector(".fb");
+    optsBox.addEventListener("click",(e)=>{
+      const t = e.target.closest(".opt");
+      if(!t || optsBox.classList.contains("locked")) return;
+      optsBox.classList.add("locked");
+      [...optsBox.children].forEach(o=>{
+        o.classList.add("dim");
+        if(o.dataset.val===correct) o.classList.add("correct");
+      });
+      if(t.dataset.val!==correct) t.classList.remove("dim"), t.classList.add("wrong");
+      fb.textContent = (t.dataset.val===correct) ? "对了! 🌿 Correct." : ("Correct answer: "+correct);
+      markMilestone("mean","mean"+i);
+      say(correct, 0.8);
+    });
+  });
+}
+
+/* ============ TAB 5: PROGRESS ============ */
+function renderProg(){
+  const total = CHARS.length + TF.length + FILL.length + MEAN.length;
+  const done = Object.keys(APP.done).length;
+  const pct = Math.round((done/total)*100);
+  document.getElementById("bar").style.width = pct+"%";
+  document.getElementById("pct").textContent = pct+"% complete ("+done+"/"+total+")";
+  const streakEl = document.getElementById("streakMsg");
+  const streak = APP.streak || 1;
+  streakEl.textContent = "🔥 "+streak+" day"+(streak===1?"":"s")+" in a row. 加油! Keep going.";
+}
+
+/* ============ TAB NAV ============ */
+function wireNav(){
+  document.querySelectorAll("nav button").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");
+      document.querySelectorAll("section").forEach(s=>s.classList.remove("on"));
+      document.getElementById(b.dataset.t).classList.add("on");
+      if("speechSynthesis" in window) speechSynthesis.cancel();
+    });
+  });
+}
+
+/* ============ INIT (all calls at the very end) ============ */
+loadVoices();
+document.getElementById("testBtn").addEventListener("click", ()=> say("你好，我们找个时间去旅游", 0.85));
+wireNav();
+renderPinyin();
+renderTF();
+renderFill();
+renderMeaning();
+renderProg();
+save();
+</script>
+</body>
+</html>
