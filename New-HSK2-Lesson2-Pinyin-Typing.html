@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aruna's Class · New HSK2 · Lesson 2 · Pinyin Typing &amp; Score</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+:root{--ink:#12233f;--red:#c0392b;--gold:#d4af37;--teal:#0d9488;--blue:#1d6fa8;--purple:#6b21a8;--green:#059669;--light:#f0f4ff;--border:#e2e8f0;--muted:#7a8699;--shadow:0 8px 32px rgba(0,0,0,.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--ink);min-height:100vh}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#2c1a5c 60%,#c0392b 100%);color:#fff;padding:18px 16px 20px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'拼';position:absolute;font-family:'Noto Sans SC';font-size:150px;font-weight:900;color:rgba(255,255,255,.06);top:-16px;left:50%;transform:translateX(-50%)}
+.badge{display:inline-block;background:rgba(212,175,55,.2);border:1px solid rgba(212,175,55,.5);color:var(--gold);font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:8px}
+.hero h1{font-family:'Noto Sans SC';font-size:clamp(17px,4.5vw,26px);font-weight:900}
+.hero .sub{font-size:12.5px;color:rgba(255,255,255,.8);margin-top:3px}
+.board{display:flex;justify-content:center;gap:7px;padding:9px;flex-wrap:wrap;background:#fff;position:sticky;top:0;z-index:60;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sc{border-radius:13px;padding:5px 12px;text-align:center;min-width:84px;border:2px solid var(--border)}
+.sc .v{font-size:17px;font-weight:900;line-height:1}.sc .l{font-size:8.5px;font-weight:800;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.sc.p{border-color:var(--red);background:#fff1f0}.sc.p .v{color:var(--red);font-size:19px}
+.sc.t{border-color:var(--gold);background:#fffbe9}.sc.t .v{color:#b8860b}
+.sc.w{border-color:var(--teal);background:#ecfdf5}.sc.w .v{color:var(--teal)}
+.sc.r{border-color:var(--blue);background:#eef6ff}.sc.r .v{color:var(--blue)}
+.nav{display:flex;background:#fff;border-bottom:2px solid var(--border);overflow-x:auto;position:sticky;top:52px;z-index:55}
+.nt{flex-shrink:0;padding:11px 12px;border:none;background:none;font-family:'Nunito';font-size:12px;font-weight:800;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.nt.on{color:var(--red);border-bottom-color:var(--red)}
+.wrap{max-width:860px;margin:0 auto;padding:16px 14px 70px}
+.sec{display:none}.sec.on{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.meta{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:8px}
+.bar{background:var(--border);border-radius:5px;height:7px;margin-bottom:12px;overflow:hidden}
+.barf{height:7px;border-radius:5px;background:linear-gradient(90deg,var(--red),var(--gold));width:0;transition:width .3s}
+.tip{background:#fff7e6;border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:8px 12px;margin-bottom:12px;font-size:12px;color:#7c5e10;font-weight:700;line-height:1.55}
+.tip code{background:#fff;border:1px solid #e6d9ae;border-radius:4px;padding:1px 5px;font-family:ui-monospace,monospace;font-size:11.5px;color:#8a6a12}
+.tip b.pts{color:var(--red)}
+.qcard{background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:18px 16px}
+.zh{font-family:'Noto Sans SC';font-size:clamp(22px,5.6vw,30px);font-weight:700;line-height:1.55;margin-bottom:11px}
+.ir{display:flex;gap:7px;align-items:stretch;flex-wrap:wrap}
+.inp{flex:1;min-width:190px;padding:12px 13px;border:2px solid var(--border);border-radius:11px;font-family:ui-monospace,'Nunito',monospace;font-size:16px;font-weight:700;color:var(--ink);background:#fbfcfe}
+.inp:focus{outline:none;border-color:var(--blue);background:#fff}
+.inp.ok{border-color:var(--green);background:#ecfdf5}
+.inp.no{border-color:var(--red);background:#fff1f0}
+.btn{padding:11px 15px;border:none;border-radius:10px;font-family:'Nunito';font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap}
+.bg{background:var(--teal);color:#fff}.bs{background:#eef1f6;color:#475569}.bd{background:var(--ink);color:#fff}.br{background:var(--red);color:#fff}
+.btn:disabled{opacity:.45;cursor:default}
+.ans{margin-top:8px;font-size:14px;font-weight:800;display:none;border-radius:9px;padding:9px 11px;line-height:1.5}
+.ans.ok{display:block;background:#d1fae5;color:#065f46}
+.ans.no{display:block;background:#fee2e2;color:#991b1b}
+.ans .py{font-size:16px;letter-spacing:.2px}
+.ans .en{font-weight:700;opacity:.85;font-size:13px;margin-top:2px}
+.ans .yours{font-weight:700;font-size:12.5px;opacity:.8;margin-top:3px}
+.ans .pt{float:right;font-size:12px;background:rgba(255,255,255,.65);border-radius:6px;padding:1px 7px}
+.navc{display:flex;gap:8px;justify-content:space-between;margin:14px 0 0}
+.nbtn{flex:1;padding:12px;border:none;border-radius:10px;font-family:'Nunito';font-weight:800;cursor:pointer;background:var(--ink);color:#fff}
+.nbtn:disabled{opacity:.4}
+.dots{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border);cursor:pointer}
+.dot.cur{background:var(--red);transform:scale(1.35)}.dot.done{background:var(--teal)}.dot.part{background:var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.wc{background:#fff;border-radius:12px;box-shadow:0 3px 14px rgba(0,0,0,.07);padding:12px 12px 11px}
+.wc .wz{font-family:'Noto Sans SC';font-size:26px;font-weight:700;line-height:1.3}
+.wc .wn{float:right;font-size:11px;font-weight:900;color:var(--muted)}
+.wc .wi{display:flex;gap:6px;margin-top:8px}
+.wc .wi input{flex:1;min-width:0;padding:9px 10px;border:2px solid var(--border);border-radius:9px;font-family:ui-monospace,'Nunito',monospace;font-size:14px;font-weight:700;background:#fbfcfe}
+.wc .wi input:focus{outline:none;border-color:var(--blue);background:#fff}
+.wc .wi input.ok{border-color:var(--green);background:#ecfdf5}
+.wc .wi input.no{border-color:var(--red);background:#fff1f0}
+.wc .wi button{border:none;border-radius:9px;padding:0 11px;font-family:'Nunito';font-weight:800;font-size:12px;cursor:pointer;background:var(--teal);color:#fff}
+.wc .wa{display:none;margin-top:7px;font-size:12.5px;font-weight:800;border-radius:8px;padding:6px 9px}
+.wc .wa.ok{display:block;background:#d1fae5;color:#065f46}
+.wc .wa.no{display:block;background:#fee2e2;color:#991b1b}
+.wc .wa .e{font-weight:700;opacity:.85;font-size:11.5px}
+.tools{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:11px}
+.lst{background:#fff;border-radius:12px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:10px}
+.lst .h{background:#f7f9fc;border-bottom:2px solid var(--border);padding:7px 12px;font-size:11px;font-weight:900;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+.lst .ln{padding:10px 12px;border-top:1px solid #eef1f6;display:flex;gap:9px;align-items:flex-start}
+.lst .ln:first-of-type{border-top:none}
+.lst .num{font-size:11px;font-weight:900;color:var(--muted);min-width:24px;margin-top:5px}
+.lst .bdy{flex:1}
+.lst .z{font-family:'Noto Sans SC';font-size:19px;font-weight:700;line-height:1.5}
+.lst .p{font-size:14px;font-weight:800;color:var(--blue);margin-top:1px}
+.lst .e{font-size:12.5px;color:var(--muted);font-weight:700;margin-top:1px}
+.spk{border:none;background:#eef1f6;color:#475569;border-radius:8px;padding:5px 8px;font-size:12px;cursor:pointer;font-weight:800}
+.search{width:100%;padding:11px 13px;border:2px solid var(--border);border-radius:11px;font-family:'Nunito';font-size:14px;font-weight:700;margin-bottom:10px}
+.search:focus{outline:none;border-color:var(--blue)}
+.empty{background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:26px;text-align:center;font-weight:800;color:var(--muted)}
+.report{background:linear-gradient(135deg,#0d9488,#0f766e);color:#fff;border-radius:16px;padding:20px;text-align:center;box-shadow:var(--shadow);margin-bottom:12px}
+.report .big{font-size:40px;font-weight:900;margin:4px 0}
+.report .gr{font-family:'Noto Sans SC';font-size:19px;font-weight:900}
+.report .sm{font-size:12.5px;opacity:.9;font-weight:700}
+.report .rb{margin-top:12px;padding:9px 22px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:9px;font-weight:800;cursor:pointer;font-family:'Nunito'}
+.footer{text-align:center;padding:18px;font-size:11px;color:var(--muted)}
+.footer b{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="badge">Aruna's Class · ChineseFrench</div>
+  <h1>新 HSK 2 · 第二课 · 打拼音 Pinyin Typing</h1>
+  <div class="sub">还是打车去北大吧 · <b>30</b> sentences (L2) + <b>40</b> two-syllable words (L1) · scored out of <b>700</b></div>
+</div>
+<div class="board">
+  <div class="sc p"><div class="v" id="vP">0</div><div class="l">得分 Score</div></div>
+  <div class="sc t"><div class="v" id="vS">0 / 30</div><div class="l">句 Sentences</div></div>
+  <div class="sc w"><div class="v" id="vW">0 / 40</div><div class="l">词 Words</div></div>
+  <div class="sc r"><div class="v" id="vA">—</div><div class="l">准确 Accuracy</div></div>
+</div>
+<div class="nav" id="nav"></div>
+<div class="wrap">
+  <div class="sec on" id="s-sent"></div>
+  <div class="sec" id="s-word"></div>
+  <div class="sec" id="s-again"></div>
+  <div class="sec" id="s-all"></div>
+</div>
+<div class="footer">新 HSK 教程 2 · 第二课 还是打车去北大吧 · 30 句 + 第一课 40 词 · <b>Aruna's Class</b></div>
+<script>
+const SENT=[{"zh":"请问，这儿有到北京大学的公交车吗？","py":"Qǐngwèn, zhèr yǒu dào Běijīng Dàxué de gōngjiāochē ma?","en":"Excuse me, is there a bus from here to Peking University?"},{"zh":"有，但车站有点儿远。","py":"Yǒu, dàn chēzhàn yǒudiǎnr yuǎn.","en":"Yes, but the bus stop is a bit far."},{"zh":"这儿好打车吗？","py":"Zhèr hǎo dǎchē ma?","en":"Is it easy to get a taxi around here?"},{"zh":"谢谢，我们还是打车去吧。","py":"Xièxie, wǒmen háishi dǎchē qù ba.","en":"Thank you — let's take a taxi instead."},{"zh":"好，没问题。","py":"Hǎo, méi wèntí.","en":"All right, no problem."},{"zh":"学校里人真多啊！","py":"Xuéxiào li rén zhēn duō a!","en":"It's so crowded on campus!"},{"zh":"北京大学有四万多名学生呢！","py":"Běijīng Dàxué yǒu sìwàn duō míng xuésheng ne!","en":"Peking University has over forty thousand students!"},{"zh":"你是怎么知道的？","py":"Nǐ shì zěnme zhīdào de?","en":"How do you know?"},{"zh":"是网上说的。","py":"Shì wǎngshang shuō de.","en":"I read it online."},{"zh":"网上还说北京大学有三千多名外国学生。","py":"Wǎngshang hái shuō Běijīng Dàxué yǒu sānqiān duō míng wàiguó xuésheng.","en":"It also says online that Peking University has more than three thousand international students."},{"zh":"我也想来这儿学习。","py":"Wǒ yě xiǎng lái zhèr xuéxí.","en":"I'd love to study here too."},{"zh":"那边就有一间教室。","py":"Nàbiān jiù yǒu yì jiān jiàoshì.","en":"There's a classroom right over there."},{"zh":"我们去看一下吧。","py":"Wǒmen qù kàn yíxià ba.","en":"Let's go and have a look."},{"zh":"家月，你看，学校里有家电影院！","py":"Jiāyuè, nǐ kàn, xuéxiào li yǒu jiā diànyǐngyuàn!","en":"Jiayue, look — there's a cinema on campus!"},{"zh":"是啊，电影院还不小。","py":"Shì a, diànyǐngyuàn hái bù xiǎo.","en":"Yes, and the cinema is not small either."},{"zh":"他们卖的电影票也很便宜。","py":"Tāmen mài de diànyǐngpiào yě hěn piányi.","en":"The film tickets they sell are very cheap too."},{"zh":"天啊！有的还不到二十块钱。","py":"Tiān a! Yǒude hái bú dào èrshí kuài qián.","en":"Goodness! Some are less than twenty yuan."},{"zh":"那你想不想去看个电影？","py":"Nà nǐ xiǎng bu xiǎng qù kàn ge diànyǐng?","en":"So do you want to go and see a film?"},{"zh":"还是别看电影了。","py":"Háishi bié kàn diànyǐng le.","en":"Let's not watch a film after all."},{"zh":"北京大学就很好看！","py":"Běijīng Dàxué jiù hěn hǎokàn!","en":"Peking University itself is well worth seeing!"},{"zh":"北京大学很大，有四万多名学生。","py":"Běijīng Dàxué hěn dà, yǒu sìwàn duō míng xuésheng.","en":"Peking University is big; it has over forty thousand students."},{"zh":"学校很漂亮，里边还有家电影院。","py":"Xuéxiào hěn piàoliang, lǐbian hái yǒu jiā diànyǐngyuàn.","en":"The campus is beautiful, and there is even a cinema inside."},{"zh":"电影票也不贵。","py":"Diànyǐngpiào yě bú guì.","en":"The film tickets are not expensive either."},{"zh":"我们有时间还想再过来看个电影。","py":"Wǒmen yǒu shíjiān hái xiǎng zài guòlái kàn ge diànyǐng.","en":"When we have time we'd like to come back again to see a film."},{"zh":"教室里有二十多个学生。","py":"Jiàoshì li yǒu èrshí duō ge xuésheng.","en":"There are more than twenty students in the classroom."},{"zh":"那件衣服很好看，还是买那件吧。","py":"Nà jiàn yīfu hěn hǎokàn, háishi mǎi nà jiàn ba.","en":"That piece of clothing looks good — better buy that one."},{"zh":"你第一次去北京，还是找个人接你吧。","py":"Nǐ dì-yī cì qù Běijīng, háishi zhǎo ge rén jiē nǐ ba.","en":"It's your first time in Beijing — better find someone to meet you."},{"zh":"现在学中文的学生很多。","py":"Xiànzài xué Zhōngwén de xuésheng hěn duō.","en":"There are a lot of students learning Chinese nowadays."},{"zh":"打车太贵了，还是坐公交车吧。","py":"Dǎchē tài guì le, háishi zuò gōngjiāochē ba.","en":"A taxi is too expensive — let's take the bus instead."},{"zh":"我们还是明天再过来吧。","py":"Wǒmen háishi míngtiān zài guòlái ba.","en":"Let's come back again tomorrow instead."}];
+const WORD=[{"zh":"请问","py":"qǐngwèn","en":"excuse me; may I ask"},{"zh":"您好","py":"nín hǎo","en":"hello (polite)"},{"zh":"表姐","py":"biǎojiě","en":"elder female cousin"},{"zh":"学生","py":"xuésheng","en":"student"},{"zh":"老师","py":"lǎoshī","en":"teacher"},{"zh":"学校","py":"xuéxiào","en":"school"},{"zh":"电话","py":"diànhuà","en":"telephone"},{"zh":"旅游","py":"lǚyóu","en":"to travel"},{"zh":"介绍","py":"jièshào","en":"to introduce"},{"zh":"东西","py":"dōngxi","en":"thing"},{"zh":"意思","py":"yìsi","en":"meaning"},{"zh":"已经","py":"yǐjīng","en":"already"},{"zh":"时间","py":"shíjiān","en":"time"},{"zh":"时候","py":"shíhou","en":"moment; time"},{"zh":"明天","py":"míngtiān","en":"tomorrow"},{"zh":"今天","py":"jīntiān","en":"today"},{"zh":"早上","py":"zǎoshang","en":"morning"},{"zh":"什么","py":"shénme","en":"what"},{"zh":"可以","py":"kěyǐ","en":"can; may"},{"zh":"帮忙","py":"bāngmáng","en":"to help out"},{"zh":"再见","py":"zàijiàn","en":"goodbye"},{"zh":"谢谢","py":"xièxie","en":"thank you"},{"zh":"客气","py":"kèqi","en":"polite; formal"},{"zh":"烤鸭","py":"kǎoyā","en":"roast duck"},{"zh":"北京","py":"Běijīng","en":"Beijing"},{"zh":"中文","py":"Zhōngwén","en":"Chinese (language)"},{"zh":"好吃","py":"hǎochī","en":"tasty"},{"zh":"第一","py":"dì-yī","en":"first"},{"zh":"你们","py":"nǐmen","en":"you (plural)"},{"zh":"我们","py":"wǒmen","en":"we; us"},{"zh":"他们","py":"tāmen","en":"they; them"},{"zh":"安妮","py":"Ānnī","en":"Annie"},{"zh":"这个","py":"zhège","en":"this one"},{"zh":"那个","py":"nàge","en":"that one"},{"zh":"很多","py":"hěn duō","en":"many; a lot"},{"zh":"不忙","py":"bù máng","en":"not busy"},{"zh":"有事","py":"yǒu shì","en":"to have something on"},{"zh":"在家","py":"zài jiā","en":"at home"},{"zh":"想来","py":"xiǎng lái","en":"to want to come"},{"zh":"一天","py":"yì tiān","en":"one day"}];
+const MAXPTS=700;
+
+/* ---------- pinyin grading: tones optional, spelling must be right ---------- */
+const TONE={'ā':'a','á':'a','ǎ':'a','à':'a','ē':'e','é':'e','ě':'e','è':'e','ī':'i','í':'i','ǐ':'i','ì':'i','ō':'o','ó':'o','ǒ':'o','ò':'o','ū':'u','ú':'u','ǔ':'u','ù':'u','ǖ':'v','ǘ':'v','ǚ':'v','ǜ':'v','ü':'v','ń':'n','ň':'n','ǹ':'n','ḿ':'m'};
+function norm(s){
+  let t=String(s||'').toLowerCase().replace(/u:/g,'v');
+  let o='';
+  for(const ch of t) o += (TONE[ch]!==undefined?TONE[ch]:ch);
+  o=o.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  return o.replace(/[^a-z]/g,'');
+}
+function firstDiff(good,got){
+  const n=Math.min(good.length,got.length);
+  for(let i=0;i<n;i++) if(good[i]!==got[i]) return i;
+  return good.length===got.length?-1:n;
+}
+
+/* ---------- state: 10 pts first try, 5 pts after a retry, 0 if revealed ---------- */
+const sRes=SENT.map(()=>({st:null,pts:0}));   // st: null | 'ok' | 'miss' | 'shown'
+const wRes=WORD.map(()=>({st:null,pts:0}));
+function score(){let p=0;sRes.forEach(r=>p+=r.pts);wRes.forEach(r=>p+=r.pts);return p;}
+function nRight(a){return a.filter(r=>r.st==='ok').length;}
+function nTried(a){return a.filter(r=>r.st!==null).length;}
+function grade(p){
+  const pc=p/MAXPTS*100;
+  if(pc>=90)return['优秀 Outstanding','🏆'];
+  if(pc>=75)return['很好 Very good','🌟'];
+  if(pc>=60)return['不错 Good','👍'];
+  if(pc>0)  return['加油 Keep going','💪'];
+  return['开始吧 Let\'s start','🚀'];
+}
+function board(){
+  document.getElementById('vP').textContent=score()+' / '+MAXPTS;
+  document.getElementById('vS').textContent=nRight(sRes)+' / '+SENT.length;
+  document.getElementById('vW').textContent=nRight(wRes)+' / '+WORD.length;
+  const t=nTried(sRes)+nTried(wRes), r=nRight(sRes)+nRight(wRes);
+  document.getElementById('vA').textContent=t?Math.round(r/t*100)+'%':'—';
+}
+
+/* ---------- speech ---------- */
+let zhVoice=null;
+function pv(){try{const vs=speechSynthesis.getVoices();zhVoice=vs.find(v=>/zh|Chinese/i.test(v.lang+v.name))||null;}catch(e){}}
+if('speechSynthesis' in window){pv();speechSynthesis.onvoiceschanged=pv;}
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=0.8;if(zhVoice)u.voice=zhVoice;speechSynthesis.speak(u);}catch(e){}}
+
+/* ---------- tabs ---------- */
+const TABS=[['sent','⌨️ 30 句 · 第二课'],['word','🧩 40 词 · 第一课'],['again','⚠️ 错题 Try again'],['all','📖 全部 All 70']];
+const nav=document.getElementById('nav');
+TABS.forEach((t,i)=>{const b=document.createElement('button');b.className='nt'+(i===0?' on':'');b.id='nt-'+t[0];b.textContent=t[1];b.onclick=()=>show(t[0]);nav.appendChild(b);});
+function show(id){
+  TABS.forEach(t=>{document.getElementById('nt-'+t[0]).classList.toggle('on',t[0]===id);document.getElementById('s-'+t[0]).classList.toggle('on',t[0]===id);});
+  window.scrollTo(0,0);
+  if(id==='again')drawAgain();
+  if(id==='all')drawAll();
+}
+
+/* ================= SENTENCES ================= */
+let si=0;
+function renderSent(){
+  const w=document.getElementById('s-sent');
+  w.innerHTML='<div class="tip">Read the Mandarin sentence and type it in <b>pinyin</b>. '
+   +'<b>Tone marks are not required</b> — <code>ni hao</code>, <code>ni3 hao3</code> and <code>nǐ hǎo</code> all count, and spaces do not matter. '
+   +'The <b>spelling</b> must be right. Type <code>v</code> for ü (<code>lvyou</code> = lǚyóu). Press <b>Enter</b> to check.<br>'
+   +'Scoring: <b class="pts">10</b> points first try · <b class="pts">5</b> points if you get it right after a miss · <b class="pts">0</b> if you press Show.</div>'
+   +'<div class="meta"><span id="sm"></span><span id="ss"></span></div><div class="bar"><div class="barf" id="sbar"></div></div>'
+   +'<div id="sq"></div>'
+   +'<div class="navc"><button class="nbtn" id="sprev">← Prev</button><button class="nbtn" id="snext">Next →</button></div>'
+   +'<div class="dots" id="sdots"></div>';
+  w.querySelector('#sprev').onclick=()=>{if(si>0){si--;drawSent();}};
+  w.querySelector('#snext').onclick=()=>{if(si<SENT.length-1){si++;drawSent();}};
+  drawSent();
+}
+function drawSent(){
+  const o=SENT[si];
+  document.getElementById('sm').textContent='Sentence '+(si+1)+' / '+SENT.length;
+  document.getElementById('ss').textContent='Score: '+score()+' / '+MAXPTS;
+  document.getElementById('sbar').style.width=((si+1)/SENT.length*100)+'%';
+  document.getElementById('sq').innerHTML='<div class="qcard"><div class="zh">'+o.zh+'</div>'
+   +'<div class="ir">'
+   +'<input class="inp" id="SI" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="type the pinyin — tones not needed">'
+   +'<button class="btn bg" id="SC">Check ✓</button>'
+   +'<button class="btn bs" id="SS">🔊</button>'
+   +'<button class="btn bs" id="SH">Show</button>'
+   +'</div><div class="ans" id="SA"></div></div>';
+  document.getElementById('sprev').disabled=(si===0);
+  document.getElementById('snext').disabled=(si===SENT.length-1);
+  document.getElementById('SC').onclick=()=>gradeSent(false);
+  document.getElementById('SH').onclick=()=>gradeSent(true);
+  document.getElementById('SS').onclick=()=>say(o.zh);
+  document.getElementById('SI').addEventListener('keydown',e=>{
+    if(e.key!=='Enter')return; e.preventDefault(); gradeSent(false);
+    if(sRes[si].st==='ok' && si<SENT.length-1){si++;drawSent();}
+  });
+  drawSDots();
+  const f=document.getElementById('SI'); if(f)f.focus();
+}
+function gradeSent(reveal){
+  const o=SENT[si], r=sRes[si];
+  const inp=document.getElementById('SI'), box=document.getElementById('SA');
+  const good=norm(o.py), got=norm(inp.value);
+  if(!got && !reveal){inp.focus();return;}
+  const ok=!reveal && got===good;
+  let earned=0;
+  if(reveal){ if(r.st===null){r.st='shown';r.pts=0;} }
+  else if(ok){
+    if(r.st===null){r.st='ok';r.pts=10;earned=10;}
+    else if(r.st==='miss'){r.st='ok';r.pts=5;earned=5;}
+  } else if(r.st===null){ r.st='miss'; r.pts=0; }
+  inp.classList.remove('ok','no'); inp.classList.add(ok?'ok':'no');
+  let extra='';
+  if(!ok && got){
+    const d=firstDiff(good,got);
+    extra='<div class="yours">you typed: '+inp.value.trim()+(d>=0?'  ·  first difference at letter '+(d+1):'')+'</div>';
+  }
+  box.className='ans '+(ok?'ok':'no');
+  box.innerHTML=(earned?'<span class="pt">+'+earned+'</span>':'')+(ok?'✓ ':'✗ ')
+    +'<span class="py">'+o.py+'</span><div class="en">'+o.en+'</div>'+extra;
+  say(o.zh); board(); drawSDots();
+  document.getElementById('ss').textContent='Score: '+score()+' / '+MAXPTS;
+}
+function drawSDots(){
+  const d=document.getElementById('sdots'); if(!d)return; d.innerHTML='';
+  SENT.forEach((_,i)=>{
+    const r=sRes[i];
+    const cls=i===si?'cur':(r.st==='ok'?'done':(r.st===null?'':'part'));
+    const e=document.createElement('div'); e.className='dot '+cls; e.title='Sentence '+(i+1);
+    e.onclick=()=>{si=i;drawSent();}; d.appendChild(e);
+  });
+}
+
+/* ================= WORDS ================= */
+function renderWord(){
+  const w=document.getElementById('s-word');
+  w.innerHTML='<div class="tip">40 two-syllable words from <b>Lesson 1</b> — every character comes from that lesson. '
+   +'Type each one in pinyin. Same rules: tones optional, spelling must be right, <code>v</code> for ü. '
+   +'Scoring: <b class="pts">10</b> first try · <b class="pts">5</b> after a miss · <b class="pts">0</b> if shown.</div>'
+   +'<div class="tools"><button class="btn bd" id="wall">Check all ✓</button><button class="btn bs" id="wshow">Show all answers</button><button class="btn bs" id="wclr">Clear typing</button></div>'
+   +'<div class="meta"><span id="wm"></span><span id="ws"></span></div><div class="bar"><div class="barf" id="wbar"></div></div>'
+   +'<div class="grid" id="wgrid"></div>';
+  document.getElementById('wgrid').innerHTML=WORD.map((o,i)=>
+     '<div class="wc"><span class="wn">'+(i+1)+'</span><div class="wz">'+o.zh+'</div>'
+    +'<div class="wi"><input id="WI'+i+'" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="pinyin">'
+    +'<button data-w="'+i+'">✓</button><button data-s="'+i+'" style="background:#eef1f6;color:#475569">🔊</button></div>'
+    +'<div class="wa" id="WA'+i+'"></div></div>').join('');
+  const g=document.getElementById('wgrid');
+  g.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>gradeWord(+b.dataset.w,false));
+  g.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>say(WORD[+b.dataset.s].zh));
+  WORD.forEach((_,i)=>{
+    document.getElementById('WI'+i).addEventListener('keydown',e=>{
+      if(e.key!=='Enter')return; e.preventDefault(); gradeWord(i,false);
+      const nx=document.getElementById('WI'+(i+1)); if(nx)nx.focus();
+    });
+  });
+  document.getElementById('wall').onclick=()=>{WORD.forEach((_,i)=>{if(document.getElementById('WI'+i).value.trim())gradeWord(i,false);});};
+  document.getElementById('wshow').onclick=()=>{WORD.forEach((_,i)=>gradeWord(i,true));};
+  document.getElementById('wclr').onclick=()=>{WORD.forEach((_,i)=>{const e=document.getElementById('WI'+i);e.value='';e.classList.remove('ok','no');document.getElementById('WA'+i).className='wa';});};
+  wMeta();
+}
+function gradeWord(i,reveal){
+  const o=WORD[i], r=wRes[i];
+  const inp=document.getElementById('WI'+i), box=document.getElementById('WA'+i);
+  const good=norm(o.py), got=norm(inp.value);
+  if(!got && !reveal) return;
+  const ok=!reveal && got===good;
+  let earned=0;
+  if(reveal){ if(r.st===null){r.st='shown';r.pts=0;} }
+  else if(ok){
+    if(r.st===null){r.st='ok';r.pts=10;earned=10;}
+    else if(r.st==='miss'){r.st='ok';r.pts=5;earned=5;}
+  } else if(r.st===null){ r.st='miss'; r.pts=0; }
+  inp.classList.remove('ok','no'); inp.classList.add(ok?'ok':'no');
+  box.className='wa '+(ok?'ok':'no');
+  box.innerHTML=(earned?'<span style="float:right">+'+earned+'</span>':'')+(ok?'✓ ':'✗ ')+o.py+'<div class="e">'+o.en+'</div>';
+  board(); wMeta();
+}
+function wMeta(){
+  const m=document.getElementById('wm'); if(!m)return;
+  m.textContent='Words right: '+nRight(wRes)+' / '+WORD.length;
+  document.getElementById('ws').textContent='Score: '+score()+' / '+MAXPTS;
+  document.getElementById('wbar').style.width=(nTried(wRes)/WORD.length*100)+'%';
+}
+
+/* ================= TRY AGAIN ================= */
+function drawAgain(){
+  const w=document.getElementById('s-again');
+  const g=grade(score());
+  let h='<div class="report"><div class="sm">得分 YOUR SCORE</div><div class="big">'+score()+' / '+MAXPTS+'</div>'
+   +'<div class="gr">'+g[1]+' '+g[0]+'</div>'
+   +'<div class="sm" style="margin-top:6px">Sentences '+nRight(sRes)+'/'+SENT.length+' · Words '+nRight(wRes)+'/'+WORD.length+'</div>'
+   +'<button class="rb" id="reset">↺ Start again from zero</button></div>';
+  const miss=[];
+  sRes.forEach((r,i)=>{if(r.st==='miss'||r.st==='shown')miss.push(['S',i]);});
+  wRes.forEach((r,i)=>{if(r.st==='miss'||r.st==='shown')miss.push(['W',i]);});
+  if(!miss.length){
+    w.innerHTML=h+'<div class="tip">Anything you miss on the first try lands here so you can redo it. Getting it right here is worth <b class="pts">5</b> points.</div>'
+      +'<div class="empty">Nothing to redo yet 🎉</div>';
+    document.getElementById('reset').onclick=doReset; return;
+  }
+  h+='<div class="tip">The items you missed on the first attempt. Type them again — a correct answer here scores <b class="pts">5</b> and clears it from the list.</div><div id="aq"></div>';
+  w.innerHTML=h;
+  document.getElementById('reset').onclick=doReset;
+  document.getElementById('aq').innerHTML=miss.map(([k,i])=>{
+    const o=(k==='S'?SENT:WORD)[i];
+    return '<div class="qcard" style="margin-bottom:11px">'
+      +'<div class="meta"><span>'+(k==='S'?'Sentence ':'Word ')+(i+1)+'</span><span></span></div>'
+      +'<div class="zh">'+o.zh+'</div>'
+      +'<div class="ir"><input class="inp" id="R'+k+i+'" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="type the pinyin again">'
+      +'<button class="btn bg" data-r="'+k+i+'">Check ✓</button>'
+      +'<button class="btn bs" data-s2="'+k+i+'">🔊</button></div>'
+      +'<div class="ans" id="RA'+k+i+'"></div></div>';
+  }).join('');
+  const q=document.getElementById('aq');
+  q.querySelectorAll('[data-s2]').forEach(b=>{const k=b.dataset.s2[0],i=+b.dataset.s2.slice(1);b.onclick=()=>say((k==='S'?SENT:WORD)[i].zh);});
+  q.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.r[0], i=+b.dataset.r.slice(1);
+    const arr=(k==='S'?SENT:WORD), res=(k==='S'?sRes:wRes), o=arr[i];
+    const inp=document.getElementById('R'+k+i), box=document.getElementById('RA'+k+i);
+    const ok=norm(inp.value)===norm(o.py);
+    inp.classList.remove('ok','no'); inp.classList.add(ok?'ok':'no');
+    box.className='ans '+(ok?'ok':'no');
+    box.innerHTML=(ok?'<span class="pt">+5</span>✓ ':'✗ ')+'<span class="py">'+o.py+'</span><div class="en">'+o.en+'</div>';
+    say(o.zh);
+    if(ok){ res[i].st='ok'; res[i].pts=5; board(); setTimeout(drawAgain,900); }
+  });
+}
+function doReset(){
+  sRes.forEach(r=>{r.st=null;r.pts=0;});
+  wRes.forEach(r=>{r.st=null;r.pts=0;});
+  si=0; board(); renderSent(); renderWord(); drawAgain();
+}
+
+/* ================= ALL ================= */
+function drawAll(f){
+  const w=document.getElementById('s-all');
+  if(!document.getElementById('flt')){
+    w.innerHTML='<div class="tip">The answer key — all 30 sentences and 40 words with pinyin and meaning. Filter by any Chinese character, pinyin syllable or English word.</div>'
+      +'<input class="search" id="flt" placeholder="filter — try  电影  ·  dache  ·  classroom">'
+      +'<div id="alist"></div>';
+    document.getElementById('flt').addEventListener('input',e=>drawAll(e.target.value));
+  }
+  const q=(f||'').trim().toLowerCase();
+  const hit=o=>{if(!q)return true;const h=(o.zh+o.py+o.en).toLowerCase();return h.includes(q)||norm(h).includes(norm(q));};
+  const sRows=SENT.map((o,i)=>({o,i})).filter(({o})=>hit(o));
+  const wRows=WORD.map((o,i)=>({o,i})).filter(({o})=>hit(o));
+  const row=({o,i})=>'<div class="ln"><span class="num">'+(i+1)+'</span><div class="bdy"><div class="z">'+o.zh+'</div>'
+      +'<div class="p">'+o.py+'</div><div class="e">'+o.en+'</div></div><button class="spk" data-s="'+o.zh+'">🔊</button></div>';
+  let h='';
+  if(sRows.length) h+='<div class="lst"><div class="h">第二课 · 30 句 Sentences</div>'+sRows.map(row).join('')+'</div>';
+  if(wRows.length) h+='<div class="lst"><div class="h">第一课 · 40 词 Two-syllable words</div>'+wRows.map(row).join('')+'</div>';
+  const list=document.getElementById('alist');
+  list.innerHTML=h||'<div class="empty">Nothing matches “'+(f||'')+'”</div>';
+  list.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>say(b.dataset.s));
+}
+
+/* init */
+board(); renderSent(); renderWord();
+</script>
+</body>
+</html>
