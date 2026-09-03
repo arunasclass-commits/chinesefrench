@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aruna's Class · YCT 1 · Bubble Pop &amp; Match</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@600;700;800;900&family=Noto+Sans+SC:wght@500;700;900&display=swap');
+:root{
+  --ink:#25324b;--muted:#7b88a1;--line:#e6ebf5;--bg:#eef4ff;
+  --pink:#ff5d8f;--orange:#ff9f45;--yellow:#ffd23f;--green:#22c19a;--blue:#3aa0ff;--purple:#8b5cf6;
+  --shadow:0 8px 28px rgba(37,50,75,.13);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+.hero{background:linear-gradient(135deg,#6a5cff 0%,#3aa0ff 45%,#22c19a 100%);color:#fff;
+  padding:16px 14px 20px;text-align:center;position:relative;overflow:hidden}
+.hero .b1,.hero .b2,.hero .b3{position:absolute;border-radius:50%;background:rgba(255,255,255,.13)}
+.hero .b1{width:120px;height:120px;top:-40px;left:-20px}
+.hero .b2{width:70px;height:70px;bottom:-25px;right:30px}
+.hero .b3{width:44px;height:44px;top:16px;right:-10px}
+.badge{position:relative;display:inline-block;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.5);
+  color:#fff;font-size:11px;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;padding:4px 14px;border-radius:20px}
+.hero h1{position:relative;font-family:'Baloo 2',cursive;font-size:clamp(21px,5.4vw,31px);font-weight:800;margin-top:7px;text-shadow:0 2px 0 rgba(0,0,0,.12)}
+.hero .sub{position:relative;font-size:13px;font-weight:700;opacity:.93;margin-top:2px}
+
+.board{display:flex;justify-content:center;gap:8px;padding:9px;flex-wrap:wrap;background:#fff;
+  position:sticky;top:0;z-index:60;box-shadow:0 3px 12px rgba(37,50,75,.08)}
+.sc{border-radius:16px;padding:5px 14px;text-align:center;min-width:86px;border:3px solid var(--line);background:#fff}
+.sc .v{font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;line-height:1.1}
+.sc .l{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+.sc.a{border-color:#ffe08a;background:#fffaea}.sc.a .v{color:#e09b00}
+.sc.b{border-color:#a9ead8;background:#eefbf7}.sc.b .v{color:var(--green)}
+.sc.c{border-color:#bcdcff;background:#eff7ff}.sc.c .v{color:var(--blue)}
+
+.nav{display:flex;background:#fff;border-bottom:3px solid var(--line);overflow-x:auto;position:sticky;top:56px;z-index:55}
+.nt{flex-shrink:0;padding:11px 14px;border:none;background:none;font-family:'Nunito';font-size:13px;font-weight:900;
+  color:var(--muted);cursor:pointer;border-bottom:4px solid transparent;margin-bottom:-3px;white-space:nowrap}
+.nt.on{color:var(--pink);border-bottom-color:var(--pink)}
+
+.wrap{max-width:880px;margin:0 auto;padding:14px 12px 60px}
+.sec{display:none}.sec.on{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.tip{background:#fff8e6;border-left:6px solid var(--yellow);border-radius:0 12px 12px 0;padding:9px 13px;
+  margin-bottom:11px;font-size:13px;font-weight:700;color:#8a6a12;line-height:1.55}
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.chips button{font-family:'Nunito';font-size:12px;font-weight:900;border:2.5px solid var(--line);background:#fff;
+  color:var(--muted);border-radius:999px;padding:5px 13px;cursor:pointer}
+.chips button.on{border-color:var(--pink);color:var(--pink);background:#fff0f5}
+
+.card{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:16px}
+.ask{text-align:center;margin-bottom:8px}
+.ask .lbl{font-size:11px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
+.ask .word{font-family:'Baloo 2',cursive;font-size:clamp(26px,7vw,40px);font-weight:800;color:var(--purple);line-height:1.2}
+
+/* ---- bubble pop ---- */
+#pool{position:relative;height:400px;border-radius:18px;overflow:hidden;
+  background:linear-gradient(180deg,#dff1ff 0%,#eaf6ff 55%,#f6fbff 100%);border:3px solid #d5e9fb}
+.bub{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;
+  border-radius:50%;cursor:pointer;font-family:'Baloo 2',cursive;font-weight:800;color:#fff;
+  box-shadow:inset -6px -8px 14px rgba(0,0,0,.10), inset 6px 8px 14px rgba(255,255,255,.45), 0 4px 10px rgba(0,0,0,.10);
+  user-select:none;-webkit-user-select:none;padding:6px;line-height:1.1;transition:transform .12s}
+.bub:active{transform:scale(.94)}
+.bub.pop{animation:pop .32s forwards}
+@keyframes pop{to{transform:scale(1.7);opacity:0}}
+.bub.no{animation:wob .4s}
+@keyframes wob{0%,100%{transform:none}25%{transform:rotate(-9deg)}75%{transform:rotate(9deg)}}
+.popmsg{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font-family:'Baloo 2',cursive;
+  font-size:34px;font-weight:800;color:var(--green);text-shadow:0 2px 0 #fff;pointer-events:none;opacity:0}
+.popmsg.go{animation:msg 1s forwards}
+@keyframes msg{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}100%{opacity:0;transform:translate(-50%,-70%) scale(1)}}
+.startov{position:absolute;inset:0;background:rgba(255,255,255,.86);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;text-align:center;padding:20px;z-index:5}
+.startov h3{font-family:'Baloo 2',cursive;font-size:26px;color:var(--purple)}
+.startov p{font-size:14px;font-weight:700;color:var(--muted);max-width:340px}
+
+.big{font-family:'Baloo 2',cursive;font-size:19px;font-weight:800;border:none;border-radius:16px;
+  padding:12px 30px;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--pink),var(--orange));
+  box-shadow:0 5px 0 rgba(0,0,0,.13)}
+.big:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.13)}
+.btn{font-family:'Nunito';font-size:13px;font-weight:900;border:none;border-radius:12px;padding:9px 16px;cursor:pointer}
+.b-g{background:var(--green);color:#fff}.b-s{background:#eef1f8;color:#5a6782}.b-p{background:var(--purple);color:#fff}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px;justify-content:center}
+
+/* ---- match ---- */
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.mcol{display:flex;flex-direction:column;gap:8px}
+.mcol h4{font-size:11px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-align:center}
+.mi{border:3px solid var(--line);background:#fff;border-radius:14px;padding:11px 8px;cursor:pointer;
+  font-weight:800;text-align:center;font-size:15px;min-height:48px;display:flex;align-items:center;justify-content:center;
+  transition:transform .1s,border-color .15s,background .15s}
+.mi.py{font-family:'Baloo 2',cursive;font-size:18px;color:var(--blue)}
+.mi.sel{border-color:var(--orange);background:#fff6ec;transform:scale(1.03)}
+.mi.done{border-color:var(--green);background:#eafaf5;color:var(--green);cursor:default;opacity:.75}
+.mi.bad{animation:wob .4s;border-color:var(--pink)}
+
+/* ---- listen ---- */
+.opts{display:grid;grid-template-columns:1fr;gap:9px;margin-top:12px}
+@media(min-width:560px){.opts{grid-template-columns:1fr 1fr}}
+.opt{border:3px solid var(--line);background:#fff;border-radius:16px;padding:13px;cursor:pointer;text-align:center;
+  font-weight:800;transition:transform .1s,border-color .15s,background .15s}
+.opt:hover{border-color:var(--blue)}
+.opt .p{font-family:'Baloo 2',cursive;font-size:22px;color:var(--blue);line-height:1.15}
+.opt .m{font-size:12.5px;font-weight:800;color:var(--muted);margin-top:2px}
+.opt.ok{border-color:var(--green);background:#eafaf5}
+.opt.ok .p{color:var(--green)}
+.opt.no{border-color:var(--pink);background:#fff1f5}
+.opt.no .p{color:var(--pink)}
+.speak{width:100%;font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:#fff;border:none;border-radius:18px;
+  padding:20px;cursor:pointer;background:linear-gradient(135deg,var(--blue),var(--purple));box-shadow:0 5px 0 rgba(0,0,0,.13)}
+.speak:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.13)}
+.reveal{margin-top:11px;border-radius:14px;padding:11px;text-align:center;font-weight:800;display:none}
+.reveal.on{display:block}
+.reveal.ok{background:#eafaf5;color:#0e8a6c}
+.reveal.no{background:#fff1f5;color:#c2185b}
+.reveal .zh{font-family:'Noto Sans SC';font-size:30px;font-weight:900;color:var(--ink);line-height:1.3}
+
+.meta{display:flex;justify-content:space-between;font-size:12px;font-weight:900;color:var(--muted);margin-bottom:7px}
+.bar{background:var(--line);border-radius:8px;height:9px;margin-bottom:12px;overflow:hidden}
+.barf{height:9px;border-radius:8px;background:linear-gradient(90deg,var(--pink),var(--yellow));width:0;transition:width .3s}
+
+.win{background:linear-gradient(135deg,var(--green),#0e8a6c);color:#fff;border-radius:22px;padding:24px;text-align:center;box-shadow:var(--shadow)}
+.win .em{font-size:52px}
+.win .t{font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;margin:4px 0}
+.win .s{font-size:14px;font-weight:700;opacity:.95}
+.win button{margin-top:13px}
+
+/* ---- list ---- */
+.search{width:100%;padding:12px 14px;border:3px solid var(--line);border-radius:14px;font-family:'Nunito';
+  font-size:14px;font-weight:800;margin-bottom:10px}
+.search:focus{outline:none;border-color:var(--blue)}
+.lgrp{background:#fff;border-radius:16px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:11px}
+.lgrp .h{background:linear-gradient(90deg,#f4f8ff,#fff);border-bottom:3px solid var(--line);padding:9px 13px;
+  font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;color:var(--purple)}
+.lgrp .r{display:flex;gap:9px;align-items:center;padding:9px 13px;border-top:1px solid #f0f3f9}
+.lgrp .r:first-of-type{border-top:none}
+.lgrp .zh{font-family:'Noto Sans SC';font-size:23px;font-weight:700;min-width:74px}
+.lgrp .bd{flex:1}
+.lgrp .py{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;color:var(--blue)}
+.lgrp .en{font-size:13px;font-weight:700;color:var(--muted)}
+.spk{border:none;background:#eef1f8;color:#5a6782;border-radius:11px;padding:7px 11px;font-size:15px;cursor:pointer}
+.empty{background:#fff;border-radius:16px;padding:26px;text-align:center;font-weight:800;color:var(--muted)}
+.footer{text-align:center;padding:16px;font-size:11.5px;font-weight:700;color:var(--muted)}
+.footer b{color:var(--pink)}
+</style>
+</head>
+<body>
+<div class="hero">
+  <span class="b1"></span><span class="b2"></span><span class="b3"></span>
+  <div class="badge">Aruna's Class · ChineseFrench</div>
+  <h1>YCT 1 · Bubble Pop &amp; Word Games</h1>
+  <div class="sub">Lessons 1–11 · 103 words · pinyin ↔ English · listen &amp; choose</div>
+</div>
+<div class="board">
+  <div class="sc a"><div class="v" id="vStar">0</div><div class="l">⭐ stars</div></div>
+  <div class="sc b"><div class="v" id="vRight">0</div><div class="l">right</div></div>
+  <div class="sc c"><div class="v" id="vAcc">—</div><div class="l">accuracy</div></div>
+</div>
+<div class="nav" id="nav"></div>
+<div class="wrap">
+  <div class="sec on" id="s-pop"></div>
+  <div class="sec" id="s-match"></div>
+  <div class="sec" id="s-listen"></div>
+  <div class="sec" id="s-all"></div>
+</div>
+<div class="footer">标准教程 YCT 1 · Lessons 1–11 · 103 words · <b>Aruna's Class</b></div>
+
+<script>
+const W=[{"zh":"一","py":"yī","en":"one","l":1},{"zh":"二","py":"èr","en":"two","l":1},{"zh":"三","py":"sān","en":"three","l":1},{"zh":"四","py":"sì","en":"four","l":1},{"zh":"五","py":"wǔ","en":"five","l":1},{"zh":"六","py":"liù","en":"six","l":1},{"zh":"七","py":"qī","en":"seven","l":1},{"zh":"八","py":"bā","en":"eight","l":1},{"zh":"九","py":"jiǔ","en":"nine","l":1},{"zh":"十","py":"shí","en":"ten","l":1},{"zh":"你","py":"nǐ","en":"you","l":1},{"zh":"好","py":"hǎo","en":"good","l":1},{"zh":"老师","py":"lǎoshī","en":"teacher","l":1},{"zh":"再见","py":"zàijiàn","en":"goodbye","l":1},{"zh":"我","py":"wǒ","en":"I, me","l":2},{"zh":"叫","py":"jiào","en":"to be called","l":2},{"zh":"什么","py":"shénme","en":"what","l":2},{"zh":"认识","py":"rènshi","en":"to know","l":2},{"zh":"很","py":"hěn","en":"very","l":2},{"zh":"高兴","py":"gāoxìng","en":"glad, happy","l":2},{"zh":"她","py":"tā","en":"she, her","l":2},{"zh":"吗","py":"ma","en":"question word","l":2},{"zh":"不","py":"bù","en":"no, not","l":2},{"zh":"他","py":"tā","en":"he, him","l":3},{"zh":"是","py":"shì","en":"am, is, are","l":3},{"zh":"谁","py":"shéi","en":"who","l":3},{"zh":"哪","py":"nǎ","en":"which","l":3},{"zh":"国","py":"guó","en":"country","l":3},{"zh":"人","py":"rén","en":"person","l":3},{"zh":"中国人","py":"Zhōngguó rén","en":"Chinese person","l":3},{"zh":"爸爸","py":"bàba","en":"father, dad","l":4},{"zh":"妈妈","py":"māma","en":"mother, mum","l":4},{"zh":"家","py":"jiā","en":"family, home","l":4},{"zh":"哥哥","py":"gēge","en":"big brother","l":4},{"zh":"姐姐","py":"jiějie","en":"big sister","l":4},{"zh":"妹妹","py":"mèimei","en":"little sister","l":4},{"zh":"有","py":"yǒu","en":"to have","l":4},{"zh":"几","py":"jǐ","en":"how many","l":4},{"zh":"口","py":"kǒu","en":"measure word for family members","l":4},{"zh":"和","py":"hé","en":"and","l":4},{"zh":"没有","py":"méiyǒu","en":"not have","l":4},{"zh":"个","py":"ge","en":"general measure word","l":4},{"zh":"岁","py":"suì","en":"years old","l":5},{"zh":"多大","py":"duō dà","en":"how old","l":5},{"zh":"也","py":"yě","en":"also, too","l":5},{"zh":"头发","py":"tóufa","en":"hair","l":6},{"zh":"鼻子","py":"bízi","en":"nose","l":6},{"zh":"眼睛","py":"yǎnjing","en":"eye","l":6},{"zh":"手","py":"shǒu","en":"hand","l":6},{"zh":"耳朵","py":"ěrduo","en":"ear","l":6},{"zh":"的","py":"de","en":"shows belonging","l":6},{"zh":"小","py":"xiǎo","en":"small","l":6},{"zh":"大","py":"dà","en":"big","l":6},{"zh":"长","py":"cháng","en":"long","l":6},{"zh":"个子","py":"gèzi","en":"height","l":6},{"zh":"真","py":"zhēn","en":"really","l":6},{"zh":"高","py":"gāo","en":"tall","l":6},{"zh":"猫","py":"māo","en":"cat","l":7},{"zh":"狗","py":"gǒu","en":"dog","l":7},{"zh":"鱼","py":"yú","en":"fish","l":7},{"zh":"鸟","py":"niǎo","en":"bird","l":7},{"zh":"这","py":"zhè","en":"this","l":7},{"zh":"那","py":"nà","en":"that","l":7},{"zh":"看","py":"kàn","en":"to look","l":7},{"zh":"这儿","py":"zhèr","en":"here","l":7},{"zh":"多","py":"duō","en":"many, much","l":7},{"zh":"那儿","py":"nàr","en":"there","l":7},{"zh":"学校","py":"xuéxiào","en":"school","l":8},{"zh":"商店","py":"shāngdiàn","en":"shop, store","l":8},{"zh":"在","py":"zài","en":"in, at","l":8},{"zh":"谢谢","py":"xièxie","en":"thank you","l":8},{"zh":"去","py":"qù","en":"to go","l":8},{"zh":"你们","py":"nǐmen","en":"you (many)","l":8},{"zh":"我们","py":"wǒmen","en":"we, us","l":8},{"zh":"哪儿","py":"nǎr","en":"where","l":8},{"zh":"星期一","py":"Xīngqīyī","en":"Monday","l":9},{"zh":"星期二","py":"Xīngqī'èr","en":"Tuesday","l":9},{"zh":"星期三","py":"Xīngqīsān","en":"Wednesday","l":9},{"zh":"星期四","py":"Xīngqīsì","en":"Thursday","l":9},{"zh":"星期五","py":"Xīngqīwǔ","en":"Friday","l":9},{"zh":"星期六","py":"Xīngqīliù","en":"Saturday","l":9},{"zh":"星期天","py":"Xīngqītiān","en":"Sunday","l":9},{"zh":"生日","py":"shēngrì","en":"birthday","l":9},{"zh":"月","py":"yuè","en":"month","l":9},{"zh":"号","py":"hào","en":"date, day of the month","l":9},{"zh":"今天","py":"jīntiān","en":"today","l":9},{"zh":"星期","py":"xīngqī","en":"week","l":9},{"zh":"明天","py":"míngtiān","en":"tomorrow","l":9},{"zh":"喜欢","py":"xǐhuan","en":"to like","l":9},{"zh":"现在","py":"xiànzài","en":"now","l":10},{"zh":"点","py":"diǎn","en":"o'clock","l":10},{"zh":"分","py":"fēn","en":"minute","l":10},{"zh":"见","py":"jiàn","en":"to meet","l":10},{"zh":"早上","py":"zǎoshang","en":"morning","l":10},{"zh":"米饭","py":"mǐfàn","en":"rice","l":11},{"zh":"面条","py":"miàntiáo","en":"noodles","l":11},{"zh":"苹果","py":"píngguǒ","en":"apple","l":11},{"zh":"牛奶","py":"niúnǎi","en":"milk","l":11},{"zh":"水","py":"shuǐ","en":"water","l":11},{"zh":"吃","py":"chī","en":"to eat","l":11},{"zh":"喝","py":"hē","en":"to drink","l":11},{"zh":"爱","py":"ài","en":"to love","l":11},{"zh":"蛋糕","py":"dàngāo","en":"cake","l":11}];
+const SECTIONS=[{"n":1,"ls":[1,2],"t":"Lessons 1 & 2"},{"n":2,"ls":[3,4],"t":"Lessons 3 & 4"},{"n":3,"ls":[5,6,7],"t":"Lessons 5, 6 & 7"},{"n":4,"ls":[8,9],"t":"Lessons 8 & 9"},{"n":5,"ls":[10,11],"t":"Lessons 10 & 11"}];
+const TITLES={"1":"你好！ Hello!","2":"你叫什么？ What's your name?","3":"他是谁？ Who is he?","4":"我家有四口人 My family","5":"我6岁 How old are you?","6":"你的个子真高！ You are so tall!","7":"这是谁的狗？ Whose dog is this?","8":"我去商店 Going to the shop","9":"今天星期几？ What day is it?","10":"现在几点？ What time is it?","11":"你吃什么？ What do you eat?"};
+const LESSONS=[1,2,3,4,5,6,7,8,9,10,11];
+
+/* ---------- score ---------- */
+let stars=0, right=0, tries=0;
+function board(){
+  document.getElementById('vStar').textContent=stars;
+  document.getElementById('vRight').textContent=right;
+  document.getElementById('vAcc').textContent=tries?Math.round(right/tries*100)+'%':'—';
+}
+function win(){ right++; tries++; stars++; board(); }
+function lose(){ tries++; board(); }
+
+/* ---------- speech ---------- */
+let zhVoice=null;
+function pv(){try{const v=speechSynthesis.getVoices();zhVoice=v.find(x=>/zh|Chinese/i.test(x.lang+x.name))||null;}catch(e){}}
+if('speechSynthesis' in window){pv();speechSynthesis.onvoiceschanged=pv;}
+function say(t,rate){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';
+  u.rate=rate||0.75;if(zhVoice)u.voice=zhVoice;speechSynthesis.speak(u);}catch(e){}}
+
+function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* ---------- tabs ---------- */
+const TABS=[['pop','🫧 Bubble Pop'],['match','🔗 Match · 5 sections'],['listen','🔊 Listen &amp; Choose'],['all','📖 All '+W.length+' words']];
+const nav=document.getElementById('nav');
+TABS.forEach((t,i)=>{const b=document.createElement('button');b.className='nt'+(i===0?' on':'');b.id='nt-'+t[0];
+  b.innerHTML=t[1];b.onclick=()=>show(t[0]);nav.appendChild(b);});
+function show(id){
+  TABS.forEach(t=>{document.getElementById('nt-'+t[0]).classList.toggle('on',t[0]===id);
+    document.getElementById('s-'+t[0]).classList.toggle('on',t[0]===id);});
+  window.scrollTo(0,0);
+  if(id!=='pop') stopPop();
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+  if(id==='all') drawAll();
+}
+
+/* ================= 1 · BUBBLE POP ================= */
+const COLORS=['#ff5d8f','#ff9f45','#22c19a','#3aa0ff','#8b5cf6','#f26fb0','#26bcd6','#f0a500'];
+let popLesson='all', popDeck=[], popIdx=0, popBubbles=[], popRAF=null, popOn=false, popTarget=null, popRound=10;
+
+function renderPop(){
+  const w=document.getElementById('s-pop');
+  w.innerHTML='<div class="tip">Read the English word at the top, then <b>pop the bubble</b> that says it in pinyin. '
+   +'Ten words in a round. Pick a lesson, or play with all of them!</div>'
+   +'<div class="chips" id="popchips"></div>'
+   +'<div class="meta"><span id="pm">Word 0 / '+popRound+'</span><span id="ps">⭐ 0 this round</span></div>'
+   +'<div class="bar"><div class="barf" id="pb"></div></div>'
+   +'<div class="card"><div class="ask"><div class="lbl">pop the bubble that means</div>'
+   +'<div class="word" id="pword">ready?</div></div>'
+   +'<div id="pool"><div class="popmsg" id="pmsg"></div>'
+   +'<div class="startov" id="povr"><h3>🫧 Ready to pop?</h3>'
+   +'<p>Bubbles float up with pinyin on them. Tap the one that matches the English word.</p>'
+   +'<button class="big" id="pstart">Start playing!</button></div></div>'
+   +'<div class="row"><button class="btn b-s" id="phear">🔊 Hear it</button>'
+   +'<button class="btn b-s" id="pskip">Skip ⏭</button>'
+   +'<button class="btn b-p" id="pagain">↺ New round</button></div></div>';
+  chips('popchips',popLesson,v=>{popLesson=v;renderPop();});
+  document.getElementById('pstart').onclick=startPop;
+  document.getElementById('pagain').onclick=startPop;
+  document.getElementById('pskip').onclick=()=>{if(popOn){lose();nextPop();}};
+  document.getElementById('phear').onclick=()=>{if(popTarget)say(popTarget.zh);};
+}
+function chips(id,cur,cb){
+  const box=document.getElementById(id); if(!box)return;
+  const opts=[['all','All']].concat(LESSONS.map(l=>[String(l),'L'+l]));
+  box.innerHTML=opts.map(([v,t])=>'<button data-v="'+v+'"'+(v===cur?' class="on"':'')+'>'+t+'</button>').join('');
+  box.querySelectorAll('button').forEach(b=>b.onclick=()=>cb(b.dataset.v));
+}
+function pool(lesson){ return lesson==='all'?W.slice():W.filter(w=>w.l===+lesson); }
+function startPop(){
+  const p=pool(popLesson);
+  popDeck=shuffle(p).slice(0,Math.min(popRound,p.length));
+  popIdx=0; popOn=true;
+  document.getElementById('povr').style.display='none';
+  nextPop();
+}
+function stopPop(){ popOn=false; if(popRAF){cancelAnimationFrame(popRAF);popRAF=null;} }
+function nextPop(){
+  const poolEl=document.getElementById('pool'); if(!poolEl)return;
+  popBubbles.forEach(b=>b.el.remove()); popBubbles=[];
+  if(popIdx>=popDeck.length){ finishPop(); return; }
+  popTarget=popDeck[popIdx];
+  document.getElementById('pword').textContent=popTarget.en;
+  document.getElementById('pm').textContent='Word '+(popIdx+1)+' / '+popDeck.length;
+  document.getElementById('pb').style.width=(popIdx/popDeck.length*100)+'%';
+  const others=shuffle(pool(popLesson).length>5?pool(popLesson):W)
+    .filter(w=>w.py!==popTarget.py).slice(0,4);
+  const set=shuffle([popTarget].concat(others));
+  const wRect=poolEl.clientWidth;
+  set.forEach((w,i)=>{
+    const el=document.createElement('div');
+    el.className='bub'; el.textContent=w.py;
+    const size=Math.max(66,Math.min(104, 40+w.py.length*9));
+    el.style.width=size+'px'; el.style.height=size+'px';
+    el.style.fontSize=(w.py.length>8?14:w.py.length>5?16:19)+'px';
+    el.style.background='radial-gradient(circle at 34% 28%, #ffffff88, '+COLORS[i%COLORS.length]+' 62%)';
+    const x=Math.random()*Math.max(10,wRect-size-10);
+    const H0=poolEl.clientHeight||400;
+    // spread them through the pool so the child sees bubbles straight away
+    const y=H0*0.10 + (i/set.length)*H0*0.78 + Math.random()*46;
+    el.style.left=x+'px'; el.style.top=y+'px';
+    poolEl.appendChild(el);
+    const b={el,w,x,y,size,vy:0.30+Math.random()*0.30,drift:(Math.random()-0.5)*0.5,ph:Math.random()*6.3};
+    el.onclick=()=>hitBubble(b);
+    popBubbles.push(b);
+  });
+  if(!popRAF) popRAF=requestAnimationFrame(tickPop);
+  say(popTarget.zh);
+}
+function tickPop(){
+  const poolEl=document.getElementById('pool');
+  if(!poolEl||!popOn){popRAF=null;return;}
+  const H=poolEl.clientHeight, Wd=poolEl.clientWidth;
+  popBubbles.forEach(b=>{
+    b.y-=b.vy*1.6; b.ph+=0.03;
+    b.x+=Math.sin(b.ph)*0.6+b.drift*0.3;
+    if(b.x<4) b.x=4; if(b.x>Wd-b.size-4) b.x=Wd-b.size-4;
+    if(b.y< -b.size-14){ b.y=H+10+Math.random()*70; b.x=Math.random()*Math.max(10,Wd-b.size-10); }
+    b.el.style.transform='translate3d('+(b.x-parseFloat(b.el.style.left))+'px,'+(b.y-parseFloat(b.el.style.top))+'px,0)';
+  });
+  popRAF=requestAnimationFrame(tickPop);
+}
+function hitBubble(b){
+  if(!popOn)return;
+  if(b.w.py===popTarget.py){
+    win();
+    b.el.classList.add('pop');
+    const m=document.getElementById('pmsg');
+    m.textContent=['Great! 🎉','Yes! ⭐','Nice! 👏','Perfect! 🌟'][Math.floor(Math.random()*4)];
+    m.classList.remove('go'); void m.offsetWidth; m.classList.add('go');
+    say(b.w.zh);
+    document.getElementById('ps').textContent='⭐ '+(popIdx+1)+' this round';
+    popIdx++;
+    setTimeout(nextPop,620);
+  } else {
+    lose();
+    b.el.classList.remove('no'); void b.el.offsetWidth; b.el.classList.add('no');
+  }
+}
+function finishPop(){
+  popOn=false;
+  const poolEl=document.getElementById('pool');
+  document.getElementById('pb').style.width='100%';
+  document.getElementById('pword').textContent='All done!';
+  poolEl.innerHTML='<div class="startov"><h3>🎉 Round finished!</h3>'
+    +'<p>You popped all '+popDeck.length+' bubbles. Try another lesson, or play again!</p>'
+    +'<button class="big" id="pstart2">Play again</button></div>';
+  document.getElementById('pstart2').onclick=()=>{renderPop();startPop();};
+}
+
+/* ================= 2 · MATCH (5 sections) ================= */
+let mSec=1, mRound=0, mSel=null, mDone=0;
+const PER=6;
+function secWords(n){ const s=SECTIONS.find(x=>x.n===n); return W.filter(w=>s.ls.indexOf(w.l)>=0); }
+function secRounds(n){ const list=secWords(n),out=[]; for(let i=0;i<list.length;i+=PER) out.push(list.slice(i,i+PER)); return out; }
+function renderMatch(){
+  const w=document.getElementById('s-match');
+  w.innerHTML='<div class="tip">Tap a <b>pinyin</b> on the left, then tap its <b>English meaning</b> on the right. '
+   +'A right pair turns green. Five sections cover every word in Lessons 1–11.</div>'
+   +'<div class="chips" id="mchips"></div>'
+   +'<div class="meta"><span id="mm"></span><span id="ms"></span></div>'
+   +'<div class="bar"><div class="barf" id="mb"></div></div>'
+   +'<div id="mbody"></div>';
+  const box=document.getElementById('mchips');
+  box.innerHTML=SECTIONS.map(s=>'<button data-v="'+s.n+'"'+(s.n===mSec?' class="on"':'')+'>Section '+s.n+'</button>').join('');
+  box.querySelectorAll('button').forEach(b=>b.onclick=()=>{mSec=+b.dataset.v;mRound=0;mSel=null;renderMatch();});
+  drawMatch();
+}
+function drawMatch(){
+  const rounds=secRounds(mSec), s=SECTIONS.find(x=>x.n===mSec);
+  if(mRound>=rounds.length){
+    document.getElementById('mm').textContent='Section '+mSec+' · '+s.t;
+    document.getElementById('ms').textContent='finished';
+    document.getElementById('mb').style.width='100%';
+    document.getElementById('mbody').innerHTML='<div class="win"><div class="em">🏆</div>'
+      +'<div class="t">Section '+mSec+' complete!</div>'
+      +'<div class="s">You matched all '+secWords(mSec).length+' words from '+s.t+'.</div>'
+      +'<button class="big" id="mnext">'+(mSec<5?'Go to Section '+(mSec+1):'Play Section 1 again')+'</button></div>';
+    document.getElementById('mnext').onclick=()=>{mSec=mSec<5?mSec+1:1;mRound=0;renderMatch();};
+    return;
+  }
+  const set=rounds[mRound];
+  mDone=0; mSel=null;
+  document.getElementById('mm').textContent='Section '+mSec+' · '+s.t+' · round '+(mRound+1)+' of '+rounds.length;
+  document.getElementById('ms').textContent='0 / '+set.length+' matched';
+  document.getElementById('mb').style.width=(mRound/rounds.length*100)+'%';
+  const left=shuffle(set), rightC=shuffle(set);
+  document.getElementById('mbody').innerHTML='<div class="card"><div class="mgrid">'
+   +'<div class="mcol"><h4>pinyin</h4>'+left.map(w=>'<div class="mi py" data-py="'+esc(w.py)+'" data-zh="'+esc(w.zh)+'">'+esc(w.py)+'</div>').join('')+'</div>'
+   +'<div class="mcol"><h4>English</h4>'+rightC.map(w=>'<div class="mi" data-py="'+esc(w.py)+'">'+esc(w.en)+'</div>').join('')+'</div>'
+   +'</div><div class="row"><button class="btn b-s" id="mskip">Show answers</button></div></div>';
+  const body=document.getElementById('mbody');
+  body.querySelectorAll('.mcol:first-child .mi').forEach(el=>el.onclick=()=>{
+    if(el.classList.contains('done'))return;
+    body.querySelectorAll('.mi.sel').forEach(x=>x.classList.remove('sel'));
+    el.classList.add('sel'); mSel=el; say(el.dataset.zh);
+  });
+  body.querySelectorAll('.mcol:last-child .mi').forEach(el=>el.onclick=()=>{
+    if(el.classList.contains('done')||!mSel)return;
+    if(el.dataset.py===mSel.dataset.py){
+      win(); el.classList.add('done'); mSel.classList.remove('sel'); mSel.classList.add('done'); mSel=null; mDone++;
+      document.getElementById('ms').textContent=mDone+' / '+set.length+' matched';
+      if(mDone===set.length) setTimeout(()=>{mRound++;drawMatch();},700);
+    } else {
+      lose();
+      el.classList.remove('bad'); void el.offsetWidth; el.classList.add('bad');
+    }
+  });
+  document.getElementById('mskip').onclick=()=>{
+    body.querySelectorAll('.mi').forEach(el=>el.classList.add('done'));
+    setTimeout(()=>{mRound++;drawMatch();},900);
+  };
+}
+
+/* ================= 3 · LISTEN & CHOOSE ================= */
+let lLesson='all', lDeck=[], lIdx=0, lLocked=false, lRound=10;
+function renderListen(){
+  const w=document.getElementById('s-listen');
+  w.innerHTML='<div class="tip">Press the big blue button to <b>hear the word</b>, then choose the right <b>pinyin</b>. '
+   +'The English meaning is in brackets to help you.</div>'
+   +'<div class="chips" id="lchips"></div>'
+   +'<div class="meta"><span id="lm"></span><span id="ls"></span></div>'
+   +'<div class="bar"><div class="barf" id="lb"></div></div>'
+   +'<div id="lbody"></div>';
+  chips('lchips',lLesson,v=>{lLesson=v;startListen();});
+  startListen();
+}
+function startListen(){
+  const p=pool(lLesson);
+  lDeck=shuffle(p).slice(0,Math.min(lRound,p.length));
+  lIdx=0; drawListen();
+}
+function drawListen(){
+  if(lIdx>=lDeck.length){
+    document.getElementById('lm').textContent='Finished';
+    document.getElementById('ls').textContent='';
+    document.getElementById('lb').style.width='100%';
+    document.getElementById('lbody').innerHTML='<div class="win"><div class="em">🎧</div>'
+      +'<div class="t">Nice listening!</div><div class="s">You finished all '+lDeck.length+' words.</div>'
+      +'<button class="big" id="lagain">Play again</button></div>';
+    document.getElementById('lagain').onclick=startListen;
+    return;
+  }
+  const o=lDeck[lIdx]; lLocked=false;
+  const others=shuffle(pool(lLesson).length>4?pool(lLesson):W).filter(x=>x.py!==o.py).slice(0,3);
+  const set=shuffle([o].concat(others));
+  document.getElementById('lm').textContent='Word '+(lIdx+1)+' / '+lDeck.length;
+  document.getElementById('ls').textContent='';
+  document.getElementById('lb').style.width=(lIdx/lDeck.length*100)+'%';
+  document.getElementById('lbody').innerHTML='<div class="card">'
+   +'<button class="speak" id="lsay">🔊 Listen</button>'
+   +'<div class="row"><button class="btn b-s" id="lslow">🐢 Slower</button></div>'
+   +'<div class="opts" id="lopts">'+set.map((x,i)=>'<div class="opt" data-i="'+i+'" data-py="'+esc(x.py)+'">'
+      +'<div class="p">'+esc(x.py)+'</div><div class="m">('+esc(x.en)+')</div></div>').join('')+'</div>'
+   +'<div class="reveal" id="lrev"></div>'
+   +'<div class="row"><button class="btn b-p" id="lnext">Next →</button></div></div>';
+  document.getElementById('lsay').onclick=()=>say(o.zh);
+  document.getElementById('lslow').onclick=()=>say(o.zh,0.45);
+  document.getElementById('lnext').onclick=()=>{lIdx++;drawListen();};
+  document.querySelectorAll('#lopts .opt').forEach(el=>el.onclick=()=>{
+    if(lLocked)return; lLocked=true;
+    const good=el.dataset.py===o.py;
+    const rev=document.getElementById('lrev');
+    if(good){ win(); el.classList.add('ok');
+      rev.className='reveal on ok';
+      rev.innerHTML='🎉 Yes! <span class="zh">'+esc(o.zh)+'</span>'+esc(o.py)+' — '+esc(o.en);
+    } else {
+      lose(); el.classList.add('no');
+      document.querySelectorAll('#lopts .opt').forEach(x=>{if(x.dataset.py===o.py)x.classList.add('ok');});
+      rev.className='reveal on no';
+      rev.innerHTML='The word was <span class="zh">'+esc(o.zh)+'</span><b>'+esc(o.py)+'</b> — '+esc(o.en);
+    }
+    say(o.zh);
+    setTimeout(()=>{lIdx++;drawListen();},1800);
+  });
+  setTimeout(()=>say(o.zh),250);
+}
+
+/* ================= 4 · ALL WORDS ================= */
+function drawAll(f){
+  const w=document.getElementById('s-all');
+  if(!document.getElementById('aflt')){
+    w.innerHTML='<div class="tip">Every word from Lessons 1–11, with the Chinese, the pinyin and the meaning. Tap 🔊 to hear it.</div>'
+      +'<input class="search" id="aflt" placeholder="search — try  apple  ·  gou  ·  星期">'
+      +'<div id="alist"></div>';
+    document.getElementById('aflt').addEventListener('input',e=>drawAll(e.target.value));
+  }
+  const q=(f||'').trim().toLowerCase();
+  const norm=s=>String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  let h='';
+  LESSONS.forEach(l=>{
+    const rows=W.filter(x=>x.l===l && (!q || norm(x.py).includes(norm(q)) || x.en.toLowerCase().includes(q) || x.zh.includes(q)));
+    if(!rows.length)return;
+    h+='<div class="lgrp"><div class="h">Lesson '+l+' · '+esc(TITLES[l])+'</div>'
+      +rows.map(x=>'<div class="r"><div class="zh">'+esc(x.zh)+'</div>'
+        +'<div class="bd"><div class="py">'+esc(x.py)+'</div><div class="en">'+esc(x.en)+'</div></div>'
+        +'<button class="spk" data-s="'+esc(x.zh)+'">🔊</button></div>').join('')
+      +'</div>';
+  });
+  const list=document.getElementById('alist');
+  list.innerHTML=h||'<div class="empty">No word matches “'+esc(f||'')+'”</div>';
+  list.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>say(b.dataset.s));
+}
+
+/* ---------- init ---------- */
+board(); renderPop(); renderMatch(); renderListen();
+</script>
+</body>
+</html>
