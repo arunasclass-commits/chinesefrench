@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aruna's Class · New HSK2 · Lesson 2.1 · Flashcards &amp; Phrases</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+:root{--ink:#12233f;--red:#c0392b;--gold:#d4af37;--teal:#0d9488;--blue:#1d6fa8;--purple:#6b21a8;
+--green:#059669;--orange:#c05621;--light:#f0f4ff;--border:#e2e8f0;--muted:#8892a4;--shadow:0 8px 32px rgba(0,0,0,.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--ink);min-height:100vh}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#123a5c 55%,#0d9488 100%);color:#fff;
+  padding:18px 16px 22px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'词';position:absolute;font-family:'Noto Sans SC';font-size:170px;font-weight:900;
+  color:rgba(255,255,255,.06);top:-22px;left:50%;transform:translateX(-50%);pointer-events:none}
+.badge{display:inline-block;background:rgba(212,175,55,.2);border:1px solid rgba(212,175,55,.5);color:var(--gold);
+  font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 15px;border-radius:20px;position:relative}
+.hero h1{font-family:'Noto Sans SC';font-size:clamp(17px,4.6vw,27px);font-weight:900;margin-top:8px;position:relative}
+.hero .sub{font-size:12.5px;color:rgba(255,255,255,.8);margin-top:3px;position:relative}
+
+.board{display:flex;justify-content:center;gap:7px;padding:9px;flex-wrap:wrap;background:#fff;
+  position:sticky;top:0;z-index:60;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sc{border-radius:13px;padding:5px 13px;text-align:center;min-width:92px;border:2px solid var(--border);background:#fff}
+.sc .v{font-size:18px;font-weight:900;line-height:1.1}
+.sc .l{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-top:2px}
+.sc.p{border-color:#eab9b2;background:#fff3f1}.sc.p .v{color:var(--red);font-size:20px}
+.sc.c{border-color:#bfe3da;background:#ecfdf5}.sc.c .v{color:var(--teal)}
+.sc.f{border-color:#c9d6f0;background:#eef4ff}.sc.f .v{color:var(--blue)}
+.sc.r{border-color:#e9d9ac;background:#fffbe9}.sc.r .v{color:#b8860b}
+
+.nav{display:flex;background:#fff;border-bottom:2px solid var(--border);overflow-x:auto;position:sticky;top:53px;z-index:55}
+.nt{flex-shrink:0;padding:11px 13px;border:none;background:none;font-family:'Nunito';font-size:12.5px;font-weight:800;
+  color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.nt.on{color:var(--red);border-bottom-color:var(--red)}
+
+.wrap{max-width:800px;margin:0 auto;padding:16px 14px 70px}
+.sec{display:none}.sec.on{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.tip{background:#fff7e6;border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:9px 13px;
+  margin-bottom:12px;font-size:12px;color:#7c5e10;font-weight:700;line-height:1.6}
+.tip code{background:#fff;border:1px solid #e6d9ae;border-radius:4px;padding:1px 5px;font-family:ui-monospace,monospace;font-size:11.5px;color:#8a6a12}
+.tip b.pts{color:var(--red)}
+.meta{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:7px;gap:10px;flex-wrap:wrap}
+.bar{background:var(--border);border-radius:5px;height:7px;margin-bottom:13px;overflow:hidden}
+.barf{height:7px;border-radius:5px;background:linear-gradient(90deg,var(--red),var(--gold));width:0;transition:width .3s}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px;align-items:center}
+.chips button{font-family:'Nunito';font-size:12px;font-weight:800;border:2px solid var(--border);background:#fff;
+  color:var(--muted);border-radius:999px;padding:4px 12px;cursor:pointer}
+.chips button.on{border-color:var(--red);color:var(--red);background:#fdf0f1}
+
+/* ---- flashcards ---- */
+.flip{perspective:1400px;margin-bottom:12px}
+.fin{position:relative;width:100%;min-height:230px;transition:transform .5s;transform-style:preserve-3d;cursor:pointer}
+.fin.on{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  background:#fff;border-radius:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:22px;text-align:center}
+.face.back{transform:rotateY(180deg);background:linear-gradient(160deg,#ffffff,#f2fbf8)}
+.face .zh{font-family:'Noto Sans SC';font-size:clamp(44px,12vw,74px);font-weight:900;line-height:1.15}
+.face .py{font-size:clamp(22px,5.6vw,30px);font-weight:900;color:var(--blue)}
+.face .en{font-size:clamp(15px,3.6vw,19px);font-weight:800;color:var(--ink);margin-top:6px}
+.face .hint{font-size:11.5px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:14px}
+.face .zhs{font-family:'Noto Sans SC';font-size:30px;font-weight:700;color:var(--muted);margin-top:8px}
+.rate{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-bottom:6px}
+.done-note{text-align:center;font-size:12.5px;font-weight:800;color:var(--teal);min-height:18px;margin-bottom:6px}
+.done-note.miss{color:var(--orange)}
+
+.btn{font-family:'Nunito';font-size:13px;font-weight:800;border:none;border-radius:10px;padding:11px 17px;cursor:pointer}
+.b-g{background:var(--teal);color:#fff}.b-o{background:var(--orange);color:#fff}.b-s{background:#eef1f6;color:#475569}
+.b-d{background:var(--ink);color:#fff}.b-r{background:var(--red);color:#fff}.b-p{background:var(--purple);color:#fff}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.nav2{display:flex;gap:9px;margin-top:13px}
+.nav2 button{flex:1;padding:12px;border:none;border-radius:10px;font-family:'Nunito';font-weight:800;font-size:14px;cursor:pointer;background:var(--ink);color:#fff}
+.nav2 button:disabled{opacity:.4}
+.dots{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin-top:13px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border);cursor:pointer}
+.dot.cur{background:var(--red);transform:scale(1.4)}.dot.ok{background:var(--teal)}.dot.no{background:#e9a184}
+
+/* ---- phrases ---- */
+.qcard{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:20px 17px}
+.lbl{font-size:10.5px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.pzh{font-family:'Noto Sans SC';font-size:clamp(32px,8.5vw,48px);font-weight:900;line-height:1.25}
+.pen{font-size:15px;font-weight:800;color:var(--orange);margin-top:3px}
+.pmade{font-family:'Noto Sans SC';font-size:14px;font-weight:700;color:var(--muted);margin-top:4px}
+.ir{display:flex;gap:7px;flex-wrap:wrap;align-items:stretch;margin-top:14px}
+.inp{flex:1;min-width:200px;padding:12px 13px;border:2px solid var(--border);border-radius:11px;
+  font-family:ui-monospace,'Nunito',monospace;font-size:16px;font-weight:700;color:var(--ink);background:#fbfcfe}
+.inp:focus{outline:none;border-color:var(--blue);background:#fff}
+.inp.ok{border-color:var(--green);background:#ecfdf5}
+.inp.no{border-color:var(--red);background:#fff1f0}
+.toneb{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:9px}
+.toneb b{font-size:11px;font-weight:900;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
+.tb{font-family:'Nunito';font-size:15px;font-weight:800;border:2px solid var(--border);background:#fff;
+  border-radius:9px;width:46px;height:38px;cursor:pointer}
+.tb:hover{border-color:var(--blue);color:var(--blue)}
+.ans{margin-top:12px;border-radius:10px;padding:10px 12px;font-size:14px;font-weight:800;display:none;line-height:1.55}
+.ans.ok{display:block;background:#d1fae5;color:#065f46}
+.ans.no{display:block;background:#fee2e2;color:#991b1b}
+.ans .p{font-size:17px}
+.ans .e{font-weight:700;opacity:.85;font-size:13px;margin-top:2px}
+.ans .y{font-weight:700;font-size:12.5px;opacity:.8;margin-top:3px}
+.ans .pt{float:right;background:rgba(255,255,255,.7);border-radius:6px;padding:1px 8px;font-size:12px}
+
+/* ---- review + final ---- */
+.rlist{background:#fff;border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:11px}
+.rlist .h{background:#f7f9fc;border-bottom:2px solid var(--border);padding:8px 13px;font-size:11px;
+  font-weight:900;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+.rrow{display:flex;gap:10px;align-items:center;padding:11px 13px;border-top:1px solid #eef1f6;flex-wrap:wrap}
+.rrow:first-of-type{border-top:none}
+.rrow .z{font-family:'Noto Sans SC';font-size:24px;font-weight:700;min-width:90px}
+.rrow .bd{flex:1;min-width:150px}
+.rrow .p{font-size:14px;font-weight:800;color:var(--blue)}
+.rrow .e{font-size:12.5px;font-weight:700;color:var(--muted)}
+.rrow input{width:170px;padding:8px 10px;border:2px solid var(--border);border-radius:9px;
+  font-family:ui-monospace,'Nunito',monospace;font-size:14px;font-weight:700}
+.rrow input:focus{outline:none;border-color:var(--blue)}
+.rrow input.ok{border-color:var(--green);background:#ecfdf5}
+.rrow input.no{border-color:var(--red);background:#fff1f0}
+.empty{background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:26px;text-align:center;font-weight:800;color:var(--muted)}
+
+.final{background:linear-gradient(135deg,#0d9488,#0f766e);color:#fff;border-radius:18px;padding:24px;text-align:center;box-shadow:var(--shadow)}
+.final .em{font-size:46px}
+.final .big{font-size:42px;font-weight:900;margin:2px 0;font-family:'Nunito'}
+.final .gr{font-family:'Noto Sans SC';font-size:20px;font-weight:900}
+.final .pc{font-size:14px;font-weight:800;opacity:.92}
+.tbl{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);margin-top:13px}
+.tbl th,.tbl td{padding:11px 13px;text-align:left;font-size:14px;font-weight:800;border-bottom:1px solid #eef1f6}
+.tbl th{background:#f7f9fc;font-size:11px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted)}
+.tbl td.n{text-align:right;font-variant-numeric:tabular-nums}
+.tbl tr.tot td{background:#f7f9fc;color:var(--red);font-size:16px;font-weight:900;border-bottom:none}
+.footer{text-align:center;padding:20px;font-size:11px;color:var(--muted)}
+.footer b{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="badge">Aruna's Class · ChineseFrench</div>
+  <h1>新 HSK 2 · 第二课 2.1 · 抽认卡 &amp; 词组</h1>
+  <div class="sub">Flashcards for the 50 words · 30 two-word phrases to type in pinyin (<b>tones not needed</b>) · scored out of <b>250</b></div>
+</div>
+<div class="board">
+  <div class="sc p"><div class="v" id="vT">0</div><div class="l">总分 Score</div></div>
+  <div class="sc c"><div class="v" id="vC">0</div><div class="l">卡片 Cards</div></div>
+  <div class="sc f"><div class="v" id="vP">0</div><div class="l">词组 Phrases</div></div>
+  <div class="sc r"><div class="v" id="vR">0</div><div class="l">复习 Review</div></div>
+</div>
+<div class="nav" id="nav"></div>
+<div class="wrap">
+  <div class="sec on" id="s-card"></div>
+  <div class="sec" id="s-phr"></div>
+  <div class="sec" id="s-rev"></div>
+  <div class="sec" id="s-fin"></div>
+</div>
+<div class="footer">New HSK Course 2 · Lesson 2, Dialogues 1 &amp; 2 · 50 words + 30 phrases · <b>Aruna's Class</b></div>
+<script>
+var W=[{"zh":"请问","py":"qǐngwèn","en":"excuse me; may I ask","alt":[]},{"zh":"这儿","py":"zhèr","en":"here","alt":[]},{"zh":"有","py":"yǒu","en":"to have; there is","alt":[]},{"zh":"到","py":"dào","en":"to; to arrive at","alt":[]},{"zh":"北京大学","py":"Běijīng Dàxué","en":"Peking University","alt":[]},{"zh":"的","py":"de","en":"(attributive particle)","alt":[]},{"zh":"公交车","py":"gōngjiāochē","en":"bus","alt":[]},{"zh":"吗","py":"ma","en":"(yes/no question particle)","alt":[]},{"zh":"但","py":"dàn","en":"but","alt":[]},{"zh":"车站","py":"chēzhàn","en":"(bus) stop; station","alt":[]},{"zh":"有点儿","py":"yǒudiǎnr","en":"a bit; a little","alt":[]},{"zh":"远","py":"yuǎn","en":"far","alt":[]},{"zh":"好","py":"hǎo","en":"good; easy to","alt":[]},{"zh":"打车","py":"dǎchē","en":"to take a taxi","alt":[]},{"zh":"谢谢","py":"xièxie","en":"thank you","alt":["xièxiè"]},{"zh":"安妮","py":"Ānnī","en":"Annie (name)","alt":[]},{"zh":"我们","py":"wǒmen","en":"we; us","alt":[]},{"zh":"还是","py":"háishi","en":"had better; still","alt":["háishì"]},{"zh":"去","py":"qù","en":"to go","alt":[]},{"zh":"吧","py":"ba","en":"(suggestion particle)","alt":[]},{"zh":"没问题","py":"méi wèntí","en":"no problem","alt":[]},{"zh":"学校","py":"xuéxiào","en":"school","alt":[]},{"zh":"里","py":"lǐ","en":"inside; in","alt":[]},{"zh":"人","py":"rén","en":"person; people","alt":[]},{"zh":"真","py":"zhēn","en":"really; truly","alt":[]},{"zh":"多","py":"duō","en":"many; more than","alt":[]},{"zh":"啊","py":"a","en":"(exclamatory particle)","alt":[]},{"zh":"是","py":"shì","en":"to be; yes","alt":[]},{"zh":"四万","py":"sìwàn","en":"forty thousand","alt":[]},{"zh":"名","py":"míng","en":"(measure word for people)","alt":[]},{"zh":"学生","py":"xuésheng","en":"student","alt":["xuéshēng"]},{"zh":"呢","py":"ne","en":"(particle)","alt":[]},{"zh":"你","py":"nǐ","en":"you","alt":[]},{"zh":"怎么","py":"zěnme","en":"how","alt":[]},{"zh":"知道","py":"zhīdào","en":"to know","alt":["zhīdao"]},{"zh":"网上","py":"wǎngshang","en":"online; on the internet","alt":["wǎngshàng"]},{"zh":"说","py":"shuō","en":"to say; to speak","alt":[]},{"zh":"还","py":"hái","en":"also; still","alt":[]},{"zh":"三千","py":"sānqiān","en":"three thousand","alt":[]},{"zh":"外国","py":"wàiguó","en":"foreign country","alt":[]},{"zh":"也","py":"yě","en":"also; too","alt":[]},{"zh":"想","py":"xiǎng","en":"to want; would like","alt":[]},{"zh":"来","py":"lái","en":"to come","alt":[]},{"zh":"学习","py":"xuéxí","en":"to study","alt":[]},{"zh":"那边","py":"nàbiān","en":"over there","alt":[]},{"zh":"就","py":"jiù","en":"just; right (then)","alt":[]},{"zh":"间","py":"jiān","en":"(measure word for rooms)","alt":[]},{"zh":"教室","py":"jiàoshì","en":"classroom","alt":[]},{"zh":"看","py":"kàn","en":"to look; to watch","alt":[]},{"zh":"一下","py":"yíxià","en":"briefly; (do) once","alt":["yīxià"]}];
+var P=[{"zh":"这儿有","py":"zhèr yǒu","en":"there is … here","made":"这儿 + 有","alt":[]},{"zh":"到这儿","py":"dào zhèr","en":"to come/get here","made":"到 + 这儿","alt":[]},{"zh":"去学校","py":"qù xuéxiào","en":"to go to school","made":"去 + 学校","alt":[]},{"zh":"学校里","py":"xuéxiào lǐ","en":"in the school","made":"学校 + 里","alt":[]},{"zh":"教室里","py":"jiàoshì lǐ","en":"in the classroom","made":"教室 + 里","alt":[]},{"zh":"我们学校","py":"wǒmen xuéxiào","en":"our school","made":"我们 + 学校","alt":[]},{"zh":"外国学生","py":"wàiguó xuésheng","en":"foreign student","made":"外国 + 学生","alt":["wàiguó xuéshēng"]},{"zh":"四万学生","py":"sìwàn xuésheng","en":"forty thousand students","made":"四万 + 学生","alt":["sìwàn xuéshēng"]},{"zh":"三千人","py":"sānqiān rén","en":"three thousand people","made":"三千 + 人","alt":[]},{"zh":"真多","py":"zhēn duō","en":"really many","made":"真 + 多","alt":[]},{"zh":"真远","py":"zhēn yuǎn","en":"really far","made":"真 + 远","alt":[]},{"zh":"真好","py":"zhēn hǎo","en":"really good","made":"真 + 好","alt":[]},{"zh":"有点儿远","py":"yǒudiǎnr yuǎn","en":"a bit far","made":"有点儿 + 远","alt":[]},{"zh":"到车站","py":"dào chēzhàn","en":"to get to the bus stop","made":"到 + 车站","alt":[]},{"zh":"有公交车","py":"yǒu gōngjiāochē","en":"there is a bus","made":"有 + 公交车","alt":[]},{"zh":"打车去","py":"dǎchē qù","en":"to go by taxi","made":"打车 + 去","alt":[]},{"zh":"还是打车","py":"háishi dǎchē","en":"better take a taxi","made":"还是 + 打车","alt":["háishì dǎchē"]},{"zh":"去北京大学","py":"qù Běijīng Dàxué","en":"to go to Peking University","made":"去 + 北京大学","alt":[]},{"zh":"那边有","py":"nàbiān yǒu","en":"over there is …","made":"那边 + 有","alt":[]},{"zh":"去那边","py":"qù nàbiān","en":"to go over there","made":"去 + 那边","alt":[]},{"zh":"看一下","py":"kàn yíxià","en":"to take a look","made":"看 + 一下","alt":["kàn yīxià"]},{"zh":"想看","py":"xiǎng kàn","en":"to want to see","made":"想 + 看","alt":[]},{"zh":"想来","py":"xiǎng lái","en":"to want to come","made":"想 + 来","alt":[]},{"zh":"来学习","py":"lái xuéxí","en":"to come to study","made":"来 + 学习","alt":[]},{"zh":"想学习","py":"xiǎng xuéxí","en":"to want to study","made":"想 + 学习","alt":[]},{"zh":"也想","py":"yě xiǎng","en":"to also want","made":"也 + 想","alt":[]},{"zh":"还想","py":"hái xiǎng","en":"to still want","made":"还 + 想","alt":[]},{"zh":"怎么知道","py":"zěnme zhīdào","en":"how do you know","made":"怎么 + 知道","alt":["zěnme zhīdao"]},{"zh":"网上说","py":"wǎngshang shuō","en":"it says online","made":"网上 + 说","alt":["wǎngshàng shuō"]},{"zh":"谢谢你","py":"xièxie nǐ","en":"thank you","made":"谢谢 + 你","alt":["xièxiè nǐ"]}];
+var MAXC=W.length*2, MAXP=P.length*5, MAX=MAXC+MAXP;
+
+/* ---------- pinyin: letters + ordered tones (tone marks REQUIRED) ---------- */
+var TMAP={'ā':['a',1],'á':['a',2],'ǎ':['a',3],'à':['a',4],'ē':['e',1],'é':['e',2],'ě':['e',3],'è':['e',4],
+'ī':['i',1],'í':['i',2],'ǐ':['i',3],'ì':['i',4],'ō':['o',1],'ó':['o',2],'ǒ':['o',3],'ò':['o',4],
+'ū':['u',1],'ú':['u',2],'ǔ':['u',3],'ù':['u',4],'ǖ':['v',1],'ǘ':['v',2],'ǚ':['v',3],'ǜ':['v',4],'ü':['v',0],
+'ń':['n',2],'ň':['n',3],'ǹ':['n',4]};
+function canon(s){
+  var str=String(s||'').toLowerCase().replace(/u:/g,'v');
+  var letters='',tones=[];
+  for(var i=0;i<str.length;i++){
+    var ch=str[i];
+    if(TMAP[ch]){ letters+=TMAP[ch][0]; if(TMAP[ch][1]) tones.push(TMAP[ch][1]); }
+    else if(ch>='1'&&ch<='5'){ var t=+ch; if(t>=1&&t<=4) tones.push(t); }   // 5 / 0 = neutral, ignored
+    else if(ch>='a'&&ch<='z') letters+=ch;
+  }
+  letters=letters.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  return {l:letters,t:tones.join('')};
+}
+function same(a,b){ var x=canon(a),y=canon(b); return x.l===y.l; }   // tones are NOT required
+function accepts(o,val){
+  if(same(val,o.py)) return true;
+  for(var i=0;i<o.alt.length;i++) if(same(val,o.alt[i])) return true;
+  return false;
+}
+function firstDiff(a,b){var n=Math.min(a.length,b.length);for(var i=0;i<n;i++)if(a[i]!==b[i])return i;return a.length===b.length?-1:n;}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+
+/* ---------- state ----------
+   st : null | 'ok' | 'miss'      pts : points already banked
+   rev: true once the item has been recovered during review                    */
+var cRes=W.map(function(){return {st:null,pts:0,rev:false};});
+var pRes=P.map(function(){return {st:null,pts:0,rev:false};});
+var revPts=0;
+function sum(a){var n=0;a.forEach(function(r){n+=r.pts;});return n;}
+function cntOK(a){return a.filter(function(r){return r.st==='ok';}).length;}
+function total(){return sum(cRes)+sum(pRes);}
+function board(){
+  document.getElementById('vT').textContent=total()+' / '+MAX;
+  document.getElementById('vC').textContent=cntOK(cRes)+' / '+W.length;
+  document.getElementById('vP').textContent=cntOK(pRes)+' / '+P.length;
+  document.getElementById('vR').textContent=revPts;
+}
+function grade(pc){
+  if(pc>=90)return ['很棒 Excellent','🏆'];
+  if(pc>=75)return ['很好 Very good','🌟'];
+  if(pc>=60)return ['不错 Good','👍'];
+  if(pc>0)  return ['加油 Keep going','💪'];
+  return ['开始吧 Ready','🚀'];
+}
+
+/* ---------- speech ---------- */
+var zhVoice=null;
+function pv(){try{var v=speechSynthesis.getVoices();zhVoice=null;for(var i=0;i<v.length;i++){if(/zh|Chinese/i.test(v[i].lang+v[i].name)){zhVoice=v[i];break;}}}catch(e){}}
+if('speechSynthesis' in window){pv();speechSynthesis.onvoiceschanged=pv;}
+function say(t,r){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=r||0.8;if(zhVoice)u.voice=zhVoice;speechSynthesis.speak(u);}catch(e){}}
+
+/* ---------- tabs ---------- */
+var TABS=[['card','🃏 抽认卡 Flashcards'],['phr','✍️ 词组 Phrases'],['rev','🔁 复习 Review'],['fin','🏆 总分 Final score']];
+var nav=document.getElementById('nav');
+TABS.forEach(function(t,i){var b=document.createElement('button');b.className='nt'+(i===0?' on':'');
+  b.id='nt-'+t[0];b.innerHTML=t[1];b.onclick=function(){show(t[0]);};nav.appendChild(b);});
+function show(id){
+  TABS.forEach(function(t){document.getElementById('nt-'+t[0]).classList.toggle('on',t[0]===id);
+    document.getElementById('s-'+t[0]).classList.toggle('on',t[0]===id);});
+  window.scrollTo(0,0);
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+  if(id==='rev') drawRev();
+  if(id==='fin') drawFin();
+}
+
+/* ================= 1 · FLASHCARDS ================= */
+var ci=0, cOrder=W.map(function(_,i){return i;}), cFront='zh', flipped=false;
+function renderCard(){
+  var w=document.getElementById('s-card');
+  w.innerHTML='<div class="tip">Tap the card to flip it. Then say honestly whether you knew it: '
+   +'<b class="pts">✓ I knew it = 2 points</b>, <b class="pts">↻ Still learning = 0</b> (it goes to the Review tab, where getting it right is worth 1 point). '
+   +'Only your first answer for a card is scored.</div>'
+   +'<div class="chips" id="cchips"></div>'
+   +'<div class="meta"><span id="cm"></span><span id="cs"></span></div>'
+   +'<div class="bar"><div class="barf" id="cb"></div></div>'
+   +'<div class="flip"><div class="fin" id="fin">'
+   +'<div class="face" id="fFront"></div><div class="face back" id="fBack"></div></div></div>'
+   +'<div class="done-note" id="cnote"></div>'
+   +'<div class="rate"><button class="btn b-g" id="cKnew">✓ I knew it (+2)</button>'
+   +'<button class="btn b-o" id="cMiss">↻ Still learning</button>'
+   +'<button class="btn b-s" id="cSay">🔊 Hear</button></div>'
+   +'<div class="nav2"><button id="cPrev">← Prev</button><button id="cNext">Next →</button></div>'
+   +'<div class="dots" id="cdots"></div>';
+  var box=document.getElementById('cchips');
+  box.innerHTML='<span style="font-size:11px;font-weight:900;letter-spacing:.8px;text-transform:uppercase;color:#8892a4">Front of card</span>'
+   +'<button data-v="zh"'+(cFront==='zh'?' class="on"':'')+'>汉字 Chinese</button>'
+   +'<button data-v="en"'+(cFront==='en'?' class="on"':'')+'>English meaning</button>'
+   +'<button data-v="shuffle" style="margin-left:6px">🔀 Shuffle</button>';
+  box.querySelectorAll('button').forEach(function(b){b.onclick=function(){
+    if(b.dataset.v==='shuffle'){cOrder=shuffle(cOrder);ci=0;}
+    else cFront=b.dataset.v;
+    renderCard();
+  };});
+  document.getElementById('fin').onclick=function(){flipped=!flipped;this.classList.toggle('on',flipped);
+    if(flipped) say(W[cOrder[ci]].zh);};
+  document.getElementById('cKnew').onclick=function(){rateCard(true);};
+  document.getElementById('cMiss').onclick=function(){rateCard(false);};
+  document.getElementById('cSay').onclick=function(){say(W[cOrder[ci]].zh);};
+  document.getElementById('cPrev').onclick=function(){if(ci>0){ci--;drawCard();}};
+  document.getElementById('cNext').onclick=function(){if(ci<cOrder.length-1){ci++;drawCard();}};
+  drawCard();
+}
+function drawCard(){
+  var o=W[cOrder[ci]], r=cRes[cOrder[ci]];
+  flipped=false; document.getElementById('fin').classList.remove('on');
+  document.getElementById('cm').textContent='Card '+(ci+1)+' / '+cOrder.length;
+  document.getElementById('cs').textContent='Card points: '+sum(cRes)+' / '+MAXC;
+  document.getElementById('cb').style.width=((ci+1)/cOrder.length*100)+'%';
+  var f=document.getElementById('fFront'), b=document.getElementById('fBack');
+  if(cFront==='zh'){
+    f.innerHTML='<div class="zh">'+esc(o.zh)+'</div><div class="hint">tap to flip</div>';
+    b.innerHTML='<div class="py">'+esc(o.py)+'</div><div class="en">'+esc(o.en)+'</div>';
+  } else {
+    f.innerHTML='<div class="en" style="font-size:clamp(19px,5vw,26px)">'+esc(o.en)+'</div><div class="hint">tap to flip</div>';
+    b.innerHTML='<div class="zh" style="font-size:clamp(38px,10vw,60px)">'+esc(o.zh)+'</div><div class="py" style="font-size:22px">'+esc(o.py)+'</div>';
+  }
+  var n=document.getElementById('cnote');
+  if(r.st==='ok'){n.className='done-note';n.textContent='✓ already scored '+r.pts+(r.rev?' (recovered in review)':'')+' — you can keep practising';}
+  else if(r.st==='miss'){n.className='done-note miss';n.textContent='↻ marked for review';}
+  else {n.className='done-note';n.textContent='';}
+  document.getElementById('cPrev').disabled=(ci===0);
+  document.getElementById('cNext').disabled=(ci===cOrder.length-1);
+  drawCDots(); board();
+}
+function rateCard(knew){
+  var id=cOrder[ci], r=cRes[id];
+  if(r.st===null){ r.st=knew?'ok':'miss'; r.pts=knew?2:0; }
+  board();
+  if(ci<cOrder.length-1){ ci++; drawCard(); } else drawCard();
+}
+function drawCDots(){
+  var d=document.getElementById('cdots'); if(!d)return; d.innerHTML='';
+  cOrder.forEach(function(id,i){
+    var r=cRes[id], cls='dot'+(i===ci?' cur':(r.st==='ok'?' ok':(r.st==='miss'?' no':'')));
+    var e=document.createElement('div'); e.className=cls; e.title='Card '+(i+1);
+    e.onclick=function(){ci=i;drawCard();}; d.appendChild(e);
+  });
+}
+
+/* ================= 2 · PHRASES ================= */
+var pi=0;
+function renderPhr(){
+  var w=document.getElementById('s-phr');
+  w.innerHTML='<div class="tip">Each phrase is made of <b>two words</b> from the 50. Type it in <b>pinyin</b>. '
+   +'<b>Tone marks are not required</b> — <code>zher you</code>, <code>zher4 you3</code> and <code>zhèr yǒu</code> are all accepted, and spaces do not matter. '
+   +'The <b>spelling</b> must be right: <code>xie xie</code> ✓, <code>xie shie</code> ✗. Type <code>v</code> for ü (<code>lv</code> = lü). Press <b>Enter</b> to check.<br>'
+   +'Scoring: <b class="pts">5</b> first try · <b class="pts">2</b> if right after a miss · <b class="pts">0</b> if you press Show.</div>'
+   +'<div class="meta"><span id="pm"></span><span id="ps"></span></div>'
+   +'<div class="bar"><div class="barf" id="pb"></div></div>'
+   +'<div id="pq"></div>'
+   +'<div class="nav2"><button id="pPrev">← Prev</button><button id="pNext">Next →</button></div>'
+   +'<div class="dots" id="pdots"></div>';
+  document.getElementById('pPrev').onclick=function(){if(pi>0){pi--;drawPhr();}};
+  document.getElementById('pNext').onclick=function(){if(pi<P.length-1){pi++;drawPhr();}};
+  drawPhr();
+}
+function drawPhr(){
+  var o=P[pi];
+  document.getElementById('pm').textContent='Phrase '+(pi+1)+' / '+P.length;
+  document.getElementById('ps').textContent='Phrase points: '+sum(pRes)+' / '+MAXP;
+  document.getElementById('pb').style.width=((pi+1)/P.length*100)+'%';
+  document.getElementById('pq').innerHTML='<div class="qcard">'
+   +'<div class="lbl">type the pinyin — tones not needed</div>'
+   +'<div class="pzh">'+esc(o.zh)+'</div>'
+   +'<div class="pen">'+esc(o.en)+'</div>'
+   +'<div class="pmade">'+esc(o.made)+'</div>'
+   +'<div class="ir"><input class="inp" id="pin" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="e.g. zher you">'
+   +'<button class="btn b-g" id="pck">Check ✓</button>'
+   +'<button class="btn b-s" id="psay">🔊</button>'
+   +'<button class="btn b-s" id="psh">Show</button></div>'
+   +'<div class="ans" id="pans"></div></div>';
+  var inp=document.getElementById('pin');
+  document.getElementById('pck').onclick=function(){gradePhr(false);};
+  document.getElementById('psh').onclick=function(){gradePhr(true);};
+  document.getElementById('psay').onclick=function(){say(o.zh);};
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();gradePhr(false);}});
+  document.getElementById('pPrev').disabled=(pi===0);
+  document.getElementById('pNext').disabled=(pi===P.length-1);
+  drawPDots(); board();
+  inp.focus();
+}
+function gradePhr(reveal){
+  var o=P[pi], r=pRes[pi];
+  var inp=document.getElementById('pin'), box=document.getElementById('pans');
+  var got=canon(inp.value), good=canon(o.py);
+  if(!got.l && !reveal){ inp.focus(); return; }
+  var ok=!reveal && accepts(o,inp.value);
+  var earned=0;
+  if(reveal){ if(r.st===null){ r.st='miss'; r.pts=0; } }
+  else if(ok){
+    if(r.st===null){ r.st='ok'; r.pts=5; earned=5; }
+    else if(r.st==='miss' && !r.rev){ r.st='ok'; r.pts=2; earned=2; }
+  } else if(r.st===null){ r.st='miss'; r.pts=0; }
+  inp.className='inp '+(ok?'ok':'no');
+  var extra='';
+  if(!ok && got.l){
+    var d=firstDiff(good.l,got.l);
+    extra='<div class="y">you typed: '+esc(inp.value.trim())+(d>=0?'  ·  first difference at letter '+(d+1):'')+'</div>';
+  }
+  box.className='ans '+(ok?'ok':'no');
+  box.innerHTML=(earned?'<span class="pt">+'+earned+'</span>':'')+(ok?'✓ ':'✗ ')
+    +'<span class="p">'+esc(o.py)+'</span><div class="e">'+esc(o.zh)+' — '+esc(o.en)+'</div>'+extra;
+  say(o.zh); board(); drawPDots();
+  document.getElementById('ps').textContent='Phrase points: '+sum(pRes)+' / '+MAXP;
+}
+function drawPDots(){
+  var d=document.getElementById('pdots'); if(!d)return; d.innerHTML='';
+  P.forEach(function(_,i){
+    var r=pRes[i], cls='dot'+(i===pi?' cur':(r.st==='ok'?' ok':(r.st==='miss'?' no':'')));
+    var e=document.createElement('div'); e.className=cls; e.title='Phrase '+(i+1);
+    e.onclick=function(){pi=i;drawPhr();}; d.appendChild(e);
+  });
+}
+
+/* ================= 3 · REVIEW ================= */
+function drawRev(){
+  var w=document.getElementById('s-rev');
+  var mc=[], mp=[];
+  cRes.forEach(function(r,i){ if(r.st==='miss') mc.push(i); });
+  pRes.forEach(function(r,i){ if(r.st==='miss') mp.push(i); });
+  var head='<div class="tip">Everything you did not get first time lands here. '
+   +'A card you now know is worth <b class="pts">1</b> point; a phrase you now type correctly is worth <b class="pts">2</b> (tones still not needed). '
+   +'These points are added to your final score and shown separately as the <b>复习 Review</b> score.</div>';
+  if(!mc.length && !mp.length){
+    w.innerHTML=head+'<div class="empty">Nothing to review — everything so far was right first time 🎉</div>';
+    return;
+  }
+  var h=head;
+  if(mc.length){
+    h+='<div class="rlist"><div class="h">抽认卡 Cards to review ('+mc.length+')</div>'
+      +mc.map(function(i){var o=W[i];
+        return '<div class="rrow"><div class="z">'+esc(o.zh)+'</div>'
+        +'<div class="bd"><div class="p">'+esc(o.py)+'</div><div class="e">'+esc(o.en)+'</div></div>'
+        +'<button class="btn b-s" data-say="'+esc(o.zh)+'">🔊</button>'
+        +'<button class="btn b-g" data-cok="'+i+'">✓ I know it now (+1)</button></div>';
+      }).join('')+'</div>';
+  }
+  if(mp.length){
+    h+='<div class="rlist"><div class="h">词组 Phrases to review ('+mp.length+')</div>'
+      +mp.map(function(i){var o=P[i];
+        return '<div class="rrow"><div class="z">'+esc(o.zh)+'</div>'
+        +'<div class="bd"><div class="e">'+esc(o.en)+'</div></div>'
+        +'<input id="rv'+i+'" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="type the pinyin">'
+        +'<button class="btn b-s" data-say="'+esc(o.zh)+'">🔊</button>'
+        +'<button class="btn b-g" data-pok="'+i+'">Check ✓</button></div>';
+      }).join('')+'</div>';
+  }
+  w.innerHTML=h;
+  w.querySelectorAll('[data-say]').forEach(function(b){b.onclick=function(){say(b.getAttribute('data-say'));};});
+  w.querySelectorAll('[data-cok]').forEach(function(b){b.onclick=function(){
+    var i=+b.getAttribute('data-cok');
+    cRes[i].st='ok'; cRes[i].pts=1; cRes[i].rev=true; revPts+=1;
+    board(); drawRev();
+  };});
+  w.querySelectorAll('[data-pok]').forEach(function(b){b.onclick=function(){
+    var i=+b.getAttribute('data-pok'), o=P[i], inp=document.getElementById('rv'+i);
+    if(!canon(inp.value).l) return;
+    if(accepts(o,inp.value)){
+      pRes[i].st='ok'; pRes[i].pts=2; pRes[i].rev=true; revPts+=2;
+      inp.className='ok'; say(o.zh); board(); setTimeout(drawRev,700);
+    } else {
+      inp.className='no'; say(o.zh);
+    }
+  };});
+  w.querySelectorAll('.rrow input').forEach(function(el){
+    el.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault();
+      var i=el.id.slice(2); var btn=w.querySelector('[data-pok="'+i+'"]'); if(btn) btn.click(); }});
+  });
+}
+
+/* ================= 4 · FINAL SCORE ================= */
+function drawFin(){
+  var w=document.getElementById('s-fin');
+  var cp=sum(cRes), pp=sum(pRes), tt=cp+pp, pc=Math.round(tt/MAX*100);
+  var g=grade(pc);
+  var cd=cRes.filter(function(r){return r.st!==null;}).length;
+  var pd=pRes.filter(function(r){return r.st!==null;}).length;
+  var stillC=cRes.filter(function(r){return r.st==='miss';}).length;
+  var stillP=pRes.filter(function(r){return r.st==='miss';}).length;
+  var h='<div class="final"><div class="em">'+g[1]+'</div>'
+   +'<div class="big">'+tt+' / '+MAX+'</div>'
+   +'<div class="gr">'+g[0]+'</div>'
+   +'<div class="pc">'+pc+'%  ·  '+(cd+pd)+' of '+(W.length+P.length)+' items attempted</div></div>'
+   +'<table class="tbl"><tr><th>Part</th><th>Attempted</th><th>Right</th><th style="text-align:right">Points</th></tr>'
+   +'<tr><td>🃏 抽认卡 Flashcards</td><td>'+cd+' / '+W.length+'</td><td>'+cntOK(cRes)+'</td><td class="n">'+cp+' / '+MAXC+'</td></tr>'
+   +'<tr><td>✍️ 词组 Phrases</td><td>'+pd+' / '+P.length+'</td><td>'+cntOK(pRes)+'</td><td class="n">'+pp+' / '+MAXP+'</td></tr>'
+   +'<tr><td>🔁 复习 Review <span style="font-weight:700;color:#8892a4">(included above)</span></td><td>—</td><td>—</td><td class="n">'+revPts+'</td></tr>'
+   +'<tr class="tot"><td>总分 Final score</td><td></td><td></td><td class="n">'+tt+' / '+MAX+'</td></tr></table>';
+  if(stillC||stillP){
+    h+='<div class="tip" style="margin-top:13px">Still to master: <b>'+stillC+'</b> card'+(stillC===1?'':'s')
+      +' and <b>'+stillP+'</b> phrase'+(stillP===1?'':'s')+'. Open the <b>🔁 复习 Review</b> tab to win those points back.</div>';
+  } else if(cd+pd>0){
+    h+='<div class="tip" style="margin-top:13px">Nothing left to review — every item you attempted was right. 🎉</div>';
+  }
+  h+='<div class="row"><button class="btn b-p" id="fRev">🔁 Go to Review</button>'
+   +'<button class="btn b-r" id="fReset">↺ Start again from zero</button></div>';
+  w.innerHTML=h;
+  document.getElementById('fRev').onclick=function(){show('rev');};
+  document.getElementById('fReset').onclick=function(){
+    cRes=W.map(function(){return {st:null,pts:0,rev:false};});
+    pRes=P.map(function(){return {st:null,pts:0,rev:false};});
+    revPts=0; ci=0; pi=0; cOrder=W.map(function(_,i){return i;});
+    board(); renderCard(); renderPhr(); drawFin();
+  };
+}
+
+/* ---------- init ---------- */
+board(); renderCard(); renderPhr();
+</script>
+</body>
+</html>
