@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>French Adjective Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Caveat:wght@600&display=swap">
+<style>
+/* ============================================================
+   FRENCH ADJECTIVE ADVENTURE
+   Design notes: the page borrows the French school "cahier Seyès"
+   exercise book -- faint blue ruling, a violet ink margin line,
+   and violet ink for the writing (French primary pupils write in
+   violet). Masculine = blue, feminine = rose, used as data, not
+   decoration.
+   ============================================================ */
+
+:root{
+  --paper:#f6f7fc;
+  --card:#ffffff;
+  --rule:#dbe3f7;          /* Seyès ruling */
+  --margin-line:#e6a6c4;   /* the pink margin line of a French cahier */
+  --ink:#1b1f38;           /* near-black with a blue bias */
+  --ink-soft:#5c6386;
+  --ink-faint:#8b91ad;
+  --violet:#4c2fbe;        /* encre violette */
+  --violet-soft:#ece7fd;
+  --masc:#1f6fe0;          /* masculine */
+  --fem:#d63d80;           /* feminine */
+  --good:#0e8f63;
+  --good-soft:#e2f6ee;
+  --oops:#c8443c;
+  --oops-soft:#fdecea;
+  --gold:#c98a12;
+  --shadow:0 1px 2px rgba(27,31,56,.06), 0 8px 24px -12px rgba(27,31,56,.22);
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#12142a;
+    --card:#1c1f3a;
+    --rule:#2c3157;
+    --margin-line:#7d3f5c;
+    --ink:#eef0fb;
+    --ink-soft:#b4bade;
+    --ink-faint:#8f96bd;
+    --violet:#b3a1ff;
+    --violet-soft:#2a2557;
+    --masc:#7fb3ff;
+    --fem:#ff8fbb;
+    --good:#5ddba9;
+    --good-soft:#123a2d;
+    --oops:#ff9b93;
+    --oops-soft:#3d1f1d;
+    --gold:#f0c05a;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#12142a;
+  --card:#1c1f3a;
+  --rule:#2c3157;
+  --margin-line:#7d3f5c;
+  --ink:#eef0fb;
+  --ink-soft:#b4bade;
+  --ink-faint:#8f96bd;
+  --violet:#b3a1ff;
+  --violet-soft:#2a2557;
+  --masc:#7fb3ff;
+  --fem:#ff8fbb;
+  --good:#5ddba9;
+  --good-soft:#123a2d;
+  --oops:#ff9b93;
+  --oops-soft:#3d1f1d;
+  --gold:#f0c05a;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--paper);
+  background-image:repeating-linear-gradient(to bottom, transparent 0 31px, var(--rule) 31px 32px);
+  color:var(--ink);
+  font-family:"Figtree","Segoe UI",system-ui,-apple-system,sans-serif;
+  font-size:17px;
+  line-height:1.55;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:760px;margin:0 auto;padding:18px 16px 72px}
+
+h1,h2,h3{font-family:"Bricolage Grotesque","Figtree",system-ui,sans-serif;text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,6vw,44px);font-weight:800;line-height:1.05;letter-spacing:-.02em}
+h2{font-size:clamp(21px,3.6vw,27px);font-weight:700;letter-spacing:-.01em}
+h3{font-size:18px;font-weight:700}
+p{margin:0}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--violet)}
+.hand{font-family:"Caveat","Segoe Script",cursive;font-size:23px;line-height:1.25}
+
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--violet);outline-offset:2px;border-radius:6px}
+
+/* ---------- shared card: a page from the cahier ---------- */
+.sheet{
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:var(--r);
+  box-shadow:var(--shadow);
+  padding:22px 22px 22px 26px;
+  position:relative;
+  overflow:hidden;
+}
+.sheet::before{
+  content:"";position:absolute;left:12px;top:0;bottom:0;width:2px;background:var(--margin-line);opacity:.7;
+}
+
+/* ---------- screens ---------- */
+.screen{display:none}
+.screen.on{display:block}
+
+/* ---------- welcome ---------- */
+.hero{display:flex;flex-direction:column;gap:14px;padding:26px 22px 26px 30px;margin-bottom:16px}
+.pairline{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:clamp(19px,4vw,26px);font-weight:700}
+.m{color:var(--masc)}
+.f{color:var(--fem)}
+.arrow{color:var(--ink-faint);font-weight:500}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:16px 0}
+.skill{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.skill .big{font-family:"Bricolage Grotesque",sans-serif;font-size:22px;font-weight:700}
+.skill .sub{font-size:14px;color:var(--ink-soft)}
+
+label.field{display:block;font-size:14px;font-weight:600;color:var(--ink-soft);margin-bottom:6px}
+input[type=text]{
+  width:100%;padding:13px 14px;font:inherit;color:var(--ink);
+  background:var(--card);border:2px solid var(--rule);border-radius:10px;
+}
+input[type=text]:focus{border-color:var(--violet);outline:none}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--violet);color:#fff;border:none;border-radius:11px;
+  padding:14px 22px;font-weight:700;font-size:17px;min-height:50px;
+  transition:transform .12s ease, filter .12s ease;
+}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--violet);border:2px solid var(--violet)}
+.btn.quiet{background:transparent;color:var(--ink-soft);border:2px solid var(--rule)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+
+/* ---------- progress rail ---------- */
+.rail{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.leg{
+  background:var(--card);border:1px solid var(--rule);border-radius:10px;
+  padding:8px 6px;text-align:center;font-size:12px;color:var(--ink-faint);font-weight:600;
+}
+.leg .name{display:block;font-size:12.5px}
+.leg .val{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:16px;font-weight:700;color:var(--ink-faint);font-variant-numeric:tabular-nums}
+.leg.active{border-color:var(--violet);background:var(--violet-soft);color:var(--violet)}
+.leg.active .val{color:var(--violet)}
+.leg.done{border-color:var(--good)}
+.leg.done .val,.leg.done{color:var(--good)}
+
+.bar{height:8px;background:var(--rule);border-radius:99px;overflow:hidden;margin-bottom:16px}
+.bar>i{display:block;height:100%;width:0;background:var(--violet);border-radius:99px;transition:width .35s ease}
+
+/* ---------- question ---------- */
+.qhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}
+.qnum{font-size:13px;font-weight:700;color:var(--ink-faint);font-variant-numeric:tabular-nums}
+.tag{font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;letter-spacing:.03em}
+.tag.m{background:color-mix(in srgb,var(--masc) 14%,transparent);color:var(--masc)}
+.tag.f{background:color-mix(in srgb,var(--fem) 14%,transparent);color:var(--fem)}
+
+.speaker{
+  width:100%;min-height:104px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  background:var(--violet-soft);border:2px dashed var(--violet);border-radius:14px;color:var(--violet);
+  font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:19px;
+}
+.speaker .ico{font-size:34px;line-height:1}
+.speaker:hover{filter:brightness(.98)}
+.speaker.playing{animation:pulse .7s ease}
+@keyframes pulse{0%{transform:scale(1)}40%{transform:scale(1.03)}100%{transform:scale(1)}}
+
+.accentbar{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+.accentbar button{
+  background:var(--card);border:1.5px solid var(--rule);border-radius:8px;
+  min-width:40px;min-height:40px;font-size:17px;font-weight:600;color:var(--violet);
+}
+.accentbar button:hover{border-color:var(--violet)}
+.hintline{font-size:14px;color:var(--ink-soft);margin-top:8px}
+
+.lines{margin:2px 0 16px;padding-left:14px;border-left:3px solid var(--violet-soft)}
+.lines p{font-size:19px;font-weight:500;margin:0 0 4px}
+.qtext{font-weight:600;margin-bottom:12px;font-size:17.5px}
+
+.options{display:flex;flex-direction:column;gap:9px}
+.opt{
+  display:flex;align-items:center;gap:12px;text-align:left;width:100%;
+  background:var(--card);border:2px solid var(--rule);border-radius:12px;
+  padding:13px 15px;font-size:17px;font-weight:500;min-height:54px;
+  transition:border-color .12s ease,background .12s ease;
+}
+.opt:hover:not([disabled]){border-color:var(--violet)}
+.opt .k{
+  flex:0 0 30px;height:30px;border-radius:8px;background:var(--violet-soft);color:var(--violet);
+  display:grid;place-items:center;font-weight:800;font-size:14px;
+}
+.opt.picked{border-color:var(--violet)}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.right .k{background:var(--good);color:#fff}
+.opt.wrong{border-color:var(--oops);background:var(--oops-soft)}
+.opt.wrong .k{background:var(--oops);color:#fff}
+
+.feedback{margin-top:14px;padding:14px 16px;border-radius:12px;display:none}
+.feedback.on{display:block}
+.feedback.good{background:var(--good-soft);border:1px solid var(--good)}
+.feedback.bad{background:var(--oops-soft);border:1px solid var(--oops)}
+.feedback .verdict{font-family:"Caveat",cursive;font-size:26px;font-weight:600;line-height:1.15}
+.feedback.good .verdict{color:var(--good)}
+.feedback.bad .verdict{color:var(--oops)}
+.feedback .detail{font-size:15.5px;color:var(--ink);margin-top:4px}
+.feedback .why{font-size:15px;color:var(--ink-soft);margin-top:6px}
+.sol{font-weight:700}
+
+/* ---------- section done ---------- */
+.done-big{font-family:"Bricolage Grotesque",sans-serif;font-size:56px;font-weight:800;line-height:1;color:var(--violet);font-variant-numeric:tabular-nums}
+
+/* ---------- results ---------- */
+.scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0}
+.score{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:16px}
+.score .lbl{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint)}
+.score .num{font-family:"Bricolage Grotesque",sans-serif;font-size:34px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.score .num small{font-size:17px;font-weight:600;color:var(--ink-faint)}
+.score.total{background:var(--violet);border-color:var(--violet);color:#fff}
+.score.total .lbl{color:rgba(255,255,255,.75)}
+.score.total .num small{color:rgba(255,255,255,.75)}
+.score .meter{height:6px;background:var(--rule);border-radius:99px;margin-top:8px;overflow:hidden}
+.score .meter>i{display:block;height:100%;background:var(--violet);border-radius:99px}
+.score.total .meter{background:rgba(255,255,255,.28)}
+.score.total .meter>i{background:#fff}
+
+.verdictcard{padding:20px 22px 20px 30px;text-align:center}
+.verdictcard .grade{font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(26px,5vw,36px);font-weight:800;color:var(--gold)}
+.strengths{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}
+.strength{border:1px solid var(--rule);border-radius:12px;padding:12px 14px;background:var(--card)}
+.strength .lbl{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint)}
+.strength .v{font-family:"Bricolage Grotesque",sans-serif;font-size:19px;font-weight:700}
+
+/* ---------- review ---------- */
+.revgroup{margin-top:22px}
+.revhead{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.revhead .count{font-size:13px;font-weight:700;color:var(--ink-faint)}
+.miss{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--oops);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.miss .n{font-size:12.5px;font-weight:700;color:var(--ink-faint);letter-spacing:.06em;text-transform:uppercase}
+.miss .qq{font-weight:600;margin:6px 0 8px}
+.miss .mini{font-size:17.5px;margin:0 0 3px;color:var(--ink-soft)}
+.ansrow{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.pill{font-size:15px;padding:5px 11px;border-radius:9px;font-weight:600}
+.pill.you{background:var(--oops-soft);color:var(--oops);border:1px solid var(--oops)}
+.pill.ok{background:var(--good-soft);color:var(--good);border:1px solid var(--good)}
+.pill.empty{background:var(--rule);color:var(--ink-soft)}
+.miss .rule{font-size:15px;color:var(--ink-soft);margin-top:6px}
+.miss .rule b{color:var(--ink)}
+.listenagain{margin-top:8px;background:var(--violet-soft);color:var(--violet);border:1.5px solid var(--violet);border-radius:9px;padding:7px 12px;font-size:15px;font-weight:600}
+.allclear{background:var(--good-soft);border:1px solid var(--good);border-radius:12px;padding:14px 16px;color:var(--good);font-weight:600}
+
+.summary{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:16px;margin-top:22px}
+.summary ul{margin:8px 0 0;padding-left:20px;color:var(--ink-soft)}
+.summary li{margin:2px 0}
+
+.voicebar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;color:var(--ink-soft);margin-top:14px}
+.voicebar select{font:inherit;font-size:14px;padding:7px 9px;border-radius:9px;border:1.5px solid var(--rule);background:var(--card);color:var(--ink);max-width:100%}
+.note{font-size:13.5px;color:var(--ink-faint)}
+.warn{background:var(--oops-soft);border:1px solid var(--oops);color:var(--oops);border-radius:10px;padding:10px 12px;font-size:14.5px;margin-top:10px;display:none}
+.warn.on{display:block}
+
+.footer{margin-top:26px;font-size:13px;color:var(--ink-faint);text-align:center}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important}
+}
+@media (max-width:430px){
+  body{font-size:16.5px}
+  .rail{grid-template-columns:repeat(2,1fr)}
+  .sheet{padding:18px 16px 18px 22px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ============ WELCOME ============ -->
+<section class="screen on" id="s-welcome" aria-labelledby="welcome-title">
+  <div class="sheet hero">
+    <p class="eyebrow">Les adjectifs · Leçon 4</p>
+    <h1 id="welcome-title">French Adjective Adventure</h1>
+    <div class="pairline"><span class="m">heureux</span><span class="arrow">→</span><span class="f">heureuse</span></div>
+    <p style="color:var(--ink-soft);max-width:52ch">Listen, read, choose, and learn how French adjectives change from masculine to feminine. 90 questions. Take your time — every mistake gets explained at the end.</p>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--masc)"></i>masculine</span>
+      <span><i class="dot" style="background:var(--fem)"></i>feminine</span>
+    </div>
+  </div>
+
+  <div class="skills">
+    <div class="skill"><span class="big">🎧 Listening</span><span class="sub">30 points · type the word you hear</span></div>
+    <div class="skill"><span class="big">📖 Reading</span><span class="sub">30 points · read 3 lines, choose</span></div>
+    <div class="skill"><span class="big">🧠 Grammar</span><span class="sub">30 points · masculine → feminine</span></div>
+  </div>
+
+  <div class="sheet">
+    <label class="field" for="nameInput">What is your name?</label>
+    <input type="text" id="nameInput" placeholder="e.g. Meera" autocomplete="given-name">
+    <div class="btnrow">
+      <button class="btn" id="startBtn">Start the adventure →</button>
+    </div>
+    <div class="voicebar">
+      <span>🔊 French voice:</span>
+      <select id="voiceSel" aria-label="Choose the French voice"></select>
+      <button class="btn quiet" style="padding:7px 12px;min-height:38px;font-size:15px" id="voiceTest">Test</button>
+      <span class="note" id="voiceNote"></span>
+    </div>
+    <div class="warn" id="voiceWarn">Your browser cannot play French audio. You can still read the hints and type the answer.</div>
+    <p class="note" style="margin-top:12px">Tip: type accents with the buttons under the answer box — <b>é è ê î ç</b> all count.</p>
+  </div>
+
+  <p class="footer">Made for the Lesson 4 adjective list · works offline in any browser</p>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section class="screen" id="s-quiz" aria-labelledby="quiz-title">
+  <div class="rail" id="rail"></div>
+  <div class="bar"><i id="bar"></i></div>
+
+  <div class="sheet" id="qcard">
+    <div class="qhead">
+      <span class="qnum" id="qnum"></span>
+      <span id="qtag"></span>
+    </div>
+    <h2 id="quiz-title" class="sr-only" style="position:absolute;left:-9999px">Question</h2>
+    <div id="qbody"></div>
+    <div class="feedback" id="fb" role="status" aria-live="polite">
+      <p class="verdict" id="fbVerdict"></p>
+      <p class="detail" id="fbDetail"></p>
+      <p class="why" id="fbWhy"></p>
+    </div>
+    <div class="btnrow" id="qbtns"></div>
+  </div>
+</section>
+
+<!-- ============ SECTION COMPLETE ============ -->
+<section class="screen" id="s-between" aria-labelledby="between-title">
+  <div class="sheet" style="text-align:center;padding:30px 22px">
+    <p class="eyebrow" id="betweenEyebrow"></p>
+    <h2 id="between-title" style="margin:6px 0 10px"></h2>
+    <p class="done-big" id="betweenScore"></p>
+    <p class="hand" id="betweenNote" style="color:var(--violet);margin-top:6px"></p>
+    <div class="btnrow" style="justify-content:center">
+      <button class="btn" id="betweenBtn"></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section class="screen" id="s-results" aria-labelledby="results-title">
+  <div class="sheet verdictcard">
+    <p class="eyebrow">Résultats</p>
+    <h2 id="results-title">Your French Adventure Results</h2>
+    <p class="grade" id="gradeLine"></p>
+    <p class="hand" id="gradeName" style="color:var(--violet)"></p>
+  </div>
+
+  <div class="scores" id="scores"></div>
+
+  <div class="strengths">
+    <div class="strength"><span class="lbl">Your strongest skill</span><div class="v" id="bestSkill"></div></div>
+    <div class="strength"><span class="lbl">Skill to practise</span><div class="v" id="worstSkill"></div></div>
+  </div>
+
+  <div class="btnrow">
+    <button class="btn" id="reviewBtn">Review my mistakes</button>
+    <button class="btn quiet" id="restartBtn">Start again</button>
+  </div>
+</section>
+
+<!-- ============ REVIEW ============ -->
+<section class="screen" id="s-review" aria-labelledby="review-title">
+  <div class="sheet">
+    <p class="eyebrow">Corrections</p>
+    <h2 id="review-title">Review my mistakes</h2>
+    <p style="color:var(--ink-soft);margin-top:6px" id="reviewIntro"></p>
+  </div>
+
+  <div id="reviewBody"></div>
+
+  <div class="summary" id="reviewSummary"></div>
+
+  <div class="btnrow">
+    <button class="btn" id="retryLis">Retry listening mistakes</button>
+    <button class="btn" id="retryRea">Retry reading mistakes</button>
+    <button class="btn" id="retryGra">Retry grammar mistakes</button>
+  </div>
+  <div class="btnrow">
+    <button class="btn ghost" id="backToScore">← Back to my score</button>
+    <button class="btn quiet" id="tryAll">Try all 90 again</button>
+  </div>
+</section>
+
+</div>
+
+<script>
+/* ============================================================
+   1. STATE  (all mutable state declared first)
+   ============================================================ */
+let studentName = "";
+let sectionIdx = 0;        // 0 listening, 1 reading, 2 grammar
+let qIdx = 0;              // index inside the running list
+let answered = false;      // has the current question been checked
+let running = [];          // list of question indexes being asked
+let retryMode = false;     // are we replaying mistakes only
+let scores = [0, 0, 0];
+let records = [[], [], []];// records[section][questionIndex] = {given, ok}
+let voices = [];
+let frVoice = null;
+let speechOK = ("speechSynthesis" in window);
+
+/* ============================================================
+   2. CONTENT
+   ============================================================ */
+
+/* ---- 2a. LISTENING: 30 dictation words ----
+   Homophone pairs (cher/chère, fier/fière, cruel/cruelle) sound
+   identical in French, so every item shows a masculine/feminine
+   tag. That is the clue, not a giveaway.                      */
+const LISTENING = [
+  {w:"bon",       g:"m", en:"good",      why:"Masculine form. The feminine doubles the n: bonne."},
+  {w:"bonne",     g:"f", en:"good",      why:"bon → bonne. Words in -on double the n and add e."},
+  {w:"ancien",    g:"m", en:"old, former", why:"Masculine form. The feminine doubles the n: ancienne."},
+  {w:"ancienne",  g:"f", en:"old, former", why:"ancien → ancienne. Double the n, then add e."},
+  {w:"cruel",     g:"m", en:"cruel",     why:"Masculine form. The feminine doubles the l: cruelle."},
+  {w:"cruelle",   g:"f", en:"cruel",     why:"cruel → cruelle. Words in -el double the l and add e."},
+  {w:"muet",      g:"m", en:"silent",    why:"Masculine form. The feminine doubles the t: muette."},
+  {w:"muette",    g:"f", en:"silent",    why:"muet → muette. Words in -et double the t and add e."},
+  {w:"généreux",  g:"m", en:"generous",  why:"Two accents: g-é-n-é-reux. Ends in -eux."},
+  {w:"généreuse", g:"f", en:"generous",  why:"généreux → généreuse. The x becomes s, then add e."},
+  {w:"heureux",   g:"m", en:"happy",     why:"Silent h at the start: h-e-u-r-e-u-x."},
+  {w:"heureuse",  g:"f", en:"happy",     why:"heureux → heureuse. The x becomes s, then add e."},
+  {w:"actif",     g:"m", en:"active",    why:"Ends in -f. The feminine changes f to v."},
+  {w:"active",    g:"f", en:"active",    why:"actif → active. The f becomes v, then add e."},
+  {w:"neuf",      g:"m", en:"brand new", why:"Ends in -f, like actif."},
+  {w:"neuve",     g:"f", en:"brand new", why:"neuf → neuve. The f becomes v, then add e."},
+  {w:"fier",      g:"m", en:"proud",     why:"Masculine form, no accent. The feminine adds è: fière."},
+  {w:"fière",     g:"f", en:"proud",     why:"fier → fière. The grave accent è is part of the spelling."},
+  {w:"cher",      g:"m", en:"expensive, dear", why:"Masculine form, no accent. The feminine adds è: chère."},
+  {w:"chère",     g:"f", en:"expensive, dear", why:"cher → chère. Words in -er become -ère."},
+  {w:"blanc",     g:"m", en:"white",     why:"Ends in a silent c."},
+  {w:"blanche",   g:"f", en:"white",     why:"blanc → blanche. This one is irregular — learn it by heart."},
+  {w:"frais",     g:"m", en:"fresh",     why:"Ends in -ais, with a silent s."},
+  {w:"fraîche",   g:"f", en:"fresh",     why:"frais → fraîche. Note the circumflex î."},
+  {w:"franc",     g:"m", en:"honest, frank", why:"Ends in a silent c, like blanc."},
+  {w:"franche",   g:"f", en:"honest, frank", why:"franc → franche. Irregular, like blanc → blanche."},
+  {w:"sec",       g:"m", en:"dry",       why:"Short word ending in c."},
+  {w:"sèche",     g:"f", en:"dry",       why:"sec → sèche. The e takes a grave accent: è."},
+  {w:"doux",      g:"m", en:"soft, gentle", why:"Ends in -oux with a silent x."},
+  {w:"douce",     g:"f", en:"soft, gentle", why:"doux → douce. Irregular: the x becomes c, then add e."}
+];
+
+/* ---- 2b. READING: 30 questions, each with exactly 3 French lines ---- */
+const READING = [
+  {l:["Paul est un homme heureux.","Sa sœur est heureuse aussi.","Ils sont très contents."],
+   q:"What is the feminine form of « heureux »?", o:["heureuse","heureuxe","heureusement"], a:"heureuse",
+   why:"Adjectives in -eux change to -euse: heureux → heureuse."},
+  {l:["Marc est un homme généreux.","Marie est une femme généreuse.","Ils aiment aider les autres."],
+   q:"What is the feminine form of « généreux »?", o:["généreuse","généreuxe","généreus"], a:"généreuse",
+   why:"Same rule: -eux becomes -euse."},
+  {l:["Paul est actif.","Marie est active.","Ils travaillent beaucoup."],
+   q:"What is the feminine form of « actif »?", o:["active","actife","actives"], a:"active",
+   why:"Adjectives in -f change the f to v and add e: actif → active."},
+  {l:["Jean est fier de son fils.","Anne est fière de sa fille.","Ils sont très contents."],
+   q:"What is the feminine form of « fier »?", o:["fière","fiere","fières"], a:"fière",
+   why:"Adjectives in -er become -ère. The grave accent is part of the word."},
+  {l:["Voici un homme bon.","Voici une femme bonne.","Ils sont gentils."],
+   q:"What is the feminine form of « bon »?", o:["bonne","bone","bonnes"], a:"bonne",
+   why:"Words in -on double the n before the e: bon → bonne."},
+  {l:["C'est un ancien professeur.","C'est une ancienne directrice.","Elle travaille encore ici."],
+   q:"What is the feminine form of « ancien »?", o:["ancienne","anciene","anciennne"], a:"ancienne",
+   why:"Words in -en double the n: ancien → ancienne."},
+  {l:["Le garçon est muet.","La fille est muette.","Ils ne parlent pas."],
+   q:"What is the feminine form of « muet »?", o:["muette","muete","muèthe"], a:"muette",
+   why:"Words in -et double the t: muet → muette."},
+  {l:["Cet homme est cruel.","Cette femme est cruelle.","Ils ne sont pas gentils."],
+   q:"What is the feminine form of « cruel »?", o:["cruelle","cruele","cruellle"], a:"cruelle",
+   why:"Words in -el double the l: cruel → cruelle."},
+  {l:["Le vélo de Paul est neuf.","Marie a une robe neuve.","Elle vient de l'acheter."],
+   q:"What is the feminine form of « neuf »?", o:["neuve","neufe","neuvée"], a:"neuve",
+   why:"The f becomes v, then add e: neuf → neuve."},
+  {l:["Ce livre est cher.","Cette voiture est chère.","Elle coûte beaucoup d'argent."],
+   q:"What is the feminine form of « cher »?", o:["chère","chere","chèree"], a:"chère",
+   why:"-er becomes -ère, with a grave accent: cher → chère."},
+  {l:["Le mur est blanc.","La porte est blanche.","La maison est jolie."],
+   q:"What is the feminine form of « blanc »?", o:["blanche","blance","blanchee"], a:"blanche",
+   why:"blanc → blanche is irregular. Learn it by heart."},
+  {l:["Le pain est frais.","La viande est fraîche.","Nous venons de l'acheter."],
+   q:"What is the feminine form of « frais »?", o:["fraîche","fraise","frèche"], a:"fraîche",
+   why:"frais → fraîche is irregular, and it takes a circumflex: î."},
+  {l:["Paul est franc.","Marie est franche.","Ils disent toujours la vérité."],
+   q:"What is the feminine form of « franc »?", o:["franche","franque","francque"], a:"franche",
+   why:"franc → franche is irregular, like blanc → blanche."},
+  {l:["Le linge est sec.","La robe est sèche.","Elle est prête à ranger."],
+   q:"What is the feminine form of « sec »?", o:["sèche","seche","secque"], a:"sèche",
+   why:"sec → sèche is irregular, and the e takes a grave accent."},
+  {l:["Paul est doux.","Marie a une voix douce.","Elle parle calmement."],
+   q:"What is the feminine form of « doux »?", o:["douce","douse","douxe"], a:"douce",
+   why:"doux → douce is irregular: the x becomes c."},
+  {l:["Le bâtiment est public.","La bibliothèque est publique.","Elle est ouverte à tous."],
+   q:"What is the feminine form of « public »?", o:["publique","publicque","publigue"], a:"publique",
+   why:"public → publique is irregular. The c becomes qu."},
+  {l:["Il est grec.","Elle est grecque.","Ils habitent à Athènes."],
+   q:"What is the feminine form of « grec »?", o:["grecque","greque","grecce"], a:"grecque",
+   why:"grec → grecque is irregular. Keep the c and add que."},
+  {l:["C'est un beau chapeau.","C'est une belle robe.","Les deux sont élégants."],
+   q:"What is the feminine form of « beau »?", o:["belle","beaue","belleu"], a:"belle",
+   why:"beau → belle. A special adjective with its own forms."},
+  {l:["C'est un nouveau livre.","C'est une nouvelle robe.","Les deux sont intéressants."],
+   q:"What is the feminine form of « nouveau »?", o:["nouvelle","nouvele","nouveaue"], a:"nouvelle",
+   why:"nouveau → nouvelle. A special adjective, like beau → belle."},
+  {l:["C'est un vieux chapeau.","C'est une vieille robe.","Les deux sont anciens."],
+   q:"What is the feminine form of « vieux »?", o:["vieille","vieuxe","vieilleu"], a:"vieille",
+   why:"vieux → vieille. A special adjective, like beau and nouveau."},
+  {l:["Le garçon est heureux.","La fille sourit beaucoup.","Elle est contente."],
+   q:"Which sentence is correct?", o:["La fille est heureuse.","La fille est heureuxe.","La fille est heureux."], a:"La fille est heureuse.",
+   why:"« fille » is feminine, so the adjective must be heureuse."},
+  {l:["Le professeur est fier.","La directrice parle de son école.","Elle est très contente."],
+   q:"Which word completes « La directrice est ___ » ?", o:["fière","fier","fiere"], a:"fière",
+   why:"« directrice » is feminine: fier → fière, with the grave accent."},
+  {l:["Le crayon est bleu.","Les crayons sont bleus.","La fleur est jolie."],
+   q:"How do most French adjectives form the plural?", o:["Add -s","Add -e","Remove the last letter"], a:"Add -s",
+   why:"Most adjectives simply add -s in the plural: bleu → bleus."},
+  {l:["Le livre est intéressant.","Les livres sont intéressants.","Le professeur lit les livres."],
+   q:"What happens to « intéressant » in the plural?", o:["intéressant → intéressants","intéressant → intéressantes","intéressant → intéressanx"], a:"intéressant → intéressants",
+   why:"The nouns are masculine plural, so the adjective adds -s."},
+  {l:["Un beau chapeau.","Un bel arbre.","Une belle robe."],
+   q:"Why do we say « un bel arbre »?", o:["The noun begins with a vowel.","The noun is feminine.","The noun is plural."], a:"The noun begins with a vowel.",
+   why:"Before a vowel or a silent h, beau becomes bel: un bel arbre, un bel homme."},
+  {l:["Un nouveau livre.","Un nouvel objet.","Une nouvelle robe."],
+   q:"Which form is used before a vowel sound?", o:["nouvel","nouveau","nouvelle"], a:"nouvel",
+   why:"Before a vowel or silent h, nouveau becomes nouvel: un nouvel ami."},
+  {l:["Un vieux chapeau.","Un vieil arbre.","Une vieille femme."],
+   q:"Which form is used before a vowel sound?", o:["vieil","vieux","vieille"], a:"vieil",
+   why:"Before a vowel or silent h, vieux becomes vieil: un vieil homme."},
+  {l:["Donne-moi un crayon rouge.","Voici une leçon facile.","J'aime la maison blanche."],
+   q:"Where is the adjective placed in these three lines?", o:["After the noun","Before the noun","At the start of the sentence"], a:"After the noun",
+   why:"Most French adjectives, including colours, come after the noun."},
+  {l:["Une belle robe.","Une jeune femme.","Un petit garçon."],
+   q:"Which word is an adjective placed BEFORE the noun?", o:["belle","robe","femme"], a:"belle",
+   why:"A few short common adjectives — beau, jeune, petit, grand — come before the noun."},
+  {l:["Ce garçon est plus grand que son frère.","Ce garçon est moins grand que son frère.","Ce garçon est aussi grand que son frère."],
+   q:"Which word means « more »?", o:["plus","moins","aussi"], a:"plus",
+   why:"plus = more, moins = less, aussi = as."}
+];
+
+/* ---- 2c. GRAMMAR: 30 questions ---- */
+const GRAMMAR = [
+  {q:"bon → ?", o:["bonne","bone","bons"], a:"bonne",
+   why:"Group 1: words in -on double the n and add e."},
+  {q:"ancien → ?", o:["ancienne","anciene","anciens"], a:"ancienne",
+   why:"Group 1: words in -en double the n and add e."},
+  {q:"cruel → ?", o:["cruelle","cruele","cruels"], a:"cruelle",
+   why:"Group 1: words in -el double the l and add e."},
+  {q:"muet → ?", o:["muette","muete","muets"], a:"muette",
+   why:"Group 1: words in -et double the t and add e."},
+  {q:"Which rule turns « heureux » into « heureuse »?",
+   o:["x becomes s, then add e","just add e","f becomes v, then add e"], a:"x becomes s, then add e",
+   why:"Group 2: -eux becomes -euse."},
+  {q:"généreux → ?", o:["généreuse","généreuxe","généreus"], a:"généreuse",
+   why:"Group 2: -eux becomes -euse."},
+  {q:"actif → ?", o:["active","actife","actifs"], a:"active",
+   why:"Group 3: the f becomes v, then add e."},
+  {q:"Which rule turns « neuf » into « neuve »?",
+   o:["f becomes v, then add e","double the f, then add e","x becomes s, then add e"], a:"f becomes v, then add e",
+   why:"Group 3: adjectives in -f take -ve in the feminine."},
+  {q:"fier → ?", o:["fière","fiere","fiers"], a:"fière",
+   why:"Group 4: -er becomes -ère. Don't forget the grave accent."},
+  {q:"cher → ?", o:["chère","chere","chers"], a:"chère",
+   why:"Group 4: -er becomes -ère."},
+  {q:"Which feminine form has a grave accent è?",
+   o:["chère","bonne","active"], a:"chère",
+   why:"Only the -er group takes the accent: cher → chère, fier → fière."},
+  {q:"blanc → ?", o:["blanche","blance","blancs"], a:"blanche",
+   why:"Irregular. Learn blanc → blanche by heart."},
+  {q:"frais → ?", o:["fraîche","fraiche","fraise"], a:"fraîche",
+   why:"Irregular, and it takes a circumflex: fraîche."},
+  {q:"franc → ?", o:["franche","franque","francs"], a:"franche",
+   why:"Irregular, like blanc → blanche."},
+  {q:"sec → ?", o:["sèche","seche","secs"], a:"sèche",
+   why:"Irregular, with a grave accent: sec → sèche."},
+  {q:"doux → ?", o:["douce","douse","douxe"], a:"douce",
+   why:"Irregular: the x becomes c, then add e."},
+  {q:"long → ?", o:["longue","longe","longs"], a:"longue",
+   why:"Irregular: long → longue."},
+  {q:"public → ?", o:["publique","publice","publics"], a:"publique",
+   why:"Irregular: the c becomes qu."},
+  {q:"grec → ?", o:["grecque","greque","grecs"], a:"grecque",
+   why:"Irregular: grec → grecque, keeping the c."},
+  {q:"beau → ?", o:["belle","beaue","beaux"], a:"belle",
+   why:"A special adjective: beau → belle. (beaux is the masculine plural.)"},
+  {q:"nouveau → ?", o:["nouvelle","nouveaue","nouveaux"], a:"nouvelle",
+   why:"A special adjective: nouveau → nouvelle."},
+  {q:"vieux → ?", o:["vieille","vieuxe","vieilles"], a:"vieille",
+   why:"A special adjective: vieux → vieille. (vieilles is the plural.)"},
+  {q:"Complete: un ___ arbre", o:["bel","beau","belle"], a:"bel",
+   why:"« arbre » starts with a vowel, so beau becomes bel."},
+  {q:"Complete: un ___ ami", o:["nouvel","nouveau","nouvelle"], a:"nouvel",
+   why:"« ami » starts with a vowel, so nouveau becomes nouvel."},
+  {q:"Complete: un ___ homme", o:["vieil","vieux","vieille"], a:"vieil",
+   why:"The h in « homme » is silent, so vieux becomes vieil."},
+  {q:"Complete: une ___ robe", o:["belle","bel","beau"], a:"belle",
+   why:"« robe » is feminine, so we use belle."},
+  {q:"le livre bleu → les livres ___", o:["bleus","bleu","bleues"], a:"bleus",
+   why:"Masculine plural: simply add -s."},
+  {q:"la fleur blanche → les fleurs ___", o:["blanches","blanchs","blanche"], a:"blanches",
+   why:"Feminine plural: the feminine form plus -s."},
+  {q:"Where do most French adjectives go?",
+   o:["After the noun","Before the noun","At the end of the sentence"], a:"After the noun",
+   why:"un crayon rouge, une leçon facile — the adjective follows the noun."},
+  {q:"« Marie est aussi grande que Paul. » What does « aussi » mean here?",
+   o:["as","more","less"], a:"as",
+   why:"plus = more, moins = less, aussi = as."}
+];
+
+const SECTIONS = [
+  {key:"listening", name:"Listening", icon:"🎧", total:30},
+  {key:"reading",   name:"Reading",   icon:"📖", total:30},
+  {key:"grammar",   name:"Grammar",   icon:"🧠", total:30}
+];
+
+/* ============================================================
+   3. HELPERS
+   ============================================================ */
+function $(id){ return document.getElementById(id); }
+
+function esc(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+/* Fisher-Yates, so the correct option is never always in slot A */
+function shuffled(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    const t=a[i]; a[i]=a[j]; a[j]=t;
+  }
+  return a;
+}
+
+/* Typed answers: ignore case and stray spaces, but accents must be right */
+function normalise(s){
+  return String(s).trim().toLowerCase().replace(/\s+/g," ");
+}
+
+function loadVoices(){
+  if(!speechOK) return;
+  voices = window.speechSynthesis.getVoices() || [];
+  const fr = voices.filter(function(v){ return /^fr/i.test(v.lang) || /fran|french/i.test(v.name); });
+  const sel = $("voiceSel");
+  const list = fr.length ? fr : voices;
+  if(sel){
+    sel.innerHTML = list.length
+      ? list.map(function(v){ return '<option value="'+voices.indexOf(v)+'">'+esc(v.name)+' ('+esc(v.lang)+')</option>'; }).join("")
+      : '<option value="-1">(no voice found)</option>';
+  }
+  frVoice = fr.length ? fr[0] : null;
+  if(sel && frVoice) sel.value = voices.indexOf(frVoice);
+  const note = $("voiceNote");
+  if(note) note.textContent = fr.length ? ("✓ " + frVoice.name) : "⚠ No French voice installed on this device.";
+  const warn = $("voiceWarn");
+  if(warn) warn.classList.toggle("on", !fr.length);
+}
+
+function say(text){
+  if(!speechOK || !text) return;
+  try{
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "fr-FR";
+    if(frVoice) u.voice = frVoice;
+    u.rate = 0.8;
+    window.speechSynthesis.speak(u);
+  }catch(e){ /* audio simply unavailable */ }
+}
+
+function question(sec, i){
+  if(sec === 0) return LISTENING[i];
+  if(sec === 1) return READING[i];
+  return GRAMMAR[i];
+}
+
+function correctOf(sec, i){
+  return sec === 0 ? LISTENING[i].w : question(sec,i).a;
+}
+
+function wrongOnes(sec){
+  const out = [];
+  for(let i=0;i<records[sec].length;i++){
+    if(records[sec][i] && !records[sec][i].ok) out.push(i);
+  }
+  return out;
+}
+
+function totalWrong(){
+  return wrongOnes(0).length + wrongOnes(1).length + wrongOnes(2).length;
+}
+
+function show(screenId){
+  const all = document.querySelectorAll(".screen");
+  for(let i=0;i<all.length;i++) all[i].classList.remove("on");
+  $(screenId).classList.add("on");
+  window.scrollTo(0,0);
+}
+
+/* ============================================================
+   4. QUIZ ENGINE
+   ============================================================ */
+function renderRail(){
+  let html = "";
+  for(let s=0;s<3;s++){
+    const cls = s === sectionIdx ? "active" : (s < sectionIdx ? "done" : "");
+    html += '<div class="leg '+cls+'"><span class="name">'+SECTIONS[s].icon+' '+SECTIONS[s].name+'</span><span class="val">'+scores[s]+'/30</span></div>';
+  }
+  html += '<div class="leg"><span class="name">🏅 Total</span><span class="val">'+(scores[0]+scores[1]+scores[2])+'/90</span></div>';
+  $("rail").innerHTML = html;
+}
+
+function renderBar(){
+  const pct = running.length ? Math.round((qIdx / running.length) * 100) : 0;
+  $("bar").style.width = pct + "%";
+}
+
+function startSection(sec, only){
+  sectionIdx = sec;
+  retryMode = !!only;
+  running = only ? only.slice() : (function(){
+    const a = [];
+    for(let i=0;i<SECTIONS[sec].total;i++) a.push(i);
+    return a;
+  })();
+  qIdx = 0;
+  show("s-quiz");
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered = false;
+  renderRail();
+  renderBar();
+
+  const i = running[qIdx];
+  const sec = sectionIdx;
+  const fb = $("fb");
+  fb.className = "feedback";
+  $("fbVerdict").textContent = "";
+  $("fbDetail").textContent = "";
+  $("fbWhy").textContent = "";
+
+  $("qnum").textContent = SECTIONS[sec].icon + " " + SECTIONS[sec].name + " · " +
+    (retryMode ? ("Retry " + (qIdx+1) + " of " + running.length + " · question " + (i+1) + " of 30")
+               : ((qIdx+1) + " of 30"));
+
+  const body = $("qbody");
+  const btns = $("qbtns");
+  btns.innerHTML = "";
+
+  if(sec === 0){
+    const item = LISTENING[i];
+    $("qtag").innerHTML = '<span class="tag '+(item.g==="m"?"m":"f")+'">'+(item.g==="m"?"masculine form":"feminine form")+'</span>';
+    body.innerHTML =
+      '<button class="speaker" id="playBtn" aria-label="Play the French word"><span class="ico">🔊</span><span>Tap to listen</span></button>' +
+      '<p class="hintline">It means <b>"'+esc(item.en)+'"</b>. Type exactly what you hear, with the accents.</p>' +
+      '<div class="accentbar" id="accents" aria-label="Accent buttons"></div>' +
+      '<label class="field" for="typed" style="margin-top:6px">Your answer</label>' +
+      '<input type="text" id="typed" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" lang="fr">';
+
+    const acc = ["é","è","ê","î","ï","ç","à","û","ô","œ"];
+    $("accents").innerHTML = acc.map(function(c){ return '<button type="button" data-c="'+c+'">'+c+'</button>'; }).join("");
+    const accBtns = $("accents").querySelectorAll("button");
+    for(let k=0;k<accBtns.length;k++){
+      accBtns[k].addEventListener("click", function(){
+        const inp = $("typed");
+        const c = this.getAttribute("data-c");
+        const start = inp.selectionStart === null ? inp.value.length : inp.selectionStart;
+        const end = inp.selectionEnd === null ? inp.value.length : inp.selectionEnd;
+        inp.value = inp.value.slice(0,start) + c + inp.value.slice(end);
+        inp.focus();
+        inp.setSelectionRange(start+1, start+1);
+      });
+    }
+    $("playBtn").addEventListener("click", function(){
+      this.classList.add("playing");
+      const el = this;
+      setTimeout(function(){ el.classList.remove("playing"); }, 700);
+      say(item.w);
+    });
+    $("typed").addEventListener("keydown", function(e){
+      if(e.key === "Enter"){ e.preventDefault(); if(!answered) check(null); else next(); }
+    });
+
+    btns.innerHTML = '<button class="btn" id="checkBtn">Check my answer</button>' +
+                     '<button class="btn quiet" id="skipBtn">I don\'t know</button>';
+    $("checkBtn").addEventListener("click", function(){ check(null); });
+    $("skipBtn").addEventListener("click", function(){ check(null, true); });
+    say(item.w);
+    setTimeout(function(){ const t=$("typed"); if(t) t.focus(); }, 60);
+
+  }else{
+    const item = question(sec, i);
+    $("qtag").innerHTML = "";
+    let html = "";
+    if(sec === 1){
+      html += '<div class="lines">' + item.l.map(function(x){ return '<p>'+esc(x)+'</p>'; }).join("") + '</div>';
+    }
+    html += '<p class="qtext">'+esc(item.q)+'</p><div class="options" id="opts" role="group" aria-label="Answer choices"></div>';
+    body.innerHTML = html;
+
+    const order = shuffled(item.o);
+    const letters = ["A","B","C"];
+    $("opts").innerHTML = order.map(function(t, n){
+      return '<button class="opt" data-v="'+esc(t)+'"><span class="k">'+letters[n]+'</span><span>'+esc(t)+'</span></button>';
+    }).join("");
+    const optBtns = $("opts").querySelectorAll(".opt");
+    for(let k=0;k<optBtns.length;k++){
+      optBtns[k].addEventListener("click", function(){
+        if(answered) return;
+        check(this.getAttribute("data-v"));
+      });
+    }
+    if(sec === 1){
+      btns.innerHTML = '<button class="btn quiet" id="hearBtn">🔊 Hear the three lines</button>';
+      $("hearBtn").addEventListener("click", function(){ say(item.l.join(" ")); });
+    }
+  }
+}
+
+function check(chosen, skipped){
+  if(answered) return;
+  const sec = sectionIdx;
+  const i = running[qIdx];
+  const right = correctOf(sec, i);
+  let given, ok;
+
+  if(sec === 0){
+    given = skipped ? "" : $("typed").value;
+    ok = !skipped && normalise(given) === normalise(right);
+  }else{
+    given = chosen;
+    ok = (given === right);
+  }
+  answered = true;
+
+  const already = records[sec][i];
+  if(ok && !(already && already.ok)) scores[sec]++;
+  if(!ok && already && already.ok) scores[sec]--;
+  records[sec][i] = {given: given, ok: ok};
+
+  /* mark the options */
+  if(sec !== 0){
+    const optBtns = $("opts").querySelectorAll(".opt");
+    for(let k=0;k<optBtns.length;k++){
+      const v = optBtns[k].getAttribute("data-v");
+      optBtns[k].disabled = true;
+      if(v === right) optBtns[k].classList.add("right");
+      else if(v === given) optBtns[k].classList.add("wrong");
+    }
+  }else{
+    const inp = $("typed");
+    if(inp) inp.disabled = true;
+    const cb = $("checkBtn"); if(cb) cb.disabled = true;
+    const sb = $("skipBtn"); if(sb) sb.disabled = true;
+  }
+
+  const fb = $("fb");
+  fb.className = "feedback on " + (ok ? "good" : "bad");
+  $("fbVerdict").textContent = ok ? pickPraise() : "Not quite — let's learn it.";
+  $("fbDetail").innerHTML = ok ? "" : ('Correct answer: <span class="sol">'+esc(right)+'</span>');
+  $("fbWhy").textContent = question(sec,i).why || "";
+
+  const btns = $("qbtns");
+  const last = (qIdx === running.length - 1);
+  btns.innerHTML = (sec === 0 ? '<button class="btn quiet" id="againBtn">🔊 Hear it again</button>' : "") +
+                   '<button class="btn" id="nextBtn">' + (last ? "See my score →" : "Next question →") + '</button>';
+  const again = $("againBtn");
+  if(again) again.addEventListener("click", function(){ say(right); });
+  $("nextBtn").addEventListener("click", next);
+  $("nextBtn").focus();
+  renderRail();
+}
+
+const PRAISE = ["Excellent! You got it!","Parfait! 🌟","Bravo! That's right.","Super! Well done.","Oui! Exactly right."];
+let praiseAt = 0;
+function pickPraise(){
+  const p = PRAISE[praiseAt % PRAISE.length];
+  praiseAt++;
+  return p;
+}
+
+function next(){
+  if(speechOK){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+  qIdx++;
+  if(qIdx < running.length){ renderQuestion(); return; }
+  renderBar();
+  if(retryMode){ showReview(); return; }
+  if(sectionIdx < 2) betweenScreen();
+  else showResults();
+}
+
+function betweenScreen(){
+  const sec = sectionIdx;
+  const s = scores[sec];
+  const nextSec = SECTIONS[sec+1];
+  $("betweenEyebrow").textContent = "Section complete";
+  $("between-title").textContent = SECTIONS[sec].icon + " " + SECTIONS[sec].name + " finished!";
+  $("betweenScore").textContent = s + " / 30";
+  $("betweenNote").textContent = s >= 25 ? "Superbe! Your ear is sharp." : (s >= 18 ? "Good work — keep going!" : "Every mistake is saved. You'll review them at the end.");
+  $("betweenBtn").textContent = "Continue to " + nextSec.name + " " + nextSec.icon + " →";
+  show("s-between");
+  renderRail();
+}
+
+/* ============================================================
+   5. RESULTS
+   ============================================================ */
+function showResults(){
+  const total = scores[0] + scores[1] + scores[2];
+  const pct = Math.round((total / 90) * 100);
+
+  let grade;
+  if(total >= 80) grade = "🏆 French Superstar!";
+  else if(total >= 65) grade = "🌟 Excellent Work!";
+  else if(total >= 50) grade = "🌱 Great Progress!";
+  else grade = "💪 Keep Practising!";
+
+  $("gradeLine").textContent = grade;
+  $("gradeName").textContent = studentName ? (studentName + ", you scored " + pct + "%") : ("You scored " + pct + "%");
+
+  let html = "";
+  for(let s=0;s<3;s++){
+    html += '<div class="score"><span class="lbl">'+SECTIONS[s].icon+' '+SECTIONS[s].name+'</span>' +
+            '<div class="num">'+scores[s]+'<small>/30</small></div>' +
+            '<div class="meter"><i style="width:'+Math.round(scores[s]/30*100)+'%"></i></div></div>';
+  }
+  html += '<div class="score total"><span class="lbl">🏅 Total</span>' +
+          '<div class="num">'+total+'<small>/90 · '+pct+'%</small></div>' +
+          '<div class="meter"><i style="width:'+pct+'%"></i></div></div>';
+  $("scores").innerHTML = html;
+
+  let best = 0, worst = 0;
+  for(let s=1;s<3;s++){
+    if(scores[s] > scores[best]) best = s;
+    if(scores[s] < scores[worst]) worst = s;
+  }
+  $("bestSkill").textContent = SECTIONS[best].icon + " " + SECTIONS[best].name + " — " + scores[best] + "/30";
+  $("worstSkill").textContent = (best === worst)
+    ? "All three are level — well balanced!"
+    : SECTIONS[worst].icon + " " + SECTIONS[worst].name + " — " + scores[worst] + "/30";
+
+  show("s-results");
+}
+
+/* ============================================================
+   6. MISTAKE REVIEW
+   ============================================================ */
+function showReview(){
+  const w = [wrongOnes(0), wrongOnes(1), wrongOnes(2)];
+  const n = w[0].length + w[1].length + w[2].length;
+
+  $("reviewIntro").textContent = n === 0
+    ? "Nothing to correct — you answered all 90 questions correctly."
+    : "Only the questions you got wrong are shown here, with the rule that explains each one.";
+
+  let html = "";
+
+  /* Listening */
+  html += '<div class="revgroup"><div class="revhead"><h3>🎧 Listening mistakes</h3><span class="count">'+w[0].length+'</span></div>';
+  if(!w[0].length){ html += '<div class="allclear">All 30 words spelled correctly. 🌟</div>'; }
+  for(let k=0;k<w[0].length;k++){
+    const i = w[0][k];
+    const it = LISTENING[i];
+    const r = records[0][i];
+    html += '<div class="miss"><span class="n">Question '+(i+1)+' · '+(it.g==="m"?"masculine":"feminine")+'</span>' +
+      '<div class="ansrow">' +
+        (r.given ? '<span class="pill you">You typed: '+esc(r.given)+'</span>' : '<span class="pill empty">No answer</span>') +
+        '<span class="pill ok">Correct: '+esc(it.w)+'</span>' +
+      '</div>' +
+      '<p class="rule"><b>Why:</b> '+esc(it.why)+'</p>' +
+      '<button class="listenagain" data-say="'+esc(it.w)+'">🔊 Listen again</button></div>';
+  }
+  html += '</div>';
+
+  /* Reading */
+  html += '<div class="revgroup"><div class="revhead"><h3>📖 Reading mistakes</h3><span class="count">'+w[1].length+'</span></div>';
+  if(!w[1].length){ html += '<div class="allclear">All 30 reading questions correct. 🌟</div>'; }
+  for(let k=0;k<w[1].length;k++){
+    const i = w[1][k];
+    const it = READING[i];
+    const r = records[1][i];
+    html += '<div class="miss"><span class="n">Question '+(i+1)+'</span>' +
+      it.l.map(function(x){ return '<p class="mini">'+esc(x)+'</p>'; }).join("") +
+      '<p class="qq">'+esc(it.q)+'</p>' +
+      '<div class="ansrow">' +
+        (r.given ? '<span class="pill you">You chose: '+esc(r.given)+'</span>' : '<span class="pill empty">No answer</span>') +
+        '<span class="pill ok">Correct: '+esc(it.a)+'</span>' +
+      '</div>' +
+      '<p class="rule"><b>Why:</b> '+esc(it.why)+'</p>' +
+      '<button class="listenagain" data-say="'+esc(it.l.join(" "))+'">🔊 Hear the lines</button></div>';
+  }
+  html += '</div>';
+
+  /* Grammar */
+  html += '<div class="revgroup"><div class="revhead"><h3>🧠 Grammar mistakes</h3><span class="count">'+w[2].length+'</span></div>';
+  if(!w[2].length){ html += '<div class="allclear">All 30 grammar questions correct. 🌟</div>'; }
+  for(let k=0;k<w[2].length;k++){
+    const i = w[2][k];
+    const it = GRAMMAR[i];
+    const r = records[2][i];
+    html += '<div class="miss"><span class="n">Question '+(i+1)+'</span>' +
+      '<p class="qq">'+esc(it.q)+'</p>' +
+      '<div class="ansrow">' +
+        (r.given ? '<span class="pill you">You chose: '+esc(r.given)+'</span>' : '<span class="pill empty">No answer</span>') +
+        '<span class="pill ok">Correct: '+esc(it.a)+'</span>' +
+      '</div>' +
+      '<p class="rule"><b>Rule:</b> '+esc(it.why)+'</p></div>';
+  }
+  html += '</div>';
+
+  $("reviewBody").innerHTML = html;
+
+  const sayBtns = $("reviewBody").querySelectorAll(".listenagain");
+  for(let k=0;k<sayBtns.length;k++){
+    sayBtns[k].addEventListener("click", function(){ say(this.getAttribute("data-say")); });
+  }
+
+  $("reviewSummary").innerHTML =
+    '<h3>You made ' + n + (n === 1 ? ' mistake.' : ' mistakes.') + '</h3>' +
+    '<ul><li>Listening mistakes: '+w[0].length+'</li>' +
+    '<li>Reading mistakes: '+w[1].length+'</li>' +
+    '<li>Grammar mistakes: '+w[2].length+'</li></ul>' +
+    '<p style="margin-top:8px;color:var(--ink-soft)">' +
+    (n ? 'Retry just the ones you missed — your score goes up when you get them right.' : 'Nothing left to retry. Try the whole set again to keep it fresh.') + '</p>';
+
+  $("retryLis").disabled = !w[0].length;
+  $("retryRea").disabled = !w[1].length;
+  $("retryGra").disabled = !w[2].length;
+
+  show("s-review");
+}
+
+function retrySection(sec){
+  const w = wrongOnes(sec);
+  if(!w.length) return;
+  startSection(sec, w);
+}
+
+function restart(){
+  studentName = "";
+  sectionIdx = 0;
+  qIdx = 0;
+  answered = false;
+  running = [];
+  retryMode = false;
+  praiseAt = 0;
+  scores = [0,0,0];
+  records = [[],[],[]];
+  $("nameInput").value = "";
+  if(speechOK){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+  show("s-welcome");
+}
+
+/* ============================================================
+   7. WIRING
+   ============================================================ */
+function wire(){
+  $("startBtn").addEventListener("click", function(){
+    studentName = $("nameInput").value.trim();
+    scores = [0,0,0];
+    records = [[],[],[]];
+    praiseAt = 0;
+    startSection(0, null);
+  });
+  $("nameInput").addEventListener("keydown", function(e){
+    if(e.key === "Enter"){ e.preventDefault(); $("startBtn").click(); }
+  });
+  $("voiceTest").addEventListener("click", function(){ say("Bonjour ! Écoute bien."); });
+  $("voiceSel").addEventListener("change", function(){
+    const idx = parseInt(this.value, 10);
+    frVoice = (idx >= 0 && voices[idx]) ? voices[idx] : null;
+    say("Bonjour !");
+  });
+  $("betweenBtn").addEventListener("click", function(){ startSection(sectionIdx + 1, null); });
+  $("reviewBtn").addEventListener("click", showReview);
+  $("restartBtn").addEventListener("click", restart);
+  $("backToScore").addEventListener("click", showResults);
+  $("retryLis").addEventListener("click", function(){ retrySection(0); });
+  $("retryRea").addEventListener("click", function(){ retrySection(1); });
+  $("retryGra").addEventListener("click", function(){ retrySection(2); });
+  $("tryAll").addEventListener("click", function(){
+    scores = [0,0,0];
+    records = [[],[],[]];
+    praiseAt = 0;
+    startSection(0, null);
+  });
+  if(speechOK && typeof window.speechSynthesis.addEventListener === "function"){
+    window.speechSynthesis.addEventListener("voiceschanged", loadVoices);
+  }else if(speechOK){
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+}
+
+/* ---------------- INIT (everything is defined above) -------------- */
+wire();
+loadVoices();
+renderRail();
+if(!speechOK){ $("voiceWarn").classList.add("on"); }
+</script>
+</body>
+</html>
