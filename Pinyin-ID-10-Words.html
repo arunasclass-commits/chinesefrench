@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aruna's Class · Identify the Pinyin · 10 Words</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+:root{--ink:#12233f;--red:#c0392b;--gold:#d4af37;--teal:#0d9488;--blue:#1d6fa8;--purple:#6b21a8;
+--green:#059669;--orange:#c05621;--light:#f0f4ff;--border:#e2e8f0;--muted:#8892a4;--shadow:0 8px 32px rgba(0,0,0,.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--ink);min-height:100vh}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#123a5c 55%,#0d9488 100%);color:#fff;
+  padding:18px 16px 22px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'拼';position:absolute;font-family:'Noto Sans SC';font-size:165px;font-weight:900;
+  color:rgba(255,255,255,.06);top:-20px;left:50%;transform:translateX(-50%);pointer-events:none}
+.badge{display:inline-block;background:rgba(212,175,55,.2);border:1px solid rgba(212,175,55,.5);color:var(--gold);
+  font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 15px;border-radius:20px;position:relative}
+.hero h1{font-family:'Noto Sans SC';font-size:clamp(18px,4.8vw,28px);font-weight:900;margin-top:8px;position:relative}
+.hero .sub{font-size:12.5px;color:rgba(255,255,255,.8);margin-top:3px;position:relative}
+
+.board{display:flex;justify-content:center;gap:7px;padding:9px;flex-wrap:wrap;background:#fff;
+  position:sticky;top:0;z-index:60;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sc{border-radius:13px;padding:5px 14px;text-align:center;min-width:96px;border:2px solid var(--border);background:#fff}
+.sc .v{font-size:19px;font-weight:900;line-height:1.1}
+.sc .l{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-top:2px}
+.sc.p{border-color:#eab9b2;background:#fff3f1}.sc.p .v{color:var(--red);font-size:21px}
+.sc.c{border-color:#bfe3da;background:#ecfdf5}.sc.c .v{color:var(--teal)}
+.sc.f{border-color:#c9d6f0;background:#eef4ff}.sc.f .v{color:var(--blue)}
+
+.nav{display:flex;background:#fff;border-bottom:2px solid var(--border);overflow-x:auto;position:sticky;top:54px;z-index:55}
+.nt{flex-shrink:0;padding:11px 14px;border:none;background:none;font-family:'Nunito';font-size:13px;font-weight:800;
+  color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.nt.on{color:var(--red);border-bottom-color:var(--red)}
+
+.wrap{max-width:760px;margin:0 auto;padding:16px 14px 70px}
+.sec{display:none}.sec.on{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.tip{background:#fff7e6;border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:9px 13px;
+  margin-bottom:12px;font-size:12.5px;color:#7c5e10;font-weight:700;line-height:1.6}
+.tip code{background:#fff;border:1px solid #e6d9ae;border-radius:4px;padding:1px 5px;font-family:ui-monospace,monospace;font-size:11.5px;color:#8a6a12}
+.tip b.pts{color:var(--red)}
+.meta{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:7px;gap:10px;flex-wrap:wrap}
+.bar{background:var(--border);border-radius:5px;height:7px;margin-bottom:13px;overflow:hidden}
+.barf{height:7px;border-radius:5px;background:linear-gradient(90deg,var(--red),var(--gold));width:0;transition:width .3s}
+
+.qcard{background:#fff;border-radius:18px;box-shadow:var(--shadow);padding:22px 18px;text-align:center}
+.lbl{font-size:10.5px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.zh{font-family:'Noto Sans SC';font-size:clamp(56px,17vw,96px);font-weight:900;line-height:1.15}
+.numtag{display:inline-block;background:#eef1f6;color:#5a6782;border-radius:8px;padding:2px 10px;
+  font-size:12px;font-weight:900;margin-bottom:6px}
+
+.opts{display:grid;grid-template-columns:1fr;gap:9px;margin-top:16px}
+@media(min-width:520px){.opts{grid-template-columns:1fr 1fr}}
+.opt{border:3px solid var(--border);background:#fff;border-radius:14px;padding:14px 10px;cursor:pointer;
+  font-size:24px;font-weight:900;color:var(--blue);transition:transform .1s,border-color .15s,background .15s}
+.opt:hover{border-color:var(--blue);transform:translateY(-2px)}
+.opt.ok{border-color:var(--green);background:#ecfdf5;color:var(--green)}
+.opt.no{border-color:var(--red);background:#fff1f0;color:var(--red)}
+.opt.dim{opacity:.5}
+
+.ir{display:flex;gap:7px;flex-wrap:wrap;align-items:stretch;margin-top:16px}
+.inp{flex:1;min-width:190px;padding:13px;border:2px solid var(--border);border-radius:11px;
+  font-family:ui-monospace,'Nunito',monospace;font-size:17px;font-weight:700;color:var(--ink);background:#fbfcfe;text-align:center}
+.inp:focus{outline:none;border-color:var(--blue);background:#fff}
+.inp.ok{border-color:var(--green);background:#ecfdf5}
+.inp.no{border-color:var(--red);background:#fff1f0}
+.btn{font-family:'Nunito';font-size:13px;font-weight:800;border:none;border-radius:11px;padding:12px 18px;cursor:pointer}
+.b-g{background:var(--teal);color:#fff}.b-s{background:#eef1f6;color:#475569}.b-r{background:var(--red);color:#fff}.b-p{background:var(--purple);color:#fff}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+
+.ans{margin-top:14px;border-radius:11px;padding:11px 13px;font-size:14.5px;font-weight:800;display:none;line-height:1.6;text-align:left}
+.ans.ok{display:block;background:#d1fae5;color:#065f46}
+.ans.no{display:block;background:#fee2e2;color:#991b1b}
+.ans .p{font-size:19px}
+.ans .e{font-weight:700;opacity:.88;font-size:13.5px;margin-top:2px}
+.ans .y{font-weight:700;font-size:12.5px;opacity:.8;margin-top:3px}
+.ans .pt{float:right;background:rgba(255,255,255,.7);border-radius:6px;padding:1px 9px;font-size:12px}
+
+.nav2{display:flex;gap:9px;margin-top:14px}
+.nav2 button{flex:1;padding:13px;border:none;border-radius:11px;font-family:'Nunito';font-weight:800;font-size:14px;cursor:pointer;background:var(--ink);color:#fff}
+.nav2 button:disabled{opacity:.4}
+.dots{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.dot{width:11px;height:11px;border-radius:50%;background:var(--border);cursor:pointer}
+.dot.cur{background:var(--red);transform:scale(1.4)}.dot.ok{background:var(--teal)}.dot.no{background:#e9a184}
+
+.lst{background:#fff;border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.lst .h{background:#f7f9fc;border-bottom:2px solid var(--border);padding:9px 13px;font-size:11px;
+  font-weight:900;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+.lrow{display:flex;gap:11px;align-items:center;padding:11px 13px;border-top:1px solid #eef1f6}
+.lrow:first-of-type{border-top:none}
+.lrow .n{font-size:12px;font-weight:900;color:var(--muted);min-width:20px}
+.lrow .z{font-family:'Noto Sans SC';font-size:30px;font-weight:700;min-width:78px}
+.lrow .bd{flex:1}
+.lrow .py{font-size:18px;font-weight:900;color:var(--blue)}
+.lrow .en{font-size:13px;font-weight:700;color:var(--muted)}
+.lrow .br{font-size:11.5px;font-weight:700;color:#a7b0c2;margin-top:1px}
+.spk{border:none;background:#eef1f6;color:#475569;border-radius:10px;padding:8px 11px;font-size:15px;cursor:pointer}
+
+.final{background:linear-gradient(135deg,#0d9488,#0f766e);color:#fff;border-radius:18px;padding:24px;text-align:center;box-shadow:var(--shadow)}
+.final .em{font-size:46px}
+.final .big{font-size:42px;font-weight:900;margin:2px 0}
+.final .gr{font-family:'Noto Sans SC';font-size:20px;font-weight:900}
+.final .pc{font-size:14px;font-weight:800;opacity:.92}
+.tbl{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);margin-top:13px}
+.tbl th,.tbl td{padding:11px 13px;text-align:left;font-size:14px;font-weight:800;border-bottom:1px solid #eef1f6}
+.tbl th{background:#f7f9fc;font-size:11px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted)}
+.tbl td.n{text-align:right;font-variant-numeric:tabular-nums}
+.tbl tr.tot td{background:#f7f9fc;color:var(--red);font-size:16px;font-weight:900;border-bottom:none}
+.footer{text-align:center;padding:20px;font-size:11px;color:var(--muted)}
+.footer b{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="badge">Aruna's Class · ChineseFrench</div>
+  <h1>认拼音 · Identify the Pinyin</h1>
+  <div class="sub">10 words from the whiteboard · choose the pinyin, then type it · scored out of <b>100</b></div>
+</div>
+<div class="board">
+  <div class="sc p"><div class="v" id="vT">0 / 100</div><div class="l">总分 Score</div></div>
+  <div class="sc c"><div class="v" id="vC">0 / 10</div><div class="l">选 Choose</div></div>
+  <div class="sc f"><div class="v" id="vY">0 / 10</div><div class="l">打 Type</div></div>
+</div>
+<div class="nav" id="nav"></div>
+<div class="wrap">
+  <div class="sec on" id="s-mc"></div>
+  <div class="sec" id="s-ty"></div>
+  <div class="sec" id="s-all"></div>
+  <div class="sec" id="s-fin"></div>
+</div>
+<div class="footer">10 words · 早上 · 开车 · 送 · 孩子 · 去 · 学校 · 回家 · 后 · 就 · 来 · <b>Aruna's Class</b></div>
+<script>
+var W=[
+ {zh:'早上',py:'zǎoshang',en:'morning',br:'',near:'wǎnshang'},
+ {zh:'开车',py:'kāi chē',en:'to drive',br:'开 kāi drive + 车 chē car',near:'kāi shē'},
+ {zh:'送',py:'sòng',en:'to take / see someone somewhere',br:'',near:'sōng'},
+ {zh:'孩子',py:'háizi',en:'child',br:'',near:'hàizi'},
+ {zh:'去',py:'qù',en:'to go',br:'',near:'qǔ'},
+ {zh:'学校',py:'xuéxiào',en:'school',br:'学 xué study + 校 xiào place',near:'xuéxí'},
+ {zh:'回家',py:'huí jiā',en:'to return home',br:'回 huí return + 家 jiā home',near:'huì jiā'},
+ {zh:'后',py:'hòu',en:'after',br:'',near:'hóu'},
+ {zh:'就',py:'jiù',en:'then; immediately',br:'',near:'jiǔ'},
+ {zh:'来',py:'lái',en:'to come',br:'',near:'lèi'}
+];
+var MAXMC=W.length*5, MAXTY=W.length*5, MAX=MAXMC+MAXTY;
+
+/* ---- pinyin compare: spelling only, tones NOT required ---- */
+var TMAP={'ā':'a','á':'a','ǎ':'a','à':'a','ē':'e','é':'e','ě':'e','è':'e','ī':'i','í':'i','ǐ':'i','ì':'i',
+'ō':'o','ó':'o','ǒ':'o','ò':'o','ū':'u','ú':'u','ǔ':'u','ù':'u','ǖ':'v','ǘ':'v','ǚ':'v','ǜ':'v','ü':'v',
+'ń':'n','ň':'n','ǹ':'n'};
+function norm(s){
+  var t=String(s||'').toLowerCase().replace(/u:/g,'v'), o='';
+  for(var i=0;i<t.length;i++){ var c=t[i]; o += (TMAP[c]!==undefined?TMAP[c]:c); }
+  o=o.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  return o.replace(/[^a-z]/g,'');
+}
+function firstDiff(a,b){var n=Math.min(a.length,b.length);for(var i=0;i<n;i++)if(a[i]!==b[i])return i;return a.length===b.length?-1:n;}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+
+/* ---- state ---- */
+var mc=W.map(function(){return {st:null,pts:0};});
+var ty=W.map(function(){return {st:null,pts:0};});
+function sum(a){var n=0;a.forEach(function(r){n+=r.pts;});return n;}
+function okc(a){return a.filter(function(r){return r.st==='ok';}).length;}
+function board(){
+  document.getElementById('vT').textContent=(sum(mc)+sum(ty))+' / '+MAX;
+  document.getElementById('vC').textContent=okc(mc)+' / '+W.length;
+  document.getElementById('vY').textContent=okc(ty)+' / '+W.length;
+}
+function grade(pc){
+  if(pc>=90)return ['很棒 Excellent','🏆'];
+  if(pc>=75)return ['很好 Very good','🌟'];
+  if(pc>=60)return ['不错 Good','👍'];
+  if(pc>0)  return ['加油 Keep going','💪'];
+  return ['开始吧 Ready','🚀'];
+}
+
+/* ---- speech ---- */
+var zhVoice=null;
+function pv(){try{var v=speechSynthesis.getVoices();zhVoice=null;for(var i=0;i<v.length;i++){if(/zh|Chinese/i.test(v[i].lang+v[i].name)){zhVoice=v[i];break;}}}catch(e){}}
+if('speechSynthesis' in window){pv();speechSynthesis.onvoiceschanged=pv;}
+function say(t){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=0.75;if(zhVoice)u.voice=zhVoice;speechSynthesis.speak(u);}catch(e){}}
+
+/* ---- tabs ---- */
+var TABS=[['mc','🔤 选拼音 Choose'],['ty','⌨️ 打拼音 Type'],['all','📖 全部 All 10'],['fin','🏆 总分 Final score']];
+var nav=document.getElementById('nav');
+TABS.forEach(function(t,i){var b=document.createElement('button');b.className='nt'+(i===0?' on':'');
+  b.id='nt-'+t[0];b.innerHTML=t[1];b.onclick=function(){show(t[0]);};nav.appendChild(b);});
+function show(id){
+  TABS.forEach(function(t){document.getElementById('nt-'+t[0]).classList.toggle('on',t[0]===id);
+    document.getElementById('s-'+t[0]).classList.toggle('on',t[0]===id);});
+  window.scrollTo(0,0);
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+  if(id==='all') drawAll();
+  if(id==='fin') drawFin();
+}
+
+/* ================= 1 · CHOOSE THE PINYIN ================= */
+var mi=0, mLocked=false, mSet=[];
+function renderMC(){
+  var w=document.getElementById('s-mc');
+  w.innerHTML='<div class="tip">Look at the Chinese word and tap the <b>correct pinyin</b>. '
+   +'Watch the tone marks — one of the wrong answers is always very close to the right one. '
+   +'Scoring: <b class="pts">5</b> points first try · <b class="pts">2</b> if you get it right after a miss.</div>'
+   +'<div class="meta"><span id="mm"></span><span id="ms"></span></div>'
+   +'<div class="bar"><div class="barf" id="mb"></div></div>'
+   +'<div id="mq"></div>'
+   +'<div class="nav2"><button id="mPrev">← Prev</button><button id="mNext">Next →</button></div>'
+   +'<div class="dots" id="mdots"></div>';
+  document.getElementById('mPrev').onclick=function(){if(mi>0){mi--;drawMC();}};
+  document.getElementById('mNext').onclick=function(){if(mi<W.length-1){mi++;drawMC();}};
+  drawMC();
+}
+function drawMC(){
+  var o=W[mi]; mLocked=false;
+  document.getElementById('mm').textContent='Word '+(mi+1)+' / '+W.length;
+  document.getElementById('ms').textContent='Choose points: '+sum(mc)+' / '+MAXMC;
+  document.getElementById('mb').style.width=((mi+1)/W.length*100)+'%';
+  var others=shuffle(W.filter(function(x){return x.py!==o.py;})).slice(0,2).map(function(x){return x.py;});
+  mSet=shuffle([o.py, o.near].concat(others));
+  document.getElementById('mq').innerHTML='<div class="qcard">'
+   +'<span class="numtag">'+(mi+1)+'</span>'
+   +'<div class="lbl">which pinyin is this?</div>'
+   +'<div class="zh">'+esc(o.zh)+'</div>'
+   +'<div class="row"><button class="btn b-s" id="mSay">🔊 Hear it</button></div>'
+   +'<div class="opts" id="mopts">'+mSet.map(function(p){
+       return '<div class="opt" data-p="'+esc(p)+'">'+esc(p)+'</div>';}).join('')+'</div>'
+   +'<div class="ans" id="mans"></div></div>';
+  document.getElementById('mSay').onclick=function(){say(o.zh);};
+  document.querySelectorAll('#mopts .opt').forEach(function(el){ el.onclick=function(){ pickMC(el); }; });
+  document.getElementById('mPrev').disabled=(mi===0);
+  document.getElementById('mNext').disabled=(mi===W.length-1);
+  drawMDots(); board();
+}
+function pickMC(el){
+  if(mLocked) return; mLocked=true;
+  var o=W[mi], r=mc[mi], good=el.getAttribute('data-p')===o.py, earned=0;
+  if(good){
+    if(r.st===null){ r.st='ok'; r.pts=5; earned=5; }
+    else if(r.st==='miss'){ r.st='ok'; r.pts=2; earned=2; }
+  } else if(r.st===null){ r.st='miss'; r.pts=0; }
+  document.querySelectorAll('#mopts .opt').forEach(function(x){
+    if(x.getAttribute('data-p')===o.py) x.classList.add('ok');
+    else if(x===el) x.classList.add('no');
+    else x.classList.add('dim');
+  });
+  var box=document.getElementById('mans');
+  box.className='ans '+(good?'ok':'no');
+  box.innerHTML=(earned?'<span class="pt">+'+earned+'</span>':'')+(good?'✓ Correct! ':'✗ Not quite. ')
+    +'<span class="p">'+esc(o.py)+'</span><div class="e">'+esc(o.zh)+' — '+esc(o.en)+'</div>'
+    +(o.br?'<div class="y">'+esc(o.br)+'</div>':'');
+  say(o.zh); board(); drawMDots();
+  document.getElementById('ms').textContent='Choose points: '+sum(mc)+' / '+MAXMC;
+  if(!good) setTimeout(function(){ if(mc[mi].st==='miss') drawMC(); }, 2200);
+}
+function drawMDots(){
+  var d=document.getElementById('mdots'); if(!d)return; d.innerHTML='';
+  W.forEach(function(_,i){
+    var r=mc[i], e=document.createElement('div');
+    e.className='dot'+(i===mi?' cur':(r.st==='ok'?' ok':(r.st==='miss'?' no':'')));
+    e.title='Word '+(i+1); e.onclick=function(){mi=i;drawMC();}; d.appendChild(e);
+  });
+}
+
+/* ================= 2 · TYPE THE PINYIN ================= */
+var ti=0;
+function renderTY(){
+  var w=document.getElementById('s-ty');
+  w.innerHTML='<div class="tip">Now write the pinyin yourself. <b>Tone marks are not needed</b> — '
+   +'<code>zao shang</code>, <code>zao3shang</code> and <code>zǎoshang</code> are all accepted, and spaces do not matter. '
+   +'The <b>spelling</b> must be right. Press <b>Enter</b> to check.<br>'
+   +'Scoring: <b class="pts">5</b> first try · <b class="pts">2</b> after a miss · <b class="pts">0</b> if you press Show.</div>'
+   +'<div class="meta"><span id="tm"></span><span id="ts"></span></div>'
+   +'<div class="bar"><div class="barf" id="tb"></div></div>'
+   +'<div id="tq"></div>'
+   +'<div class="nav2"><button id="tPrev">← Prev</button><button id="tNext">Next →</button></div>'
+   +'<div class="dots" id="tdots"></div>';
+  document.getElementById('tPrev').onclick=function(){if(ti>0){ti--;drawTY();}};
+  document.getElementById('tNext').onclick=function(){if(ti<W.length-1){ti++;drawTY();}};
+  drawTY();
+}
+function drawTY(){
+  var o=W[ti];
+  document.getElementById('tm').textContent='Word '+(ti+1)+' / '+W.length;
+  document.getElementById('ts').textContent='Type points: '+sum(ty)+' / '+MAXTY;
+  document.getElementById('tb').style.width=((ti+1)/W.length*100)+'%';
+  document.getElementById('tq').innerHTML='<div class="qcard">'
+   +'<span class="numtag">'+(ti+1)+'</span>'
+   +'<div class="lbl">type the pinyin — tones not needed</div>'
+   +'<div class="zh">'+esc(o.zh)+'</div>'
+   +'<div class="ir"><input class="inp" id="tin" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="pinyin">'
+   +'<button class="btn b-g" id="tck">Check ✓</button>'
+   +'<button class="btn b-s" id="tsay">🔊</button>'
+   +'<button class="btn b-s" id="tsh">Show</button></div>'
+   +'<div class="ans" id="tans"></div></div>';
+  var inp=document.getElementById('tin');
+  document.getElementById('tck').onclick=function(){gradeTY(false);};
+  document.getElementById('tsh').onclick=function(){gradeTY(true);};
+  document.getElementById('tsay').onclick=function(){say(o.zh);};
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();gradeTY(false);}});
+  document.getElementById('tPrev').disabled=(ti===0);
+  document.getElementById('tNext').disabled=(ti===W.length-1);
+  drawTDots(); board(); inp.focus();
+}
+function gradeTY(reveal){
+  var o=W[ti], r=ty[ti];
+  var inp=document.getElementById('tin'), box=document.getElementById('tans');
+  var got=norm(inp.value), good=norm(o.py);
+  if(!got && !reveal){ inp.focus(); return; }
+  var ok=!reveal && got===good, earned=0;
+  if(reveal){ if(r.st===null){ r.st='miss'; r.pts=0; } }
+  else if(ok){
+    if(r.st===null){ r.st='ok'; r.pts=5; earned=5; }
+    else if(r.st==='miss'){ r.st='ok'; r.pts=2; earned=2; }
+  } else if(r.st===null){ r.st='miss'; r.pts=0; }
+  inp.className='inp '+(ok?'ok':'no');
+  var extra='';
+  if(!ok && got){ var d=firstDiff(good,got);
+    extra='<div class="y">you typed: '+esc(inp.value.trim())+(d>=0?'  ·  first difference at letter '+(d+1):'')+'</div>'; }
+  box.className='ans '+(ok?'ok':'no');
+  box.innerHTML=(earned?'<span class="pt">+'+earned+'</span>':'')+(ok?'✓ Correct! ':'✗ Not quite. ')
+    +'<span class="p">'+esc(o.py)+'</span><div class="e">'+esc(o.zh)+' — '+esc(o.en)+'</div>'
+    +(o.br?'<div class="y">'+esc(o.br)+'</div>':'')+extra;
+  say(o.zh); board(); drawTDots();
+  document.getElementById('ts').textContent='Type points: '+sum(ty)+' / '+MAXTY;
+}
+function drawTDots(){
+  var d=document.getElementById('tdots'); if(!d)return; d.innerHTML='';
+  W.forEach(function(_,i){
+    var r=ty[i], e=document.createElement('div');
+    e.className='dot'+(i===ti?' cur':(r.st==='ok'?' ok':(r.st==='miss'?' no':'')));
+    e.title='Word '+(i+1); e.onclick=function(){ti=i;drawTY();}; d.appendChild(e);
+  });
+}
+
+/* ================= 3 · ALL ================= */
+function drawAll(){
+  var w=document.getElementById('s-all');
+  w.innerHTML='<div class="tip">All ten words with the correct pinyin and meaning. Tap 🔊 to hear each one.</div>'
+   +'<div class="lst"><div class="h">10 words · pinyin &amp; meaning</div>'
+   +W.map(function(o,i){
+      return '<div class="lrow"><span class="n">'+(i+1)+'</span><div class="z">'+esc(o.zh)+'</div>'
+      +'<div class="bd"><div class="py">'+esc(o.py)+'</div><div class="en">'+esc(o.en)+'</div>'
+      +(o.br?'<div class="br">'+esc(o.br)+'</div>':'')+'</div>'
+      +'<button class="spk" data-s="'+esc(o.zh)+'">🔊</button></div>';
+    }).join('')+'</div>';
+  w.querySelectorAll('[data-s]').forEach(function(b){b.onclick=function(){say(b.getAttribute('data-s'));};});
+}
+
+/* ================= 4 · FINAL SCORE ================= */
+function drawFin(){
+  var w=document.getElementById('s-fin');
+  var a=sum(mc), b=sum(ty), t=a+b, pc=Math.round(t/MAX*100), g=grade(pc);
+  var ad=mc.filter(function(r){return r.st!==null;}).length;
+  var bd=ty.filter(function(r){return r.st!==null;}).length;
+  var missA=[], missB=[];
+  mc.forEach(function(r,i){if(r.st==='miss')missA.push(W[i].zh);});
+  ty.forEach(function(r,i){if(r.st==='miss')missB.push(W[i].zh);});
+  var h='<div class="final"><div class="em">'+g[1]+'</div><div class="big">'+t+' / '+MAX+'</div>'
+   +'<div class="gr">'+g[0]+'</div><div class="pc">'+pc+'%  ·  '+(ad+bd)+' of '+(W.length*2)+' questions answered</div></div>'
+   +'<table class="tbl"><tr><th>Part</th><th>Answered</th><th>Right</th><th style="text-align:right">Points</th></tr>'
+   +'<tr><td>🔤 选拼音 Choose the pinyin</td><td>'+ad+' / '+W.length+'</td><td>'+okc(mc)+'</td><td class="n">'+a+' / '+MAXMC+'</td></tr>'
+   +'<tr><td>⌨️ 打拼音 Type the pinyin</td><td>'+bd+' / '+W.length+'</td><td>'+okc(ty)+'</td><td class="n">'+b+' / '+MAXTY+'</td></tr>'
+   +'<tr class="tot"><td>总分 Final score</td><td></td><td></td><td class="n">'+t+' / '+MAX+'</td></tr></table>';
+  if(missA.length||missB.length){
+    h+='<div class="tip" style="margin-top:13px">Still to practise — '
+      +(missA.length?'<b>choose:</b> '+missA.join('  ')+(missB.length?' &nbsp;·&nbsp; ':''):'')
+      +(missB.length?'<b>type:</b> '+missB.join('  '):'')+'</div>';
+  } else if(ad+bd>0){
+    h+='<div class="tip" style="margin-top:13px">Every word you answered was right first time. 🎉</div>';
+  }
+  h+='<div class="row"><button class="btn b-r" id="fReset">↺ Start again from zero</button></div>';
+  w.innerHTML=h;
+  document.getElementById('fReset').onclick=function(){
+    mc=W.map(function(){return {st:null,pts:0};});
+    ty=W.map(function(){return {st:null,pts:0};});
+    mi=0; ti=0; board(); renderMC(); renderTY(); drawFin();
+  };
+}
+
+/* ---- init ---- */
+board(); renderMC(); renderTY();
+</script>
+</body>
+</html>
