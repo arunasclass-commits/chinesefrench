@@ -171,6 +171,20 @@ footer{text-align:center;font-size:12px;color:var(--soft);margin-top:24px}
   .recog .big{font-size:54px}
 }
 
+/* word-by-word help under the 完成对话 sentences */
+.glossline{margin-top:2px}
+.glossline .py{font-size:13px;color:var(--teal);font-family:inherit;display:block}
+.glossline .gm{font-size:13px;color:var(--soft);font-family:inherit;display:block}
+.hide-py .py{display:none}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px}
+.chip-w{cursor:pointer;font-family:inherit;background:#fffdf8;border:1.5px solid var(--line);border-radius:11px;
+  padding:5px 9px;text-align:center;color:var(--ink);line-height:1.25}
+.chip-w:hover{border-color:var(--gold);background:#fff8e8}
+.chip-w b{display:block;font-size:19px;font-weight:500}
+.chip-w .cp{display:block;font-size:11.5px;color:var(--teal)}
+.chip-w .cm{display:block;font-size:10.5px;color:var(--soft)}
+.hide-py .chip-w .cp{display:none}
+
 </style>
 </head>
 <body>
@@ -417,13 +431,32 @@ const GRAMMAR = {
   /* 完成对话 Complete the dialogues (page 031) */
   fill: [
     {before:"A：今天晚上我想看个电影。<br>B：这个电影不错，", after:"，你也看看吧。",
-     answers:["我看过","我已经看过了","我看过了"], show:"我看过", en:"“This film is good, I have seen it — you should watch it too.”"},
+     py:"A: Jīntiān wǎnshang wǒ xiǎng kàn ge diànyǐng.　B: Zhège diànyǐng búcuò, ______, nǐ yě kànkan ba.",
+     mean:"A: Tonight I want to watch a film.　B: This film is good, ______, you should watch it too.",
+     words:[["今天","jīntiān","today"],["晚上","wǎnshang","evening"],["我","wǒ","I; me"],["想","xiǎng","to want to"],
+            ["看","kàn","to watch; to look"],["个","ge","(measure word)"],["电影","diànyǐng","film"],
+            ["这个","zhège","this one"],["不错","búcuò","not bad; good"],["你","nǐ","you"],["也","yě","also"],
+            ["看看","kànkan","to have a look"],["吧","ba","(suggestion)"]],
+     answers:["我看过","我已经看过了","我看过了"], show:"我看过",
+     showPy:"Wǒ kànguo.", showEn:"I have seen it.",
+     en:"“This film is good, I have seen it — you should watch it too.”"},
     {before:"A：这家超市的苹果好吃吗？<br>B：", after:"，我也不知道。",
-     answers:["我没买过","我没吃过","没吃过","没买过"], show:"我没吃过", en:"“I haven't eaten them either, so I don't know.”"},
+     py:"A: Zhè jiā chāoshì de píngguǒ hǎochī ma?　B: ______, wǒ yě bù zhīdào.",
+     mean:"A: Are the apples in this supermarket tasty?　B: ______, I don't know either.",
+     words:[["这家","zhè jiā","this (shop)"],["超市","chāoshì","supermarket"],["的","de","(of)"],
+            ["苹果","píngguǒ","apple"],["好吃","hǎochī","tasty"],["吗","ma","(yes-no question)"],
+            ["我","wǒ","I; me"],["也","yě","also; either"],["不","bù","not"],["知道","zhīdào","to know"]],
+     answers:["我没买过","我没吃过","没吃过","没买过"], show:"我没吃过",
+     showPy:"Wǒ méi chīguo.", showEn:"I haven't eaten them.",
+     en:"“I haven't eaten them either, so I don't know.”"},
     {before:"A：", after:"北京没有？<br>B：去过。",
-     answers:["你去过","去过"], show:"你去过", en:"“Have you been to Beijing?” — the 没有 question form."}
-  ]
-};
+     py:"A: ______ Běijīng méiyǒu?　B: Qùguo.",
+     mean:"A: Have you been to Beijing?　B: Yes, I have.",
+     words:[["北京","Běijīng","Beijing"],["没有","méiyǒu","or not (question ending)"],["去过","qùguo","have been to"]],
+     answers:["你去过","去过"], show:"你去过",
+     showPy:"Nǐ qùguo Běijīng méiyǒu?", showEn:"Have you been to Beijing?",
+     en:"“Have you been to Beijing?” — the 没有 question form."}
+  ]};
 
 /* English -> Chinese, drag and drop. tiles are shuffled at run time */
 const BUILD = [
@@ -686,8 +719,16 @@ $('wNext').onclick=function(){openChar((wIdx+1)%wList().length);};
   GRAMMAR.fill.forEach(function(f,i){
     var d=el('div','fillrow');
     d.innerHTML='('+(i+1)+') '+f.before+' <input id="gf'+i+'" autocomplete="off"> '+f.after+
-      '<div class="fill-en">'+f.en+'</div>';
+      '<div class="glossline"><span class="py">'+f.py+'</span><span class="gm">'+f.mean+'</span></div>'+
+      '<div class="chips" id="gw'+i+'"></div>'+
+      '<div class="fill-en">'+f.en+'</div>'+
+      '<div class="fb" id="gm'+i+'" style="min-height:0;font-family:inherit"></div>';
     box.appendChild(d);
+    f.words.forEach(function(wd){
+      var c=el('button','chip-w','<b class="zh">'+wd[0]+'</b><span class="cp">'+wd[1]+'</span><span class="cm">'+wd[2]+'</span>');
+      c.onclick=function(){speak(wd[0]);};
+      $('gw'+i).appendChild(c);
+    });
   });
 })();
 function normZh(s){return (s||'').replace(/[\s，。！？、,.!?]/g,'');}
@@ -704,7 +745,11 @@ $('gCheck').onclick=function(){
   else{fb.className='fb bad';fb.textContent=ok+' / '+GRAMMAR.fill.length+' correct — 想一想：动词后面加“过”。';bloop();}
 };
 $('gShow').onclick=function(){
-  GRAMMAR.fill.forEach(function(f,i){$('gf'+i).value=f.show;$('gf'+i).className='ok';});
+  GRAMMAR.fill.forEach(function(f,i){
+    $('gf'+i).value=f.show;$('gf'+i).className='ok';
+    $('gm'+i).className='fb good';
+    $('gm'+i).innerHTML='<span class="py" style="display:block">'+f.showPy+'</span><span class="gm">'+f.showEn+'</span>';
+  });
   $('gFb').className='fb';$('gFb').textContent='参考答案 model answers filled in.';
 };
 
