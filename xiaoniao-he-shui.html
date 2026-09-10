@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>小鸟喝水 · Xiǎoniǎo Hē Shuǐ — Little Bird Drinks Water</title>
+<style>
+:root{
+  --ink:#22303a;--soft:#5d7684;--paper:#f2fafd;--card:#fff;
+  --sky:#3aa0bb;--skysoft:#e2f4f9;--sun:#f2a83c;--sunsoft:#fdf0dc;
+  --leaf:#5fa564;--leafsoft:#e6f4e6;--red:#d4553f;--redsoft:#fbe9e5;
+  --line:#dbe8ee;--shadow:0 2px 0 rgba(0,0,0,.04),0 10px 24px rgba(30,60,80,.10);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:radial-gradient(circle at 10% 4%,#e6f6fd 0,transparent 42%),radial-gradient(circle at 92% 6%,#fdf1de 0,transparent 38%),var(--paper);
+  color:var(--ink);font-family:"Nunito",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+.zh{font-family:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+#app{max-width:1000px;margin:0 auto;padding:12px 14px 48px}
+
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:4px 2px 10px}
+.brand{display:flex;align-items:center;gap:11px}
+.mascot{font-size:36px;line-height:1;display:inline-block;transition:transform .3s}
+.mascot.bounce{transform:translateY(-9px) rotate(-10deg)}
+.brand h1{font-size:20px;margin:0}
+.brand p{margin:0;font-size:12px;color:var(--soft)}
+.score{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chip{background:#fff;border:2px solid var(--line);border-radius:999px;padding:6px 12px;font-size:14px;box-shadow:var(--shadow)}
+button.chip{cursor:pointer;font-family:inherit;color:var(--ink)}
+button.chip.on{background:var(--sky);border-color:var(--sky);color:#fff}
+
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;cursor:pointer;font-family:inherit;font-size:15px;background:#fff;border:2px solid var(--line);border-radius:14px;
+  padding:8px 14px;display:flex;flex-direction:column;align-items:center;line-height:1.2;color:var(--ink);box-shadow:var(--shadow)}
+.tab span{font-size:10px;color:var(--soft);letter-spacing:.3px}
+.tab.active{background:var(--sky);border-color:var(--sky);color:#fff}
+.tab.active span{color:#d6eef4}
+.tab .badge{position:absolute}
+
+.screen{display:none;animation:fade .25s ease}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
+h2.sec{font-size:18px;margin:0 0 4px}
+p.scene{font-size:13.5px;color:var(--soft);margin:0 0 12px}
+.btn{cursor:pointer;font-family:inherit;font-size:14.5px;background:#fff;border:2px solid var(--line);border-radius:13px;padding:9px 14px;color:var(--ink);box-shadow:var(--shadow)}
+.btn:hover{border-color:var(--sky)}
+.btn.primary{background:var(--sky);border-color:var(--sky);color:#fff}
+.btn.sun{background:var(--sun);border-color:var(--sun);color:#fff}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.hidden{display:none !important}
+
+/* story */
+.pagedots{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.pd{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);background:#fff;color:var(--soft);font-size:12px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit}
+.pd.now{background:var(--sun);border-color:var(--sun);color:#fff}
+.pd.seen{border-color:var(--sky);color:var(--sky)}
+.pic{width:100%;border-radius:16px;overflow:hidden;border:2px solid var(--line);background:#eaf6fb;line-height:0}
+.pic svg{width:100%;height:auto;display:block}
+.pgnum{font-size:12px;color:var(--soft);letter-spacing:.5px;margin:12px 0 2px}
+.spy{font-size:24px;font-weight:700;line-height:1.5;margin:2px 0 6px}
+.shz{font-size:23px;line-height:1.7;color:#2d4756;margin:2px 0 6px}
+.sen{font-size:15px;color:var(--soft);line-height:1.6;margin:0}
+.glosshead{font-size:12px;color:var(--sky);letter-spacing:.5px;margin:14px 0 6px;text-transform:uppercase}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.wchip{cursor:pointer;font-family:inherit;text-align:left;background:#fbfeff;border:1.5px solid var(--line);border-radius:11px;padding:6px 10px;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.wchip:hover{border-color:var(--sun);background:#fffaf2}
+.wchip b{display:block;font-size:15px;color:var(--ink)}
+.wchip i{display:block;font-size:11.5px;color:var(--soft);font-style:normal;max-width:210px}
+
+/* words */
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:9px}
+.wcard{cursor:pointer;font-family:inherit;text-align:left;background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 12px;box-shadow:var(--shadow)}
+.wcard:hover{border-color:var(--sky)}
+.wcard b{display:block;font-size:18px}
+.wcard i{display:block;font-size:12.5px;color:var(--soft);font-style:normal;margin-top:2px}
+.wcard u{display:block;font-size:11px;color:var(--sun);text-decoration:none;margin-top:4px}
+.setpick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.pill{cursor:pointer;font-family:inherit;font-size:13px;background:#fff;border:2px solid var(--line);border-radius:999px;padding:6px 13px;color:var(--ink)}
+.pill.on{background:var(--leaf);border-color:var(--leaf);color:#fff}
+
+/* quiz */
+.bar{height:10px;border-radius:999px;background:var(--skysoft);overflow:hidden;margin:10px 0 4px}
+.bar i{display:block;height:100%;background:var(--sky);width:0;transition:width .3s}
+.qmeta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--soft);margin-bottom:12px}
+.qprompt{background:var(--skysoft);border-radius:16px;padding:20px 16px;text-align:center;margin-bottom:14px}
+.qprompt .big{font-size:34px;font-weight:800;line-height:1.3}
+.qprompt .lab{font-size:12px;color:var(--soft);letter-spacing:.6px;text-transform:uppercase;margin-bottom:6px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{cursor:pointer;font-family:inherit;font-size:17px;background:#fff;border:2.5px solid var(--line);border-radius:15px;padding:14px 14px;color:var(--ink);
+  box-shadow:var(--shadow);text-align:left;line-height:1.35;transition:transform .1s}
+.opt:hover:not(:disabled){border-color:var(--sun);transform:translateY(-1px)}
+.opt.ok{border-color:var(--leaf);background:var(--leafsoft)}
+.opt.no{border-color:var(--red);background:var(--redsoft)}
+.opt:disabled{cursor:default}
+.fb{margin-top:12px;font-size:15.5px;min-height:26px}
+.fb.good{color:var(--leaf);font-weight:700}
+.fb.bad{color:var(--red)}
+.fb small{display:block;color:var(--soft);font-weight:400;font-size:13px;margin-top:2px}
+
+.result{text-align:center;padding:12px 8px}
+.result .big{font-size:60px;font-weight:800;line-height:1}
+.result .pct{font-size:16px;color:var(--soft);margin-top:4px}
+.stars{font-size:34px;letter-spacing:6px;margin:10px 0}
+.msg{font-size:16px;margin:6px 0 4px}
+
+/* review */
+.mrow{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;background:#fffdfb}
+.mrow .w{flex:1 1 auto}
+.mrow .w b{font-size:17px;display:block}
+.mrow .w i{font-style:normal;font-size:13px;color:var(--soft);display:block}
+.mrow .w s{display:block;font-size:12px;color:var(--red);text-decoration:none}
+.mrow .n{background:var(--redsoft);color:var(--red);border-radius:999px;padding:3px 9px;font-size:12px;font-weight:700}
+.empty{text-align:center;color:var(--soft);font-size:15px;padding:26px 10px}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:15px;
+  opacity:0;pointer-events:none;transition:all .25s;z-index:500;max-width:88vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+footer{text-align:center;font-size:12px;color:var(--soft);margin-top:24px}
+
+@media (max-width:560px){ .opts{grid-template-columns:1fr} }
+@media (max-width:640px){
+  .spy{font-size:20px}.shz{font-size:20px}
+  .qprompt .big{font-size:27px}
+  .opt{font-size:16px;padding:13px 12px}
+  .result .big{font-size:48px}
+}
+
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="brand">
+      <span class="mascot" id="mascot">🐦</span>
+      <div>
+        <h1>Xiǎoniǎo Hē Shuǐ · Little Bird Drinks Water</h1>
+        <p>Pinyin storybook with audio, pictures and a word quiz</p>
+      </div>
+    </div>
+    <div class="score">
+      <span class="chip">⭐ <b id="stars">0</b></span>
+      <button class="chip" id="hzBtn">汉字 OFF</button>
+      <button class="chip" id="enBtn">English ON</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-s="story">📖 故事<span>Story</span></button>
+    <button class="tab" data-s="words">🔤 生词<span>Words</span></button>
+    <button class="tab" data-s="quiz">🎯 选一选<span>Choose</span></button>
+    <button class="tab" data-s="review">🔁 复习<span>My mistakes</span></button>
+  </nav>
+
+  <main>
+    <section class="screen active" id="s-story">
+      <div class="card">
+        <div class="pagedots" id="dots"></div>
+        <div class="pic" id="pic"></div>
+        <div class="pgnum" id="pgnum"></div>
+        <div class="spy" id="spy"></div>
+        <div class="shz zh hidden" id="shz"></div>
+        <p class="sen" id="sen"></p>
+        <div class="row">
+          <button class="btn primary" id="bPlay">🔊 听 Listen</button>
+          <button class="btn" id="bSlow">🐢 慢 Slow</button>
+          <button class="btn" id="bPrev">◀ 上一页 Back</button>
+          <button class="btn sun" id="bNext">下一页 Next ▶</button>
+          <button class="btn" id="bAuto">▶ 自动播放 Play all</button>
+        </div>
+        <div class="glosshead">每个词 · every word — tap to hear it</div>
+        <div class="chips" id="gloss"></div>
+      </div>
+    </section>
+
+    <section class="screen" id="s-words">
+      <div class="card">
+        <h2 class="sec">生词 · All the words</h2>
+        <p class="scene">Every word from the story. Tap a card to hear it. <b id="wcount"></b></p>
+        <div class="setpick" id="wPick"></div>
+        <div class="wgrid" id="wgrid"></div>
+      </div>
+    </section>
+
+    <section class="screen" id="s-quiz">
+      <div class="card" id="qSetup">
+        <h2 class="sec">选一选 · Choose the right answer</h2>
+        <p class="scene">Pick how you want to practise, then press Start. You get 1 point for each right answer, and every mistake is saved for review.</p>
+        <div class="glosshead">1 · What kind of question?</div>
+        <div class="setpick" id="qMode"></div>
+        <div class="glosshead">2 · Which words?</div>
+        <div class="setpick" id="qScope"></div>
+        <div class="glosshead">3 · How many questions?</div>
+        <div class="setpick" id="qLen"></div>
+        <div class="row"><button class="btn primary" id="qStart">▶ 开始 Start</button></div>
+      </div>
+
+      <div class="card hidden" id="qPlay">
+        <div class="bar"><i id="qBar"></i></div>
+        <div class="qmeta"><span id="qCount"></span><span id="qScore"></span></div>
+        <div class="qprompt">
+          <div class="lab" id="qLab"></div>
+          <div class="big" id="qBig"></div>
+          <div class="row" style="justify-content:center" id="qAudioRow">
+            <button class="btn" id="qHear">🔊 再听一次 Hear again</button>
+          </div>
+        </div>
+        <div class="opts" id="qOpts"></div>
+        <div class="fb" id="qFb"></div>
+        <div class="row">
+          <button class="btn sun" id="qNext">下一题 Next ▶</button>
+          <button class="btn" id="qQuit">停止 Stop</button>
+        </div>
+      </div>
+
+      <div class="card hidden" id="qDone">
+        <div class="result">
+          <div class="big" id="rScore"></div>
+          <div class="pct" id="rPct"></div>
+          <div class="stars" id="rStars"></div>
+          <div class="msg" id="rMsg"></div>
+        </div>
+        <div class="row" style="justify-content:center">
+          <button class="btn primary" id="rWrong">🔁 只练错的 Practise my mistakes</button>
+          <button class="btn" id="rAgain">↺ 再来一次 Again</button>
+          <button class="btn sun" id="rHome">🎯 新的练习 New quiz</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="s-review">
+      <div class="card">
+        <h2 class="sec">我的错题 · The words I got wrong</h2>
+        <p class="scene">Every word you missed today, with the right answer. Tap 🔊 to hear it.</p>
+        <div id="mList"></div>
+        <div class="row">
+          <button class="btn primary" id="mPractise">🔁 练习这些词 Practise these words</button>
+          <button class="btn" id="mClear">🧹 清空 Clear the list</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <footer>爱睿娜的课堂 · Aruna's Class — ChineseFrench Institute</footer>
+</div>
+<script>var STORY = [
+{n:1, hz:"一只小鸟在天上飞来飞去，最后累了，它在山顶停了下来。",
+ py:"Yì zhī xiǎoniǎo zài tiānshàng fēilái-fēiqù, zuìhòu lèi le, tā zài shāndǐng tíng le xiàlái.",
+ en:"A little bird flew around in the sky. Finally, it became tired and stopped on the mountaintop.",
+ g:[["yì","one"],["zhī","measure word for birds and animals"],["xiǎoniǎo","little bird"],["zài","at; in"],["tiānshàng","in the sky"],["fēilái-fēiqù","fly back and forth; fly around"],["zuìhòu","finally; in the end"],["lèi","tired"],["le","indicates a change or completed situation"],["tā","he; it"],["shāndǐng","mountaintop"],["tíng","stop"],["xiàlái","down; come down; settle down"]]},
+
+{n:2, hz:"太阳出来了，天气很热，小鸟渴了。",
+ py:"Tàiyáng chūlái le, tiānqì hěn rè, xiǎoniǎo kě le.",
+ en:"The sun came out, the weather became very hot, and the little bird became thirsty.",
+ g:[["tàiyáng","sun"],["chūlái","come out; appear"],["le","indicates a new situation or change"],["tiānqì","weather"],["hěn","very"],["rè","hot"],["xiǎoniǎo","little bird"],["kě","thirsty"]]},
+
+{n:3, hz:"小鸟飞到了山下，小鸟飞来飞去，它想找一点儿水喝。",
+ py:"Xiǎoniǎo fēidào le shānxià, xiǎoniǎo fēilái-fēiqù, tā xiǎng zhǎo yìdiǎnr shuǐ hē.",
+ en:"The little bird flew down to the foot of the mountain. It flew around, looking for a little water to drink.",
+ g:[["xiǎoniǎo","little bird"],["fēidào","fly to; fly as far as"],["le","indicates a completed action"],["shānxià","foot of the mountain; below the mountain"],["fēilái-fēiqù","fly back and forth; fly around"],["tā","he; it"],["xiǎng","want to; would like to"],["zhǎo","look for"],["yìdiǎnr","a little; some"],["shuǐ","water"],["hē","drink"]]},
+
+{n:4, hz:"找啊找，小鸟终于在一个大石头旁边看见了一个瓶子，里面有半瓶水。",
+ py:"Zhǎo a zhǎo, xiǎoniǎo zhōngyú zài yí ge dà shítou pángbiān kànjiàn le yí ge píngzi, lǐmiàn yǒu bàn píng shuǐ.",
+ en:"After searching and searching, the little bird finally saw a bottle beside a big rock. There was half a bottle of water inside.",
+ g:[["zhǎo","look for"],["a","storytelling particle showing continued action"],["xiǎoniǎo","little bird"],["zhōngyú","finally; at last"],["zài","at; in"],["yí ge","one; a"],["dà","big"],["shítou","stone; rock"],["pángbiān","beside; next to"],["kànjiàn","see; catch sight of"],["le","indicates a completed action"],["píngzi","bottle"],["lǐmiàn","inside"],["yǒu","there is; have"],["bàn","half"],["píng","bottle; measure word for bottled contents"],["shuǐ","water"]]},
+
+{n:5, hz:"小鸟想喝水，可是瓶口太小，小鸟的嘴又太短，喝不到水。",
+ py:"Xiǎoniǎo xiǎng hē shuǐ, kěshì píngkǒu tài xiǎo, xiǎoniǎo de zuǐ yòu tài duǎn, hē bù dào shuǐ.",
+ en:"The little bird wanted to drink the water, but the bottle opening was too small, and its beak was also too short. It could not reach the water.",
+ g:[["xiǎoniǎo","little bird"],["xiǎng","want to"],["hē","drink"],["shuǐ","water"],["kěshì","but; however"],["píngkǒu","bottle opening; mouth of the bottle"],["tài","too"],["xiǎo","small"],["de","possessive/linking particle"],["zuǐ","mouth; beak"],["yòu","also; additionally"],["duǎn","short"],["hē bù dào","cannot reach/drink successfully"]]},
+
+{n:6, hz:"小鸟想把瓶子推倒，可是瓶子太重，推不动。",
+ py:"Xiǎoniǎo xiǎng bǎ píngzi tuīdǎo, kěshì píngzi tài zhòng, tuī bù dòng.",
+ en:"The little bird wanted to push the bottle over, but the bottle was too heavy, so it could not move it.",
+ g:[["xiǎoniǎo","little bird"],["xiǎng","want to"],["bǎ","marker used to bring the object before the action"],["píngzi","bottle"],["tuīdǎo","push over; knock down"],["kěshì","but; however"],["tài","too"],["zhòng","heavy"],["tuī","push"],["bù","not; cannot"],["dòng","move"],["tuī bù dòng","cannot push or move"]]},
+
+{n:7, hz:"小鸟在瓶子周围走来走去。怎么办呢？我的嘴太短了，如果水能升到瓶口，我就能喝到水了。小鸟想。",
+ py:"Xiǎoniǎo zài píngzi zhōuwéi zǒulái-zǒuqù. Zěnme bàn ne? Wǒ de zuǐ tài duǎn le, rúguǒ shuǐ néng shēngdào píngkǒu, wǒ jiù néng hēdào shuǐ le. Xiǎoniǎo xiǎng.",
+ en:"The little bird walked around the bottle. “What should I do? My beak is too short. If the water could rise to the bottle opening, then I could drink the water,” the little bird thought.",
+ g:[["xiǎoniǎo","little bird"],["zài","at; in"],["píngzi","bottle"],["zhōuwéi","around; surrounding area"],["zǒulái-zǒuqù","walk back and forth; walk around"],["zěnme","how; what way"],["bàn","do; handle; deal with"],["ne","question/softening particle"],["wǒ","I; me"],["de","possessive/linking particle"],["zuǐ","mouth; beak"],["tài","too"],["duǎn","short"],["le","indicates a change of state"],["rúguǒ","if"],["shuǐ","water"],["néng","can; be able to"],["shēngdào","rise to"],["píngkǒu","bottle opening"],["jiù","then; in that case"],["hēdào","manage to drink; reach the water"],["xiǎng","think"]]},
+
+{n:8, hz:"这时，小鸟看见瓶子周围有很多小石子，小鸟有了主意。",
+ py:"Zhè shí, xiǎoniǎo kànjiàn píngzi zhōuwéi yǒu hěn duō xiǎo shízǐ, xiǎoniǎo yǒu le zhǔyi.",
+ en:"Just then, the little bird saw many small stones around the bottle. The bird got an idea.",
+ g:[["zhè shí","at this moment; just then"],["xiǎoniǎo","little bird"],["kànjiàn","see; notice"],["píngzi","bottle"],["zhōuwéi","around"],["yǒu","there is; there are"],["hěn duō","many; a lot of"],["xiǎo","small"],["shízǐ","small stone; pebble"],["le","indicates a new situation"],["zhǔyi","idea; plan"]]},
+
+{n:9, hz:"小鸟用嘴把小石子一块一块放进了瓶子里。",
+ py:"Xiǎoniǎo yòng zuǐ bǎ xiǎo shízǐ yí kuài, yí kuài fàng jìn le píngzi lǐ.",
+ en:"The little bird used its beak to put the small stones into the bottle, one by one.",
+ g:[["xiǎoniǎo","little bird"],["yòng","use"],["zuǐ","mouth; beak"],["bǎ","marker used to bring the object before the action"],["xiǎo shízǐ","small stones; pebbles"],["yí kuài","one piece; one at a time"],["fàng jìn","put into"],["le","indicates a completed action"],["píngzi","bottle"],["lǐ","inside; in"]]},
+
+{n:10, hz:"瓶子里的水一点儿一点儿上来了，水终于到了瓶口！",
+ py:"Píngzi lǐ de shuǐ yìdiǎnr, yìdiǎnr shànglái le, shuǐ zhōngyú dào le píngkǒu!",
+ en:"The water in the bottle gradually rose. Finally, the water reached the bottle opening!",
+ g:[["píngzi","bottle"],["lǐ","inside; in"],["de","possessive/linking particle"],["shuǐ","water"],["yìdiǎnr","a little"],["shànglái","rise up; come up"],["le","indicates a change or completed movement"],["zhōngyú","finally; at last"],["dào","reach; arrive"],["píngkǒu","bottle opening"]]},
+
+{n:11, hz:"小鸟喝到了水。",
+ py:"Xiǎoniǎo hēdào le shuǐ.",
+ en:"The little bird finally managed to drink the water.",
+ g:[["xiǎoniǎo","little bird"],["hēdào","manage to drink; reach the water"],["le","indicates completed action"],["shuǐ","water"]]},
+
+{n:12, hz:"小鸟喝饱了，又飞上了蓝天。",
+ py:"Xiǎoniǎo hē bǎo le, yòu fēi shàng le lántiān.",
+ en:"The little bird drank its fill and then flew back into the blue sky.",
+ g:[["xiǎoniǎo","little bird"],["hē","drink"],["bǎo","full; satisfied"],["le","indicates a change of state"],["yòu","again"],["fēi shàng","fly up; fly onto"],["lán","blue"],["tiān","sky; heaven"],["lántiān","blue sky"]]}
+];
+
+/* canonical word list for the quiz: [pinyin, hanzi, english, first page] */
+var WORDS = [
+["yì","一","one",1],
+["zhī","只","measure word for birds and animals",1],
+["xiǎoniǎo","小鸟","little bird",1],
+["zài","在","at; in",1],
+["tiānshàng","天上","in the sky",1],
+["fēilái-fēiqù","飞来飞去","fly back and forth; fly around",1],
+["zuìhòu","最后","finally; in the end",1],
+["lèi","累","tired",1],
+["le","了","particle: a completed action or a change",1],
+["tā","它","he; it",1],
+["shāndǐng","山顶","mountaintop",1],
+["tíng","停","stop",1],
+["xiàlái","下来","down; come down; settle down",1],
+["tàiyáng","太阳","sun",2],
+["chūlái","出来","come out; appear",2],
+["tiānqì","天气","weather",2],
+["hěn","很","very",2],
+["rè","热","hot",2],
+["kě","渴","thirsty",2],
+["fēidào","飞到","fly to; fly as far as",3],
+["shānxià","山下","foot of the mountain; below the mountain",3],
+["xiǎng","想","want to; would like to; think",3],
+["zhǎo","找","look for",3],
+["yìdiǎnr","一点儿","a little; some",3],
+["shuǐ","水","water",3],
+["hē","喝","drink",3],
+["a","啊","storytelling particle showing continued action",4],
+["zhōngyú","终于","finally; at last",4],
+["yí ge","一个","one; a",4],
+["dà","大","big",4],
+["shítou","石头","stone; rock",4],
+["pángbiān","旁边","beside; next to",4],
+["kànjiàn","看见","see; catch sight of",4],
+["píngzi","瓶子","bottle",4],
+["lǐmiàn","里面","inside",4],
+["yǒu","有","there is; have",4],
+["bàn","半","half",4],
+["píng","瓶","bottle; measure word for bottled contents",4],
+["kěshì","可是","but; however",5],
+["píngkǒu","瓶口","bottle opening; mouth of the bottle",5],
+["tài","太","too",5],
+["xiǎo","小","small",5],
+["de","的","possessive / linking particle",5],
+["zuǐ","嘴","mouth; beak",5],
+["yòu","又","also; again",5],
+["duǎn","短","short",5],
+["hē bù dào","喝不到","cannot reach / drink successfully",5],
+["bǎ","把","marker used to bring the object before the action",6],
+["tuīdǎo","推倒","push over; knock down",6],
+["zhòng","重","heavy",6],
+["tuī","推","push",6],
+["bù","不","not; cannot",6],
+["dòng","动","move",6],
+["tuī bù dòng","推不动","cannot push or move",6],
+["zhōuwéi","周围","around; surrounding area",7],
+["zǒulái-zǒuqù","走来走去","walk back and forth; walk around",7],
+["zěnme","怎么","how; what way",7],
+["bàn","办","do; handle; deal with",7],
+["ne","呢","question / softening particle",7],
+["wǒ","我","I; me",7],
+["rúguǒ","如果","if",7],
+["néng","能","can; be able to",7],
+["shēngdào","升到","rise to",7],
+["jiù","就","then; in that case",7],
+["hēdào","喝到","manage to drink; reach the water",7],
+["zhè shí","这时","at this moment; just then",8],
+["hěn duō","很多","many; a lot of",8],
+["shízǐ","石子","small stone; pebble",8],
+["zhǔyi","主意","idea; plan",8],
+["yòng","用","use",9],
+["xiǎo shízǐ","小石子","small stones; pebbles",9],
+["yí kuài","一块","one piece; one at a time",9],
+["fàng jìn","放进","put into",9],
+["lǐ","里","inside; in",9],
+["shànglái","上来","rise up; come up",10],
+["dào","到","reach; arrive",10],
+["bǎo","饱","full; satisfied",12],
+["fēi shàng","飞上","fly up; fly onto",12],
+["lán","蓝","blue",12],
+["tiān","天","sky; heaven",12],
+["lántiān","蓝天","blue sky",12]
+];
+</script>
+<script>/* ---- hand-drawn SVG scenes, 640 x 400 ---- */
+function g(t,a,inner){var s='<'+t;for(var k in a){s+=' '+k+'="'+a[k]+'"';}return inner===undefined?s+'/>':s+'>'+inner+'</'+t+'>';}
+
+function BIRD(x,y,sc,opt){
+  opt=opt||{};
+  var beak=opt.beak||16, flip=opt.flip?-1:1, tilt=opt.tilt||0;
+  var wingUp=opt.wing==='up', wingDn=opt.wing==='down';
+  var s='<g transform="translate('+x+','+y+') rotate('+tilt+') scale('+(sc*flip)+','+sc+')">';
+  s+='<polygon points="-24,-4 -46,-16 -42,0 -46,14 -24,6" fill="#e08a2c"/>';
+  s+='<ellipse cx="0" cy="0" rx="26" ry="21" fill="#f4a83f"/>';
+  s+='<ellipse cx="-2" cy="8" rx="20" ry="12" fill="#fbd08a"/>';
+  if(!opt.nolegs){
+    s+='<path d="M-6 19 L-8 32 M-12 32 L-2 32" stroke="#c9701c" stroke-width="3" fill="none" stroke-linecap="round"/>';
+    s+='<path d="M7 19 L6 32 M1 32 L11 32" stroke="#c9701c" stroke-width="3" fill="none" stroke-linecap="round"/>';
+  }
+  if(wingUp) s+='<path d="M0 -4 Q6 -30 26 -30 Q14 -12 8 -2 Z" fill="#e0842a"/>';
+  else if(wingDn) s+='<path d="M0 2 Q6 26 26 28 Q14 12 8 4 Z" fill="#e0842a"/>';
+  else s+='<ellipse cx="2" cy="0" rx="15" ry="10" fill="#e0842a" transform="rotate(-12 2 0)"/>';
+  s+='<circle cx="21" cy="-17" r="15" fill="#f7b862"/>';
+  s+='<polygon points="33,-19 '+(33+beak)+',-15 33,-11" fill="#ef7b23"/>';
+  s+='<circle cx="25" cy="-21" r="3.4" fill="#3a2a18"/><circle cx="26.2" cy="-22.2" r="1.1" fill="#fff"/>';
+  if(opt.blush) s+='<ellipse cx="17" cy="-11" rx="4" ry="2.6" fill="#f08a8a" opacity=".55"/>';
+  if(opt.tuft) s+='<path d="M16 -31 Q19 -40 23 -31" stroke="#e0842a" stroke-width="3" fill="none" stroke-linecap="round"/>';
+  return s+'</g>';
+}
+
+function BOTTLE(x,y,sc,water,pebbles,tilt){
+  // body 70 wide, 110 tall, origin at bottom-centre
+  var s='<g transform="translate('+x+','+y+') rotate('+(tilt||0)+') scale('+sc+')">';
+  s+='<ellipse cx="0" cy="6" rx="36" ry="7" fill="#000" opacity=".10"/>';
+  var top=-112, bodyTop=-84;
+  s+='<rect x="-11" y="'+top+'" width="22" height="30" rx="5" fill="#cfe9ef" opacity=".8"/>';
+  s+='<path d="M-11 '+(top+26)+' Q-11 '+(bodyTop-4)+' -31 '+(bodyTop+6)+' L-31 -14 Q-31 0 -18 0 L18 0 Q31 0 31 -14 L31 '+(bodyTop+6)+' Q11 '+(bodyTop-4)+' 11 '+(top+26)+' Z" fill="#d9eef2" opacity=".85" stroke="#9fc9d2" stroke-width="2"/>';
+  var wt = -2 - water*72;                       // water surface y
+  s+='<clipPath id="cb'+x+'"><path d="M-11 '+(top+26)+' Q-11 '+(bodyTop-4)+' -31 '+(bodyTop+6)+' L-31 -14 Q-31 0 -18 0 L18 0 Q31 0 31 -14 L31 '+(bodyTop+6)+' Q11 '+(bodyTop-4)+' 11 '+(top+26)+' Z"/></clipPath>';
+  s+='<g clip-path="url(#cb'+x+')">';
+  s+='<rect x="-34" y="'+wt+'" width="68" height="120" fill="#4fb6ce" opacity=".85"/>';
+  s+='<path d="M-34 '+wt+' q9 -5 17 0 q9 5 17 0 q9 -5 17 0 q9 5 17 0 v8 h-68 Z" fill="#7fd0e2"/>';
+  if(pebbles){ for(var i=0;i<pebbles;i++){
+      var px=-24+((i*17)%46), py=-6-Math.floor(i/3)*11 - (i%2)*4, r=6+(i%3);
+      s+='<ellipse cx="'+px+'" cy="'+py+'" rx="'+r+'" ry="'+(r-1)+'" fill="#8d8478"/>';
+      s+='<ellipse cx="'+(px-1.5)+'" cy="'+(py-1.5)+'" rx="'+(r/2.6)+'" ry="'+(r/3.4)+'" fill="#b3aa9c"/>';
+  }}
+  s+='</g>';
+  s+='<path d="M-22 '+(bodyTop+18)+' L-22 -20" stroke="#fff" stroke-width="5" opacity=".55" stroke-linecap="round"/>';
+  return s+'</g>';
+}
+
+function PEBBLE(x,y,r){
+  return '<ellipse cx="'+x+'" cy="'+y+'" rx="'+r+'" ry="'+(r*0.78)+'" fill="#9a9084"/>'+
+         '<ellipse cx="'+(x-r*0.3)+'" cy="'+(y-r*0.3)+'" rx="'+(r*0.38)+'" ry="'+(r*0.26)+'" fill="#c0b7a8"/>';
+}
+function ROCK(x,y,sc){
+  return '<g transform="translate('+x+','+y+') scale('+sc+')">'+
+   '<ellipse cx="0" cy="4" rx="72" ry="10" fill="#000" opacity=".10"/>'+
+   '<path d="M-70 4 Q-64 -44 -28 -56 Q6 -70 40 -52 Q72 -36 68 4 Z" fill="#9b9284"/>'+
+   '<path d="M-70 4 Q-64 -44 -28 -56 Q-14 -40 -22 4 Z" fill="#ada496"/>'+
+   '<path d="M20 -56 Q44 -48 52 -22" stroke="#867d70" stroke-width="4" fill="none" stroke-linecap="round"/></g>';
+}
+function SUN(x,y,r,rays){
+  var s='<g transform="translate('+x+','+y+')">';
+  if(rays){ for(var i=0;i<12;i++){var a=i*30*Math.PI/180;
+    s+='<line x1="'+(Math.cos(a)*(r+9)).toFixed(1)+'" y1="'+(Math.sin(a)*(r+9)).toFixed(1)+'" x2="'+(Math.cos(a)*(r+24)).toFixed(1)+'" y2="'+(Math.sin(a)*(r+24)).toFixed(1)+'" stroke="#f9c93c" stroke-width="5" stroke-linecap="round" opacity=".85"/>';}}
+  s+='<circle r="'+r+'" fill="#ffd84d"/><circle r="'+(r*0.72)+'" fill="#ffe680"/>';
+  return s+'</g>';
+}
+function CLOUD(x,y,sc,op){
+  return '<g transform="translate('+x+','+y+') scale('+sc+')" opacity="'+(op||0.9)+'">'+
+   '<ellipse cx="0" cy="0" rx="34" ry="20" fill="#fff"/><ellipse cx="-28" cy="6" rx="24" ry="15" fill="#fff"/>'+
+   '<ellipse cx="28" cy="7" rx="26" ry="16" fill="#fff"/><ellipse cx="6" cy="-13" rx="20" ry="14" fill="#fff"/></g>';
+}
+function MOUNTAIN(){
+  return '<polygon points="90,330 250,96 410,330" fill="#8fae7c"/>'+
+         '<polygon points="250,96 410,330 322,330" fill="#7a9a68"/>'+
+         '<polygon points="212,150 250,96 288,150 250,132" fill="#c9dcbd"/>'+
+         '<polygon points="330,330 448,168 566,330" fill="#a3bd90" opacity=".85"/>';
+}
+function GROUND(y,c1,c2){
+  return '<path d="M0 '+y+' Q160 '+(y-22)+' 320 '+y+' Q480 '+(y+20)+' 640 '+(y-8)+' L640 400 L0 400 Z" fill="'+(c1||'#a8cf86')+'"/>'+
+         '<path d="M0 '+(y+30)+' Q200 '+(y+12)+' 400 '+(y+34)+' Q520 '+(y+48)+' 640 '+(y+28)+' L640 400 L0 400 Z" fill="'+(c2||'#8fbd6e')+'"/>';
+}
+function GRASS(x,y){
+  return '<path d="M'+x+' '+y+' q-4 -14 -10 -18 M'+x+' '+y+' q0 -16 2 -20 M'+x+' '+y+' q5 -13 11 -16" stroke="#6fa353" stroke-width="3" fill="none" stroke-linecap="round"/>';
+}
+function BUBBLE(x,y,w,h,inner){
+  return '<g transform="translate('+x+','+y+')">'+
+   '<rect x="0" y="0" width="'+w+'" height="'+h+'" rx="'+(h/2.6)+'" fill="#fff" opacity=".93" stroke="#cfd9dd" stroke-width="2"/>'+
+   '<circle cx="14" cy="'+(h+14)+'" r="7" fill="#fff" opacity=".93" stroke="#cfd9dd" stroke-width="2"/>'+
+   '<circle cx="2" cy="'+(h+28)+'" r="4" fill="#fff" opacity=".9" stroke="#cfd9dd" stroke-width="2"/>'+
+   inner+'</g>';
+}
+function SKY(a,b){
+  return '<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">'+
+   '<stop offset="0" stop-color="'+a+'"/><stop offset="1" stop-color="'+b+'"/></linearGradient></defs>'+
+   '<rect width="640" height="400" fill="url(#sky)"/>';
+}
+
+function SCENE(n){
+  var s='';
+  if(n===1){
+    s+=SKY('#bfe6f7','#eaf7fb')+SUN(560,64,30)+CLOUD(110,70,1)+CLOUD(430,50,.8,.8);
+    s+=MOUNTAIN()+GROUND(330);
+    s+='<path d="M78 176 Q118 104 176 128 Q222 146 244 106" stroke="#fff" stroke-width="3" stroke-dasharray="7 9" fill="none" opacity=".95"/>';
+    s+=BIRD(96,150,.5,{wing:'up',tilt:-22});
+    s+=BIRD(186,130,.46,{wing:'down',tilt:12});
+    s+=BIRD(250,74,.72,{blush:1,tuft:1});
+    s+='<path d="M288 44 q11 -7 4 -14 q11 3 6 -12" stroke="#7fa0ad" stroke-width="3" fill="none" stroke-linecap="round" opacity=".75"/>';
+    return s;
+  }
+  if(n===2){
+    s+=SKY('#ffe9b8','#fff6e0')+SUN(540,72,42,true)+MOUNTAIN()+GROUND(330,'#c2d189','#a9bd72');
+    s+='<g opacity=".55" stroke="#f0a34a" stroke-width="4" fill="none" stroke-linecap="round">';
+    s+='<path d="M420 130 q12 -14 0 -28 q-12 -14 0 -28"/><path d="M462 148 q12 -14 0 -28 q-12 -14 0 -28"/>';
+    s+='<path d="M156 148 q12 -14 0 -28 q-12 -14 0 -28"/></g>';
+    s+=BIRD(250,74,.76,{beak:22,blush:1,tuft:1});
+    s+='<ellipse cx="274" cy="42" rx="5" ry="7" fill="#8fd8ef" opacity=".9"/>';
+    s+='<ellipse cx="220" cy="50" rx="4" ry="6" fill="#8fd8ef" opacity=".9"/>';
+    s+='<ellipse cx="292" cy="60" rx="4.5" ry="6.5" fill="#8fd8ef" opacity=".85"/>';
+    return s;
+  }
+  if(n===3){
+    s+=SKY('#cceafa','#f0f9fc')+SUN(560,60,30,true)+MOUNTAIN()+GROUND(320);
+    s+='<path d="M244 92 Q136 106 112 186 Q96 250 142 288" stroke="#fff" stroke-width="3" stroke-dasharray="7 9" fill="none" opacity=".95"/>';
+    s+=BIRD(150,112,.5,{flip:1,wing:'up',tilt:24});
+    s+=BIRD(112,220,.56,{wing:'down',tilt:-16});
+    s+=BIRD(160,295,.78,{blush:1,tuft:1});
+    s+=GRASS(470,352)+GRASS(510,362)+GRASS(70,356);
+    return s;
+  }
+  if(n===4){
+    s+=SKY('#cceafa','#f2fafc')+SUN(576,56,26)+CLOUD(120,62,.85,.85)+GROUND(300);
+    s+=ROCK(452,322,1.3)+BOTTLE(336,322,1.05,.5,0);
+    s+=BIRD(150,274,.8,{blush:1,tuft:1});
+    s+='<text x="186" y="218" font-size="44" font-weight="700" fill="#e0662d" font-family="sans-serif">!</text>';
+    s+=GRASS(590,354)+GRASS(64,346)+PEBBLE(266,350,7)+PEBBLE(292,358,5);
+    return s;
+  }
+  if(n===5){
+    s+=SKY('#cceafa','#f2fafc')+GROUND(300)+ROCK(540,320,.8);
+    s+=BOTTLE(300,322,1.25,.5,0);
+    s+=BIRD(260,176,.72,{beak:22,tilt:30,nolegs:1,blush:1});
+    s+='<path d="M300 196 L300 268" stroke="#e0662d" stroke-width="3" stroke-dasharray="6 7" fill="none"/>';
+    s+='<polygon points="300,276 292,258 308,258" fill="#e0662d"/>';
+    s+='<circle cx="418" cy="200" r="26" fill="#fff" opacity=".92" stroke="#e0662d" stroke-width="3"/>';
+    s+='<path d="M404 186 L432 214 M432 186 L404 214" stroke="#e0662d" stroke-width="5" stroke-linecap="round"/>';
+    s+=GRASS(80,344);
+    return s;
+  }
+  if(n===6){
+    s+=SKY('#cceafa','#f2fafc')+GROUND(300);
+    s+=BOTTLE(356,322,1.2,.5,0);
+    s+=BIRD(238,276,.82,{wing:'up',blush:1,tilt:10});
+    s+='<path d="M290 254 L312 254" stroke="#e0662d" stroke-width="7" stroke-linecap="round"/>';
+    s+='<polygon points="324,254 306,245 306,263" fill="#e0662d"/>';
+    s+='<g stroke="#e0662d" stroke-width="4" stroke-linecap="round" opacity=".85">'+
+       '<path d="M232 214 L226 200"/><path d="M252 208 L252 192"/><path d="M272 214 L280 200"/></g>';
+    s+='<circle cx="470" cy="190" r="26" fill="#fff" opacity=".92" stroke="#e0662d" stroke-width="3"/>';
+    s+='<path d="M456 176 L484 204 M484 176 L456 204" stroke="#e0662d" stroke-width="5" stroke-linecap="round"/>';
+    s+=GRASS(90,348);
+    return s;
+  }
+  if(n===7){
+    s+=SKY('#cceafa','#f2fafc')+GROUND(300);
+    s+=BOTTLE(330,320,1.15,.5,0);
+    s+='<ellipse cx="330" cy="330" rx="128" ry="26" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="8 9"/>';
+    s+=BIRD(180,306,.72,{blush:1,tuft:1});
+    s+=BUBBLE(60,54,206,116,
+        BOTTLE(104,150,.92,.95,6)+'<text x="150" y="40" font-size="19" fill="#3b6d7c" font-family="sans-serif">shuǐ shēngdào</text><text x="150" y="62" font-size="19" fill="#3b6d7c" font-family="sans-serif">píngkǒu?</text>');
+    s+=GRASS(560,352);
+    return s;
+  }
+  if(n===8){
+    s+=SKY('#cceafa','#f2fafc')+GROUND(300);
+    s+=BOTTLE(330,320,1.15,.5,0);
+    var ps=[[210,336,10],[246,352,7],[420,340,9],[452,356,6],[164,352,8],[396,362,7],[280,362,6],[500,344,8],[128,336,6],[368,332,5]];
+    for(var i=0;i<ps.length;i++) s+=PEBBLE(ps[i][0],ps[i][1],ps[i][2]);
+    s+=BIRD(168,282,.74,{blush:1,tuft:1,wing:'up'});
+    s+='<g transform="translate(150,196)"><path d="M0 12 a16 16 0 1 1 24 0 q-4 6 -4 12 h-16 q0 -6 -4 -12 Z" fill="#ffd84d" stroke="#e0a91f" stroke-width="2"/>'+
+       '<rect x="4" y="26" width="16" height="6" rx="3" fill="#e0a91f"/>'+
+       '<g stroke="#f2b820" stroke-width="3" stroke-linecap="round"><path d="M-10 -6 L-20 -12"/><path d="M34 -6 L44 -12"/><path d="M12 -22 L12 -34"/></g></g>';
+    return s;
+  }
+  if(n===9){
+    s+=SKY('#cceafa','#f2fafc')+GROUND(300);
+    s+=BOTTLE(340,322,1.2,.62,7);
+    s+=BIRD(268,142,.7,{beak:18,tilt:20,nolegs:1,blush:1});
+    s+=PEBBLE(318,160,9);
+    s+='<path d="M320 172 L338 186" stroke="#8d8478" stroke-width="2.5" stroke-dasharray="5 6" fill="none"/>';
+    s+=PEBBLE(190,346,8)+PEBBLE(220,358,6)+PEBBLE(470,350,8)+PEBBLE(500,360,6);
+    return s;
+  }
+  if(n===10){
+    s+=SKY('#cceafa','#f2fafc')+GROUND(300);
+    s+=BOTTLE(320,320,1.35,1,12);
+    s+='<g stroke="#3aa0bb" stroke-width="4" fill="none" stroke-linecap="round">'+
+       '<path d="M240 210 L240 172"/><polygon points="240,158 232,176 248,176" fill="#3aa0bb" stroke="none"/>'+
+       '<path d="M400 210 L400 172"/><polygon points="400,158 392,176 408,176" fill="#3aa0bb" stroke="none"/></g>';
+    s+='<text x="430" y="140" font-size="34" fill="#f0b429" font-family="sans-serif">✦</text>';
+    s+='<text x="196" y="128" font-size="26" fill="#f0b429" font-family="sans-serif">✦</text>';
+    s+=PEBBLE(150,352,8)+PEBBLE(516,346,7);
+    return s;
+  }
+  if(n===11){
+    s+=SKY('#cceafa','#f2fafc')+GROUND(300)+ROCK(548,322,.7);
+    s+=BOTTLE(300,322,1.3,1,12);
+    s+=BIRD(258,176,.74,{beak:20,tilt:25,nolegs:1,blush:1});
+    s+='<g fill="#7fd0e2"><circle cx="322" cy="180" r="4"/><circle cx="336" cy="166" r="3"/><circle cx="314" cy="160" r="2.6"/></g>';
+    s+='<text x="150" y="112" font-size="30" fill="#f0b429" font-family="sans-serif">♪</text>';
+    s+=GRASS(88,346);
+    return s;
+  }
+  s+=SKY('#a8ddf5','#e8f7fd')+SUN(552,66,36,true)+CLOUD(120,88,1.05)+CLOUD(400,58,.85,.85)+MOUNTAIN()+GROUND(330);
+  s+='<path d="M170 320 Q250 250 330 200 Q400 158 470 116" stroke="#fff" stroke-width="3" stroke-dasharray="7 9" fill="none" opacity=".95"/>';
+  s+=BOTTLE(160,340,.62,1,10);
+  s+=BIRD(300,214,.56,{wing:'down',tilt:-18});
+  s+=BIRD(478,110,.86,{wing:'up',tilt:-16,blush:1,tuft:1,nolegs:1});
+  s+='<text x="404" y="60" font-size="28" fill="#f0b429" font-family="sans-serif">♪</text>';
+  s+='<text x="540" y="176" font-size="22" fill="#f0b429" font-family="sans-serif">♪</text>';
+  return s;
+}
+</script>
+<script>(function(){
+'use strict';
+function $(id){return document.getElementById(id);}
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e;}
+
+var S={page:0,seen:{},hz:false,en:true,stars:0,mistakes:[],autoOn:false};
+
+/* ---------- toast + mascot ---------- */
+var toastT=null;
+function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show');},1900);}
+function hop(){var m=$('mascot');m.classList.add('bounce');setTimeout(function(){m.classList.remove('bounce');},280);}
+
+/* ---------- audio ---------- */
+var voice=null, warned=false;
+function pickVoice(){
+  if(!('speechSynthesis' in window))return;
+  var vs=speechSynthesis.getVoices()||[];
+  var pref=['zh-CN','zh_CN','zh-Hans','zh'];
+  for(var p=0;p<pref.length;p++){
+    for(var i=0;i<vs.length;i++){
+      var lang=(vs[i].lang||'').replace('_','-');
+      if(lang.toLowerCase().indexOf(pref[p].toLowerCase().replace('_','-'))===0){voice=vs[i];return;}
+    }
+  }
+  for(var j=0;j<vs.length;j++){ if((vs[j].lang||'').toLowerCase().indexOf('zh')===0){voice=vs[j];return;} }
+}
+if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; }
+
+function say(text,rate,onend){
+  if(!('speechSynthesis' in window)){ if(!warned){warned=true;toast('This browser has no speech. Chrome or Edge works best.');} if(onend)onend(); return; }
+  try{ speechSynthesis.cancel(); }catch(e){}
+  var u=new SpeechSynthesisUtterance(text);
+  u.lang='zh-CN'; u.rate=rate||.92; u.pitch=1.06;
+  if(voice)u.voice=voice;
+  if(onend)u.onend=onend;
+  u.onerror=function(){ if(onend)onend(); };
+  if(!voice && !warned){ warned=true; toast('No Chinese voice found on this device — the words still show.'); }
+  speechSynthesis.speak(u);
+}
+function stopSay(){ try{speechSynthesis.cancel();}catch(e){} }
+
+/* small win / miss sounds */
+var AC=null;
+function tone(freqs,dur){
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    freqs.forEach(function(f,i){
+      var o=AC.createOscillator(),g2=AC.createGain();
+      o.type='sine';o.frequency.value=f;
+      var t0=AC.currentTime+i*0.09;
+      g2.gain.setValueAtTime(0.0001,t0);
+      g2.gain.exponentialRampToValueAtTime(0.16,t0+0.02);
+      g2.gain.exponentialRampToValueAtTime(0.0001,t0+(dur||0.22));
+      o.connect(g2);g2.connect(AC.destination);o.start(t0);o.stop(t0+(dur||0.22)+0.03);
+    });
+  }catch(e){}
+}
+function cheer(){tone([660,880,1180],0.2);}
+function bloop(){tone([300,200],0.24);}
+
+/* ---------- tabs ---------- */
+var tabs=document.querySelectorAll('.tab');
+for(var t=0;t<tabs.length;t++){
+  (function(b){
+    b.onclick=function(){
+      stopAuto();
+      for(var i=0;i<tabs.length;i++)tabs[i].classList.remove('active');
+      b.classList.add('active');
+      var scr=document.querySelectorAll('.screen');
+      for(var j=0;j<scr.length;j++)scr[j].classList.remove('active');
+      $('s-'+b.getAttribute('data-s')).classList.add('active');
+      if(b.getAttribute('data-s')==='review')drawReview();
+    };
+  })(tabs[t]);
+}
+function goTab(name){
+  for(var i=0;i<tabs.length;i++){
+    if(tabs[i].getAttribute('data-s')===name){ tabs[i].click(); return; }
+  }
+}
+
+/* ---------- global toggles ---------- */
+$('hzBtn').onclick=function(){
+  S.hz=!S.hz; this.textContent=S.hz?'汉字 ON':'汉字 OFF'; this.classList.toggle('on',S.hz); drawPage();
+};
+$('enBtn').onclick=function(){
+  S.en=!S.en; this.textContent=S.en?'English ON':'English OFF'; this.classList.toggle('on',!S.en); drawPage(); drawWords();
+};
+function addStar(n){ S.stars+=n; $('stars').textContent=S.stars; }
+
+/* ---------- STORY ---------- */
+function drawDots(){
+  var d=$('dots'); d.innerHTML='';
+  STORY.forEach(function(p,i){
+    var b=el('button','pd',String(p.n));
+    if(i===S.page)b.className='pd now';
+    else if(S.seen[i])b.className='pd seen';
+    b.onclick=function(){stopAuto();S.page=i;drawPage();};
+    d.appendChild(b);
+  });
+}
+function drawPage(){
+  var p=STORY[S.page];
+  S.seen[S.page]=1;
+  $('pic').innerHTML='<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg">'+SCENE(p.n)+'</svg>';
+  $('pgnum').textContent='第 '+p.n+' 页 · Story page '+p.n+' of '+STORY.length;
+  $('spy').textContent=p.py;
+  $('shz').textContent=p.hz;
+  $('shz').classList.toggle('hidden',!S.hz);
+  $('sen').textContent=S.en?p.en:'';
+  var gl=$('gloss'); gl.innerHTML='';
+  p.g.forEach(function(w){
+    var b=el('button','wchip');
+    var bb=el('b',null,w[0]); var ii=el('i',null,w[1]);
+    b.appendChild(bb); if(S.en)b.appendChild(ii);
+    b.onclick=function(){ var hz=hanziFor(w[0]); say(hz||w[0],.85); hop(); };
+    gl.appendChild(b);
+  });
+  drawDots();
+  $('bPrev').disabled=(S.page===0);
+  $('bNext').disabled=(S.page===STORY.length-1);
+}
+var HZMAP={};
+WORDS.forEach(function(w){ if(!HZMAP[w[0]])HZMAP[w[0]]=w[1]; });
+HZMAP['fēilái-fēiqù']='飞来飞去'; HZMAP['zǒulái-zǒuqù']='走来走去';
+function hanziFor(py){ return HZMAP[py]||null; }
+
+$('bPlay').onclick=function(){ stopAuto(); say(STORY[S.page].hz,.9); hop(); };
+$('bSlow').onclick=function(){ stopAuto(); say(STORY[S.page].hz,.62); hop(); };
+$('bPrev').onclick=function(){ stopAuto(); if(S.page>0){S.page--;drawPage();} };
+$('bNext').onclick=function(){ stopAuto(); if(S.page<STORY.length-1){S.page++;drawPage();} };
+$('bAuto').onclick=function(){ S.autoOn?stopAuto():startAuto(); };
+function startAuto(){
+  S.autoOn=true; $('bAuto').textContent='⏸ 停止 Stop'; $('bAuto').classList.add('primary');
+  step();
+  function step(){
+    if(!S.autoOn)return;
+    drawPage();
+    say(STORY[S.page].hz,.88,function(){
+      if(!S.autoOn)return;
+      setTimeout(function(){
+        if(!S.autoOn)return;
+        if(S.page<STORY.length-1){S.page++;step();}
+        else{stopAuto();toast('完了! The end. 好棒!');cheer();}
+      },900);
+    });
+  }
+}
+function stopAuto(){
+  if(!S.autoOn)return;
+  S.autoOn=false; stopSay();
+  $('bAuto').textContent='▶ 自动播放 Play all'; $('bAuto').classList.remove('primary');
+}
+
+/* ---------- WORDS ---------- */
+var wFilter='all';
+function drawWordPicker(){
+  var box=$('wPick'); box.innerHTML='';
+  var opts=[['all','全部 All'],['1-4','页 1–4'],['5-8','页 5–8'],['9-12','页 9–12']];
+  opts.forEach(function(o){
+    var b=el('button','pill'+(wFilter===o[0]?' on':''),o[1]);
+    b.onclick=function(){ wFilter=o[0]; drawWordPicker(); drawWords(); };
+    box.appendChild(b);
+  });
+}
+function wordsIn(filter){
+  if(filter==='all')return WORDS.slice();
+  var a=filter.split('-'), lo=+a[0], hi=+a[1];
+  return WORDS.filter(function(w){return w[3]>=lo&&w[3]<=hi;});
+}
+function drawWords(){
+  var list=wordsIn(wFilter), grid=$('wgrid'); grid.innerHTML='';
+  $('wcount').textContent='('+list.length+' words)';
+  list.forEach(function(w){
+    var b=el('button','wcard');
+    b.appendChild(el('b',null,w[0]));
+    if(S.en)b.appendChild(el('i',null,w[2]));
+    b.appendChild(el('u',null,'story page '+w[3]+(S.hz?'  ·  '+w[1]:'')));
+    b.onclick=function(){ say(w[1],.82); hop(); };
+    grid.appendChild(b);
+  });
+}
+
+/* ---------- QUIZ ---------- */
+var Q={mode:'p2e',scope:'all',len:10,items:[],i:0,score:0,answered:false,fromMistakes:false};
+
+function pickerRow(boxId,opts,key,after){
+  var box=$(boxId); box.innerHTML='';
+  opts.forEach(function(o){
+    var b=el('button','pill'+(Q[key]===o[0]?' on':''),o[1]);
+    b.onclick=function(){ Q[key]=o[0]; pickerRow(boxId,opts,key,after); if(after)after(); };
+    box.appendChild(b);
+  });
+}
+function drawSetup(){
+  pickerRow('qMode',[['p2e','拼音 → English'],['e2p','English → 拼音'],['a2p','🔊 听 Listen → 拼音']],'mode');
+  pickerRow('qScope',[['all','全部 All words'],['1-4','页 1–4'],['5-8','页 5–8'],['9-12','页 9–12'],['mist','🔁 我的错题 My mistakes']],'scope');
+  pickerRow('qLen',[[10,'10'],[20,'20'],[0,'全部 All']],'len');
+}
+function shuffle(a){ for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+
+function buildPool(){
+  if(Q.scope==='mist'){
+    if(!S.mistakes.length)return null;
+    return S.mistakes.map(function(m){return m.w;});
+  }
+  return wordsIn(Q.scope==='all'?'all':Q.scope);
+}
+function label(w){ return Q.mode==='e2p'? w[0] : w[2]; }
+
+function makeItems(pool){
+  var all=WORDS.slice();
+  var picked=shuffle(pool.slice());
+  if(Q.len>0)picked=picked.slice(0,Q.len);
+  return picked.map(function(w){
+    var used={}; used[label(w)]=1;
+    var ds=[], bag=shuffle(all.slice());
+    for(var i=0;i<bag.length&&ds.length<3;i++){
+      var c=bag[i], lab=label(c);
+      if(used[lab])continue;
+      if(c[0]===w[0]||c[2]===w[2])continue;   // never two options that both fit the prompt
+      used[lab]=1; ds.push(c);
+    }
+    var opts=shuffle([w].concat(ds));
+    return {w:w,opts:opts};
+  });
+}
+function startQuiz(pool){
+  if(!pool||!pool.length){ toast('There are no words in that group yet.'); return; }
+  Q.items=makeItems(pool); Q.i=0; Q.score=0; Q.answered=false;
+  $('qSetup').classList.add('hidden'); $('qDone').classList.add('hidden'); $('qPlay').classList.remove('hidden');
+  drawQ();
+}
+$('qStart').onclick=function(){
+  var pool=buildPool();
+  if(Q.scope==='mist'&&!pool){ toast('No mistakes yet — try a quiz first!'); return; }
+  Q.fromMistakes=(Q.scope==='mist');
+  startQuiz(pool);
+};
+function drawQ(){
+  var it=Q.items[Q.i], w=it.w;
+  Q.answered=false;
+  $('qBar').style.width=Math.round(Q.i/Q.items.length*100)+'%';
+  $('qCount').textContent='第 '+(Q.i+1)+' 题 / '+Q.items.length;
+  $('qScore').textContent='得分 Score: '+Q.score;
+  var lab=$('qLab'), big=$('qBig');
+  $('qAudioRow').classList.add('hidden');
+  if(Q.mode==='p2e'){ lab.textContent='What does this mean?'; big.textContent=w[0]; }
+  else if(Q.mode==='e2p'){ lab.textContent='Which pinyin word is this?'; big.textContent=w[2]; }
+  else { lab.textContent='Listen, then choose the pinyin'; big.textContent='🔊'; $('qAudioRow').classList.remove('hidden'); say(w[1],.8); }
+  var box=$('qOpts'); box.innerHTML='';
+  it.opts.forEach(function(c){
+    var b=el('button','opt',label(c));
+    b.onclick=function(){ answer(b,c,it); };
+    box.appendChild(b);
+  });
+  $('qFb').textContent=''; $('qFb').className='fb';
+  $('qNext').textContent = (Q.i===Q.items.length-1)?'看成绩 See my score ▶':'下一题 Next ▶';
+}
+$('qHear').onclick=function(){ say(Q.items[Q.i].w[1],.8); };
+
+function answer(btn,choice,it){
+  if(Q.answered)return;
+  Q.answered=true;
+  var w=it.w, right=(choice===w);
+  var btns=$('qOpts').children;
+  for(var i=0;i<btns.length;i++){
+    btns[i].disabled=true;
+    if(btns[i].textContent===label(w))btns[i].classList.add('ok');
+  }
+  if(right){
+    Q.score++; addStar(1); cheer(); hop();
+    $('qFb').className='fb good';
+    $('qFb').innerHTML='对了! Correct — <b>'+w[0]+'</b> = '+w[2];
+    setTimeout(function(){ if(Q.answered)nextQ(); },1150);
+  }else{
+    btn.classList.add('no'); bloop();
+    $('qFb').className='fb bad';
+    $('qFb').innerHTML='再试试 Not quite. <b>'+w[0]+'</b> = '+w[2]+'<small>You chose: '+label(choice)+'</small>';
+    noteMistake(w,label(choice));
+  }
+  say(w[1],.8);
+  $('qScore').textContent='得分 Score: '+Q.score;
+}
+function noteMistake(w,chose){
+  for(var i=0;i<S.mistakes.length;i++){
+    if(S.mistakes[i].w[0]===w[0]&&S.mistakes[i].w[2]===w[2]){ S.mistakes[i].n++; S.mistakes[i].chose=chose; return; }
+  }
+  S.mistakes.push({w:w,n:1,chose:chose});
+}
+$('qNext').onclick=function(){ nextQ(); };
+function nextQ(){
+  if(Q.i<Q.items.length-1){ Q.i++; drawQ(); }
+  else finish();
+}
+$('qQuit').onclick=function(){ stopSay(); finish(); };
+
+function finish(){
+  stopSay();
+  $('qPlay').classList.add('hidden'); $('qDone').classList.remove('hidden');
+  var done=Q.i+(Q.answered?1:0); if(done<1)done=1;
+  var total=Q.items.length;
+  var pct=Math.round(Q.score/total*100);
+  $('rScore').textContent=Q.score+' / '+total;
+  $('rPct').textContent=pct+'% correct';
+  var st=pct>=90?'⭐⭐⭐':pct>=70?'⭐⭐':pct>=40?'⭐':'☆';
+  $('rStars').textContent=st;
+  var wrong=total-Q.score;
+  $('rMsg').innerHTML = wrong===0
+    ? '太棒了! Perfect — every word right. 🎉'
+    : wrong+' word'+(wrong>1?'s':'')+' to look at again. They are saved in <b>My mistakes</b>.';
+  if(pct>=90)cheer();
+  $('rWrong').classList.toggle('hidden',!S.mistakes.length);
+  drawReview();
+}
+$('rAgain').onclick=function(){ startQuiz(buildPool()||WORDS); };
+$('rHome').onclick=function(){ $('qDone').classList.add('hidden'); $('qSetup').classList.remove('hidden'); };
+$('rWrong').onclick=function(){
+  if(!S.mistakes.length){toast('No mistakes saved.');return;}
+  Q.scope='mist'; drawSetup();
+  startQuiz(S.mistakes.map(function(m){return m.w;}));
+};
+
+/* ---------- REVIEW ---------- */
+function drawReview(){
+  var box=$('mList'); box.innerHTML='';
+  if(!S.mistakes.length){
+    box.appendChild(el('div','empty','没有错题! No mistakes yet. Do a quiz and anything you miss will appear here.'));
+    $('mPractise').disabled=true; $('mClear').disabled=true;
+    return;
+  }
+  $('mPractise').disabled=false; $('mClear').disabled=false;
+  S.mistakes.slice().sort(function(a,b){return b.n-a.n;}).forEach(function(m){
+    var r=el('div','mrow');
+    var sp=el('button','btn','🔊'); sp.onclick=function(){ say(m.w[1],.8); };
+    var w=el('div','w');
+    w.appendChild(el('b',null,m.w[0]+(S.hz?'  '+m.w[1]:'')));
+    w.appendChild(el('i',null,m.w[2]));
+    if(m.chose)w.appendChild(el('s',null,'you chose: '+m.chose));
+    var n=el('span','n','×'+m.n);
+    r.appendChild(sp); r.appendChild(w); r.appendChild(n);
+    box.appendChild(r);
+  });
+}
+$('mPractise').onclick=function(){
+  if(!S.mistakes.length)return;
+  goTab('quiz');
+  Q.scope='mist'; drawSetup();
+  startQuiz(S.mistakes.map(function(m){return m.w;}));
+};
+$('mClear').onclick=function(){
+  S.mistakes=[];
+  if(Q.scope==='mist'){ Q.scope='all'; drawSetup(); }
+  drawReview(); toast('清空了 · list cleared');
+};
+
+/* ---------- go ---------- */
+drawPage(); drawWordPicker(); drawWords(); drawSetup(); drawReview();
+})();
+</script>
+</body>
+</html>
