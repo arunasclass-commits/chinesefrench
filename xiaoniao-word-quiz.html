@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>选一选 · Word Practice — Xiǎoniǎo Hē Shuǐ</title>
+<style>
+:root{
+  --ink:#22303a;--soft:#5d7684;--paper:#f2fafd;--card:#fff;
+  --sky:#3aa0bb;--skysoft:#e2f4f9;--sun:#f2a83c;--sunsoft:#fdf0dc;
+  --leaf:#5fa564;--leafsoft:#e6f4e6;--red:#d4553f;--redsoft:#fbe9e5;
+  --line:#dbe8ee;--shadow:0 2px 0 rgba(0,0,0,.04),0 10px 24px rgba(30,60,80,.10);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:radial-gradient(circle at 10% 4%,#e6f6fd 0,transparent 42%),radial-gradient(circle at 92% 6%,#fdf1de 0,transparent 38%),var(--paper);
+  color:var(--ink);font-family:"Nunito",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+.zh{font-family:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+#app{max-width:1000px;margin:0 auto;padding:12px 14px 48px}
+
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:4px 2px 10px}
+.brand{display:flex;align-items:center;gap:11px}
+.mascot{font-size:36px;line-height:1;display:inline-block;transition:transform .3s}
+.mascot.bounce{transform:translateY(-9px) rotate(-10deg)}
+.brand h1{font-size:20px;margin:0}
+.brand p{margin:0;font-size:12px;color:var(--soft)}
+.score{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chip{background:#fff;border:2px solid var(--line);border-radius:999px;padding:6px 12px;font-size:14px;box-shadow:var(--shadow)}
+button.chip{cursor:pointer;font-family:inherit;color:var(--ink)}
+button.chip.on{background:var(--sky);border-color:var(--sky);color:#fff}
+
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;cursor:pointer;font-family:inherit;font-size:15px;background:#fff;border:2px solid var(--line);border-radius:14px;
+  padding:8px 14px;display:flex;flex-direction:column;align-items:center;line-height:1.2;color:var(--ink);box-shadow:var(--shadow)}
+.tab span{font-size:10px;color:var(--soft);letter-spacing:.3px}
+.tab.active{background:var(--sky);border-color:var(--sky);color:#fff}
+.tab.active span{color:#d6eef4}
+.tab .badge{position:absolute}
+
+.screen{display:none;animation:fade .25s ease}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
+h2.sec{font-size:18px;margin:0 0 4px}
+p.scene{font-size:13.5px;color:var(--soft);margin:0 0 12px}
+.btn{cursor:pointer;font-family:inherit;font-size:14.5px;background:#fff;border:2px solid var(--line);border-radius:13px;padding:9px 14px;color:var(--ink);box-shadow:var(--shadow)}
+.btn:hover{border-color:var(--sky)}
+.btn.primary{background:var(--sky);border-color:var(--sky);color:#fff}
+.btn.sun{background:var(--sun);border-color:var(--sun);color:#fff}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.hidden{display:none !important}
+
+/* pickers */
+.setpick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.pill{cursor:pointer;font-family:inherit;font-size:13px;background:#fff;border:2px solid var(--line);border-radius:999px;padding:6px 13px;color:var(--ink)}
+.pill.on{background:var(--leaf);border-color:var(--leaf);color:#fff}
+.glosshead{font-size:12px;color:var(--sky);letter-spacing:.5px;margin:14px 0 6px;text-transform:uppercase}
+.qprompt .hz{font-size:26px;color:#2d4756;margin-top:6px;min-height:6px}
+
+/* quiz */
+.bar{height:10px;border-radius:999px;background:var(--skysoft);overflow:hidden;margin:10px 0 4px}
+.bar i{display:block;height:100%;background:var(--sky);width:0;transition:width .3s}
+.qmeta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--soft);margin-bottom:12px}
+.qprompt{background:var(--skysoft);border-radius:16px;padding:20px 16px;text-align:center;margin-bottom:14px}
+.qprompt .big{font-size:34px;font-weight:800;line-height:1.3}
+.qprompt .lab{font-size:12px;color:var(--soft);letter-spacing:.6px;text-transform:uppercase;margin-bottom:6px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{cursor:pointer;font-family:inherit;font-size:17px;background:#fff;border:2.5px solid var(--line);border-radius:15px;padding:14px 14px;color:var(--ink);
+  box-shadow:var(--shadow);text-align:left;line-height:1.35;transition:transform .1s}
+.opt:hover:not(:disabled){border-color:var(--sun);transform:translateY(-1px)}
+.opt.ok{border-color:var(--leaf);background:var(--leafsoft)}
+.opt.no{border-color:var(--red);background:var(--redsoft)}
+.opt:disabled{cursor:default}
+.fb{margin-top:12px;font-size:15.5px;min-height:26px}
+.fb.good{color:var(--leaf);font-weight:700}
+.fb.bad{color:var(--red)}
+.fb small{display:block;color:var(--soft);font-weight:400;font-size:13px;margin-top:2px}
+
+.result{text-align:center;padding:12px 8px}
+.result .big{font-size:60px;font-weight:800;line-height:1}
+.result .pct{font-size:16px;color:var(--soft);margin-top:4px}
+.stars{font-size:34px;letter-spacing:6px;margin:10px 0}
+.msg{font-size:16px;margin:6px 0 4px}
+
+/* review */
+.mrow{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;background:#fffdfb}
+.mrow .w{flex:1 1 auto}
+.mrow .w b{font-size:17px;display:block}
+.mrow .w i{font-style:normal;font-size:13px;color:var(--soft);display:block}
+.mrow .w s{display:block;font-size:12px;color:var(--red);text-decoration:none}
+.mrow .n{background:var(--redsoft);color:var(--red);border-radius:999px;padding:3px 9px;font-size:12px;font-weight:700}
+.empty{text-align:center;color:var(--soft);font-size:15px;padding:26px 10px}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:15px;
+  opacity:0;pointer-events:none;transition:all .25s;z-index:500;max-width:88vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+footer{text-align:center;font-size:12.5px;color:var(--soft);margin-top:26px;line-height:1.7}
+footer small{font-size:11px;opacity:.85}
+
+@media (max-width:560px){ .opts{grid-template-columns:1fr} }
+@media (max-width:640px){
+  .spy{font-size:20px}.shz{font-size:20px}
+  .qprompt .big{font-size:27px}
+  .opt{font-size:16px;padding:13px 12px}
+  .result .big{font-size:48px}
+}
+
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="brand">
+      <span class="mascot" id="mascot">🎯</span>
+      <div>
+        <h1>选一选 · Choose the right answer</h1>
+        <p>Xiǎoniǎo Hē Shuǐ · Little Bird Drinks Water — word practice</p>
+      </div>
+    </div>
+    <div class="score">
+      <span class="chip">⭐ <b id="stars">0</b></span>
+      <button class="chip" id="hzBtn">汉字 OFF</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-s="quiz">🎯 选一选<span>Choose</span></button>
+    <button class="tab" data-s="review">🔁 复习<span>My mistakes</span></button>
+  </nav>
+
+  <main>
+    <section class="screen active" id="s-quiz">
+      <div class="card" id="qSetup">
+        <h2 class="sec">开始练习 · Set up your practice</h2>
+        <p class="scene">1 point for every right answer. Every word you miss is saved in <b>My mistakes</b>, and you can practise just those.</p>
+        <div class="glosshead">1 · What kind of question?</div>
+        <div class="setpick" id="qMode"></div>
+        <div class="glosshead">2 · Which words?</div>
+        <div class="setpick" id="qScope"></div>
+        <div class="glosshead">3 · How many questions?</div>
+        <div class="setpick" id="qLen"></div>
+        <div class="row"><button class="btn primary" id="qStart">▶ 开始 Start</button></div>
+      </div>
+
+      <div class="card hidden" id="qPlay">
+        <div class="bar"><i id="qBar"></i></div>
+        <div class="qmeta"><span id="qCount"></span><span id="qScore"></span></div>
+        <div class="qprompt">
+          <div class="lab" id="qLab"></div>
+          <div class="big" id="qBig"></div>
+          <div class="hz zh" id="qHz"></div>
+          <div class="row" style="justify-content:center" id="qAudioRow">
+            <button class="btn" id="qHear">🔊 再听一次 Hear again</button>
+          </div>
+        </div>
+        <div class="opts" id="qOpts"></div>
+        <div class="fb" id="qFb"></div>
+        <div class="row">
+          <button class="btn sun" id="qNext">下一题 Next ▶</button>
+          <button class="btn" id="qQuit">停止 Stop</button>
+        </div>
+      </div>
+
+      <div class="card hidden" id="qDone">
+        <div class="result">
+          <div class="big" id="rScore"></div>
+          <div class="pct" id="rPct"></div>
+          <div class="stars" id="rStars"></div>
+          <div class="msg" id="rMsg"></div>
+        </div>
+        <div class="row" style="justify-content:center">
+          <button class="btn primary" id="rWrong">🔁 只练错的 Practise my mistakes</button>
+          <button class="btn" id="rAgain">↺ 再来一次 Again</button>
+          <button class="btn sun" id="rHome">🎯 新的练习 New practice</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="s-review">
+      <div class="card">
+        <h2 class="sec">我的错题 · The words I got wrong</h2>
+        <p class="scene">Every word you missed today, with the right answer and what you chose instead. Tap 🔊 to hear it.</p>
+        <div id="mList"></div>
+        <div class="row">
+          <button class="btn primary" id="mPractise">🔁 练习这些词 Practise these words</button>
+          <button class="btn" id="mClear">🧹 清空 Clear the list</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <footer>
+    爱睿娜的课堂 · Aruna's Class — ChineseFrench Institute<br>
+    <small>An original study app written from Aruna's own language proficiency (HSK / BCT certified).
+    It is not a reproduction of any textbook.</small><br>
+    <small>© ChineseFrench Institute — Aruna's Class. All rights reserved.</small>
+  </footer>
+</div>
+<script>/* canonical word list for the quiz: [pinyin, hanzi, english, first page] */
+var WORDS = [
+["yì","一","one",1],
+["zhī","只","measure word for birds and animals",1],
+["xiǎoniǎo","小鸟","little bird",1],
+["zài","在","at; in",1],
+["tiānshàng","天上","in the sky",1],
+["fēilái-fēiqù","飞来飞去","fly back and forth; fly around",1],
+["zuìhòu","最后","finally; in the end",1],
+["lèi","累","tired",1],
+["le","了","particle: a completed action or a change",1],
+["tā","它","he; it",1],
+["shāndǐng","山顶","mountaintop",1],
+["tíng","停","stop",1],
+["xiàlái","下来","down; come down; settle down",1],
+["tàiyáng","太阳","sun",2],
+["chūlái","出来","come out; appear",2],
+["tiānqì","天气","weather",2],
+["hěn","很","very",2],
+["rè","热","hot",2],
+["kě","渴","thirsty",2],
+["fēidào","飞到","fly to; fly as far as",3],
+["shānxià","山下","foot of the mountain; below the mountain",3],
+["xiǎng","想","want to; would like to; think",3],
+["zhǎo","找","look for",3],
+["yìdiǎnr","一点儿","a little; some",3],
+["shuǐ","水","water",3],
+["hē","喝","drink",3],
+["a","啊","storytelling particle showing continued action",4],
+["zhōngyú","终于","finally; at last",4],
+["yí ge","一个","one; a",4],
+["dà","大","big",4],
+["shítou","石头","stone; rock",4],
+["pángbiān","旁边","beside; next to",4],
+["kànjiàn","看见","see; catch sight of",4],
+["píngzi","瓶子","bottle",4],
+["lǐmiàn","里面","inside",4],
+["yǒu","有","there is; have",4],
+["bàn","半","half",4],
+["píng","瓶","bottle; measure word for bottled contents",4],
+["kěshì","可是","but; however",5],
+["píngkǒu","瓶口","bottle opening; mouth of the bottle",5],
+["tài","太","too",5],
+["xiǎo","小","small",5],
+["de","的","possessive / linking particle",5],
+["zuǐ","嘴","mouth; beak",5],
+["yòu","又","also; again",5],
+["duǎn","短","short",5],
+["hē bù dào","喝不到","cannot reach / drink successfully",5],
+["bǎ","把","marker used to bring the object before the action",6],
+["tuīdǎo","推倒","push over; knock down",6],
+["zhòng","重","heavy",6],
+["tuī","推","push",6],
+["bù","不","not; cannot",6],
+["dòng","动","move",6],
+["tuī bù dòng","推不动","cannot push or move",6],
+["zhōuwéi","周围","around; surrounding area",7],
+["zǒulái-zǒuqù","走来走去","walk back and forth; walk around",7],
+["zěnme","怎么","how; what way",7],
+["bàn","办","do; handle; deal with",7],
+["ne","呢","question / softening particle",7],
+["wǒ","我","I; me",7],
+["rúguǒ","如果","if",7],
+["néng","能","can; be able to",7],
+["shēngdào","升到","rise to",7],
+["jiù","就","then; in that case",7],
+["hēdào","喝到","manage to drink; reach the water",7],
+["zhè shí","这时","at this moment; just then",8],
+["hěn duō","很多","many; a lot of",8],
+["shízǐ","石子","small stone; pebble",8],
+["zhǔyi","主意","idea; plan",8],
+["yòng","用","use",9],
+["xiǎo shízǐ","小石子","small stones; pebbles",9],
+["yí kuài","一块","one piece; one at a time",9],
+["fàng jìn","放进","put into",9],
+["lǐ","里","inside; in",9],
+["shànglái","上来","rise up; come up",10],
+["dào","到","reach; arrive",10],
+["bǎo","饱","full; satisfied",12],
+["fēi shàng","飞上","fly up; fly onto",12],
+["lán","蓝","blue",12],
+["tiān","天","sky; heaven",12],
+["lántiān","蓝天","blue sky",12]
+];
+</script>
+<script>(function(){
+'use strict';
+function $(id){return document.getElementById(id);}
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e;}
+
+var S={hz:false,stars:0,mistakes:[]};
+
+var toastT=null;
+function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show');},1900);}
+function hop(){var m=$('mascot');m.classList.add('bounce');setTimeout(function(){m.classList.remove('bounce');},280);}
+
+/* ---------- audio ---------- */
+var voice=null, warned=false;
+function pickVoice(){
+  if(!('speechSynthesis' in window))return;
+  var vs=speechSynthesis.getVoices()||[];
+  for(var i=0;i<vs.length;i++){ if((vs[i].lang||'').replace('_','-').toLowerCase().indexOf('zh')===0){voice=vs[i];return;} }
+}
+if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; }
+function say(text,rate){
+  if(!('speechSynthesis' in window)){ if(!warned){warned=true;toast('This browser has no speech. Chrome or Edge works best.');} return; }
+  try{ speechSynthesis.cancel(); }catch(e){}
+  var u=new SpeechSynthesisUtterance(text);
+  u.lang='zh-CN'; u.rate=rate||.82; u.pitch=1.06;
+  if(voice)u.voice=voice;
+  if(!voice && !warned){ warned=true; toast('No Chinese voice found on this device — the words still show.'); }
+  speechSynthesis.speak(u);
+}
+function stopSay(){ try{speechSynthesis.cancel();}catch(e){} }
+
+var AC=null;
+function tone(freqs,dur){
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    freqs.forEach(function(f,i){
+      var o=AC.createOscillator(),g=AC.createGain();
+      o.type='sine';o.frequency.value=f;
+      var t0=AC.currentTime+i*0.09;
+      g.gain.setValueAtTime(0.0001,t0);
+      g.gain.exponentialRampToValueAtTime(0.16,t0+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,t0+(dur||0.22));
+      o.connect(g);g.connect(AC.destination);o.start(t0);o.stop(t0+(dur||0.22)+0.03);
+    });
+  }catch(e){}
+}
+function cheer(){tone([660,880,1180],0.2);}
+function bloop(){tone([300,200],0.24);}
+
+/* ---------- tabs ---------- */
+var tabs=document.querySelectorAll('.tab');
+for(var t=0;t<tabs.length;t++){
+  (function(b){
+    b.onclick=function(){
+      for(var i=0;i<tabs.length;i++)tabs[i].classList.remove('active');
+      b.classList.add('active');
+      var scr=document.querySelectorAll('.screen');
+      for(var j=0;j<scr.length;j++)scr[j].classList.remove('active');
+      $('s-'+b.getAttribute('data-s')).classList.add('active');
+      if(b.getAttribute('data-s')==='review')drawReview();
+    };
+  })(tabs[t]);
+}
+function goTab(name){
+  for(var i=0;i<tabs.length;i++){ if(tabs[i].getAttribute('data-s')===name){tabs[i].click();return;} }
+}
+
+$('hzBtn').onclick=function(){
+  S.hz=!S.hz; this.textContent=S.hz?'汉字 ON':'汉字 OFF'; this.classList.toggle('on',S.hz);
+  if(!$('qPlay').classList.contains('hidden'))showHz();
+  drawReview();
+};
+function addStar(n){ S.stars+=n; $('stars').textContent=S.stars; }
+
+/* ---------- quiz ---------- */
+var Q={mode:'p2e',scope:'all',len:10,items:[],i:0,score:0,answered:false};
+
+function wordsIn(filter){
+  if(filter==='all')return WORDS.slice();
+  var a=filter.split('-'), lo=+a[0], hi=+a[1];
+  return WORDS.filter(function(w){return w[3]>=lo&&w[3]<=hi;});
+}
+function pickerRow(boxId,opts,key){
+  var box=$(boxId); box.innerHTML='';
+  opts.forEach(function(o){
+    var b=el('button','pill'+(Q[key]===o[0]?' on':''),o[1]);
+    b.onclick=function(){ Q[key]=o[0]; pickerRow(boxId,opts,key); };
+    box.appendChild(b);
+  });
+}
+function drawSetup(){
+  pickerRow('qMode',[['p2e','拼音 → English'],['e2p','English → 拼音'],['a2p','🔊 听 Listen → 拼音']],'mode');
+  pickerRow('qScope',[['all','全部 All 81 words'],['1-4','Words from pages 1–4'],['5-8','pages 5–8'],['9-12','pages 9–12'],['mist','🔁 我的错题 My mistakes']],'scope');
+  pickerRow('qLen',[[10,'10'],[20,'20'],[0,'全部 All']],'len');
+}
+function shuffle(a){ for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+function label(w){ return Q.mode==='e2p'? w[0] : w[2]; }
+
+function buildPool(){
+  if(Q.scope==='mist'){
+    if(!S.mistakes.length)return null;
+    return S.mistakes.map(function(m){return m.w;});
+  }
+  return wordsIn(Q.scope==='all'?'all':Q.scope);
+}
+function makeItems(pool){
+  var all=WORDS.slice();
+  var picked=shuffle(pool.slice());
+  if(Q.len>0)picked=picked.slice(0,Q.len);
+  return picked.map(function(w){
+    var used={}; used[label(w)]=1;
+    var ds=[], bag=shuffle(all.slice());
+    for(var i=0;i<bag.length&&ds.length<3;i++){
+      var c=bag[i], lab=label(c);
+      if(used[lab])continue;
+      if(c[0]===w[0]||c[2]===w[2])continue;   // never two options that both fit
+      used[lab]=1; ds.push(c);
+    }
+    return {w:w,opts:shuffle([w].concat(ds))};
+  });
+}
+function startQuiz(pool){
+  if(!pool||!pool.length){ toast('There are no words in that group yet.'); return; }
+  Q.items=makeItems(pool); Q.i=0; Q.score=0; Q.answered=false;
+  $('qSetup').classList.add('hidden'); $('qDone').classList.add('hidden'); $('qPlay').classList.remove('hidden');
+  drawQ();
+}
+$('qStart').onclick=function(){
+  var pool=buildPool();
+  if(Q.scope==='mist'&&!pool){ toast('No mistakes yet — do a practice first!'); return; }
+  startQuiz(pool);
+};
+function showHz(){
+  var w=Q.items[Q.i].w;
+  $('qHz').textContent = (S.hz && Q.mode!=='e2p') ? w[1] : '';
+}
+function drawQ(){
+  var it=Q.items[Q.i], w=it.w;
+  Q.answered=false;
+  $('qBar').style.width=Math.round(Q.i/Q.items.length*100)+'%';
+  $('qCount').textContent='第 '+(Q.i+1)+' 题 / '+Q.items.length;
+  $('qScore').textContent='得分 Score: '+Q.score;
+  $('qAudioRow').classList.add('hidden');
+  if(Q.mode==='p2e'){ $('qLab').textContent='What does this mean?'; $('qBig').textContent=w[0]; }
+  else if(Q.mode==='e2p'){ $('qLab').textContent='Which pinyin word is this?'; $('qBig').textContent=w[2]; }
+  else { $('qLab').textContent='Listen, then choose the pinyin'; $('qBig').textContent='🔊'; $('qAudioRow').classList.remove('hidden'); say(w[1]); }
+  showHz();
+  var box=$('qOpts'); box.innerHTML='';
+  it.opts.forEach(function(c){
+    var b=el('button','opt',label(c));
+    b.onclick=function(){ answer(b,c,it); };
+    box.appendChild(b);
+  });
+  $('qFb').textContent=''; $('qFb').className='fb';
+  $('qNext').textContent=(Q.i===Q.items.length-1)?'看成绩 See my score ▶':'下一题 Next ▶';
+}
+$('qHear').onclick=function(){ say(Q.items[Q.i].w[1]); };
+
+function answer(btn,choice,it){
+  if(Q.answered)return;
+  Q.answered=true;
+  var w=it.w, right=(choice===w), btns=$('qOpts').children;
+  for(var i=0;i<btns.length;i++){
+    btns[i].disabled=true;
+    if(btns[i].textContent===label(w))btns[i].classList.add('ok');
+  }
+  if(right){
+    Q.score++; addStar(1); cheer(); hop();
+    $('qFb').className='fb good';
+    $('qFb').innerHTML='对了! Correct — <b>'+w[0]+'</b> ('+w[1]+') = '+w[2];
+    setTimeout(function(){ if(Q.answered)nextQ(); },1150);
+  }else{
+    btn.classList.add('no'); bloop();
+    $('qFb').className='fb bad';
+    $('qFb').innerHTML='再试试 Not quite. <b>'+w[0]+'</b> ('+w[1]+') = '+w[2]+'<small>You chose: '+label(choice)+'</small>';
+    noteMistake(w,label(choice));
+  }
+  say(w[1]);
+  $('qScore').textContent='得分 Score: '+Q.score;
+}
+function noteMistake(w,chose){
+  for(var i=0;i<S.mistakes.length;i++){
+    if(S.mistakes[i].w[0]===w[0]&&S.mistakes[i].w[2]===w[2]){ S.mistakes[i].n++; S.mistakes[i].chose=chose; return; }
+  }
+  S.mistakes.push({w:w,n:1,chose:chose});
+}
+$('qNext').onclick=function(){ nextQ(); };
+function nextQ(){ if(Q.i<Q.items.length-1){Q.i++;drawQ();} else finish(); }
+$('qQuit').onclick=function(){ stopSay(); finish(); };
+
+function finish(){
+  stopSay();
+  $('qPlay').classList.add('hidden'); $('qDone').classList.remove('hidden');
+  var total=Q.items.length, pct=Math.round(Q.score/total*100);
+  $('rScore').textContent=Q.score+' / '+total;
+  $('rPct').textContent=pct+'% correct';
+  $('rStars').textContent=pct>=90?'⭐⭐⭐':pct>=70?'⭐⭐':pct>=40?'⭐':'☆';
+  var wrong=total-Q.score;
+  $('rMsg').innerHTML = wrong===0 ? '太棒了! Perfect — every word right. 🎉'
+    : wrong+' word'+(wrong>1?'s':'')+' to look at again. They are saved in <b>My mistakes</b>.';
+  if(pct>=90)cheer();
+  $('rWrong').classList.toggle('hidden',!S.mistakes.length);
+  drawReview();
+}
+$('rAgain').onclick=function(){ startQuiz(buildPool()||WORDS); };
+$('rHome').onclick=function(){ $('qDone').classList.add('hidden'); $('qSetup').classList.remove('hidden'); };
+$('rWrong').onclick=function(){
+  if(!S.mistakes.length){toast('No mistakes saved.');return;}
+  Q.scope='mist'; drawSetup();
+  startQuiz(S.mistakes.map(function(m){return m.w;}));
+};
+
+/* ---------- review ---------- */
+function drawReview(){
+  var box=$('mList'); if(!box)return;
+  box.innerHTML='';
+  if(!S.mistakes.length){
+    box.appendChild(el('div','empty','没有错题! No mistakes yet. Do a practice and anything you miss will appear here.'));
+    $('mPractise').disabled=true; $('mClear').disabled=true;
+    return;
+  }
+  $('mPractise').disabled=false; $('mClear').disabled=false;
+  S.mistakes.slice().sort(function(a,b){return b.n-a.n;}).forEach(function(m){
+    var r=el('div','mrow');
+    var sp=el('button','btn','🔊'); sp.onclick=function(){ say(m.w[1]); };
+    var w=el('div','w');
+    w.appendChild(el('b',null,m.w[0]+(S.hz?'  '+m.w[1]:'')));
+    w.appendChild(el('i',null,m.w[2]));
+    if(m.chose)w.appendChild(el('s',null,'you chose: '+m.chose));
+    r.appendChild(sp); r.appendChild(w); r.appendChild(el('span','n','×'+m.n));
+    box.appendChild(r);
+  });
+}
+$('mPractise').onclick=function(){
+  if(!S.mistakes.length)return;
+  goTab('quiz');
+  Q.scope='mist'; drawSetup();
+  startQuiz(S.mistakes.map(function(m){return m.w;}));
+};
+$('mClear').onclick=function(){
+  S.mistakes=[];
+  if(Q.scope==='mist'){ Q.scope='all'; drawSetup(); }
+  drawReview(); toast('清空了 · list cleared');
+};
+
+drawSetup(); drawReview();
+})();
+</script>
+</body>
+</html>
