@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mediennutzung · Wortschatz-Training</title>
+<style>
+:root{
+  --ink:#22303a;--soft:#5d7684;--paper:#f2fafd;--card:#fff;
+  --sky:#3aa0bb;--skysoft:#e2f4f9;--sun:#f2a83c;--sunsoft:#fdf0dc;
+  --leaf:#5fa564;--leafsoft:#e6f4e6;--red:#d4553f;--redsoft:#fbe9e5;
+  --line:#dbe8ee;--shadow:0 2px 0 rgba(0,0,0,.04),0 10px 24px rgba(30,60,80,.10);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:radial-gradient(circle at 10% 4%,#e6f6fd 0,transparent 42%),radial-gradient(circle at 92% 6%,#fdf1de 0,transparent 38%),var(--paper);
+  color:var(--ink);font-family:"Nunito",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+.zh{font-family:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+#app{max-width:1000px;margin:0 auto;padding:12px 14px 48px}
+
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:4px 2px 10px}
+.brand{display:flex;align-items:center;gap:11px}
+.mascot{font-size:36px;line-height:1;display:inline-block;transition:transform .3s}
+.mascot.bounce{transform:translateY(-9px) rotate(-10deg)}
+.brand h1{font-size:20px;margin:0}
+.brand p{margin:0;font-size:12px;color:var(--soft)}
+.score{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chip{background:#fff;border:2px solid var(--line);border-radius:999px;padding:6px 12px;font-size:14px;box-shadow:var(--shadow)}
+button.chip{cursor:pointer;font-family:inherit;color:var(--ink)}
+button.chip.on{background:var(--sky);border-color:var(--sky);color:#fff}
+
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;cursor:pointer;font-family:inherit;font-size:15px;background:#fff;border:2px solid var(--line);border-radius:14px;
+  padding:8px 14px;display:flex;flex-direction:column;align-items:center;line-height:1.2;color:var(--ink);box-shadow:var(--shadow)}
+.tab span{font-size:10px;color:var(--soft);letter-spacing:.3px}
+.tab.active{background:var(--sky);border-color:var(--sky);color:#fff}
+.tab.active span{color:#d6eef4}
+.tab .badge{position:absolute}
+
+.screen{display:none;animation:fade .25s ease}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
+h2.sec{font-size:18px;margin:0 0 4px}
+p.scene{font-size:13.5px;color:var(--soft);margin:0 0 12px}
+.btn{cursor:pointer;font-family:inherit;font-size:14.5px;background:#fff;border:2px solid var(--line);border-radius:13px;padding:9px 14px;color:var(--ink);box-shadow:var(--shadow)}
+.btn:hover{border-color:var(--sky)}
+.btn.primary{background:var(--sky);border-color:var(--sky);color:#fff}
+.btn.sun{background:var(--sun);border-color:var(--sun);color:#fff}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.hidden{display:none !important}
+
+/* pickers */
+.setpick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.pill{cursor:pointer;font-family:inherit;font-size:13px;background:#fff;border:2px solid var(--line);border-radius:999px;padding:6px 13px;color:var(--ink)}
+.pill.on{background:var(--leaf);border-color:var(--leaf);color:#fff}
+.glosshead{font-size:12px;color:var(--sky);letter-spacing:.5px;margin:14px 0 6px;text-transform:uppercase}
+.qprompt .hz{font-size:26px;color:#2d4756;margin-top:6px;min-height:6px}
+
+/* quiz */
+.bar{height:10px;border-radius:999px;background:var(--skysoft);overflow:hidden;margin:10px 0 4px}
+.bar i{display:block;height:100%;background:var(--sky);width:0;transition:width .3s}
+.qmeta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--soft);margin-bottom:12px}
+.qprompt{background:var(--skysoft);border-radius:16px;padding:20px 16px;text-align:center;margin-bottom:14px}
+.qprompt .big{font-size:34px;font-weight:800;line-height:1.3}
+.qprompt .lab{font-size:12px;color:var(--soft);letter-spacing:.6px;text-transform:uppercase;margin-bottom:6px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{cursor:pointer;font-family:inherit;font-size:17px;background:#fff;border:2.5px solid var(--line);border-radius:15px;padding:14px 14px;color:var(--ink);
+  box-shadow:var(--shadow);text-align:left;line-height:1.35;transition:transform .1s}
+.opt:hover:not(:disabled){border-color:var(--sun);transform:translateY(-1px)}
+.opt.ok{border-color:var(--leaf);background:var(--leafsoft)}
+.opt.no{border-color:var(--red);background:var(--redsoft)}
+.opt:disabled{cursor:default}
+.fb{margin-top:12px;font-size:15.5px;min-height:26px}
+.fb.good{color:var(--leaf);font-weight:700}
+.fb.bad{color:var(--red)}
+.fb small{display:block;color:var(--soft);font-weight:400;font-size:13px;margin-top:2px}
+
+.result{text-align:center;padding:12px 8px}
+.result .big{font-size:60px;font-weight:800;line-height:1}
+.result .pct{font-size:16px;color:var(--soft);margin-top:4px}
+.stars{font-size:34px;letter-spacing:6px;margin:10px 0}
+.msg{font-size:16px;margin:6px 0 4px}
+
+
+/* match */
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mcol{display:flex;flex-direction:column;gap:9px}
+.mitem{cursor:pointer;font-family:inherit;font-size:16px;background:#fff;border:2.5px solid var(--line);border-radius:14px;padding:13px 13px;
+  color:var(--ink);box-shadow:var(--shadow);text-align:left;line-height:1.3;min-height:56px;display:flex;align-items:center;gap:8px;transition:transform .1s}
+.mitem:hover:not(:disabled){border-color:var(--sun)}
+.mitem .k{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--skysoft);color:var(--sky);font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center}
+.mitem.sel{border-color:var(--sky);background:var(--skysoft);transform:translateY(-1px)}
+.mitem.done{border-color:var(--leaf);background:var(--leafsoft);cursor:default;opacity:.75}
+.mitem.done .k{background:var(--leaf);color:#fff}
+.mitem.bad{border-color:var(--red);background:var(--redsoft)}
+.mitem:disabled{cursor:default}
+
+/* verbs */
+.vbox{background:var(--skysoft);border-radius:16px;padding:18px 16px;margin-bottom:6px}
+.vsen{font-size:20px;line-height:1.6;font-weight:600}
+.vsen u{text-decoration:none;border-bottom:3px solid var(--sun);padding:0 26px}
+.vmeta{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 10px}
+.vtag{background:#fff;border:2px solid var(--line);border-radius:999px;padding:4px 12px;font-size:13px;color:var(--sky);font-weight:700}
+.vtag.alt{color:var(--sun)}
+.vtag.sep{color:var(--red);border-color:var(--redsoft)}
+.vin{width:100%;font-family:inherit;font-size:21px;padding:12px 14px;border:2.5px solid var(--line);border-radius:13px;background:#fff;color:var(--ink)}
+.vin:focus{outline:none;border-color:var(--sky)}
+.vin.ok{border-color:var(--leaf);background:var(--leafsoft)}
+.vin.no{border-color:var(--red);background:var(--redsoft)}
+.mrow .w u{display:block;font-size:11px;color:var(--sun);text-decoration:none;margin-top:3px}
+
+/* review */
+.mrow{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;background:#fffdfb}
+.mrow .w{flex:1 1 auto}
+.mrow .w b{font-size:17px;display:block}
+.mrow .w i{font-style:normal;font-size:13px;color:var(--soft);display:block}
+.mrow .w s{display:block;font-size:12px;color:var(--red);text-decoration:none}
+.mrow .n{background:var(--redsoft);color:var(--red);border-radius:999px;padding:3px 9px;font-size:12px;font-weight:700}
+.empty{text-align:center;color:var(--soft);font-size:15px;padding:26px 10px}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:15px;
+  opacity:0;pointer-events:none;transition:all .25s;z-index:500;max-width:88vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+footer{text-align:center;font-size:12.5px;color:var(--soft);margin-top:26px;line-height:1.7}
+footer small{font-size:11px;opacity:.85}
+
+@media (max-width:560px){ .opts{grid-template-columns:1fr} .mgrid{gap:8px} .mitem{font-size:14px;padding:10px;min-height:50px} .vsen{font-size:17px} }
+@media (max-width:640px){
+  .spy{font-size:20px}.shz{font-size:20px}
+  .qprompt .big{font-size:27px}
+  .opt{font-size:16px;padding:13px 12px}
+  .result .big{font-size:48px}
+}
+
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="brand">
+      <span class="mascot" id="mascot">📻</span>
+      <div>
+        <h1>Mediennutzung · Wortschatz-Training</h1>
+        <p>Match · Choose · Conjugate the verbs — 45 words from Texte 1–3</p>
+      </div>
+    </div>
+    <div class="score">
+      <span class="chip">⭐ <b id="stars">0</b></span>
+      <button class="chip" id="sndBtn">🔊 Ton AN</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-s="match">🔗 Zuordnen<span>Match 5</span></button>
+    <button class="tab" data-s="quiz">🎯 Wählen<span>Choose</span></button>
+    <button class="tab" data-s="verb">✍️ Verben<span>Conjugate</span></button>
+    <button class="tab" data-s="review">🔁 Fehler<span>My mistakes</span></button>
+  </nav>
+
+  <main>
+    <!-- ============ MATCH ============ -->
+    <section class="screen active" id="s-match">
+      <div class="card">
+        <h2 class="sec">Zuordnen · Match English to German</h2>
+        <p class="scene">Five pairs at a time. Tap an English word, then tap its German word. 2 points for each right pair.</p>
+        <div class="setpick" id="mSet"></div>
+        <div class="qmeta"><span id="mProg"></span><span id="mScore"></span></div>
+        <div class="mgrid">
+          <div class="mcol" id="mLeft"></div>
+          <div class="mcol" id="mRight"></div>
+        </div>
+        <div class="fb" id="mFb"></div>
+        <div class="row">
+          <button class="btn sun" id="mNext">Nächste 5 · Next set ▶</button>
+          <button class="btn" id="mRedo">↺ Nochmal · Redo</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CHOOSE ============ -->
+    <section class="screen" id="s-quiz">
+      <div class="card" id="qSetup">
+        <h2 class="sec">Wählen · Choose the right answer</h2>
+        <p class="scene">1 point for every right answer. Every word you miss is saved under <b>Fehler</b>.</p>
+        <div class="glosshead">1 · Which direction?</div>
+        <div class="setpick" id="qMode"></div>
+        <div class="glosshead">2 · Which words?</div>
+        <div class="setpick" id="qScope"></div>
+        <div class="glosshead">3 · How many questions?</div>
+        <div class="setpick" id="qLen"></div>
+        <div class="row"><button class="btn primary" id="qStart">▶ Start</button></div>
+      </div>
+
+      <div class="card hidden" id="qPlay">
+        <div class="bar"><i id="qBar"></i></div>
+        <div class="qmeta"><span id="qCount"></span><span id="qScore"></span></div>
+        <div class="qprompt">
+          <div class="lab" id="qLab"></div>
+          <div class="big" id="qBig"></div>
+        </div>
+        <div class="opts" id="qOpts"></div>
+        <div class="fb" id="qFb"></div>
+        <div class="row">
+          <button class="btn sun" id="qNext">Weiter · Next ▶</button>
+          <button class="btn" id="qQuit">Stopp</button>
+        </div>
+      </div>
+
+      <div class="card hidden" id="qDone">
+        <div class="result">
+          <div class="big" id="rScore"></div>
+          <div class="pct" id="rPct"></div>
+          <div class="stars" id="rStars"></div>
+          <div class="msg" id="rMsg"></div>
+        </div>
+        <div class="row" style="justify-content:center">
+          <button class="btn primary" id="rWrong">🔁 Nur die Fehler üben</button>
+          <button class="btn" id="rAgain">↺ Nochmal</button>
+          <button class="btn sun" id="rHome">🎯 Neue Übung</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VERBS ============ -->
+    <section class="screen" id="s-verb">
+      <div class="card">
+        <h2 class="sec">Verben · Put the verb in the right form</h2>
+        <p class="scene">The sentence is in English. Write the German verb correctly for the subject given. Separable verbs: write both parts, e.g. <i>schalten ein</i>.</p>
+        <div class="setpick" id="vSet"></div>
+        <div class="qmeta"><span id="vProg"></span><span id="vScore"></span></div>
+        <div class="vbox">
+          <div class="vsen" id="vSen"></div>
+          <div class="vmeta"><span class="vtag" id="vInf"></span><span class="vtag alt" id="vSubj"></span><span class="vtag sep hidden" id="vSep">trennbar · separable</span></div>
+          <input class="vin" id="vIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="German verb form…">
+        </div>
+        <div class="fb" id="vFb"></div>
+        <div class="row">
+          <button class="btn primary" id="vCheck">✅ Prüfen · Check</button>
+          <button class="btn" id="vShow">👀 Lösung · Show</button>
+          <button class="btn sun" id="vNext">Weiter ▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ REVIEW ============ -->
+    <section class="screen" id="s-review">
+      <div class="card">
+        <h2 class="sec">Meine Fehler · The words I got wrong</h2>
+        <p class="scene">Everything you missed today, from all three exercises, with the right answer.</p>
+        <div id="mList"></div>
+        <div class="row">
+          <button class="btn primary" id="pPractise">🔁 Diese Wörter üben · Practise these</button>
+          <button class="btn" id="pClear">🧹 Liste löschen · Clear</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <footer>
+    Aruna's Class — ChineseFrench Institute<br>
+    <small>An original study app written from Aruna's own language proficiency.
+    It is not a reproduction of any textbook.</small><br>
+    <small>© ChineseFrench Institute — Aruna's Class. All rights reserved.</small>
+  </footer>
+</div>
+<script>/* Mediennutzung — Wortschatz.  [German, English, text number] */
+var WORDS = [
+["die Mediennutzung","media use",1],
+["das Weckerklingeln","alarm-clock ringing",1],
+["sich gegen etwas wehren","resist something",1],
+["sich einschleichen","creep into / gradually become part of",1],
+["grundsätzlich","basically / generally",1],
+["beziehen","obtain / get",1],
+["hauptsächlich","mainly",1],
+["verlinken","link",1],
+["sich informieren","inform oneself",1],
+["umfassend","comprehensively",1],
+["zurückhaltend","reserved / cautious",1],
+["vermissen","miss (feel the lack of)",1],
+["das Niveau","quality / standard",1],
+["der Privatsender","private broadcaster",1],
+["führen","conduct / have",1],
+["der Auslandsfreund","friend abroad",1],
+
+["sich freuen auf","look forward to",2],
+["vorfinden","find",2],
+["eilig haben","be in a hurry",2],
+["blättern","leaf through / browse",2],
+["die Zeitschrift","magazine",2],
+["erhalten","receive",2],
+["dagegen","on the other hand",2],
+["umständlich","complicated / inconvenient",2],
+["anstrengend","tiring",2],
+["einschalten","switch on",2],
+["zappen","channel-surf",2],
+["unbedingt","absolutely",2],
+["der Krimi","crime film / crime programme",2],
+["umgehen mit","know how to use / handle",2],
+["gerne würde ich","I would like to",2],
+
+["der Lieblingssender","favourite station",3],
+["zum einen ... zum anderen","on the one hand ... on the other hand",3],
+["wach werden","wake up / become awake",3],
+["sich anziehen","get dressed",3],
+["das Praktikum","internship",3],
+["sodass","so that / with the result that",3],
+["einen Blick werfen","take a look",3],
+["in Reichweite","within reach",3],
+["eingehend","incoming",3],
+["zugegebenermaßen","admittedly",3],
+["jemanden von etwas abhalten","prevent / distract someone from something",3],
+["privat","privately",3],
+["verbringen","spend",3],
+["verpassen","miss (fail to catch / not see)",3]
+];
+
+/* Verb conjugation.  sen = English sentence with ___ ; inf = infinitive shown;
+   subj = the German subject to use ; ans = accepted answers ; sep = separable hint */
+var VERBS = [
+{s:1,inf:"sich wehren",subj:"ich",sen:"Every morning I ___ against the alarm-clock ringing.",
+ ans:["wehre mich","ich wehre mich","wehre mich gegen"],show:"wehre mich"},
+{s:1,inf:"sich einschleichen",subj:"das Handy",sep:1,sen:"The mobile phone ___ slowly into our daily life.",
+ ans:["schleicht sich ein","das handy schleicht sich ein","schleicht sich langsam ein"],show:"schleicht sich ein"},
+{s:1,inf:"beziehen",subj:"ich",sen:"I ___ my news mainly from the internet.",
+ ans:["beziehe","ich beziehe"],show:"beziehe"},
+{s:1,inf:"verlinken",subj:"die Zeitungen",sen:"The newspapers ___ many videos on their websites.",
+ ans:["verlinken","die zeitungen verlinken"],show:"verlinken"},
+{s:1,inf:"sich informieren",subj:"wir",sen:"We ___ about the news every evening.",
+ ans:["informieren uns","wir informieren uns"],show:"informieren uns"},
+{s:1,inf:"vermissen",subj:"ich",sen:"I ___ good documentaries on the private channels.",
+ ans:["vermisse","ich vermisse"],show:"vermisse"},
+{s:1,inf:"führen",subj:"sie (plural)",sen:"They ___ long conversations with their friends abroad.",
+ ans:["führen","fuehren","sie führen"],show:"führen"},
+
+{s:2,inf:"sich freuen auf",subj:"ich",sen:"I ___ the weekend.",
+ ans:["freue mich auf","ich freue mich auf","freue mich"],show:"freue mich auf"},
+{s:2,inf:"vorfinden",subj:"ich",sep:1,sen:"In the morning I ___ the newspaper in the letterbox.",
+ ans:["finde vor","ich finde vor"],show:"finde vor"},
+{s:2,inf:"es eilig haben",subj:"er",sen:"In the morning he ___ and reads nothing.",
+ ans:["hat es eilig","er hat es eilig","hat es eilig,"],show:"hat es eilig"},
+{s:2,inf:"blättern",subj:"sie (she)",sen:"She ___ through a magazine.",
+ ans:["blättert","blaettert","sie blättert"],show:"blättert"},
+{s:2,inf:"erhalten",subj:"ich",sen:"I ___ the newspaper every morning.",
+ ans:["erhalte","ich erhalte"],show:"erhalte"},
+{s:2,inf:"einschalten",subj:"wir",sep:1,sen:"In the evening we ___ the television.",
+ ans:["schalten ein","wir schalten ein"],show:"schalten ein"},
+{s:2,inf:"zappen",subj:"er",sen:"He ___ through all the channels.",
+ ans:["zappt","er zappt"],show:"zappt"},
+{s:2,inf:"umgehen mit",subj:"du",sep:1,sen:"You ___ the computer very well.",
+ ans:["gehst um","du gehst um","gehst gut um"],show:"gehst um"},
+{s:2,inf:"würden (gerne würde ich)",subj:"ich",sen:"I ___ like to watch more documentaries.",
+ ans:["würde","wuerde","ich würde"],show:"würde"},
+
+{s:3,inf:"wach werden",subj:"ich",sen:"I ___ at six o'clock.",
+ ans:["werde wach","ich werde wach"],show:"werde wach"},
+{s:3,inf:"sich anziehen",subj:"ich",sep:1,sen:"Then I ___ quickly.",
+ ans:["ziehe mich an","ich ziehe mich an"],show:"ziehe mich an"},
+{s:3,inf:"einen Blick werfen",subj:"er",sen:"He ___ a look at his mobile phone.",
+ ans:["wirft","er wirft","wirft einen blick"],show:"wirft"},
+{s:3,inf:"abhalten",subj:"das Handy",sep:1,sen:"The mobile phone ___ me from my work.",
+ ans:["hält ab","haelt ab","das handy hält ab"],show:"hält ab"},
+{s:3,inf:"verbringen",subj:"ich",sen:"I ___ two hours online every day.",
+ ans:["verbringe","ich verbringe"],show:"verbringe"},
+{s:3,inf:"verpassen",subj:"wir",sen:"We ___ our favourite programme almost every week.",
+ ans:["verpassen","wir verpassen"],show:"verpassen"}
+];
+</script>
+<script>(function(){
+'use strict';
+function $(id){return document.getElementById(id);}
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e;}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+var S={stars:0,sound:true,mistakes:[]};
+
+var toastT=null;
+function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show');},1900);}
+function hop(){var m=$('mascot');m.classList.add('bounce');setTimeout(function(){m.classList.remove('bounce');},280);}
+function addStar(n){S.stars+=n;$('stars').textContent=S.stars;}
+
+/* ---------- audio ---------- */
+var voice=null,warned=false;
+function pickVoice(){
+  if(!('speechSynthesis' in window))return;
+  var vs=speechSynthesis.getVoices()||[];
+  for(var i=0;i<vs.length;i++){ if((vs[i].lang||'').replace('_','-').toLowerCase().indexOf('de')===0){voice=vs[i];return;} }
+}
+if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function say(text){
+  if(!S.sound)return;
+  if(!('speechSynthesis' in window)){if(!warned){warned=true;toast('This browser has no speech. Chrome or Edge works best.');}return;}
+  try{speechSynthesis.cancel();}catch(e){}
+  var t=String(text).replace(/\.\.\./g,' ').replace(/\s*\/\s*/g,' ');
+  var u=new SpeechSynthesisUtterance(t);
+  u.lang='de-DE';u.rate=.9;
+  if(voice)u.voice=voice;
+  if(!voice&&!warned){warned=true;toast('No German voice found on this device — the words still show.');}
+  speechSynthesis.speak(u);
+}
+$('sndBtn').onclick=function(){
+  S.sound=!S.sound;this.textContent=S.sound?'🔊 Ton AN':'🔇 Ton AUS';this.classList.toggle('on',!S.sound);
+  if(!S.sound)try{speechSynthesis.cancel();}catch(e){}
+};
+
+var AC=null;
+function tone(f,d){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+  f.forEach(function(x,i){var o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.value=x;
+  var t0=AC.currentTime+i*0.09;g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(0.15,t0+0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001,t0+(d||0.22));o.connect(g);g.connect(AC.destination);o.start(t0);o.stop(t0+(d||0.22)+0.03);});}catch(e){}}
+function cheer(){if(S.sound)tone([660,880,1180],0.2);}
+function bloop(){if(S.sound)tone([300,200],0.24);}
+
+/* ---------- mistakes ---------- */
+function noteMistake(de,en,type,chose){
+  for(var i=0;i<S.mistakes.length;i++){
+    if(S.mistakes[i].de===de&&S.mistakes[i].type===type){S.mistakes[i].n++;S.mistakes[i].chose=chose;return;}
+  }
+  S.mistakes.push({de:de,en:en,type:type,chose:chose,n:1});
+}
+function drawReview(){
+  var box=$('mList');if(!box)return;
+  box.innerHTML='';
+  if(!S.mistakes.length){
+    box.appendChild(el('div','empty','Keine Fehler! Nothing wrong yet. Do an exercise and anything you miss will appear here.'));
+    $('pPractise').disabled=true;$('pClear').disabled=true;return;
+  }
+  $('pPractise').disabled=false;$('pClear').disabled=false;
+  S.mistakes.slice().sort(function(a,b){return b.n-a.n;}).forEach(function(m){
+    var r=el('div','mrow');
+    var sp=el('button','btn','🔊');sp.onclick=function(){say(m.de);};
+    var w=el('div','w');
+    w.appendChild(el('b',null,m.de));
+    w.appendChild(el('i',null,m.en));
+    if(m.chose)w.appendChild(el('s',null,'you wrote / chose: '+m.chose));
+    w.appendChild(el('u',null,m.type));
+    r.appendChild(sp);r.appendChild(w);r.appendChild(el('span','n','×'+m.n));
+    box.appendChild(r);
+  });
+}
+$('pClear').onclick=function(){
+  S.mistakes=[];
+  if(Q.scope==='mist'){Q.scope='all';drawQSetup();}
+  drawReview();toast('Liste gelöscht · list cleared');
+};
+$('pPractise').onclick=function(){
+  if(!S.mistakes.length)return;
+  var pool=[];
+  S.mistakes.forEach(function(m){
+    for(var i=0;i<WORDS.length;i++) if(WORDS[i][0]===m.de){pool.push(WORDS[i]);return;}
+  });
+  if(!pool.length){toast('Those were verb sentences — open the Verben tab to practise them.');return;}
+  goTab('quiz');Q.scope='mist';drawQSetup();startQuiz(pool);
+};
+
+/* ---------- tabs ---------- */
+var tabs=document.querySelectorAll('.tab');
+for(var t=0;t<tabs.length;t++){(function(b){
+  b.onclick=function(){
+    for(var i=0;i<tabs.length;i++)tabs[i].classList.remove('active');
+    b.classList.add('active');
+    var sc=document.querySelectorAll('.screen');
+    for(var j=0;j<sc.length;j++)sc[j].classList.remove('active');
+    $('s-'+b.getAttribute('data-s')).classList.add('active');
+    if(b.getAttribute('data-s')==='review')drawReview();
+  };})(tabs[t]);}
+function goTab(n){for(var i=0;i<tabs.length;i++)if(tabs[i].getAttribute('data-s')===n){tabs[i].click();return;}}
+
+function wordsIn(sec){ return sec==='all'?WORDS.slice():WORDS.filter(function(w){return w[2]===+sec;}); }
+function pills(boxId,opts,get,set){
+  var box=$(boxId);box.innerHTML='';
+  opts.forEach(function(o){
+    var b=el('button','pill'+(get()===o[0]?' on':''),o[1]);
+    b.onclick=function(){set(o[0]);pills(boxId,opts,get,set);};
+    box.appendChild(b);
+  });
+}
+var SECOPTS=[['all','Alle · All 45'],['1','Text 1'],['2','Text 2'],['3','Text 3']];
+
+/* ================= MATCH ================= */
+var M={sec:'all',sets:[],idx:0,score:0,total:0,sel:null,doneCount:0};
+function buildSets(){
+  var list=shuffle(wordsIn(M.sec));
+  M.sets=[];
+  for(var i=0;i<list.length;i+=5) M.sets.push(list.slice(i,i+5));
+  if(M.sets.length>1 && M.sets[M.sets.length-1].length<2){
+    var last=M.sets.pop(); M.sets[M.sets.length-1]=M.sets[M.sets.length-1].concat(last);
+  }
+  M.idx=0;M.score=0;M.total=0;
+  drawMatch();
+}
+function drawMatch(){
+  var set=M.sets[M.idx]||[];
+  M.sel=null;M.doneCount=0;
+  $('mProg').textContent='Satz '+(M.idx+1)+' / '+M.sets.length+'  ·  '+set.length+' pairs';
+  $('mScore').textContent='Punkte · Score: '+M.score;
+  $('mFb').textContent='';$('mFb').className='fb';
+  var L=$('mLeft'),R=$('mRight');L.innerHTML='';R.innerHTML='';
+  set.forEach(function(w,i){
+    var b=el('button','mitem');
+    b.appendChild(el('span','k',String(i+1)));
+    b.appendChild(el('span',null,w[1]));
+    b.setAttribute('data-de',w[0]);
+    b.onclick=function(){ pickLeft(b,w); };
+    L.appendChild(b);
+  });
+  shuffle(set.slice()).forEach(function(w,i){
+    var b=el('button','mitem');
+    b.appendChild(el('span','k',String.fromCharCode(97+i)));
+    b.appendChild(el('span',null,w[0]));
+    b.setAttribute('data-de',w[0]);
+    b.onclick=function(){ pickRight(b,w); };
+    R.appendChild(b);
+  });
+  $('mNext').textContent=(M.idx===M.sets.length-1)?'Von vorn · Start again ▶':'Nächste 5 · Next set ▶';
+}
+function pickLeft(btn,w){
+  if(btn.classList.contains('done'))return;
+  var all=$('mLeft').children;
+  for(var i=0;i<all.length;i++)all[i].classList.remove('sel');
+  btn.classList.add('sel');
+  M.sel={btn:btn,w:w};
+}
+function pickRight(btn,w){
+  if(btn.classList.contains('done'))return;
+  if(!M.sel){toast('First tap an English word on the left.');return;}
+  var right=(M.sel.w[0]===w[0]);
+  if(right){
+    M.sel.btn.classList.remove('sel');
+    M.sel.btn.classList.add('done');M.sel.btn.disabled=true;
+    btn.classList.add('done');btn.disabled=true;
+    M.score+=2;M.total+=2;addStar(2);cheer();hop();say(w[0]);
+    M.doneCount++;
+    $('mFb').className='fb good';
+    $('mFb').innerHTML='Richtig! <b>'+w[1]+'</b> = '+w[0];
+    $('mScore').textContent='Punkte · Score: '+M.score;
+    M.sel=null;
+    var set=M.sets[M.idx];
+    if(M.doneCount===set.length){
+      $('mFb').className='fb good';
+      $('mFb').innerHTML='Super! Alle '+set.length+' Paare richtig. 🎉';
+      cheer();
+    }
+  }else{
+    bloop();
+    btn.classList.add('bad');
+    var bad=btn;setTimeout(function(){bad.classList.remove('bad');},650);
+    M.total+=2;
+    noteMistake(M.sel.w[0],M.sel.w[1],'match',w[0]);
+    $('mFb').className='fb bad';
+    $('mFb').innerHTML='Nicht ganz. <b>'+M.sel.w[1]+'</b> = '+M.sel.w[0];
+    drawReview();
+  }
+}
+$('mNext').onclick=function(){
+  if(M.idx<M.sets.length-1)M.idx++; else M.idx=0;
+  drawMatch();
+};
+$('mRedo').onclick=function(){ drawMatch(); };
+pills('mSet',SECOPTS,function(){return M.sec;},function(v){M.sec=v;buildSets();});
+
+/* ================= CHOOSE ================= */
+var Q={mode:'e2d',scope:'all',len:10,items:[],i:0,score:0,answered:false};
+function label(w){ return Q.mode==='e2d'? w[0] : w[1]; }
+function drawQSetup(){
+  pills('qMode',[['e2d','English → Deutsch'],['d2e','Deutsch → English']],function(){return Q.mode;},function(v){Q.mode=v;});
+  pills('qScope',SECOPTS.concat([['mist','🔁 Meine Fehler']]),function(){return Q.scope;},function(v){Q.scope=v;});
+  pills('qLen',[[10,'10'],[20,'20'],[0,'Alle · All']],function(){return Q.len;},function(v){Q.len=v;});
+}
+function qPool(){
+  if(Q.scope==='mist'){
+    var p=[];
+    S.mistakes.forEach(function(m){for(var i=0;i<WORDS.length;i++)if(WORDS[i][0]===m.de){p.push(WORDS[i]);return;}});
+    return p.length?p:null;
+  }
+  return wordsIn(Q.scope);
+}
+function makeItems(pool){
+  var all=WORDS.slice(),picked=shuffle(pool.slice());
+  if(Q.len>0)picked=picked.slice(0,Q.len);
+  return picked.map(function(w){
+    var used={};used[label(w)]=1;
+    var ds=[],bag=shuffle(all.slice());
+    for(var i=0;i<bag.length&&ds.length<3;i++){
+      var c=bag[i],lab=label(c);
+      if(used[lab])continue;
+      if(c[0]===w[0]||c[1]===w[1])continue;
+      used[lab]=1;ds.push(c);
+    }
+    return {w:w,opts:shuffle([w].concat(ds))};
+  });
+}
+function startQuiz(pool){
+  if(!pool||!pool.length){toast('There are no words in that group yet.');return;}
+  Q.items=makeItems(pool);Q.i=0;Q.score=0;Q.answered=false;
+  $('qSetup').classList.add('hidden');$('qDone').classList.add('hidden');$('qPlay').classList.remove('hidden');
+  drawQ();
+}
+$('qStart').onclick=function(){
+  var p=qPool();
+  if(Q.scope==='mist'&&!p){toast('No word mistakes yet — do an exercise first.');return;}
+  startQuiz(p);
+};
+function drawQ(){
+  var it=Q.items[Q.i],w=it.w;
+  Q.answered=false;
+  $('qBar').style.width=Math.round(Q.i/Q.items.length*100)+'%';
+  $('qCount').textContent='Frage '+(Q.i+1)+' / '+Q.items.length;
+  $('qScore').textContent='Punkte · Score: '+Q.score;
+  if(Q.mode==='e2d'){ $('qLab').textContent='Wie heißt das auf Deutsch?'; $('qBig').textContent=w[1]; }
+  else { $('qLab').textContent="What does this mean?"; $('qBig').textContent=w[0]; say(w[0]); }
+  var box=$('qOpts');box.innerHTML='';
+  it.opts.forEach(function(c){
+    var b=el('button','opt',label(c));
+    b.onclick=function(){answerQ(b,c,it);};
+    box.appendChild(b);
+  });
+  $('qFb').textContent='';$('qFb').className='fb';
+  $('qNext').textContent=(Q.i===Q.items.length-1)?'Ergebnis · See my score ▶':'Weiter · Next ▶';
+}
+function answerQ(btn,choice,it){
+  if(Q.answered)return;
+  Q.answered=true;
+  var w=it.w,right=(choice===w),bs=$('qOpts').children;
+  for(var i=0;i<bs.length;i++){bs[i].disabled=true;if(bs[i].textContent===label(w))bs[i].classList.add('ok');}
+  if(right){
+    Q.score++;addStar(1);cheer();hop();
+    $('qFb').className='fb good';
+    $('qFb').innerHTML='Richtig! <b>'+w[0]+'</b> = '+w[1];
+    setTimeout(function(){if(Q.answered)nextQ();},1150);
+  }else{
+    btn.classList.add('no');bloop();
+    $('qFb').className='fb bad';
+    $('qFb').innerHTML='Nicht ganz. <b>'+w[0]+'</b> = '+w[1]+'<small>You chose: '+label(choice)+'</small>';
+    noteMistake(w[0],w[1],'choose',label(choice));
+    drawReview();
+  }
+  say(w[0]);
+  $('qScore').textContent='Punkte · Score: '+Q.score;
+}
+$('qNext').onclick=function(){nextQ();};
+function nextQ(){ if(Q.i<Q.items.length-1){Q.i++;drawQ();} else finishQ(); }
+$('qQuit').onclick=function(){finishQ();};
+function finishQ(){
+  try{speechSynthesis.cancel();}catch(e){}
+  $('qPlay').classList.add('hidden');$('qDone').classList.remove('hidden');
+  var total=Q.items.length,pct=Math.round(Q.score/total*100);
+  $('rScore').textContent=Q.score+' / '+total;
+  $('rPct').textContent=pct+'% richtig';
+  $('rStars').textContent=pct>=90?'⭐⭐⭐':pct>=70?'⭐⭐':pct>=40?'⭐':'☆';
+  var wrong=total-Q.score;
+  $('rMsg').innerHTML=wrong===0?'Perfekt! Every word right. 🎉'
+    :wrong+' word'+(wrong>1?'s':'')+' to look at again — saved under <b>Fehler</b>.';
+  if(pct>=90)cheer();
+  $('rWrong').classList.toggle('hidden',!S.mistakes.length);
+  drawReview();
+}
+$('rAgain').onclick=function(){startQuiz(qPool()||WORDS);};
+$('rHome').onclick=function(){$('qDone').classList.add('hidden');$('qSetup').classList.remove('hidden');};
+$('rWrong').onclick=function(){$('pPractise').click();};
+
+/* ================= VERBS ================= */
+var V={sec:'all',list:[],i:0,score:0,done:false};
+function norm(s){
+  return String(s).toLowerCase()
+    .replace(/ß/g,'ss').replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u')
+    .replace(/[.,!?;:"'’]/g,' ').replace(/\s+/g,' ').trim();
+}
+function buildVerbs(){
+  V.list=shuffle(V.sec==='all'?VERBS.slice():VERBS.filter(function(v){return v.s===+V.sec;}));
+  V.i=0;V.score=0;drawV();
+}
+function drawV(){
+  var v=V.list[V.i];
+  V.done=false;
+  $('vProg').textContent='Satz '+(V.i+1)+' / '+V.list.length;
+  $('vScore').textContent='Punkte · Score: '+V.score;
+  $('vSen').innerHTML=v.sen.replace('___','<u>&nbsp;</u>');
+  $('vInf').textContent=v.inf;
+  $('vSubj').textContent='Subjekt: '+v.subj;
+  $('vSep').classList.toggle('hidden',!v.sep);
+  var inp=$('vIn');inp.value='';inp.className='vin';inp.disabled=false;
+  $('vFb').textContent='';$('vFb').className='fb';
+  $('vNext').textContent=(V.i===V.list.length-1)?'Von vorn · Start again ▶':'Weiter ▶';
+  try{inp.focus();}catch(e){}
+}
+function checkV(){
+  if(V.done)return;
+  var v=V.list[V.i],typed=$('vIn').value;
+  if(!typed.trim()){toast('Write the verb first.');return;}
+  var ok=false,n=norm(typed);
+  for(var i=0;i<v.ans.length;i++) if(norm(v.ans[i])===n){ok=true;break;}
+  V.done=true;$('vIn').disabled=true;
+  if(ok){
+    V.score+=2;addStar(2);cheer();hop();
+    $('vIn').classList.add('ok');
+    $('vFb').className='fb good';
+    $('vFb').innerHTML='Richtig! <b>'+v.subj+' '+v.show+'</b>';
+  }else{
+    bloop();
+    $('vIn').classList.add('no');
+    $('vFb').className='fb bad';
+    $('vFb').innerHTML='Nicht ganz. Richtig ist: <b>'+v.subj+' '+v.show+'</b><small>You wrote: '+typed+'</small>';
+    noteMistake(v.inf+' → '+v.show,'('+v.subj+') '+v.sen.replace('___','___'),'verb',typed);
+    drawReview();
+  }
+  say(v.subj+' '+v.show);
+  $('vScore').textContent='Punkte · Score: '+V.score;
+}
+$('vCheck').onclick=checkV;
+$('vIn').addEventListener('keydown',function(e){ if(e.key==='Enter')checkV(); });
+$('vShow').onclick=function(){
+  var v=V.list[V.i];
+  if(!V.done){
+    V.done=true;$('vIn').disabled=true;$('vIn').classList.add('no');
+    noteMistake(v.inf+' → '+v.show,'('+v.subj+') '+v.sen,'verb','(showed the answer)');
+    drawReview();
+  }
+  $('vFb').className='fb';
+  $('vFb').innerHTML='Lösung: <b>'+v.subj+' '+v.show+'</b>';
+  say(v.subj+' '+v.show);
+};
+$('vNext').onclick=function(){ if(V.i<V.list.length-1)V.i++; else V.i=0; drawV(); };
+pills('vSet',SECOPTS,function(){return V.sec;},function(v){V.sec=v;buildVerbs();});
+
+/* ---------- go ---------- */
+buildSets(); drawQSetup(); buildVerbs(); drawReview();
+})();
+</script>
+</body>
+</html>
