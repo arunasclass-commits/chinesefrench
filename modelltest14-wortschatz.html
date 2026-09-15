@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Modelltest 14 — B1/B2 Wortschatz-Training</title>
+<style>
+:root{
+  --ink:#22303a;
+  --paper:#faf7f0;
+  --card:#ffffff;
+  --border:#22303a;
+  --accent:#2f6b3a;
+  --accent-2:#d4553f;
+  --blue:#2f7d95;
+  --orange:#f2a83c;
+  --muted:#6b7a85;
+  --shadow:0 6px 0 rgba(34,48,58,0.12);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+#app{max-width:760px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding-bottom:78px;}
+
+/* Top bar */
+.topbar{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 16px;background:var(--card);
+  border-bottom:2px solid var(--border);
+  position:sticky;top:0;z-index:5;
+}
+.topbar .mascot{font-size:28px;}
+.topbar .title{font-weight:800;font-size:16px;flex:1;line-height:1.15;}
+.topbar .title small{display:block;font-weight:500;color:var(--muted);font-size:11px;}
+.star-count{display:flex;align-items:center;gap:4px;font-weight:800;font-size:15px;color:var(--orange);}
+.toggle-btn{
+  border:2px solid var(--border);border-radius:20px;background:var(--card);
+  padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;color:var(--ink);
+  white-space:nowrap;
+}
+.toggle-btn.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+/* Tabs */
+.tabbar{
+  position:fixed;bottom:0;left:0;right:0;z-index:10;
+  display:flex;background:var(--card);border-top:2px solid var(--border);
+  max-width:760px;margin:0 auto;
+}
+.tabbar button{
+  flex:1;border:none;background:none;padding:10px 4px 8px;
+  font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+}
+.tabbar button .ic{font-size:20px;}
+.tabbar button.active{color:var(--accent);}
+.tabbar button.active .ic{transform:scale(1.1);}
+
+.panel{display:none;flex:1;flex-direction:column;padding:14px 16px 20px;}
+.panel.active{display:flex;}
+
+/* Story / text tab */
+.dots{display:flex;justify-content:center;gap:7px;margin:6px 0 12px;flex-wrap:wrap;}
+.dot{
+  width:11px;height:11px;border-radius:50%;border:2px solid var(--border);
+  background:#fff;cursor:pointer;
+}
+.dot.visited{background:var(--blue);border-color:var(--blue);}
+.dot.current{background:var(--orange);border-color:var(--orange);transform:scale(1.25);}
+
+.scene-card{
+  border:2px solid var(--border);border-radius:16px;overflow:hidden;
+  box-shadow:var(--shadow);background:#fff;
+}
+.scene-card svg{display:block;width:100%;height:auto;}
+
+.page-meta{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin:12px 0 4px;
+}
+.page-meta .who{font-weight:800;font-size:14px;}
+.page-meta .who span{color:var(--muted);font-weight:600;}
+.page-num{font-size:12px;color:var(--muted);font-weight:700;}
+
+.de-text{
+  font-size:19px;line-height:1.5;font-weight:600;margin:8px 0 6px;
+}
+.en-text{
+  font-size:14.5px;line-height:1.45;color:var(--muted);
+  border-left:3px solid var(--blue);padding-left:10px;margin:6px 0 10px;
+}
+.en-text.hidden{display:none;}
+
+.expr-box{
+  background:#fff7e6;border:2px dashed var(--orange);border-radius:12px;
+  padding:10px 12px;margin:8px 0 14px;font-size:13px;
+}
+.expr-box .lbl{font-weight:800;color:#a06a12;margin-bottom:3px;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;}
+.expr-box .de{font-weight:700;}
+.expr-box .en{color:var(--muted);}
+.expr-box .ex{margin-top:6px;font-style:italic;font-size:12.5px;}
+
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px;}
+.btn{
+  border:2px solid var(--border);background:var(--card);border-radius:12px;
+  padding:9px 14px;font-weight:700;font-size:13px;cursor:pointer;color:var(--ink);
+  box-shadow:0 3px 0 rgba(34,48,58,0.12);
+}
+.btn:active{transform:translateY(2px);box-shadow:none;}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.btn.play{background:var(--blue);color:#fff;border-color:var(--blue);}
+.btn.wide{flex:1;text-align:center;}
+.btn:disabled{opacity:.45;cursor:default;}
+
+.word-chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+.chip{
+  border:2px solid var(--border);border-radius:12px;background:#fff;
+  padding:7px 10px;cursor:pointer;text-align:left;min-width:120px;
+  box-shadow:0 2px 0 rgba(34,48,58,0.1);
+}
+.chip:active{transform:translateY(1px);}
+.chip b{display:block;font-size:14px;}
+.chip small{color:var(--muted);font-size:11.5px;}
+
+/* Vocab tab */
+.filter-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.pill{
+  border:2px solid var(--border);border-radius:20px;background:#fff;
+  padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;
+}
+.pill.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.vocab-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media (max-width:480px){.vocab-grid{grid-template-columns:1fr;}}
+.vcard{
+  border:2px solid var(--border);border-radius:12px;background:#fff;padding:10px 12px;
+  cursor:pointer;box-shadow:0 3px 0 rgba(34,48,58,0.1);
+}
+.vcard b{font-size:15px;}
+.vcard .m{color:var(--muted);font-size:13px;margin-top:2px;}
+.vcard .src{font-size:10.5px;color:#9fae7a;margin-top:4px;font-weight:700;}
+
+/* Quiz tab */
+.setup-block{margin-bottom:14px;}
+.setup-block .lbl{font-weight:800;font-size:12.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);margin-bottom:6px;}
+.choice-row{display:flex;flex-wrap:wrap;gap:8px;}
+.choice-btn{
+  border:2px solid var(--border);border-radius:12px;background:#fff;
+  padding:9px 12px;font-weight:700;font-size:13px;cursor:pointer;
+}
+.choice-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+.progress-wrap{margin:6px 0 14px;}
+.progress-bar-bg{height:10px;border-radius:6px;background:#eee;border:2px solid var(--border);overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--accent);width:0%;transition:width .25s;}
+.progress-labels{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--muted);margin-top:4px;}
+
+.prompt-card{
+  border:2px solid var(--border);border-radius:16px;background:#fff;padding:22px 16px;
+  text-align:center;margin-bottom:14px;box-shadow:var(--shadow);
+}
+.prompt-card .kind{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;}
+.prompt-card .word{font-size:26px;font-weight:800;}
+.prompt-card .listen-btn{margin-top:10px;}
+
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media (max-width:560px){.options-grid{grid-template-columns:1fr;}}
+.opt-btn{
+  border:2px solid var(--border);border-radius:12px;background:#fff;
+  padding:14px 10px;font-size:15px;font-weight:700;cursor:pointer;
+  box-shadow:0 3px 0 rgba(34,48,58,0.1);
+}
+.opt-btn.correct{background:#dff0d8;border-color:var(--accent);color:var(--accent);}
+.opt-btn.wrong{background:#fbe0da;border-color:var(--accent-2);color:var(--accent-2);}
+.opt-btn:disabled{cursor:default;}
+
+.feedback{
+  margin-top:12px;padding:10px 12px;border-radius:12px;font-weight:700;font-size:14px;text-align:center;
+}
+.feedback.good{background:#dff0d8;color:var(--accent);}
+.feedback.bad{background:#fbe0da;color:var(--accent-2);}
+
+.results-card{text-align:center;padding:20px 14px;}
+.results-card .pct{font-size:42px;font-weight:800;margin:6px 0;}
+.results-card .stars{font-size:34px;margin-bottom:10px;}
+.results-actions{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+
+/* Review tab */
+.review-item{
+  border:2px solid var(--border);border-radius:12px;background:#fff;padding:10px 12px;
+  margin-bottom:10px;box-shadow:0 3px 0 rgba(34,48,58,0.1);
+}
+.review-item .top{display:flex;justify-content:space-between;align-items:center;}
+.review-item b{font-size:15px;}
+.review-item .count{background:var(--accent-2);color:#fff;border-radius:10px;padding:2px 8px;font-size:11px;font-weight:800;}
+.review-item .m{color:var(--muted);font-size:13px;margin-top:3px;}
+.review-item .wrong-choice{font-size:12px;color:var(--accent-2);margin-top:3px;}
+.review-item .spk{margin-top:6px;}
+.empty-state{text-align:center;color:var(--muted);padding:40px 20px;font-size:14px;}
+
+.footer-note{
+  text-align:center;color:var(--muted);font-size:11px;padding:14px 0 4px;
+}
+
+.toast{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+  background:var(--ink);color:#fff;padding:9px 16px;border-radius:20px;font-size:12.5px;
+  z-index:20;box-shadow:0 4px 12px rgba(0,0,0,.2);
+}
+.small-icon-btn{
+  border:2px solid var(--border);background:#fff;border-radius:10px;
+  padding:5px 9px;cursor:pointer;font-size:14px;
+}
+
+/* Insert-sentence cards (highlighted gap-fill answers) */
+.insert-box{
+  background:#e8f2fb;border:2px solid var(--blue);border-radius:12px;
+  padding:10px 12px;margin:8px 0;font-size:13px;
+}
+.insert-box .lbl{font-weight:800;color:#1f5b70;margin-bottom:3px;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;}
+.insert-box .de{font-weight:700;}
+.insert-box .en{color:var(--muted);}
+.insert-box .why{margin-top:6px;font-style:italic;font-size:12.5px;color:#1f5b70;}
+
+/* Solution table */
+.solution-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px;}
+.solution-table th,.solution-table td{border:2px solid var(--border);padding:6px 8px;text-align:left;}
+.solution-table th{background:#eef3fb;}
+.unused-box{
+  background:#fbe9e9;border:2px dashed var(--accent-2);border-radius:12px;
+  padding:10px 12px;margin:8px 0;font-size:13px;
+}
+.unused-box .lbl{font-weight:800;color:#a03a2c;margin-bottom:3px;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;}
+
+/* Embedded multiple-choice comprehension question (Lesen Teil 3) */
+.mc-card{
+  border:2px solid var(--border);border-radius:16px;background:#fff;
+  padding:14px;margin:10px 0 14px;box-shadow:var(--shadow);
+}
+.mc-card .mc-num{
+  display:inline-block;background:var(--blue);color:#fff;font-weight:800;
+  border-radius:20px;padding:3px 12px;font-size:12.5px;margin-bottom:8px;
+}
+.mc-card .mc-q-de{font-weight:700;font-size:15.5px;margin-bottom:3px;}
+.mc-card .mc-q-en{color:var(--muted);font-size:13px;margin-bottom:12px;}
+.mc-option{
+  display:flex;gap:8px;align-items:flex-start;width:100%;text-align:left;
+  border:2px solid var(--border);border-radius:12px;background:#fff;
+  padding:10px 12px;margin-bottom:8px;cursor:pointer;font-size:14px;
+  box-shadow:0 3px 0 rgba(34,48,58,0.1);
+}
+.mc-option .k{font-weight:800;flex-shrink:0;}
+.mc-option .txt{flex:1;}
+.mc-option .txt .en{display:block;color:var(--muted);font-size:12px;margin-top:2px;}
+.mc-option.correct{background:#dff0d8;border-color:var(--accent);}
+.mc-option.wrong{background:#fbe0da;border-color:var(--accent-2);}
+.mc-option:disabled{cursor:default;}
+.mc-feedback{
+  margin-top:6px;padding:8px 10px;border-radius:10px;font-weight:700;font-size:13.5px;
+}
+.mc-feedback.good{background:#dff0d8;color:var(--accent);}
+.mc-feedback.bad{background:#fbe0da;color:var(--accent-2);}
+.mc-referral{
+  margin-top:10px;background:#eef3fb;border:2px dashed var(--blue);border-radius:12px;
+  padding:10px 12px;font-size:13px;
+}
+.mc-referral .lbl{font-weight:800;color:#1f5b70;margin-bottom:4px;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;}
+.mc-referral .quote{font-style:italic;font-weight:600;}
+.mc-referral .quote-en{color:var(--muted);margin-top:2px;}
+.mc-why-list{margin-top:8px;font-size:12.5px;color:var(--muted);}
+.mc-why-list div{margin-bottom:3px;}
+
+/* Heading-matching question (Lesen Teil 5) */
+.match-options-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media (max-width:420px){.match-options-grid{grid-template-columns:1fr;}}
+.match-option{
+  display:flex;flex-direction:column;gap:2px;text-align:left;
+  border:2px solid var(--border);border-radius:12px;background:#fff;
+  padding:9px 11px;cursor:pointer;font-size:13.5px;
+  box-shadow:0 3px 0 rgba(34,48,58,0.1);
+}
+.match-option .k{font-weight:800;}
+.match-option .en{color:var(--muted);font-size:11.5px;}
+.match-option.correct{background:#dff0d8;border-color:var(--accent);}
+.match-option.wrong{background:#fbe0da;border-color:var(--accent-2);}
+.match-option:disabled{cursor:default;}
+.evidence-list{margin-top:8px;}
+.evidence-list .ev{
+  font-style:italic;font-weight:600;margin-bottom:3px;font-size:13px;
+}
+.category-tag{
+  display:inline-block;background:#f2a83c;color:#5a3a00;font-weight:800;
+  border-radius:20px;padding:3px 12px;font-size:11.5px;margin-bottom:8px;
+  text-transform:uppercase;letter-spacing:.03em;
+}
+.trick-box{
+  background:#fff7e6;border:2px dashed var(--orange);border-radius:12px;
+  padding:10px 12px;margin:10px 0;font-size:13px;
+}
+
+/* Mixed vocab practice — mode cards, topic pills, match-the-following grid */
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media (max-width:420px){.mode-grid{grid-template-columns:1fr;}}
+.mode-card{
+  border:2px solid var(--border);border-radius:14px;background:#fff;
+  padding:12px;cursor:pointer;text-align:left;box-shadow:0 3px 0 rgba(34,48,58,0.1);
+}
+.mode-card .ic{font-size:22px;}
+.mode-card b{display:block;font-size:14px;margin-top:4px;}
+.mode-card small{color:var(--muted);font-size:11.5px;}
+.mode-card.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.mode-card.active small{color:#e5f3e8;}
+
+.topic-pill{
+  border:2px solid var(--border);border-radius:20px;background:#fff;
+  padding:6px 13px;font-size:12.5px;font-weight:700;cursor:pointer;
+}
+.topic-pill.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+
+.match-header{
+  display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;
+  color:var(--muted);margin-bottom:8px;
+}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.match-col{display:flex;flex-direction:column;gap:8px;}
+.match-tile{
+  border:2px solid var(--border);border-radius:12px;background:#fff;
+  padding:10px 10px;font-size:13px;font-weight:600;cursor:pointer;text-align:center;
+  min-height:44px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 0 rgba(34,48,58,0.1);
+}
+.match-tile.selected{border-color:var(--blue);background:#eaf3fb;}
+.match-tile.matched{background:#dff0d8;border-color:var(--accent);color:var(--accent);opacity:0.55;cursor:default;}
+.match-tile.wrong-flash{background:#fbe0da;border-color:var(--accent-2);}
+.match-tile:disabled{cursor:default;}
+.match-progress{
+  text-align:center;font-weight:800;font-size:14px;margin:10px 0;color:var(--muted);
+}
+
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="topbar">
+    <div class="mascot">📘</div>
+    <div class="title">Modelltest 14 — Wortschatz
+      <small>Lesen Teil 1–4 · Nur B1/B2-Niveau</small>
+    </div>
+    <div class="star-count">⭐ <span id="starCount">0</span></div>
+  </div>
+
+  <!-- VOCAB BROWSE PANEL -->
+  <div class="panel active" id="panel-vocab">
+    <div class="filter-pills" id="vocabPills"></div>
+    <div class="vocab-grid" id="vocabGrid"></div>
+  </div>
+
+  <!-- PRACTICE PANEL -->
+  <div class="panel" id="panel-practice">
+    <div id="practiceSetup">
+      <div class="setup-block">
+        <div class="lbl">Übungsart</div>
+        <div class="mode-grid" id="modeGrid"></div>
+      </div>
+      <div class="setup-block">
+        <div class="lbl">Teile</div>
+        <div class="choice-row" id="topicPills"></div>
+      </div>
+      <div class="setup-block">
+        <div class="lbl">Länge</div>
+        <div class="choice-row" id="lengthChoices"></div>
+      </div>
+      <button class="btn primary wide" id="btnStartPractice">Start</button>
+    </div>
+
+    <div id="mcPlay" style="display:none;">
+      <div class="progress-wrap">
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progFill"></div></div>
+        <div class="progress-labels">
+          <span id="progLabel">Frage 1 / 10</span>
+          <span id="scoreLabel">0 Punkte</span>
+        </div>
+      </div>
+      <div class="prompt-card">
+        <div class="kind" id="promptKind"></div>
+        <div class="word" id="promptWord"></div>
+        <button class="btn play listen-btn" id="btnPromptListen" style="display:none;">🔊 Hören</button>
+      </div>
+      <div class="options-grid" id="optionsGrid"></div>
+      <div class="feedback" id="feedback" style="display:none;"></div>
+    </div>
+
+    <div id="practiceResults" style="display:none;">
+      <div class="results-card">
+        <div class="lbl" id="resultsLabel">Ergebnis</div>
+        <div class="pct" id="resultPct"></div>
+        <div id="resultScore"></div>
+        <div class="stars" id="resultStars"></div>
+        <div class="results-actions">
+          <button class="btn primary wide" id="btnPracticeMistakes">Meine Fehler üben</button>
+          <button class="btn wide" id="btnAgain">Nochmal</button>
+          <button class="btn wide" id="btnNewPractice">Neue Übung</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEW PANEL -->
+  <div class="panel" id="panel-review">
+    <div id="reviewList"></div>
+  </div>
+
+  <div class="tabbar">
+    <button class="tab-btn active" data-tab="vocab"><span class="ic">🔤</span>Vokabeln</button>
+    <button class="tab-btn" data-tab="practice"><span class="ic">🎯</span>Üben</button>
+    <button class="tab-btn" data-tab="review"><span class="ic">🔁</span>Wiederholen</button>
+  </div>
+</div>
+
+<script>
+const TOPICS = [
+  { key: "Teil1", label: "Teil 1", full: "Erfahrungen mit Hörgeräten" },
+  { key: "Teil2", label: "Teil 2", full: "Gedächtnistraining" },
+  { key: "Teil3", label: "Teil 3", full: "Lachkurse sind hoch im Trend" },
+  { key: "Teil4", label: "Teil 4", full: "Zusatzstoffe in Lebensmitteln" }
+];
+
+const VOCAB = [
+  // ===== TEIL 1 — Erfahrungen mit Hörgeräten =====
+  { de: "das Forum", en: "forum", topics: ["Teil1"] },
+  { de: "der Kommentar", en: "comment", topics: ["Teil1"] },
+  { de: "das Hörgerät", en: "hearing aid", topics: ["Teil1"] },
+  { de: "auf jemanden/etwas zutreffen", en: "to apply to someone/something", topics: ["Teil1"] },
+  { de: "die Aussage", en: "statement", topics: ["Teil1"] },
+  { de: "mehrmals", en: "several times / more than once", topics: ["Teil1"] },
+  { de: "die Anschaffung", en: "purchase / acquisition", topics: ["Teil1"] },
+  { de: "überwiegend", en: "mainly / predominantly", topics: ["Teil1"] },
+  { de: "es geht darum, ... zu + Infinitiv", en: "it is about / the aim is to ...", topics: ["Teil1"] },
+  { de: "weiterhin", en: "still / continuing to", topics: ["Teil1"] },
+  { de: "genießen", en: "to enjoy", topics: ["Teil1"] },
+  { de: "der Wunsch", en: "wish / desire", topics: ["Teil1"] },
+  { de: "der Klang", en: "sound", topics: ["Teil1"] },
+  { de: "abdecken", en: "to cover / meet / satisfy", topics: ["Teil1"] },
+  { de: "einen Wunsch abdecken", en: "to meet/satisfy a need or desire", topics: ["Teil1"] },
+  { de: "der Akustiker", en: "hearing-aid specialist", topics: ["Teil1"] },
+  { de: "enttäuschend", en: "disappointing", topics: ["Teil1"] },
+  { de: "das Bedürfnis", en: "need", topics: ["Teil1", "Teil2"] },
+  { de: "gedeckt werden", en: "to be met / satisfied", topics: ["Teil1"] },
+  { de: "wahrscheinlich", en: "probably", topics: ["Teil1"] },
+  { de: "unmöglich", en: "impossible", topics: ["Teil1"] },
+  { de: "befriedigend", en: "satisfactory", topics: ["Teil1"] },
+  { de: "Bedürfnisse decken", en: "to meet/satisfy needs", topics: ["Teil1"] },
+  { de: "die Beratung", en: "consultation / advice", topics: ["Teil1"] },
+  { de: "hervorragend", en: "excellent / outstanding", topics: ["Teil1"] },
+  { de: "engagiert", en: "committed / dedicated", topics: ["Teil1"] },
+  { de: "voll eingehen auf", en: "to respond fully to", topics: ["Teil1"] },
+  { de: "die Kenntnisse", en: "knowledge", topics: ["Teil1"] },
+  { de: "umsetzen", en: "to implement / put into practice", topics: ["Teil1", "Teil3"] },
+  { de: "auf Wünsche eingehen", en: "to respond to / take wishes into account", topics: ["Teil1"] },
+  { de: "irgendwelche", en: "any / some", topics: ["Teil1"] },
+  { de: "extrem", en: "extreme", topics: ["Teil1"] },
+  { de: "die Verhältnisse", en: "conditions / circumstances", topics: ["Teil1"] },
+  { de: "hochgradig", en: "highly / extremely", topics: ["Teil1"] },
+  { de: "die Meisterleistung", en: "outstanding achievement", topics: ["Teil1"] },
+  { de: "eine technische Meisterleistung", en: "a remarkable technical achievement", topics: ["Teil1"] },
+  { de: "sich anpassen an", en: "to adapt to", topics: ["Teil1"] },
+  { de: "automatisch", en: "automatically", topics: ["Teil1"] },
+  { de: "restlos", en: "completely / totally", topics: ["Teil1"] },
+  { de: "restlos zufrieden sein", en: "to be completely satisfied", topics: ["Teil1"] },
+  { de: "die Zuzahlung", en: "additional payment", topics: ["Teil1"] },
+  { de: "sich lohnen", en: "to be worth it", topics: ["Teil1"] },
+  { de: "der Beruf", en: "profession", topics: ["Teil1"] },
+  { de: "häufig", en: "frequently", topics: ["Teil1", "Teil4"] },
+  { de: "die Verhandlung", en: "negotiation", topics: ["Teil1"] },
+  { de: "leiten", en: "to lead / conduct", topics: ["Teil1"] },
+  { de: "die Messe", en: "trade fair", topics: ["Teil1"] },
+  { de: "das Nebengeräusch", en: "background noise", topics: ["Teil1"] },
+  { de: "konfrontiert werden mit", en: "to be confronted with", topics: ["Teil1"] },
+  { de: "mit einem Problem konfrontiert werden", en: "to be confronted with a problem", topics: ["Teil1"] },
+  { de: "außerdem", en: "furthermore / in addition", topics: ["Teil1"] },
+  { de: "telefonieren", en: "to make phone calls", topics: ["Teil1"] },
+  { de: "die Fremdsprache", en: "foreign language", topics: ["Teil1"] },
+  { de: "die Anbindung", en: "connection / connectivity", topics: ["Teil1"] },
+  { de: "wodurch", en: "through which / whereby", topics: ["Teil1"] },
+  { de: "übermitteln", en: "to transmit", topics: ["Teil1"] },
+  { de: "die Schwerhörigkeit", en: "hearing impairment", topics: ["Teil1"] },
+  { de: "auffallen", en: "to notice / become noticeable", topics: ["Teil1"] },
+  { de: "zunehmend", en: "increasingly", topics: ["Teil1", "Teil2"] },
+  { de: "undeutlich", en: "unclear", topics: ["Teil1"] },
+  { de: "verständlich", en: "understandable", topics: ["Teil1"] },
+  { de: "der HNO-Arzt", en: "ENT doctor", topics: ["Teil1"] },
+  { de: "Folgendes", en: "the following", topics: ["Teil1"] },
+  { de: "bestehen", en: "to exist / persist", topics: ["Teil1"] },
+  { de: "nachhaltig", en: "lasting / long-term", topics: ["Teil1"] },
+  { de: "abbauen", en: "to deteriorate / break down / reduce", topics: ["Teil1", "Teil3"] },
+  { de: "die Struktur", en: "structure", topics: ["Teil1"] },
+  { de: "zuständig sein für", en: "to be responsible for", topics: ["Teil1"] },
+  { de: "je ..., umso ...", en: "the more ..., the more ...", topics: ["Teil1"] },
+  { de: "vernünftig", en: "reasonable / sensible", topics: ["Teil1"] },
+  { de: "herstellen", en: "to restore / establish", topics: ["Teil1"] },
+  { de: "entscheidend", en: "crucial", topics: ["Teil1"] },
+  { de: "daher", en: "therefore", topics: ["Teil1", "Teil3", "Teil4"] },
+  { de: "der Hörverlust", en: "hearing loss", topics: ["Teil1"] },
+  { de: "rechtzeitig", en: "in time", topics: ["Teil1"] },
+  { de: "erkennen", en: "to recognize", topics: ["Teil1"] },
+  { de: "eine Entscheidung treffen", en: "to make a decision", topics: ["Teil1"] },
+  { de: "sich anhören", en: "to sound", topics: ["Teil1"] },
+  { de: "als würde ...", en: "as if ...", topics: ["Teil1"] },
+  { de: "der Telefonhörer", en: "telephone receiver", topics: ["Teil1"] },
+  { de: "blechern", en: "tinny / metallic", topics: ["Teil1"] },
+  { de: "das Geräusch", en: "noise / sound", topics: ["Teil1"] },
+  { de: "unterscheiden", en: "to distinguish", topics: ["Teil1"] },
+  { de: "kaum", en: "hardly / barely", topics: ["Teil1", "Teil3"] },
+  { de: "verzerrt", en: "distorted", topics: ["Teil1"] },
+  { de: "dadurch", en: "as a result / through this", topics: ["Teil1", "Teil4"] },
+  { de: "insgesamt", en: "overall", topics: ["Teil1"] },
+  { de: "sinken", en: "to decrease", topics: ["Teil1"] },
+  { de: "nerven", en: "to annoy", topics: ["Teil1"] },
+  { de: "deutlich", en: "clearly", topics: ["Teil1"] },
+  { de: "obwohl", en: "although / even though", topics: ["Teil1"] },
+  { de: "auf Bedürfnisse eingehen", en: "to take needs into account", topics: ["Teil1"] },
+  { de: "zu hören bekommen", en: "to be told / hear repeatedly", topics: ["Teil1"] },
+  { de: "von früh bis spät", en: "from morning till night", topics: ["Teil1"] },
+  { de: "der Höreindruck", en: "auditory impression", topics: ["Teil1"] },
+  { de: "sich gewöhnen an", en: "to get used to", topics: ["Teil1"] },
+  { de: "zurechtkommen", en: "to manage / cope", topics: ["Teil1"] },
+  { de: "mit etwas gut zurechtkommen", en: "to manage well with something", topics: ["Teil1"] },
+  { de: "der Stimmenwechsel", en: "change of voices", topics: ["Teil1"] },
+  { de: "überfordern", en: "to overwhelm", topics: ["Teil1"] },
+  { de: "enorm", en: "enormously", topics: ["Teil1", "Teil4"] },
+  { de: "jemanden zum Verzweifeln bringen", en: "to drive someone to despair", topics: ["Teil1"] },
+  { de: "stören", en: "to disturb / bother", topics: ["Teil1"] },
+  { de: "unangenehm", en: "unpleasant", topics: ["Teil1"] },
+  { de: "sogar", en: "even", topics: ["Teil1"] },
+  { de: "die Körperposition", en: "body position", topics: ["Teil1"] },
+  { de: "sich zurücklehnen", en: "to lean back", topics: ["Teil1"] },
+  { de: "sich für etwas entscheiden", en: "to decide on something", topics: ["Teil1"] },
+  { de: "sich etwas anschaffen", en: "to buy / acquire something", topics: ["Teil1"] },
+  { de: "statt", en: "instead of", topics: ["Teil1"] },
+  { de: "die Verbesserung", en: "improvement", topics: ["Teil1", "Teil4"] },
+  { de: "mit etwas zu kämpfen haben", en: "to struggle / deal with something", topics: ["Teil1"] },
+  { de: "bedürfen", en: "to require", topics: ["Teil1"] },
+  { de: "die Gewöhnungsphase", en: "adjustment period", topics: ["Teil1"] },
+  { de: "relativ", en: "relatively", topics: ["Teil1"] },
+  { de: "trotzdem", en: "nevertheless", topics: ["Teil1"] },
+  { de: "plötzlich", en: "suddenly", topics: ["Teil1"] },
+  { de: "umblättern", en: "to turn pages", topics: ["Teil1"] },
+  { de: "quietschend", en: "squeaking", topics: ["Teil1"] },
+  { de: "die Fahrradbremse", en: "bicycle brake", topics: ["Teil1"] },
+  { de: "akustisch", en: "acoustic", topics: ["Teil1"] },
+  { de: "die Belastung", en: "burden / stress", topics: ["Teil1"] },
+  { de: "eine akustische Belastung", en: "an acoustic burden / stressful sound", topics: ["Teil1"] },
+
+  // ===== TEIL 2 — Gedächtnistraining =====
+  { de: "das Gedächtnis", en: "memory", topics: ["Teil2"] },
+  { de: "aktivieren", en: "to activate", topics: ["Teil2"] },
+  { de: "fit halten", en: "to keep fit", topics: ["Teil2"] },
+  { de: "das Gehirn", en: "brain", topics: ["Teil2", "Teil1"] },
+  { de: "komplex", en: "complex", topics: ["Teil2"] },
+  { de: "das Gebilde", en: "structure / formation", topics: ["Teil2"] },
+  { de: "bereits", en: "already", topics: ["Teil2"] },
+  { de: "die Leistungsfähigkeit", en: "performance capacity", topics: ["Teil2"] },
+  { de: "abrufen", en: "to retrieve / access", topics: ["Teil2"] },
+  { de: "jemanden im Stich lassen", en: "to let somebody down", topics: ["Teil2"] },
+  { de: "steigern", en: "to increase / improve", topics: ["Teil2", "Teil3"] },
+  { de: "das Kreuzworträtsel", en: "crossword puzzle", topics: ["Teil2"] },
+  { de: "die Knobelaufgabe", en: "brain teaser / puzzle", topics: ["Teil2"] },
+  { de: "das Gehirnjogging", en: "brain training", topics: ["Teil2"] },
+  { de: "inwiefern", en: "to what extent / in what way", topics: ["Teil2"] },
+  { de: "die Merkfähigkeit", en: "memory capacity", topics: ["Teil2"] },
+  { de: "verbessern", en: "to improve", topics: ["Teil2"] },
+  { de: "wissenschaftlich belegt sein", en: "to be scientifically proven/documented", topics: ["Teil2"] },
+  { de: "der Zeitvertreib", en: "pastime", topics: ["Teil2"] },
+  { de: "zu bieten haben", en: "to have to offer", topics: ["Teil2"] },
+  { de: "vielmehr", en: "rather / instead (signals a contrast)", topics: ["Teil2"] },
+  { de: "der Wissenschaftler", en: "scientist", topics: ["Teil2"] },
+  { de: "bedeutend", en: "considerably / significantly", topics: ["Teil2"] },
+  { de: "wirksam", en: "effective", topics: ["Teil2"] },
+  { de: "herausfordern", en: "to challenge", topics: ["Teil2"] },
+  { de: "abwechslungsreich", en: "varied / diverse", topics: ["Teil2"] },
+  { de: "gleichzeitig", en: "simultaneously / at the same time", topics: ["Teil2", "Teil3"] },
+  { de: "gezielt", en: "targeted", topics: ["Teil2"] },
+  { de: "die Auswirkung", en: "effect / impact", topics: ["Teil2"] },
+  { de: "das Arbeitsgedächtnis", en: "working memory", topics: ["Teil2"] },
+  { de: "die Konzentrationsfähigkeit", en: "ability to concentrate", topics: ["Teil2"] },
+  { de: "die Fähigkeit", en: "ability", topics: ["Teil2", "Teil3"] },
+  { de: "zunehmen", en: "to increase", topics: ["Teil2"] },
+  { de: "nicht nur ..., sondern auch ...", en: "not only ..., but also ...", topics: ["Teil2"] },
+  { de: "ebenso", en: "likewise / equally", topics: ["Teil2"] },
+  { de: "die Geschwindigkeit", en: "speed", topics: ["Teil2"] },
+  { de: "verarbeiten", en: "to process", topics: ["Teil2"] },
+  { de: "langanhaltend", en: "long-lasting", topics: ["Teil2"] },
+  { de: "relevant", en: "relevant", topics: ["Teil2"] },
+  { de: "der Alltag", en: "everyday life", topics: ["Teil2"] },
+  { de: "die Handhabung", en: "handling / use", topics: ["Teil2"] },
+  { de: "finanziell", en: "financial", topics: ["Teil2"] },
+  { de: "die Entscheidungskompetenz", en: "decision-making ability", topics: ["Teil2"] },
+  { de: "bis hin zu", en: "all the way to", topics: ["Teil2"] },
+  { de: "die Effektivität", en: "effectiveness", topics: ["Teil2"] },
+  { de: "gewährleisten", en: "to ensure", topics: ["Teil2"] },
+  { de: "erfüllen", en: "to fulfil", topics: ["Teil2"] },
+  { de: "individuell anpassen", en: "to adapt individually", topics: ["Teil2"] },
+  { de: "bewirken", en: "to cause / bring about", topics: ["Teil2"] },
+  { de: "die Langeweile", en: "boredom", topics: ["Teil2"] },
+  { de: "somit", en: "therefore / thus", topics: ["Teil2"] },
+  { de: "wirkungslos", en: "ineffective", topics: ["Teil2"] },
+  { de: "dagegen", en: "on the other hand / in contrast", topics: ["Teil2", "Teil3"] },
+  { de: "die Frustration", en: "frustration", topics: ["Teil2"] },
+  { de: "zu etwas führen", en: "to lead to something", topics: ["Teil2"] },
+  { de: "beachten", en: "to take into account", topics: ["Teil2"] },
+  { de: "zielgerichtet", en: "goal-oriented / targeted", topics: ["Teil2"] },
+  { de: "der Inhalt", en: "content", topics: ["Teil2"] },
+  { de: "auf etwas aufbauen", en: "to be based on / build upon", topics: ["Teil2"] },
+  { de: "wechselnd", en: "changing / varied", topics: ["Teil2"] },
+  { de: "regelmäßig", en: "regularly", topics: ["Teil2"] },
+  { de: "die Herausforderung", en: "challenge", topics: ["Teil2"] },
+  { de: "schließlich", en: "finally", topics: ["Teil2"] },
+  { de: "motivierend gestalten", en: "to design in a motivating way", topics: ["Teil2"] },
+  { de: "nicht zu kurz kommen", en: "to not be neglected", topics: ["Teil2"] },
+  { de: "sich umsetzen lassen", en: "can be implemented / put into practice", topics: ["Teil2"] },
+  { de: "schulen", en: "to train / develop", topics: ["Teil2"] },
+  { de: "die Mühe", en: "effort", topics: ["Teil2"] },
+  { de: "ohne viel Mühe", en: "without much effort", topics: ["Teil2"] },
+  { de: "aufmerksam", en: "attentive", topics: ["Teil2"] },
+  { de: "das Gespräch", en: "conversation", topics: ["Teil2"] },
+  { de: "die Sorge", en: "worry / concern", topics: ["Teil2"] },
+  { de: "die Neuigkeit", en: "news / new information", topics: ["Teil2"] },
+  { de: "auf etwas eingehen", en: "to address / respond to something", topics: ["Teil2", "Teil1"] },
+  { de: "die Leidenschaft", en: "passion", topics: ["Teil2"] },
+  { de: "die Erfahrung", en: "experience", topics: ["Teil2"] },
+  { de: "die Erinnerung", en: "memory / recollection", topics: ["Teil2"] },
+  { de: "die grauen Zellen", en: "brain cells", topics: ["Teil2"] },
+  { de: "etwas auf Touren bringen", en: "to get something working / going", topics: ["Teil2"] },
+  { de: "konzentriert", en: "focused", topics: ["Teil2"] },
+  { de: "ergebnisoffen", en: "open-ended", topics: ["Teil2"] },
+  { de: "die Unterhaltung", en: "conversation", topics: ["Teil2"] },
+  { de: "die Vernetzung", en: "connection / networking", topics: ["Teil2"] },
+  { de: "zum einen ..., zum anderen ...", en: "on the one hand ..., on the other hand ...", topics: ["Teil2"] },
+  { de: "heben", en: "to lift / raise", topics: ["Teil2"] },
+  { de: "die Stimmung", en: "mood", topics: ["Teil2"] },
+  { de: "sich positiv auf etwas auswirken", en: "to have a positive effect on something", topics: ["Teil2"] },
+  { de: "eine solche + Nomen", en: "such a ... (refers back to something just mentioned)", topics: ["Teil2"] },
+
+  // ===== TEIL 3 — Lachkurse sind hoch im Trend =====
+  { de: "hoch im Trend sein", en: "to be very fashionable / a current trend", topics: ["Teil3"] },
+  { de: "die Richtigkeit", en: "correctness / truth", topics: ["Teil3"] },
+  { de: "volkstümlich", en: "popular / traditional", topics: ["Teil3"] },
+  { de: "die Weisheit", en: "wisdom / saying", topics: ["Teil3"] },
+  { de: "jemanden von etwas überzeugen", en: "to convince somebody of something", topics: ["Teil3"] },
+  { de: "das Wohlbefinden", en: "well-being", topics: ["Teil3"] },
+  { de: "das Wohlbefinden steigern", en: "to improve/increase well-being", topics: ["Teil3"] },
+  { de: "unterstützend", en: "supportive / as a support", topics: ["Teil3"] },
+  { de: "einsetzen", en: "to use / employ", topics: ["Teil3"] },
+  { de: "bei Krankheiten eingesetzt werden", en: "to be used in cases of illness", topics: ["Teil3"] },
+  { de: "steigend", en: "increasing / rising", topics: ["Teil3"] },
+  { de: "erneut", en: "again", topics: ["Teil3"] },
+  { de: "bezeugen", en: "to testify to / prove", topics: ["Teil3"] },
+  { de: "inzwischen", en: "meanwhile / by now", topics: ["Teil3", "Teil1"] },
+  { de: "wissenschaftlich nachgewiesen", en: "scientifically proven", topics: ["Teil3"] },
+  { de: "der Witz", en: "joke", topics: ["Teil3"] },
+  { de: "fröhlich", en: "cheerful", topics: ["Teil3"] },
+  { de: "der Mitmensch", en: "fellow human being", topics: ["Teil3"] },
+  { de: "sympathisch", en: "likeable", topics: ["Teil3"] },
+  { de: "wahrnehmen", en: "to perceive / notice", topics: ["Teil3"] },
+  { de: "die Feststellung", en: "finding / observation", topics: ["Teil3"] },
+  { de: "der Forscher", en: "researcher", topics: ["Teil3"] },
+  { de: "als sympathisch wahrgenommen werden", en: "to be perceived as likeable", topics: ["Teil3"] },
+  { de: "missmutig", en: "grumpy / bad-tempered", topics: ["Teil3"] },
+  { de: "sich wohlfühlen", en: "to feel comfortable / feel good", topics: ["Teil3"] },
+  { de: "etwas geht jemandem leicht von der Hand", en: "something is easy for someone to do", topics: ["Teil3"] },
+  { de: "ebenfalls", en: "also", topics: ["Teil3"] },
+  { de: "der Arbeitsplatz", en: "workplace", topics: ["Teil3"] },
+  { de: "der Teamgeist", en: "team spirit", topics: ["Teil3"] },
+  { de: "die Kreativität", en: "creativity", topics: ["Teil3"] },
+  { de: "fördern", en: "to promote / encourage", topics: ["Teil3"] },
+  { de: "die Konfliktlösung", en: "conflict resolution", topics: ["Teil3"] },
+  { de: "von Nutzen sein", en: "to be useful / beneficial", topics: ["Teil3", "Teil4"] },
+  { de: "Stress abbauen", en: "to reduce stress", topics: ["Teil3"] },
+  { de: "aus medizinischer Sicht", en: "from a medical point of view", topics: ["Teil3"] },
+  { de: "die Wirkung", en: "effect", topics: ["Teil3", "Teil4"] },
+  { de: "das Stresshormon", en: "stress hormone", topics: ["Teil3"] },
+  { de: "schmerzlindernd", en: "pain-relieving", topics: ["Teil3"] },
+  { de: "stärken", en: "to strengthen", topics: ["Teil3"] },
+  { de: "das Immunsystem", en: "immune system", topics: ["Teil3"] },
+  { de: "geistig", en: "mental", topics: ["Teil3"] },
+  { de: "die Entspannung", en: "relaxation", topics: ["Teil3"] },
+  { de: "sich einstellen", en: "to occur / set in", topics: ["Teil3"] },
+  { de: "entstehen", en: "to arise / develop", topics: ["Teil3"] },
+  { de: "eine Art", en: "a kind of", topics: ["Teil3"] },
+  { de: "die Atempause", en: "breathing pause", topics: ["Teil3"] },
+  { de: "verschreiben", en: "to prescribe", topics: ["Teil3"] },
+  { de: "die Alterspsychiatrie", en: "geriatric psychiatry", topics: ["Teil3"] },
+  { de: "heilsam", en: "healing / beneficial", topics: ["Teil3"] },
+  { de: "etwas als ... einsetzen", en: "to use something as ...", topics: ["Teil3"] },
+  { de: "erschreckend", en: "frightening / alarming", topics: ["Teil3"] },
+  { de: "die Tatsache", en: "fact", topics: ["Teil3"] },
+  { de: "im Laufe des Lebens", en: "over the course of one's life", topics: ["Teil3"] },
+  { de: "verlernen", en: "to unlearn", topics: ["Teil3"] },
+  { de: "spontan", en: "spontaneous", topics: ["Teil3"] },
+  { de: "der Erwachsene", en: "adult", topics: ["Teil3"] },
+  { de: "kognitiv", en: "cognitive", topics: ["Teil3"] },
+  { de: "kein Wunder", en: "no wonder", topics: ["Teil3"] },
+  { de: "professionell", en: "professional", topics: ["Teil3"] },
+  { de: "der Lachtrainer", en: "laughter trainer", topics: ["Teil3"] },
+  { de: "jemanden zum Lachen bringen", en: "to make somebody laugh", topics: ["Teil3"] },
+  { de: "wie läuft etwas ab?", en: "how does something work / take place?", topics: ["Teil3"] },
+  { de: "das Mitglied", en: "member", topics: ["Teil3"] },
+  { de: "überraschend", en: "surprising", topics: ["Teil3"] },
+  { de: "langsam aber sicher", en: "slowly but surely", topics: ["Teil3"] },
+  { de: "herauskitzeln", en: "to coax out / draw out", topics: ["Teil3"] },
+  { de: "vortäuschen", en: "to pretend", topics: ["Teil3"] },
+  { de: "schallend", en: "ringing / loud", topics: ["Teil3"] },
+  { de: "explodierend", en: "explosive", topics: ["Teil3"] },
+  { de: "auch wenn", en: "even if / although", topics: ["Teil3"] },
+  { de: "sich entspannen", en: "to relax", topics: ["Teil3"] },
+  { de: "lachfreudig", en: "fond of laughing", topics: ["Teil3"] },
+  { de: "das Ziel erreichen", en: "to achieve the goal", topics: ["Teil3"] },
+  { de: "der Erfinder", en: "inventor", topics: ["Teil3"] },
+  { de: "erstaunt", en: "surprised / amazed", topics: ["Teil3"] },
+  { de: "öffentlich", en: "public", topics: ["Teil3"] },
+  { de: "bereit sein", en: "to be willing / ready", topics: ["Teil3"] },
+  { de: "zunächst", en: "initially / at first", topics: ["Teil3", "Teil2"] },
+  { de: "sich finden", en: "to gather / come together", topics: ["Teil3"] },
+  { de: "peinlich", en: "embarrassing", topics: ["Teil3"] },
+  { de: "jemandem ist etwas peinlich", en: "something is embarrassing to someone", topics: ["Teil3"] },
+  { de: "sich anschließen", en: "to join", topics: ["Teil3"] },
+  { de: "sich einer Gruppe anschließen", en: "to join a group / exercise", topics: ["Teil3"] },
+  { de: "in den Anfängen", en: "in the early days", topics: ["Teil3"] },
+  { de: "sich gegenseitig", en: "each other", topics: ["Teil3"] },
+  { de: "indem + Verb", en: "by doing something", topics: ["Teil3"] },
+  { de: "ziemlich", en: "quite / rather", topics: ["Teil3"] },
+  { de: "jemandem ausgehen", en: "to run out (for someone)", topics: ["Teil3"] },
+  { de: "eine Methode entwickeln", en: "to develop a method", topics: ["Teil3"] },
+  { de: "ermöglichen", en: "to make possible", topics: ["Teil3"] },
+  { de: "erleichtern", en: "to make easier", topics: ["Teil3"] },
+  { de: "ohne Grund", en: "without a reason", topics: ["Teil3"] },
+  { de: "sich etwas ausdenken", en: "to come up with / think up something", topics: ["Teil3"] },
+  { de: "die Dehnübung", en: "stretching exercise", topics: ["Teil3"] },
+  { de: "verbinden", en: "to combine / connect", topics: ["Teil3"] },
+  { de: "die Geburtsstunde", en: "the birth / beginning of something", topics: ["Teil3", "Teil4"] },
+  { de: "gestresst", en: "stressed", topics: ["Teil3"] },
+  { de: "vergnügt", en: "cheerful / content", topics: ["Teil3"] },
+  { de: "angenehm empfinden", en: "to perceive as pleasant", topics: ["Teil3"] },
+  { de: "entspannend", en: "relaxing", topics: ["Teil3"] },
+  { de: "das Denkvermögen", en: "ability to think", topics: ["Teil3"] },
+  { de: "das Humorverständnis", en: "understanding of humor", topics: ["Teil3"] },
+  { de: "sich verändern", en: "to change", topics: ["Teil3", "Teil4"] },
+  { de: "das Verhalten", en: "behavior", topics: ["Teil3"] },
+  { de: "die Lernfähigkeit", en: "ability to learn", topics: ["Teil3"] },
+  { de: "abnehmen", en: "to decrease", topics: ["Teil3"] },
+  { de: "locker", en: "relaxed", topics: ["Teil3"] },
+  { de: "unbeschwert", en: "carefree", topics: ["Teil3"] },
+  { de: "der Teilnehmer", en: "participant", topics: ["Teil3"] },
+  { de: "verlegen", en: "to move / relocate", topics: ["Teil3"] },
+  { de: "die Arztpraxis", en: "doctor's practice", topics: ["Teil3"] },
+  { de: "der Anhänger", en: "follower / supporter", topics: ["Teil3"] },
+  { de: "auffordern", en: "to ask / invite / call upon", topics: ["Teil3"] },
+  { de: "miteinbeziehen", en: "to include / incorporate", topics: ["Teil3"] },
+
+  // ===== TEIL 4 — Zusatzstoffe in Lebensmitteln =====
+  { de: "die Kennzeichnungspflicht", en: "mandatory labeling", topics: ["Teil4"] },
+  { de: "darüber hinwegtäuschen", en: "to disguise / conceal", topics: ["Teil4"] },
+  { de: "der Lebensmittelzusatzstoff", en: "food additive", topics: ["Teil4"] },
+  { de: "die Entstehung", en: "development / occurrence", topics: ["Teil4"] },
+  { de: "die Krankheit", en: "disease", topics: ["Teil4", "Teil3"] },
+  { de: "mit etwas in Verbindung gebracht werden", en: "to be associated with something", topics: ["Teil4"] },
+  { de: "der Anlass zu etwas", en: "reason / cause for something", topics: ["Teil4"] },
+  { de: "neuerlich", en: "renewed / further", topics: ["Teil4"] },
+  { de: "mit etwas beauftragt werden", en: "to be commissioned with something", topics: ["Teil4"] },
+  { de: "zu widersprüchlichen Ergebnissen kommen", en: "to arrive at contradictory results", topics: ["Teil4"] },
+  { de: "Zweifel entstehen", en: "doubts arise", topics: ["Teil4"] },
+  { de: "im Rahmen", en: "within the framework", topics: ["Teil4"] },
+  { de: "die Verpflichtung", en: "obligation", topics: ["Teil4"] },
+  { de: "das Nahrungsmittelallergen", en: "food allergen", topics: ["Teil4"] },
+  { de: "glutenhaltig", en: "containing gluten", topics: ["Teil4"] },
+  { de: "das Getreide", en: "grain / cereal", topics: ["Teil4"] },
+  { de: "die Verpackung", en: "packaging", topics: ["Teil4"] },
+  { de: "kennzeichnen", en: "to label", topics: ["Teil4"] },
+  { de: "im Rahmen einer Verpflichtung", en: "within the framework of an obligation", topics: ["Teil4"] },
+  { de: "sinnvoll", en: "sensible / useful", topics: ["Teil4"] },
+  { de: "die Verordnung", en: "regulation", topics: ["Teil4"] },
+  { de: "der Allergiker", en: "person with an allergy", topics: ["Teil4"] },
+  { de: "unverzichtbar", en: "indispensable / essential", topics: ["Teil4"] },
+  { de: "die Kennzeichnung", en: "labeling", topics: ["Teil4"] },
+  { de: "die Verwendung", en: "use", topics: ["Teil4"] },
+  { de: "der Zusatzstoff", en: "additive", topics: ["Teil4"] },
+  { de: "maßgeblich", en: "decisive / significant", topics: ["Teil4"] },
+  { de: "die Eigenschaft", en: "property / characteristic", topics: ["Teil4"] },
+  { de: "maßgeblich dafür sein", en: "to be a decisive factor for that", topics: ["Teil4"] },
+  { de: "haltbar", en: "long-lasting / able to be kept", topics: ["Teil4"] },
+  { de: "recht lange", en: "quite a long time", topics: ["Teil4"] },
+  { de: "appetitlich", en: "appetizing", topics: ["Teil4"] },
+  { de: "egal, in welcher Menge", en: "regardless of the amount", topics: ["Teil4"] },
+  { de: "enthalten sein", en: "to be contained", topics: ["Teil4"] },
+  { de: "die Menge", en: "quantity / amount", topics: ["Teil4"] },
+  { de: "aufführen", en: "to list", topics: ["Teil4"] },
+  { de: "die E-Nummer", en: "E-number", topics: ["Teil4"] },
+  { de: "die Schwierigkeit", en: "difficulty", topics: ["Teil4"] },
+  { de: "der Laie", en: "layperson / non-expert", topics: ["Teil4"] },
+  { de: "höchst unverständlich", en: "extremely incomprehensible", topics: ["Teil4"] },
+  { de: "feststellen", en: "to determine / establish", topics: ["Teil4"] },
+  { de: "es handelt sich um + Akkusativ", en: "it concerns / it is about ...", topics: ["Teil4"] },
+  { de: "das Erfrischungsgetränk", en: "soft drink", topics: ["Teil4"] },
+  { de: "gerade bei", en: "especially among", topics: ["Teil4"] },
+  { de: "beliebt", en: "popular", topics: ["Teil4", "Teil2"] },
+  { de: "der Jugendliche", en: "young person / adolescent", topics: ["Teil4"] },
+  { de: "enthalten", en: "to contain", topics: ["Teil4"] },
+  { de: "die Zitronensäure", en: "citric acid", topics: ["Teil4"] },
+  { de: "Karies", en: "tooth decay / dental caries", topics: ["Teil4"] },
+  { de: "begünstigen", en: "to promote / contribute to", topics: ["Teil4"] },
+  { de: "der Zuckergehalt", en: "sugar content", topics: ["Teil4"] },
+  { de: "der Farbstoff", en: "coloring agent", topics: ["Teil4"] },
+  { de: "der Zahnschaden", en: "dental damage", topics: ["Teil4"] },
+  { de: "beteiligt sein an", en: "to be involved in", topics: ["Teil4"] },
+  { de: "einheitlich", en: "uniform / standardized", topics: ["Teil4"] },
+  { de: "der Nutzen", en: "benefit / use", topics: ["Teil4"] },
+  { de: "der Mitgliedsstaat", en: "member state", topics: ["Teil4"] },
+  { de: "der Einsatz", en: "use / application", topics: ["Teil4"] },
+  { de: "verbieten", en: "to prohibit / ban", topics: ["Teil4"] },
+  { de: "traditionell", en: "traditional", topics: ["Teil4"] },
+  { de: "den Einsatz von etwas verbieten", en: "to prohibit the use of something", topics: ["Teil4"] },
+  { de: "gebraut werden", en: "to be brewed", topics: ["Teil4"] },
+  { de: "frei von", en: "free from", topics: ["Teil4"] },
+  { de: "das Reinheitsgebot", en: "purity law", topics: ["Teil4"] },
+  { de: "urteilen über", en: "to judge / evaluate", topics: ["Teil4"] },
+  { de: "angeben", en: "to state / specify", topics: ["Teil4"] },
+  { de: "unverpackt", en: "unpackaged", topics: ["Teil4"] },
+  { de: "anbieten", en: "to offer", topics: ["Teil4"] }
+];
+
+// German-to-German synonym / paraphrase pairs — the core B2 Lesen skill:
+// recognizing the SAME idea worded differently. "en" gives the shared meaning.
+const SYNONYMS = [
+  { a: "Unklarheit", b: "Zweifel", en: "uncertainty / doubt", topics: ["Teil4"] },
+  { a: "gesundheitliche Schäden", b: "Krankheiten", en: "damage to health / diseases", topics: ["Teil4"] },
+  { a: "Unverträglichkeit", b: "Allergie / Allergen", en: "intolerance / allergy", topics: ["Teil4"] },
+  { a: "feststellen", b: "überprüfen / erkennen", en: "to determine / check / recognize", topics: ["Teil4"] },
+  { a: "Optimierung", b: "Verbesserung", en: "optimization / improvement", topics: ["Teil4"] },
+  { a: "Beschaffenheit", b: "Eigenschaften", en: "condition / properties", topics: ["Teil4"] },
+  { a: "codierte Bezeichnung", b: "E-Nummer", en: "coded label / E-number", topics: ["Teil4"] },
+  { a: "Erkennung erschwert", b: "für Laien unverständlich", en: "recognition made harder / incomprehensible to laypeople", topics: ["Teil4"] },
+  { a: "die Zähne angreifen", b: "Karies / Zahnschäden", en: "attack the teeth / tooth decay, dental damage", topics: ["Teil4"] },
+  { a: "Ausnahmen", b: "verbieten / Sonderregelung", en: "exceptions / to ban, special rule", topics: ["Teil4"] },
+  { a: "gut beraten", b: "Beratung ... hervorragend", en: "well advised / excellent consultation", topics: ["Teil1"] },
+  { a: "nicht lange gezögert", b: "Entscheidung ... schnell getroffen", en: "did not hesitate long / decided quickly", topics: ["Teil1"] },
+  { a: "Kommunikation nicht erleichtert", b: "laut und deutlich sprechen müssen", en: "communication not made easier / must speak loudly and clearly", topics: ["Teil1"] },
+  { a: "Geräusche gleich", b: "kaum unterscheiden", en: "sounds the same / can hardly distinguish", topics: ["Teil1"] },
+  { a: "beruflich wichtig", b: "in meinem Beruf", en: "professionally important / in my profession", topics: ["Teil1"] },
+  { a: "moderne Technik", b: "Bluetooth-Anbindung", en: "modern technology / Bluetooth connectivity", topics: ["Teil1"] },
+  { a: "unzufrieden", b: "nicht glücklich damit", en: "dissatisfied / not happy with it", topics: ["Teil1"] },
+  { a: "Alltagsgeräusche", b: "Zeitung / Fahrradbremsen", en: "everyday sounds / newspaper, bicycle brakes", topics: ["Teil1"] },
+  { a: "irritieren / stören", b: "überfordern / zum Verzweifeln bringen", en: "irritate/disturb / overwhelm, drive to despair", topics: ["Teil1"] },
+  { a: "die Hörhilfe", b: "das Hörgerät", en: "hearing aid (two words for the same thing)", topics: ["Teil1"] },
+  { a: "Vielmehr", b: "im Gegenteil", en: "rather / on the contrary (contrast signal)", topics: ["Teil2"] },
+  { a: "zu einfach → Langeweile", b: "zu schwierig → Frustration", en: "too easy → boredom / too difficult → frustration", topics: ["Teil2"] },
+  { a: "Zum einen ...", b: "Zum anderen ...", en: "on the one hand ... / on the other hand ...", topics: ["Teil2"] },
+  { a: "eine solche Unterhaltung", b: "das vorher beschriebene Gespräch", en: "such a conversation / the conversation described before", topics: ["Teil2"] },
+  { a: "sich positiv auswirken", b: "einen guten Effekt haben", en: "to have a positive effect / a good effect", topics: ["Teil2"] },
+  { a: "jemanden im Stich lassen", b: "jemanden enttäuschen / versagen", en: "let someone down / disappoint, fail", topics: ["Teil2"] },
+  { a: "wissenschaftlich belegt", b: "wissenschaftlich nachgewiesen", en: "scientifically documented / scientifically proven", topics: ["Teil2", "Teil3"] },
+  { a: "unbeschwert fühlen", b: "sich entspannen / sich wohlfühlen", en: "feel carefree / relax, feel good", topics: ["Teil3"] },
+  { a: "jemanden zum Lachen bringen", b: "Menschen wieder zum Lachen bringen", en: "make somebody laugh / make people laugh again", topics: ["Teil3"] },
+  { a: "vergnügte Menschen", b: "fröhliche Menschen", en: "cheerful/content people (same idea)", topics: ["Teil3"] },
+  { a: "dagegen", b: "im Gegensatz dazu", en: "on the other hand / in contrast to that", topics: ["Teil3", "Teil2"] },
+  { a: "die Arbeit geht leicht von der Hand", b: "die Arbeit fällt leicht", en: "work goes easily / work is easy", topics: ["Teil3"] }
+];
+
+</script>
+<script>
+(function () {
+  "use strict";
+
+  // ---------- state ----------
+  let starCount = 0;
+  let deVoice = null;
+  const mistakes = new Map(); // key: de.toLowerCase() -> {de,en,count,lastWrong}
+
+  // ---------- speech ----------
+  function pickVoice() {
+    const voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+    deVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith("de")) || null;
+  }
+  if (window.speechSynthesis) {
+    pickVoice();
+    speechSynthesis.onvoiceschanged = pickVoice;
+  }
+  let voiceWarned = false;
+  function toast(msg) {
+    const t = document.createElement("div");
+    t.className = "toast";
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2600);
+  }
+  function speak(text, rate, onend) {
+    if (!window.speechSynthesis) {
+      if (!voiceWarned) { toast("Sprachausgabe wird auf diesem Gerät nicht unterstützt."); voiceWarned = true; }
+      if (onend) onend();
+      return;
+    }
+    if (!deVoice && !voiceWarned) {
+      toast("Keine deutsche Stimme gefunden — der Text bleibt trotzdem sichtbar.");
+      voiceWarned = true;
+    }
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "de-DE";
+    if (deVoice) u.voice = deVoice;
+    u.rate = rate || 1;
+    if (onend) u.onend = onend;
+    speechSynthesis.speak(u);
+  }
+
+  // ---------- tone feedback ----------
+  let actx = null;
+  function tone(freqs, dur) {
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      let t = actx.currentTime;
+      freqs.forEach((f) => {
+        const osc = actx.createOscillator();
+        const gain = actx.createGain();
+        osc.frequency.value = f;
+        osc.type = "sine";
+        gain.gain.setValueAtTime(0.0001, t);
+        gain.gain.exponentialRampToValueAtTime(0.2, t + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        osc.connect(gain).connect(actx.destination);
+        osc.start(t);
+        osc.stop(t + dur + 0.02);
+        t += dur * 0.55;
+      });
+    } catch (e) { /* ignore */ }
+  }
+  const goodTone = () => tone([660, 880, 1180], 0.14);
+  const badTone = () => tone([300, 200], 0.16);
+
+  // ---------- tabs ----------
+  const panels = {
+    vocab: document.getElementById("panel-vocab"),
+    practice: document.getElementById("panel-practice"),
+    review: document.getElementById("panel-review")
+  };
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      Object.values(panels).forEach(p => p.classList.remove("active"));
+      panels[btn.dataset.tab].classList.add("active");
+      if (btn.dataset.tab === "vocab") renderVocabBrowse();
+      if (btn.dataset.tab === "review") renderReview();
+    });
+  });
+  function goToTab(name) {
+    document.querySelector(`.tab-btn[data-tab="${name}"]`).click();
+  }
+
+  // ---------- top bar ----------
+  const starCountEl = document.getElementById("starCount");
+  function addStar(n) {
+    starCount += n;
+    starCountEl.textContent = starCount;
+  }
+
+  // ---------- vocab browse tab ----------
+  let vocabFilter = "Alle";
+  function topicLabel(key) {
+    const t = TOPICS.find(x => x.key === key);
+    return t ? t.label : key;
+  }
+  function renderVocabPills() {
+    const pillsEl = document.getElementById("vocabPills");
+    pillsEl.innerHTML = "";
+    const allBtn = document.createElement("button");
+    allBtn.className = "pill" + (vocabFilter === "Alle" ? " active" : "");
+    allBtn.textContent = "Alle";
+    allBtn.addEventListener("click", () => { vocabFilter = "Alle"; renderVocabBrowse(); });
+    pillsEl.appendChild(allBtn);
+    TOPICS.forEach(t => {
+      const p = document.createElement("button");
+      p.className = "pill" + (vocabFilter === t.key ? " active" : "");
+      p.textContent = t.label;
+      p.addEventListener("click", () => { vocabFilter = t.key; renderVocabBrowse(); });
+      pillsEl.appendChild(p);
+    });
+  }
+  function renderVocabBrowse() {
+    renderVocabPills();
+    const grid = document.getElementById("vocabGrid");
+    grid.innerHTML = "";
+    const items = VOCAB.filter(v => vocabFilter === "Alle" || v.topics.includes(vocabFilter));
+    items.forEach(v => {
+      const c = document.createElement("div");
+      c.className = "vcard";
+      c.innerHTML = `<b>${v.de}</b><div class="m">${v.en}</div><div class="src">${v.topics.map(topicLabel).join(", ")}</div>`;
+      c.addEventListener("click", () => speak(v.de, 1));
+      grid.appendChild(c);
+    });
+  }
+
+  // ---------- practice setup ----------
+  const MODES = [
+    { id: "listen-en", ic: "🔊", label: "Hören → EN", sub: "Listen, choose English" },
+    { id: "de-en", ic: "🇩🇪→🇬🇧", label: "DE → EN", sub: "Choose English" },
+    { id: "en-de", ic: "🇬🇧→🇩🇪", label: "EN → DE", sub: "Choose German" },
+    { id: "synonyms", ic: "🔁", label: "Synonyme", sub: "Choose the German synonym" }
+  ];
+  let practiceMode = "de-en";
+  let selectedTopics = TOPICS.map(t => t.key);
+  let practiceLength = 10;
+
+  function renderModeGrid() {
+    const el = document.getElementById("modeGrid");
+    el.innerHTML = "";
+    MODES.forEach(m => {
+      const c = document.createElement("button");
+      c.className = "mode-card" + (practiceMode === m.id ? " active" : "");
+      c.innerHTML = `<span class="ic">${m.ic}</span><b>${m.label}</b><small>${m.sub}</small>`;
+      c.addEventListener("click", () => { practiceMode = m.id; renderModeGrid(); });
+      el.appendChild(c);
+    });
+  }
+  function renderTopicPills() {
+    const el = document.getElementById("topicPills");
+    el.innerHTML = "";
+    const allBtn = document.createElement("button");
+    allBtn.className = "topic-pill" + (selectedTopics.length === TOPICS.length ? " active" : "");
+    allBtn.textContent = "Alle";
+    allBtn.addEventListener("click", () => { selectedTopics = TOPICS.map(t => t.key); renderTopicPills(); });
+    el.appendChild(allBtn);
+    TOPICS.forEach(t => {
+      const b = document.createElement("button");
+      b.className = "topic-pill" + (selectedTopics.includes(t.key) ? " active" : "");
+      b.textContent = t.label;
+      b.addEventListener("click", () => {
+        if (selectedTopics.includes(t.key)) {
+          if (selectedTopics.length === 1) { toast("Mindestens ein Teil muss ausgewählt sein."); return; }
+          selectedTopics = selectedTopics.filter(k => k !== t.key);
+        } else {
+          selectedTopics = [...selectedTopics, t.key];
+        }
+        renderTopicPills();
+      });
+      el.appendChild(b);
+    });
+  }
+  function renderLengthChoices() {
+    const el = document.getElementById("lengthChoices");
+    el.innerHTML = "";
+    [10, 20, 40, "all"].forEach(n => {
+      const b = document.createElement("button");
+      b.className = "choice-btn" + (practiceLength === n ? " active" : "");
+      b.textContent = n === "all" ? "Alle" : n;
+      b.addEventListener("click", () => { practiceLength = n; renderLengthChoices(); });
+      el.appendChild(b);
+    });
+  }
+  renderModeGrid(); renderTopicPills(); renderLengthChoices();
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function filteredPool() {
+    return VOCAB.filter(v => v.topics.some(t => selectedTopics.includes(t)));
+  }
+  function filteredSynonymPool() {
+    return SYNONYMS.filter(p => p.topics.some(t => selectedTopics.includes(t)))
+      .map(p => ({ de: p.a, en: p.b, gloss: p.en }));
+  }
+
+  document.getElementById("btnStartPractice").addEventListener("click", () => startMc());
+
+  // ---------- MC-style practice (listen-en, en-de, de-en, synonyms) ----------
+  let mcQuestions = [], mcIdx = 0, mcScore = 0, mcAnswered = false, mcScopeIsMistakes = false;
+
+  function startMc(fromMistakes) {
+    mcScopeIsMistakes = !!fromMistakes;
+    let pool;
+    if (fromMistakes) pool = Array.from(mistakes.values());
+    else if (practiceMode === "synonyms") pool = filteredSynonymPool();
+    else pool = filteredPool();
+    if (pool.length < 4) {
+      toast("Zu wenige Einträge für diese Auswahl — wähle mehr Teile.");
+      return;
+    }
+    pool = shuffle(pool);
+    const n = practiceLength === "all" ? pool.length : Math.min(practiceLength, pool.length);
+    mcQuestions = pool.slice(0, n);
+    mcIdx = 0; mcScore = 0;
+    document.getElementById("practiceSetup").style.display = "none";
+    document.getElementById("practiceResults").style.display = "none";
+    document.getElementById("mcPlay").style.display = "block";
+    showMcQuestion();
+  }
+
+  function buildMcOptions(answer) {
+    if (practiceMode === "synonyms") {
+      const distractPool = shuffle(SYNONYMS.filter(p => p.b.toLowerCase() !== answer.en.toLowerCase()));
+      const chosen = [];
+      const seen = new Set();
+      for (const p of distractPool) {
+        const low = p.b.toLowerCase();
+        if (seen.has(low)) continue;
+        seen.add(low);
+        chosen.push(p.b);
+        if (chosen.length === 3) break;
+      }
+      return shuffle([{ label: answer.en, correct: true }, ...chosen.map(label => ({ label, correct: false }))]);
+    }
+    const distractPool = shuffle(VOCAB.filter(w => w.de.toLowerCase() !== answer.de.toLowerCase() && w.en.toLowerCase() !== answer.en.toLowerCase()));
+    const wantsGerman = practiceMode === "en-de";
+    const chosen = [];
+    const seen = new Set();
+    for (const w of distractPool) {
+      const label = wantsGerman ? w.de : w.en;
+      const low = label.toLowerCase();
+      if (seen.has(low)) continue;
+      seen.add(low);
+      chosen.push(w);
+      if (chosen.length === 3) break;
+    }
+    const answerLabel = wantsGerman ? answer.de : answer.en;
+    return shuffle([{ label: answerLabel, correct: true }, ...chosen.map(w => ({ label: wantsGerman ? w.de : w.en, correct: false }))]);
+  }
+
+  function showMcQuestion() {
+    mcAnswered = false;
+    const q = mcQuestions[mcIdx];
+    document.getElementById("progFill").style.width = `${(mcIdx / mcQuestions.length) * 100}%`;
+    document.getElementById("progLabel").textContent = `Frage ${mcIdx + 1} / ${mcQuestions.length}`;
+    document.getElementById("scoreLabel").textContent = `${mcScore} Punkte`;
+    document.getElementById("feedback").style.display = "none";
+
+    const kindEl = document.getElementById("promptKind");
+    const wordEl = document.getElementById("promptWord");
+    const listenBtn = document.getElementById("btnPromptListen");
+
+    if (practiceMode === "de-en") {
+      kindEl.textContent = "Was bedeutet dieses Wort?";
+      wordEl.textContent = q.de;
+      listenBtn.style.display = "inline-block";
+    } else if (practiceMode === "en-de") {
+      kindEl.textContent = "Wie sagt man das auf Deutsch?";
+      wordEl.textContent = q.en;
+      listenBtn.style.display = "none";
+    } else if (practiceMode === "synonyms") {
+      kindEl.textContent = "Welches Wort bedeutet (fast) dasselbe?";
+      wordEl.textContent = q.de;
+      listenBtn.style.display = "inline-block";
+    } else {
+      kindEl.textContent = "Hör zu und wähle die richtige Bedeutung";
+      wordEl.textContent = "🔊";
+      listenBtn.style.display = "inline-block";
+    }
+    listenBtn.onclick = () => speak(q.de, 1);
+    if (practiceMode === "listen-en") speak(q.de, 1);
+
+    const options = buildMcOptions(q);
+    const grid = document.getElementById("optionsGrid");
+    grid.innerHTML = "";
+    options.forEach(opt => {
+      const b = document.createElement("button");
+      b.className = "opt-btn";
+      b.textContent = opt.label;
+      b.addEventListener("click", () => onMcAnswer(b, opt, q, options, grid));
+      grid.appendChild(b);
+    });
+  }
+
+  function onMcAnswer(btn, opt, q, options, grid) {
+    if (mcAnswered) return;
+    mcAnswered = true;
+    grid.querySelectorAll(".opt-btn").forEach(b => b.disabled = true);
+    const correctBtn = Array.from(grid.children).find((b, i) => options[i].correct);
+    correctBtn.classList.add("correct");
+    const fb = document.getElementById("feedback");
+    const glossSuffix = q.gloss ? ` (${q.gloss})` : "";
+    if (opt.correct) {
+      goodTone(); mcScore++; addStar(1);
+      speak(q.de, 1);
+      fb.className = "feedback good";
+      fb.textContent = `✅ Richtig! ${q.de} = ${q.en}${glossSuffix}`;
+      fb.style.display = "block";
+      setTimeout(nextMcQuestion, 1100);
+    } else {
+      btn.classList.add("wrong");
+      badTone();
+      speak(q.de, 1);
+      fb.className = "feedback bad";
+      fb.textContent = `❌ Nicht ganz … richtig: ${q.de} = ${q.en}${glossSuffix}`;
+      fb.style.display = "block";
+      const key = q.de.toLowerCase();
+      const existing = mistakes.get(key);
+      if (existing) { existing.count++; existing.lastWrong = opt.label; }
+      else mistakes.set(key, { de: q.de, en: q.en, count: 1, lastWrong: opt.label });
+      const nb = document.createElement("button");
+      nb.className = "btn primary wide";
+      nb.style.marginTop = "10px";
+      nb.textContent = "Weiter ▶";
+      nb.addEventListener("click", () => { nb.remove(); nextMcQuestion(); });
+      fb.after(nb);
+    }
+  }
+
+  function nextMcQuestion() {
+    document.querySelectorAll("#panel-practice .btn.primary.wide").forEach(b => {
+      if (b.textContent === "Weiter ▶") b.remove();
+    });
+    mcIdx++;
+    if (mcIdx >= mcQuestions.length) showMcResults(); else showMcQuestion();
+  }
+
+  function showMcResults() {
+    document.getElementById("mcPlay").style.display = "none";
+    document.getElementById("practiceResults").style.display = "block";
+    const pct = Math.round((mcScore / mcQuestions.length) * 100);
+    document.getElementById("resultsLabel").textContent = "Ergebnis";
+    document.getElementById("resultPct").textContent = `${pct}%`;
+    document.getElementById("resultScore").textContent = `${mcScore} / ${mcQuestions.length} richtig`;
+    const starsEl = document.getElementById("resultStars");
+    starsEl.textContent = pct >= 90 ? "⭐⭐⭐" : pct >= 70 ? "⭐⭐" : pct >= 40 ? "⭐" : "—";
+  }
+
+  // ---------- results actions ----------
+  document.getElementById("btnPracticeMistakes").addEventListener("click", () => {
+    if (mistakes.size < 4) { toast("Noch nicht genug Fehler gesammelt (mind. 4 nötig)."); return; }
+    practiceMode = "de-en";
+    renderModeGrid();
+    document.getElementById("practiceResults").style.display = "none";
+    startMc(true);
+  });
+  document.getElementById("btnAgain").addEventListener("click", () => {
+    document.getElementById("practiceResults").style.display = "none";
+    startMc(mcScopeIsMistakes);
+  });
+  document.getElementById("btnNewPractice").addEventListener("click", () => {
+    document.getElementById("practiceResults").style.display = "none";
+    document.getElementById("practiceSetup").style.display = "block";
+  });
+
+  // ---------- review tab ----------
+  function renderReview() {
+    const list = document.getElementById("reviewList");
+    list.innerHTML = "";
+    if (mistakes.size === 0) {
+      list.innerHTML = `<div class="empty-state">🎉 Keine Fehler bisher — weiter so!</div>`;
+      return;
+    }
+    Array.from(mistakes.values()).forEach(m => {
+      const item = document.createElement("div");
+      item.className = "review-item";
+      item.innerHTML = `
+        <div class="top"><b>${m.de}</b><span class="count">×${m.count}</span></div>
+        <div class="m">${m.en}</div>
+        <button class="small-icon-btn spk">🔊</button>
+      `;
+      item.querySelector(".spk").addEventListener("click", () => speak(m.de, 1));
+      list.appendChild(item);
+    });
+    const actions = document.createElement("div");
+    actions.className = "controls";
+    actions.innerHTML = `
+      <button class="btn primary wide" id="btnPracticeFromReview">Diese Wörter üben</button>
+      <button class="btn wide" id="btnClearMistakes">Liste löschen</button>
+    `;
+    list.appendChild(actions);
+    document.getElementById("btnPracticeFromReview").addEventListener("click", () => {
+      if (mistakes.size < 4) { toast("Noch nicht genug Fehler gesammelt (mind. 4 nötig)."); return; }
+      goToTab("practice");
+      practiceMode = "de-en";
+      renderModeGrid(); renderLengthChoices();
+      document.getElementById("practiceSetup").style.display = "block";
+      startMc(true);
+    });
+    document.getElementById("btnClearMistakes").addEventListener("click", () => {
+      mistakes.clear();
+      renderReview();
+    });
+  }
+
+  // ---------- init ----------
+  renderVocabBrowse();
+})();
+
+</script>
+</body>
+</html>
