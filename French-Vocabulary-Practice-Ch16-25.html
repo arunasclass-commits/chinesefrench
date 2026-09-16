@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Vocabulaire Français — ChineseFrench Institute</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#3f5f9e; --blue-dark:#2c4470; --red:#e0475a; --gold:#f5b342;
+    --cream:#fff8ee; --card:#ffffff; --green:#4caf6d; --grey:#8a94a6;
+    --radius:18px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Nunito', sans-serif;
+    background:linear-gradient(160deg,#eaf1ff 0%, #fff8ee 55%, #ffeef0 100%);
+    min-height:100vh; color:#2b2f3a; padding:14px;
+  }
+  h1,h2,h3, .chip, .btn, .tab, .chapter-btn{font-family:'Baloo 2', sans-serif;}
+  #app{max-width:720px; margin:0 auto;}
+  .header{text-align:center; padding:10px 4px 16px;}
+  .header h1{font-size:1.5rem; color:var(--blue-dark); margin:0 0 2px;}
+  .header p{margin:0; color:var(--grey); font-size:0.9rem;}
+  .flag-strip{height:6px; border-radius:4px; background:linear-gradient(90deg,#3f5f9e 0 33%, #fff 33% 66%, #e0475a 66% 100%); margin:0 0 14px;}
+
+  .chapter-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px;}
+  .chapter-btn{
+    background:var(--card); border:none; border-radius:var(--radius); padding:14px 10px;
+    text-align:left; cursor:pointer; box-shadow:0 3px 0 #d8dfec; font-size:1rem;
+    display:flex; flex-direction:column; gap:2px; color:#2b2f3a;
+  }
+  .chapter-btn:active{transform:translateY(2px); box-shadow:0 1px 0 #d8dfec;}
+  .chapter-btn .emoji{font-size:1.6rem;}
+  .chapter-btn .num{color:var(--grey); font-size:0.75rem; font-weight:600;}
+  .chapter-btn .title-fr{font-weight:700; color:var(--blue-dark);}
+  .chapter-btn .title-en{font-size:0.78rem; color:var(--grey);}
+  .chapter-btn .count{font-size:0.72rem; color:var(--green); font-weight:700;}
+
+  .topbar{display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap;}
+  .back-btn{background:var(--card); border:none; border-radius:12px; padding:8px 12px; font-weight:700; cursor:pointer; color:var(--blue-dark); box-shadow:0 2px 0 #d8dfec;}
+  .chapter-title{font-weight:800; color:var(--blue-dark); font-size:1.15rem; flex:1;}
+  .score-badge{background:var(--gold); color:#fff; font-weight:800; border-radius:20px; padding:5px 12px; font-size:0.85rem; white-space:nowrap;}
+
+  .tabs{display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap;}
+  .tab{flex:1 1 auto; background:var(--card); border:none; border-radius:14px; padding:10px 6px; font-weight:700; cursor:pointer; color:#5a6376; font-size:0.85rem; box-shadow:0 2px 0 #d8dfec; min-width:74px;}
+  .tab.active{background:var(--blue); color:#fff; box-shadow:0 2px 0 var(--blue-dark);}
+
+  .card{background:var(--card); border-radius:var(--radius); padding:18px; box-shadow:0 3px 0 #d8dfec; margin-bottom:14px;}
+
+  .progress-line{display:flex; justify-content:space-between; align-items:center; font-size:0.82rem; color:var(--grey); margin-bottom:8px; font-weight:700;}
+
+  .btn{background:var(--blue); color:#fff; border:none; border-radius:14px; padding:11px 18px; font-weight:700; font-size:0.95rem; cursor:pointer; box-shadow:0 3px 0 var(--blue-dark);}
+  .btn:active{transform:translateY(2px); box-shadow:0 1px 0 var(--blue-dark);}
+  .btn.secondary{background:var(--grey); box-shadow:0 3px 0 #6b7385;}
+  .btn.green{background:var(--green); box-shadow:0 3px 0 #327349;}
+  .btn:disabled{opacity:0.45; cursor:not-allowed;}
+  .btn-row{display:flex; gap:10px; justify-content:center; margin-top:14px; flex-wrap:wrap;}
+
+  /* MATCH MODE */
+  .match-cols{display:flex; gap:14px;}
+  .match-col{flex:1; display:flex; flex-direction:column; gap:8px;}
+  .match-item{background:#f1f5fd; border:2px solid #e1e8f7; border-radius:12px; padding:11px 8px; text-align:center; cursor:pointer; font-weight:700; color:#2b2f3a; font-size:0.9rem; transition:all .15s;}
+  .match-item.fr{color:var(--blue-dark);}
+  .match-item.selected{border-color:var(--blue); background:#dfeaff;}
+  .match-item.correct{background:#e2f7e8; border-color:var(--green); color:#2b6b40; cursor:default;}
+  .match-item.wrong{background:#fde3e6; border-color:var(--red); animation:shake .35s;}
+  .match-item.done{visibility:hidden;}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+
+  /* FILL MODE */
+  .clue-box{text-align:center; margin-bottom:16px;}
+  .clue-box .en{font-size:1.25rem; font-weight:800; color:var(--blue-dark);}
+  .clue-box .hint{color:var(--grey); font-size:0.82rem; margin-top:2px;}
+  .sentence-line{text-align:center; font-size:1.1rem; margin-bottom:18px; color:#2b2f3a;}
+  .dropzone{display:inline-flex; align-items:center; justify-content:center; min-width:130px; min-height:42px; border:3px dashed #b9c4dd; border-radius:12px; padding:4px 12px; vertical-align:middle; background:#f7f9fd;}
+  .dropzone.filled{border-style:solid; border-color:var(--blue); background:#eaf1ff;}
+  .dropzone.correct{border-color:var(--green); background:#e2f7e8;}
+  .dropzone.wrong{border-color:var(--red); background:#fde3e6;}
+  .word-bank{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; min-height:56px; padding:10px; background:#f7f9fd; border-radius:14px;}
+  .chip{background:var(--gold); color:#fff; font-weight:700; border-radius:12px; padding:10px 16px; cursor:grab; touch-action:none; user-select:none; box-shadow:0 2px 0 #c98f1f; font-size:0.95rem;}
+  .chip.dragging{opacity:0.9; box-shadow:0 6px 14px rgba(0,0,0,.25); cursor:grabbing;}
+  .chip-placeholder{background:transparent; border:2px dashed #ddd; border-radius:12px;}
+
+  /* TF MODE */
+  .tf-statement{text-align:center; font-size:1.15rem; margin-bottom:18px; line-height:1.5;}
+  .tf-statement .fr-word{color:var(--blue-dark); font-weight:800;}
+  .tf-statement .en-word{color:var(--red); font-weight:800;}
+  .tf-buttons{display:flex; gap:14px; justify-content:center;}
+  .tf-btn{flex:1; max-width:150px; padding:16px; border-radius:14px; border:none; font-weight:800; font-size:1.1rem; cursor:pointer; color:#fff;}
+  .tf-btn.true-btn{background:var(--green); box-shadow:0 3px 0 #327349;}
+  .tf-btn.false-btn{background:var(--red); box-shadow:0 3px 0 #a53240;}
+  .tf-btn:active{transform:translateY(2px); box-shadow:none;}
+
+  /* LISTEN MODE */
+  .play-btn{display:block; margin:0 auto 20px; width:84px; height:84px; border-radius:50%; background:var(--blue); border:none; color:#fff; font-size:2rem; cursor:pointer; box-shadow:0 4px 0 var(--blue-dark);}
+  .play-btn:active{transform:translateY(3px); box-shadow:none;}
+  .mcq-options{display:flex; flex-direction:column; gap:10px;}
+  .mcq-btn{background:#f1f5fd; border:2px solid #e1e8f7; border-radius:12px; padding:13px; font-size:1rem; font-weight:700; text-align:left; cursor:pointer; color:#2b2f3a;}
+  .mcq-btn.correct{background:#e2f7e8; border-color:var(--green); color:#2b6b40;}
+  .mcq-btn.wrong{background:#fde3e6; border-color:var(--red); color:#8a2530;}
+  .mcq-btn:disabled{cursor:default;}
+
+  .feedback{text-align:center; font-weight:800; margin-top:12px; min-height:26px; font-size:1rem;}
+  .feedback.good{color:var(--green);}
+  .feedback.bad{color:var(--red);}
+
+  .done-screen{text-align:center;}
+  .done-screen .big-score{font-size:2.4rem; font-weight:800; color:var(--blue-dark); margin:8px 0;}
+  .done-screen .medal{font-size:3rem;}
+
+  footer{text-align:center; color:var(--grey); font-size:0.72rem; margin:22px 0 8px;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============================= DATA ============================= */
+const CHAPTERS = [
+{id:16, emoji:'👪', fr:'La famille', en:'Family', words:[
+  {fr:"le père", en:"father"},{fr:"la mère", en:"mother"},{fr:"le fils", en:"son"},
+  {fr:"la fille", en:"daughter"},{fr:"l'ami", en:"friend (male)"},{fr:"l'amie", en:"friend (female)"},
+  {fr:"le cousin", en:"cousin (male)"},{fr:"la cousine", en:"cousin (female)"},{fr:"le neveu", en:"nephew"},
+  {fr:"la nièce", en:"niece"},{fr:"l'étudiant", en:"student (male)"},{fr:"l'étudiante", en:"student (female)"},
+  {fr:"un enfant", en:"child"},{fr:"une enfant", en:"child (female)"},{fr:"un élève", en:"pupil (male)"},
+  {fr:"une élève", en:"pupil (female)"},{fr:"un professeur", en:"teacher (male)"},{fr:"une professeur", en:"teacher (female)"},
+  {fr:"le roi", en:"king"},{fr:"la reine", en:"queen"},{fr:"le chanteur", en:"singer (male)"},
+  {fr:"la chanteuse", en:"singer (female)"},{fr:"le danseur", en:"dancer (male)"},{fr:"la danseuse", en:"dancer (female)"},
+  {fr:"le directeur", en:"director (male)"},{fr:"la directrice", en:"director (female)"},{fr:"l'acteur", en:"actor"},
+  {fr:"l'actrice", en:"actress"}
+]},
+{id:17, emoji:'🍎', fr:'Les fruits et légumes', en:'Fruits & Vegetables', words:[
+  {fr:"l'abricot", en:"apricot"},{fr:"l'aubergine", en:"brinjal / eggplant"},{fr:"la banane", en:"banana"},
+  {fr:"le brocoli", en:"broccoli"},{fr:"la carotte", en:"carrot"},{fr:"la cerise", en:"cherry"},
+  {fr:"le chou", en:"cabbage"},{fr:"le chou-fleur", en:"cauliflower"},{fr:"le citron", en:"lemon"},
+  {fr:"la citrouille", en:"pumpkin"},{fr:"le concombre", en:"cucumber"},{fr:"les épinards", en:"spinach"},
+  {fr:"les haricots verts", en:"French beans"},{fr:"la laitue", en:"lettuce"},{fr:"la mangue", en:"mango"},
+  {fr:"le melon", en:"melon"},{fr:"la noix de coco", en:"coconut"},{fr:"l'oignon", en:"onion"},
+  {fr:"l'orange", en:"orange"},{fr:"le pamplemousse", en:"grapefruit"},{fr:"la pastèque", en:"watermelon"},
+  {fr:"la pêche", en:"peach"},{fr:"les petits pois", en:"garden peas"},{fr:"la poire", en:"pear"},
+  {fr:"le poivron", en:"capsicum"},{fr:"la pomme", en:"apple"},{fr:"la pomme de terre", en:"potato"},
+  {fr:"la prune", en:"plum"},{fr:"le radis", en:"radish"},{fr:"le raisin", en:"grape"},
+  {fr:"la fraise", en:"strawberry"},{fr:"l'ananas", en:"pineapple"},{fr:"la tomate", en:"tomato"},
+  {fr:"le maïs", en:"corn"}
+]},
+{id:18, emoji:'🧍', fr:'Les parties du corps', en:'Body Parts', words:[
+  {fr:"la bouche", en:"mouth"},{fr:"le coude", en:"elbow"},{fr:"la jambe", en:"leg"},
+  {fr:"la joue", en:"cheek"},{fr:"la langue", en:"tongue"},{fr:"le nez", en:"nose"},
+  {fr:"le sourcil", en:"eyebrow"},{fr:"la tête", en:"head"},{fr:"le ventre", en:"stomach"},
+  {fr:"le visage", en:"face"},{fr:"le doigt", en:"finger"},{fr:"la main", en:"hand"},
+  {fr:"le menton", en:"chin"},{fr:"l'épaule", en:"shoulder"},{fr:"le pied", en:"foot"},
+  {fr:"le bras", en:"arm"},{fr:"les cheveux", en:"hair"},{fr:"les yeux", en:"eyes"},
+  {fr:"les lèvres", en:"lips"},{fr:"les dents", en:"teeth"},{fr:"l'œil", en:"eye"},
+  {fr:"le genou", en:"knee"},{fr:"le cou", en:"neck"},{fr:"la poitrine", en:"chest"},
+  {fr:"le dos", en:"back"},{fr:"le talon", en:"heel"},{fr:"la cheville", en:"ankle"},
+  {fr:"le poignet", en:"wrist"},{fr:"les orteils", en:"toes"},{fr:"le cœur", en:"heart"}
+]},
+{id:19, emoji:'🏠', fr:'La maison', en:'House', words:[
+  {fr:"une maison", en:"house"},{fr:"un appartement", en:"apartment"},{fr:"une pièce", en:"a room"},
+  {fr:"une fenêtre", en:"window"},{fr:"un meuble", en:"a piece of furniture"},{fr:"le rez-de-chaussée", en:"ground floor"},
+  {fr:"l'étage", en:"floor"},{fr:"le premier étage", en:"first floor"},{fr:"un escalier", en:"staircase"},
+  {fr:"un balcon", en:"balcony"},{fr:"une terrasse", en:"terrace"},{fr:"un jardin", en:"garden"},
+  {fr:"une porte", en:"door"},{fr:"un mur", en:"wall"},{fr:"un toit", en:"roof"},
+  {fr:"une cave", en:"basement"},{fr:"un téléphone", en:"telephone"},{fr:"un réveil", en:"alarm clock"}
+]},
+{id:20, emoji:'🚪', fr:'Les pièces de la maison', en:'Rooms of the House', words:[
+  {fr:"les pièces", en:"rooms"},{fr:"une entrée", en:"entrance way"},{fr:"un hall d'entrée", en:"foyer"},
+  {fr:"un séjour", en:"living room"},{fr:"un salon", en:"drawing room"},{fr:"une salle de séjour", en:"living room (formal)"},
+  {fr:"une salle à manger", en:"dining room"},{fr:"une cuisine", en:"kitchen"},{fr:"un couloir", en:"hallway"},
+  {fr:"une chambre", en:"bedroom"},{fr:"une salle de bains", en:"bathroom"},{fr:"des toilettes / des W.C.", en:"toilet"},
+  {fr:"une buanderie", en:"laundry room"},{fr:"un grenier", en:"attic"},{fr:"une cave", en:"basement"},
+  {fr:"un garage", en:"garage"}
+]},
+{id:21, emoji:'🛋️', fr:'La salle de séjour', en:'Living Room', words:[
+  {fr:"un canapé", en:"couch"},{fr:"un fauteuil", en:"armchair"},{fr:"une table basse", en:"coffee table"},
+  {fr:"une télévision", en:"television"},{fr:"un tableau", en:"painting"},{fr:"un tapis", en:"carpet"},
+  {fr:"une lampe", en:"lamp"},{fr:"une étagère", en:"bookcase"}
+]},
+{id:22, emoji:'🛁', fr:'La salle de bains', en:'Bathroom', words:[
+  {fr:"une baignoire", en:"bathtub"},{fr:"une douche", en:"shower"},{fr:"un lavabo", en:"washbasin"},
+  {fr:"un miroir", en:"mirror"},{fr:"un tapis-brosse", en:"doormat"},{fr:"un robinet", en:"tap"},
+  {fr:"une serviette", en:"towel"},{fr:"du savon", en:"soap"}
+]},
+{id:23, emoji:'🛏️', fr:'La chambre', en:'Bedroom', words:[
+  {fr:"un lit", en:"bed"},{fr:"une table de nuit", en:"nightstand"},{fr:"une commode", en:"chest of drawers"},
+  {fr:"une étagère", en:"bookcase"},{fr:"une lampe", en:"lamp"},{fr:"un placard", en:"closet"},
+  {fr:"un ordinateur", en:"computer"},{fr:"une armoire", en:"wardrobe"},{fr:"un bureau", en:"desk"},
+  {fr:"un lecteur d.v.d.", en:"DVD player"}
+]},
+{id:24, emoji:'🍳', fr:'La cuisine', en:'Kitchen', words:[
+  {fr:"un réfrigérateur", en:"refrigerator"},{fr:"un four", en:"oven"},{fr:"un évier", en:"sink"},
+  {fr:"un placard", en:"cabinet"},{fr:"un four à micro-ondes", en:"microwave"},{fr:"une cuisinière", en:"stove"},
+  {fr:"un lave-vaisselle", en:"dishwasher"},{fr:"un robinet", en:"tap"},{fr:"un congélateur", en:"freezer"},
+  {fr:"une poubelle", en:"trashcan"},{fr:"une casserole", en:"saucepan"},{fr:"une poêle", en:"frying pan"},
+  {fr:"un couteau", en:"knife"},{fr:"une fourchette", en:"fork"},{fr:"une cuillère", en:"spoon"},
+  {fr:"une assiette", en:"plate"}
+]},
+{id:25, emoji:'👕', fr:'Les vêtements', en:'Clothes', words:[
+  {fr:"la chemise", en:"shirt"},{fr:"le pantalon", en:"pants / trousers"},{fr:"le tee-shirt", en:"t-shirt"},
+  {fr:"le jean", en:"jeans"},{fr:"le manteau", en:"coat"},{fr:"le haut", en:"top"},
+  {fr:"le pull", en:"sweater"},{fr:"le short", en:"shorts"},{fr:"le pyjama", en:"pajamas"},
+  {fr:"le chapeau", en:"hat"},{fr:"la casquette", en:"cap"},{fr:"le basket", en:"sports shoe"},
+  {fr:"le bonnet", en:"woollen cap"},{fr:"le costume", en:"suit (for men)"},{fr:"la culotte", en:"shorts (underwear)"},
+  {fr:"le peignoir", en:"night gown"},{fr:"l'anorak", en:"ski jacket"},{fr:"le survêtement", en:"tracksuit"},
+  {fr:"la veste", en:"jacket"},{fr:"la robe", en:"dress"},{fr:"la jupe", en:"skirt"},
+  {fr:"l'imperméable", en:"raincoat"},{fr:"les bottes", en:"boots"},{fr:"les sandales", en:"sandals"},
+  {fr:"les chaussettes", en:"socks"},{fr:"les chaussures", en:"shoes"},{fr:"la cravate", en:"necktie"},
+  {fr:"la ceinture", en:"belt"},{fr:"l'écharpe", en:"muffler / scarf"},{fr:"le foulard", en:"scarf"},
+  {fr:"le chemisier", en:"blouse"},{fr:"le gilet", en:"cardigan"}
+]}
+];
+
+/* ============================= HELPERS ============================= */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function pickDistractors(pool, correctWord, count){
+  const candidates = pool.filter(w => w.fr !== correctWord.fr && w.en !== correctWord.en);
+  return shuffle(candidates).slice(0, count);
+}
+function speakFrench(text){
+  try{
+    window.speechSynthesis.cancel();
+    const clean = text.replace(/\s*\/.*$/,'').replace(/^l'|^un |^une |^les |^des |^le |^la /i, m => m);
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'fr-FR';
+    utter.rate = 0.85;
+    window.speechSynthesis.speak(utter);
+  }catch(e){}
+}
+function speakOnceVoicesReady(text){
+  const voices = window.speechSynthesis.getVoices();
+  if(voices.length === 0){
+    window.speechSynthesis.onvoiceschanged = () => speakFrench(text);
+  }
+  speakFrench(text);
+}
+
+/* ============================= STATE ============================= */
+let state = {
+  screen: 'home',      // home | chapter
+  chapterId: null,
+  mode: null,           // match | fill | tf | listen
+  session: null,        // per-mode session data
+};
+
+const app = document.getElementById('app');
+
+function getChapter(id){ return CHAPTERS.find(c => c.id === id); }
+
+/* ============================= RENDER ROOT ============================= */
+function render(){
+  if(state.screen === 'home'){ renderHome(); return; }
+  renderChapter();
+}
+
+function renderHome(){
+  let html = `
+    <div class="header">
+      <h1>🇫🇷 Le Vocabulaire Français</h1>
+      <p>ChineseFrench Institute — choisis un chapitre / choose a chapter</p>
+    </div>
+    <div class="flag-strip"></div>
+    <div class="chapter-grid">`;
+  CHAPTERS.forEach(ch => {
+    html += `
+      <button class="chapter-btn" onclick="openChapter(${ch.id})">
+        <span class="emoji">${ch.emoji}</span>
+        <span class="num">Chapitre ${ch.id}</span>
+        <span class="title-fr">${ch.fr}</span>
+        <span class="title-en">${ch.en}</span>
+        <span class="count">${ch.words.length} mots</span>
+      </button>`;
+  });
+  html += `</div><footer>© ChineseFrench Institute — Aruna's Class. All rights reserved.</footer>`;
+  app.innerHTML = html;
+}
+
+function openChapter(id){
+  state.screen = 'chapter';
+  state.chapterId = id;
+  state.mode = 'match';
+  startModeSession();
+  render();
+}
+
+function goHome(){
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  state.screen = 'home';
+  render();
+}
+
+function switchMode(mode){
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  state.mode = mode;
+  startModeSession();
+  render();
+}
+
+const MODE_LABELS = {
+  match: '🔗 Associer',
+  fill: '✏️ Complète',
+  tf: '✅ Vrai/Faux',
+  listen: '🎧 Écoute'
+};
+
+function renderChapter(){
+  const ch = getChapter(state.chapterId);
+  let html = `
+    <div class="topbar">
+      <button class="back-btn" onclick="goHome()">← Chapitres</button>
+      <div class="chapter-title">${ch.emoji} ${ch.fr}</div>
+    </div>
+    <div class="tabs">`;
+  Object.keys(MODE_LABELS).forEach(m => {
+    html += `<button class="tab ${state.mode===m?'active':''}" onclick="switchMode('${m}')">${MODE_LABELS[m]}</button>`;
+  });
+  html += `</div><div id="mode-content"></div>`;
+  app.innerHTML = html;
+  renderModeContent();
+}
+
+function startModeSession(){
+  const ch = getChapter(state.chapterId);
+  if(state.mode === 'match'){
+    state.session = { queue: shuffle(ch.words), roundSize:6, roundIdx:0, correct:0, total:0, roundState:null };
+    startMatchRound();
+  } else {
+    state.session = { queue: shuffle(ch.words), idx:0, correct:0, answered:false };
+  }
+}
+
+/* ============================= MATCH MODE ============================= */
+function startMatchRound(){
+  const s = state.session;
+  const start = s.roundIdx * s.roundSize;
+  const roundWords = s.queue.slice(start, start + s.roundSize);
+  s.roundState = {
+    words: roundWords,
+    frOrder: shuffle(roundWords.map((w,i)=>i)),
+    enOrder: shuffle(roundWords.map((w,i)=>i)),
+    matched: new Set(),
+    selectedFr: null,
+    selectedEn: null
+  };
+}
+
+function renderModeContent(){
+  const ch = getChapter(state.chapterId);
+  const c = document.getElementById('mode-content');
+  if(state.mode === 'match'){ renderMatch(ch, c); }
+  else if(state.mode === 'fill'){ renderFill(ch, c); }
+  else if(state.mode === 'tf'){ renderTF(ch, c); }
+  else if(state.mode === 'listen'){ renderListen(ch, c); }
+}
+
+function renderMatch(ch, container){
+  const s = state.session;
+  const totalRounds = Math.ceil(s.queue.length / s.roundSize);
+  const rs = s.roundState;
+
+  if(!rs){
+    container.innerHTML = renderDoneScreen(s.correct, s.total);
+    return;
+  }
+
+  let html = `
+    <div class="card">
+      <div class="progress-line"><span>Round ${s.roundIdx+1} / ${totalRounds}</span><span>✅ ${s.correct}/${s.total}</span></div>
+      <div class="match-cols">
+        <div class="match-col" id="col-fr">`;
+  rs.frOrder.forEach(i => {
+    const done = rs.matched.has(i);
+    const sel = rs.selectedFr === i;
+    html += `<div class="match-item fr ${done?'done':''} ${sel?'selected':''}" data-i="${i}" onclick="matchClickFr(${i})">${rs.words[i].fr}</div>`;
+  });
+  html += `</div><div class="match-col" id="col-en">`;
+  rs.enOrder.forEach(i => {
+    const done = rs.matched.has(i);
+    const sel = rs.selectedEn === i;
+    html += `<div class="match-item ${done?'done':''} ${sel?'selected':''}" data-i="${i}" onclick="matchClickEn(${i})">${rs.words[i].en}</div>`;
+  });
+  html += `</div></div><div class="feedback" id="feedback"></div></div>`;
+  container.innerHTML = html;
+}
+
+function matchClickFr(i){
+  const rs = state.session.roundState;
+  if(rs.matched.has(i)) return;
+  rs.selectedFr = i;
+  tryMatch();
+}
+function matchClickEn(i){
+  const rs = state.session.roundState;
+  if(rs.matched.has(i)) return;
+  rs.selectedEn = i;
+  tryMatch();
+}
+function tryMatch(){
+  const s = state.session;
+  const rs = s.roundState;
+  if(rs.selectedFr === null || rs.selectedEn === null) { renderModeContent(); return; }
+  const fb = document.getElementById('feedback');
+  s.total++;
+  if(rs.selectedFr === rs.selectedEn){
+    rs.matched.add(rs.selectedFr);
+    s.correct++;
+    if(fb){ fb.textContent = '✅ Bravo !'; fb.className='feedback good'; }
+    rs.selectedFr = null; rs.selectedEn = null;
+    renderModeContent();
+    if(rs.matched.size === rs.words.length){
+      setTimeout(()=>{
+        const totalRounds = Math.ceil(s.queue.length / s.roundSize);
+        if(s.roundIdx + 1 < totalRounds){
+          s.roundIdx++;
+          startMatchRound();
+        } else {
+          s.roundState = null;
+        }
+        renderModeContent();
+      }, 500);
+    }
+  } else {
+    if(fb){ fb.textContent = '❌ Essaie encore !'; fb.className='feedback bad'; }
+    const badFr = rs.selectedFr, badEn = rs.selectedEn;
+    renderModeContent();
+    const elFr = document.querySelector(`#col-fr [data-i="${badFr}"]`);
+    const elEn = document.querySelector(`#col-en [data-i="${badEn}"]`);
+    if(elFr) elFr.classList.add('wrong');
+    if(elEn) elEn.classList.add('wrong');
+    setTimeout(()=>{
+      rs.selectedFr = null; rs.selectedEn = null;
+      renderModeContent();
+    }, 500);
+  }
+}
+
+/* ============================= FILL MODE (drag & drop) ============================= */
+function renderFill(ch, container){
+  const s = state.session;
+  if(s.idx >= s.queue.length){
+    container.innerHTML = renderDoneScreen(s.correct, s.queue.length);
+    return;
+  }
+  const word = s.queue[s.idx];
+  const distractors = pickDistractors(ch.words, word, 3);
+  const options = shuffle([word, ...distractors]);
+
+  let html = `
+    <div class="card">
+      <div class="progress-line"><span>Mot ${s.idx+1} / ${s.queue.length}</span><span>✅ ${s.correct}</span></div>
+      <div class="clue-box">
+        <div class="hint">Le mot anglais est :</div>
+        <div class="en">${word.en}</div>
+      </div>
+      <div class="sentence-line">Glisse le bon mot français ici :
+        <span class="dropzone" id="dz1" data-answer="${word.fr.replace(/"/g,'&quot;')}"></span>
+      </div>
+      <div class="word-bank" id="wordbank">`;
+  options.forEach((o,idx) => {
+    html += `<div class="chip" data-word="${o.fr.replace(/"/g,'&quot;')}" id="chip${idx}">${o.fr}</div>`;
+  });
+  html += `</div>
+      <div class="btn-row">
+        <button class="btn" id="checkBtn" disabled onclick="checkFill()">Vérifier</button>
+        <button class="btn secondary" id="nextFillBtn" style="display:none" onclick="nextFill()">Suivant →</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+    </div>`;
+  container.innerHTML = html;
+  setupFillDrag();
+}
+
+function setupFillDrag(){
+  document.querySelectorAll('#wordbank .chip').forEach(makeDraggableChip);
+  const dz = document.getElementById('dz1');
+  dz.addEventListener('click', () => {
+    if(dz.dataset.filled && !dz.dataset.locked){
+      const chip = dz.querySelector('.chip');
+      if(chip){
+        document.getElementById('wordbank').appendChild(chip);
+        dz.dataset.filled = '';
+        document.getElementById('checkBtn').disabled = true;
+      }
+    }
+  });
+}
+
+function makeDraggableChip(chip){
+  chip.addEventListener('pointerdown', function(e){
+    if(chip.dataset.locked) return;
+    e.preventDefault();
+    const rect = chip.getBoundingClientRect();
+    const shiftX = e.clientX - rect.left;
+    const shiftY = e.clientY - rect.top;
+    const originalParent = chip.parentElement;
+    const placeholder = document.createElement('div');
+    placeholder.className = 'chip-placeholder';
+    placeholder.style.width = rect.width+'px';
+    placeholder.style.height = rect.height+'px';
+    originalParent.insertBefore(placeholder, chip.nextSibling);
+
+    document.body.appendChild(chip);
+    chip.style.position = 'fixed';
+    chip.style.zIndex = 1000;
+    chip.style.width = rect.width+'px';
+    chip.style.left = rect.left+'px';
+    chip.style.top = rect.top+'px';
+    chip.classList.add('dragging');
+    chip.setPointerCapture(e.pointerId);
+
+    function move(ev){
+      chip.style.left = (ev.clientX - shiftX)+'px';
+      chip.style.top = (ev.clientY - shiftY)+'px';
+    }
+    function up(ev){
+      chip.removeEventListener('pointermove', move);
+      chip.removeEventListener('pointerup', up);
+      chip.classList.remove('dragging');
+      chip.style.position=''; chip.style.zIndex=''; chip.style.left=''; chip.style.top=''; chip.style.width='';
+      chip.style.display='none';
+      const target = document.elementFromPoint(ev.clientX, ev.clientY);
+      chip.style.display='';
+      const dz = target && target.closest('.dropzone');
+      placeholder.remove();
+      if(dz && !dz.dataset.filled){
+        dz.appendChild(chip);
+        dz.classList.add('filled');
+        dz.dataset.filled = '1';
+        document.getElementById('checkBtn').disabled = false;
+      } else if(dz && dz.dataset.filled){
+        originalParent.appendChild(chip);
+      } else {
+        originalParent.appendChild(chip);
+      }
+    }
+    chip.addEventListener('pointermove', move);
+    chip.addEventListener('pointerup', up);
+  });
+}
+
+function checkFill(){
+  const dz = document.getElementById('dz1');
+  const chip = dz.querySelector('.chip');
+  if(!chip) return;
+  const correctAnswer = dz.dataset.answer;
+  const fb = document.getElementById('feedback');
+  document.querySelectorAll('#wordbank .chip, .dropzone .chip').forEach(c => c.dataset.locked = '1');
+  document.getElementById('checkBtn').style.display='none';
+  document.getElementById('nextFillBtn').style.display='inline-block';
+  if(chip.dataset.word === correctAnswer){
+    dz.classList.add('correct');
+    fb.textContent = '✅ Parfait !';
+    fb.className = 'feedback good';
+    state.session.correct++;
+  } else {
+    dz.classList.add('wrong');
+    fb.textContent = `❌ La bonne réponse était : ${correctAnswer}`;
+    fb.className = 'feedback bad';
+  }
+}
+function nextFill(){
+  state.session.idx++;
+  renderModeContent();
+}
+
+/* ============================= TRUE/FALSE MODE ============================= */
+function renderTF(ch, container){
+  const s = state.session;
+  if(s.idx >= s.queue.length){
+    container.innerHTML = renderDoneScreen(s.correct, s.queue.length);
+    return;
+  }
+  if(s.answered === false && s.currentIsTrue === undefined){
+    const word = s.queue[s.idx];
+    const isTrue = Math.random() < 0.5;
+    let shownEn = word.en;
+    if(!isTrue){
+      const distractors = pickDistractors(ch.words, word, 1);
+      shownEn = distractors.length ? distractors[0].en : word.en;
+      if(distractors.length === 0){ s.currentIsTrue = true; }
+    }
+    s.currentWord = word;
+    s.currentShownEn = shownEn;
+    s.currentIsTrue = (shownEn === word.en);
+  }
+  const word = s.currentWord;
+  let html = `
+    <div class="card">
+      <div class="progress-line"><span>Mot ${s.idx+1} / ${s.queue.length}</span><span>✅ ${s.correct}</span></div>
+      <div class="tf-statement">
+        <span class="fr-word">${word.fr}</span> veut dire <span class="en-word">${s.currentShownEn}</span> ?
+      </div>
+      <div class="tf-buttons">
+        <button class="tf-btn true-btn" ${s.answered?'disabled':''} onclick="answerTF(true)">✅ Vrai</button>
+        <button class="tf-btn false-btn" ${s.answered?'disabled':''} onclick="answerTF(false)">❌ Faux</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <div class="btn-row" id="tfNextRow" style="display:${s.answered?'flex':'none'}">
+        <button class="btn secondary" onclick="nextTF()">Suivant →</button>
+      </div>
+    </div>`;
+  container.innerHTML = html;
+  if(s.answered){
+    const fb = document.getElementById('feedback');
+    if(s.lastCorrect){ fb.textContent = '✅ Bravo !'; fb.className='feedback good'; }
+    else { fb.textContent = `❌ En fait, ${s.currentIsTrue ? "c'est Vrai" : "c'est Faux"} — "${word.fr}" = ${word.en}`; fb.className='feedback bad'; }
+  }
+}
+function answerTF(choice){
+  const s = state.session;
+  if(s.answered) return;
+  s.answered = true;
+  s.lastCorrect = (choice === s.currentIsTrue);
+  if(s.lastCorrect) s.correct++;
+  renderModeContent();
+}
+function nextTF(){
+  const s = state.session;
+  s.idx++;
+  s.answered = false;
+  s.currentIsTrue = undefined;
+  s.currentWord = null;
+  s.currentShownEn = null;
+  renderModeContent();
+}
+
+/* ============================= LISTENING MCQ MODE ============================= */
+function renderListen(ch, container){
+  const s = state.session;
+  if(s.idx >= s.queue.length){
+    container.innerHTML = renderDoneScreen(s.correct, s.queue.length);
+    return;
+  }
+  const word = s.queue[s.idx];
+  if(!s.currentOptions || s.optionsIdx !== s.idx){
+    const distractors = pickDistractors(ch.words, word, 3);
+    s.currentOptions = shuffle([word, ...distractors]);
+    s.optionsIdx = s.idx;
+  }
+  let html = `
+    <div class="card">
+      <div class="progress-line"><span>Mot ${s.idx+1} / ${s.queue.length}</span><span>✅ ${s.correct}</span></div>
+      <p style="text-align:center; color:var(--grey); margin-top:0;">Écoute et choisis la bonne signification</p>
+      <button class="play-btn" id="playBtn">🔊</button>
+      <div class="mcq-options" id="mcqOptions">`;
+  s.currentOptions.forEach((o, idx) => {
+    html += `<button class="mcq-btn" data-idx="${idx}" onclick="answerListen(${idx})">${o.en}</button>`;
+  });
+  html += `</div>
+      <div class="feedback" id="feedback"></div>
+      <div class="btn-row" id="listenNextRow" style="display:none">
+        <button class="btn secondary" onclick="nextListen()">Suivant →</button>
+      </div>
+    </div>`;
+  container.innerHTML = html;
+  const playBtn = document.getElementById('playBtn');
+  playBtn.addEventListener('click', () => speakOnceVoicesReady(word.fr));
+  setTimeout(() => speakOnceVoicesReady(word.fr), 300);
+}
+function answerListen(idx){
+  const s = state.session;
+  if(s.locked) return;
+  s.locked = true;
+  const word = s.queue[s.idx];
+  const chosen = s.currentOptions[idx];
+  document.querySelectorAll('#mcqOptions .mcq-btn').forEach((btn,i) => {
+    btn.disabled = true;
+    if(s.currentOptions[i].fr === word.fr) btn.classList.add('correct');
+    else if(i === idx) btn.classList.add('wrong');
+  });
+  const fb = document.getElementById('feedback');
+  if(chosen.fr === word.fr){
+    fb.textContent = '✅ Bravo !'; fb.className='feedback good'; s.correct++;
+  } else {
+    fb.textContent = `❌ "${word.fr}" = ${word.en}`; fb.className='feedback bad';
+  }
+  document.getElementById('listenNextRow').style.display='flex';
+}
+function nextListen(){
+  const s = state.session;
+  s.idx++;
+  s.locked = false;
+  s.currentOptions = null;
+  renderModeContent();
+}
+
+/* ============================= DONE SCREEN ============================= */
+function renderDoneScreen(correct, total){
+  const pct = total ? Math.round((correct/total)*100) : 0;
+  const medal = pct >= 90 ? '🏆' : pct >= 70 ? '🥈' : pct >= 50 ? '🥉' : '💪';
+  return `
+    <div class="card done-screen">
+      <div class="medal">${medal}</div>
+      <div>Terminé !</div>
+      <div class="big-score">${correct} / ${total}</div>
+      <div style="color:var(--grey);">${pct}% de bonnes réponses</div>
+      <div class="btn-row">
+        <button class="btn" onclick="startModeSession(); renderModeContent();">🔄 Recommencer</button>
+        <button class="btn secondary" onclick="goHome()">← Chapitres</button>
+      </div>
+    </div>`;
+}
+
+/* ============================= INIT ============================= */
+window.CHAPTERS = CHAPTERS;
+window.state = state;
+render();
+</script>
+</body>
+</html>
