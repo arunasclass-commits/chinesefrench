@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>拼音练习 · Pinyin Drill</title>
+<style>
+  :root{
+    --ink:#2b2320;
+    --paper:#f6f1e7;
+    --paper-2:#ece3d2;
+    --seal:#a83e2c;
+    --seal-dim:#c97a68;
+    --jade:#3f6b57;
+    --jade-dim:#a9c4b8;
+    --line:#d8cdb8;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#ece3d2;
+      --paper:#1c1815;
+      --paper-2:#26211c;
+      --seal:#e2735c;
+      --seal-dim:#7a3c30;
+      --jade:#8fc3ab;
+      --jade-dim:#3a5548;
+      --line:#3a332b;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#ece3d2;
+    --paper:#1c1815;
+    --paper-2:#26211c;
+    --seal:#e2735c;
+    --seal-dim:#7a3c30;
+    --jade:#8fc3ab;
+    --jade-dim:#3a5548;
+    --line:#3a332b;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family: "Noto Serif SC", "Songti SC", "PingFang SC", Georgia, serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 60px;
+  }
+  .wrap{
+    width:100%;
+    max-width:480px;
+  }
+  header{
+    text-align:center;
+    margin-bottom:22px;
+  }
+  h1{
+    font-size:1.5rem;
+    margin:0 0 4px;
+    letter-spacing:0.04em;
+    font-weight:600;
+  }
+  .sub{
+    font-family: Georgia, "Times New Roman", serif;
+    font-size:0.85rem;
+    color:var(--ink);
+    opacity:0.65;
+  }
+
+  .modes{
+    display:flex;
+    gap:8px;
+    margin-bottom:22px;
+    border-bottom:1px solid var(--line);
+  }
+  .mode-btn{
+    flex:1;
+    background:none;
+    border:none;
+    padding:10px 6px 12px;
+    font-family:inherit;
+    font-size:0.95rem;
+    color:var(--ink);
+    opacity:0.5;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    transition:opacity .15s, border-color .15s;
+  }
+  .mode-btn.active{
+    opacity:1;
+    border-color:var(--seal);
+    color:var(--seal);
+  }
+
+  .card{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:36px 24px 28px;
+    text-align:center;
+    position:relative;
+  }
+
+  .progress{
+    font-family: Georgia, serif;
+    font-size:0.75rem;
+    opacity:0.55;
+    margin-bottom:18px;
+  }
+
+  .char-display{
+    font-size:5rem;
+    line-height:1;
+    margin:8px 0 22px;
+    font-weight:500;
+  }
+
+  .sound-display{
+    margin:8px 0 26px;
+  }
+  .play-btn{
+    width:76px;
+    height:76px;
+    border-radius:50%;
+    border:2px solid var(--jade);
+    background:none;
+    color:var(--jade);
+    font-size:1.9rem;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .12s, background .15s;
+  }
+  .play-btn:hover{ background:var(--jade-dim); }
+  .play-btn:active{ transform:scale(0.94); }
+  .play-hint{
+    margin-top:10px;
+    font-family:Georgia,serif;
+    font-size:0.75rem;
+    opacity:0.55;
+  }
+
+  form{
+    display:flex;
+    gap:8px;
+  }
+  input[type="text"]{
+    flex:1;
+    font-family:inherit;
+    font-size:1.15rem;
+    padding:12px 14px;
+    border-radius:4px;
+    border:1px solid var(--line);
+    background:var(--paper);
+    color:var(--ink);
+    outline:none;
+  }
+  input[type="text"]:focus{
+    border-color:var(--jade);
+  }
+  button.submit{
+    font-family:inherit;
+    font-size:1rem;
+    padding:0 20px;
+    border-radius:4px;
+    border:none;
+    background:var(--seal);
+    color:var(--paper);
+    cursor:pointer;
+  }
+  button.submit:active{ transform:translateY(1px); }
+
+  .feedback{
+    margin-top:20px;
+    min-height:64px;
+    font-family:Georgia,serif;
+  }
+  .feedback .verdict{
+    font-size:1.05rem;
+    font-weight:700;
+    margin-bottom:4px;
+  }
+  .verdict.correct{ color:var(--jade); }
+  .verdict.wrong{ color:var(--seal); }
+  .feedback .answer-line{
+    font-size:0.95rem;
+    opacity:0.85;
+  }
+  .feedback .answer-line b{
+    font-family: "Noto Serif SC","Songti SC","PingFang SC", serif;
+  }
+
+  .next-btn{
+    margin-top:16px;
+    font-family:inherit;
+    background:none;
+    border:1px solid var(--jade);
+    color:var(--jade);
+    padding:8px 22px;
+    border-radius:4px;
+    cursor:pointer;
+    font-size:0.9rem;
+    display:none;
+  }
+  .next-btn.show{ display:inline-block; }
+
+  .score-bar{
+    display:flex;
+    justify-content:space-between;
+    margin-top:18px;
+    font-family:Georgia,serif;
+    font-size:0.8rem;
+    opacity:0.65;
+  }
+
+  .reset-line{
+    text-align:center;
+    margin-top:20px;
+  }
+  .reset-line button{
+    background:none;
+    border:none;
+    font-family:inherit;
+    font-size:0.8rem;
+    color:var(--ink);
+    opacity:0.45;
+    cursor:pointer;
+    text-decoration:underline;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>拼音练习</h1>
+    <div class="sub">type pinyin without tone marks — e.g. "xue" not "xuě"</div>
+  </header>
+
+  <div class="modes">
+    <button class="mode-btn active" data-mode="sound">听音写拼音<br><span style="font-size:0.7rem;opacity:0.8">Sound → Pinyin</span></button>
+    <button class="mode-btn" data-mode="char">看字写拼音<br><span style="font-size:0.7rem;opacity:0.8">Character → Pinyin</span></button>
+  </div>
+
+  <div class="card">
+    <div class="progress" id="progress">1 / 21</div>
+
+    <div id="charDisplay" class="char-display" style="display:none;"></div>
+
+    <div id="soundDisplay" class="sound-display">
+      <button type="button" class="play-btn" id="playBtn" aria-label="Play sound">▶</button>
+      <div class="play-hint">tap to hear it again</div>
+    </div>
+
+    <form id="answerForm" autocomplete="off">
+      <input type="text" id="pinyinInput" placeholder="type pinyin..." />
+      <button type="submit" class="submit">Check</button>
+    </form>
+
+    <div class="feedback" id="feedback"></div>
+
+    <button class="next-btn" id="nextBtn" type="button">Next →</button>
+
+    <div class="score-bar">
+      <span id="scoreText">Score: 0 / 0</span>
+      <span id="streakText">Streak: 0</span>
+    </div>
+  </div>
+
+  <div class="reset-line">
+    <button id="resetBtn" type="button">reshuffle deck</button>
+  </div>
+</div>
+
+<script>
+const DECK = [
+  {ch:"昨", py:"zuo", meaning:"yesterday (昨天)"},
+  {ch:"天", py:"tian", meaning:"day / sky"},
+  {ch:"下", py:"xia", meaning:"down / to fall (下雪)"},
+  {ch:"雪", py:"xue", meaning:"snow"},
+  {ch:"了", py:"le", meaning:"completed-action particle"},
+  {ch:"是", py:"shi", meaning:"to be"},
+  {ch:"的", py:"de", meaning:"possessive particle"},
+  {ch:"太", py:"tai", meaning:"too / very"},
+  {ch:"冷", py:"leng", meaning:"cold"},
+  {ch:"你", py:"ni", meaning:"you"},
+  {ch:"没", py:"mei", meaning:"not / did not"},
+  {ch:"来", py:"lai", meaning:"to come"},
+  {ch:"公", py:"gong", meaning:"public (公司)"},
+  {ch:"司", py:"si", meaning:"to manage (公司 = company)"},
+  {ch:"生", py:"sheng", meaning:"to be born / life (生病)"},
+  {ch:"病", py:"bing", meaning:"sick / illness"},
+  {ch:"对", py:"dui", meaning:"correct / right"},
+  {ch:"我", py:"wo", meaning:"I / me"},
+  {ch:"去", py:"qu", meaning:"to go"},
+  {ch:"医", py:"yi", meaning:"medicine (医院)"},
+  {ch:"院", py:"yuan", meaning:"institution / courtyard (医院 = hospital)"},
+  {ch:"看", py:"kan", meaning:"to look / see (看病)"}
+];
+
+let mode = "sound";
+let deck = [];
+let idx = 0;
+let score = 0;
+let attempts = 0;
+let streak = 0;
+let answered = false;
+
+const els = {
+  progress: document.getElementById("progress"),
+  charDisplay: document.getElementById("charDisplay"),
+  soundDisplay: document.getElementById("soundDisplay"),
+  playBtn: document.getElementById("playBtn"),
+  form: document.getElementById("answerForm"),
+  input: document.getElementById("pinyinInput"),
+  feedback: document.getElementById("feedback"),
+  nextBtn: document.getElementById("nextBtn"),
+  scoreText: document.getElementById("scoreText"),
+  streakText: document.getElementById("streakText"),
+  resetBtn: document.getElementById("resetBtn"),
+  modeBtns: document.querySelectorAll(".mode-btn")
+};
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function newDeck(){
+  deck = shuffle(DECK);
+  idx = 0;
+  loadQuestion();
+}
+
+function speak(char){
+  try{
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(char);
+    u.lang = "zh-CN";
+    u.rate = 0.85;
+    window.speechSynthesis.speak(u);
+  }catch(e){
+    els.feedback.innerHTML = '<div class="answer-line">Speech isn\'t available in this browser.</div>';
+  }
+}
+
+function loadQuestion(){
+  answered = false;
+  els.input.value = "";
+  els.input.disabled = false;
+  els.feedback.innerHTML = "";
+  els.nextBtn.classList.remove("show");
+  els.progress.textContent = (idx+1) + " / " + deck.length;
+
+  const item = deck[idx];
+  if(mode === "char"){
+    els.charDisplay.style.display = "block";
+    els.soundDisplay.style.display = "none";
+    els.charDisplay.textContent = item.ch;
+  } else {
+    els.charDisplay.style.display = "none";
+    els.soundDisplay.style.display = "block";
+    speak(item.ch);
+  }
+  els.input.focus();
+}
+
+function checkAnswer(){
+  if(answered) return;
+  const item = deck[idx];
+  const guess = els.input.value.trim().toLowerCase();
+  if(!guess) return;
+
+  answered = true;
+  attempts++;
+  const correct = guess === item.py;
+  if(correct){
+    score++;
+    streak++;
+  } else {
+    streak = 0;
+  }
+
+  els.input.disabled = true;
+  els.scoreText.textContent = "Score: " + score + " / " + attempts;
+  els.streakText.textContent = "Streak: " + streak;
+
+  els.feedback.innerHTML =
+    '<div class="verdict ' + (correct ? "correct" : "wrong") + '">' +
+      (correct ? "对了！" : "不对") +
+    '</div>' +
+    '<div class="answer-line"><b>' + item.ch + '</b> — ' + item.py + ' — ' + item.meaning + '</div>';
+
+  els.nextBtn.classList.add("show");
+}
+
+function nextQuestion(){
+  idx++;
+  if(idx >= deck.length){
+    deck = shuffle(DECK);
+    idx = 0;
+  }
+  loadQuestion();
+}
+
+els.form.addEventListener("submit", function(e){
+  e.preventDefault();
+  if(!answered){
+    checkAnswer();
+  } else {
+    nextQuestion();
+  }
+});
+
+els.nextBtn.addEventListener("click", nextQuestion);
+els.playBtn.addEventListener("click", function(){ speak(deck[idx].ch); });
+els.resetBtn.addEventListener("click", newDeck);
+
+els.modeBtns.forEach(function(btn){
+  btn.addEventListener("click", function(){
+    els.modeBtns.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    mode = btn.dataset.mode;
+    deck = shuffle(DECK);
+    idx = 0;
+    loadQuestion();
+  });
+});
+
+newDeck();
+</script>
+</body>
+</html>
