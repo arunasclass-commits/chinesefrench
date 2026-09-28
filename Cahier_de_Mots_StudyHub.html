@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cahier de Mots</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+:root{
+  --ink:#1d2433; --muted:#6a7180; --paper:#ffffff; --bg:#f7f6f2;
+  --line:#e5e1d8; --line2:#efece5;
+  --a1:#2f5fa8; --a2:#b8355f; --a3:#2b7f5e; --a4:#b8761a; --a5:#6b4fa8; --a6:#0d7490;
+  --ok:#1f7a55; --okbg:#e8f5ee; --warn:#9a6a10; --warnbg:#fdf3e0; --no:#9c3550; --nobg:#fceef1;
+  --shadow:0 1px 2px rgba(29,36,51,.05), 0 6px 18px rgba(29,36,51,.05);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size:17px; line-height:1.55; -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:820px; margin:0 auto; padding:0 16px 56px}
+
+/* ---------- header ---------- */
+header{
+  background:linear-gradient(135deg,#2f5fa8 0%,#4a4a9e 55%,#6b4fa8 100%);
+  color:#fff; padding:22px 0 18px; margin-bottom:18px;
+}
+header .wrap{padding-bottom:0}
+h1{font-family:"Marcellus", Georgia, serif; font-weight:400; font-size:30px; margin:0 0 4px; letter-spacing:.2px}
+.sub{margin:0; opacity:.9; font-size:15px}
+.bar{height:8px; background:rgba(255,255,255,.25); border-radius:99px; margin-top:14px; overflow:hidden}
+.bar i{display:block; height:100%; width:0; background:#fff; border-radius:99px; transition:width .4s ease}
+.barrow{display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:8px; font-size:14px; opacity:.95}
+
+/* ---------- settings ---------- */
+.voicebar{
+  background:var(--paper); border:1px solid var(--line); border-radius:12px;
+  padding:12px 14px; margin-bottom:16px; font-size:14px; box-shadow:var(--shadow);
+}
+.voicebar .row{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:6px}
+.voicebar label{color:var(--muted); font-weight:600}
+select{
+  font:inherit; font-size:14px; padding:6px 8px; border:1px solid var(--line);
+  border-radius:8px; background:#fff; color:var(--ink); max-width:100%;
+}
+#voiceNote{color:var(--muted); font-size:13px; margin-top:4px}
+
+/* ---------- nav ---------- */
+nav{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px}
+nav button{
+  font:inherit; font-size:15px; font-weight:600; cursor:pointer;
+  background:var(--paper); color:var(--ink); border:1px solid var(--line);
+  padding:9px 14px; border-radius:99px; box-shadow:var(--shadow);
+}
+nav button.active{background:var(--ink); color:#fff; border-color:var(--ink)}
+
+/* ---------- sections & cards ---------- */
+section{display:none}
+section.on{display:block}
+.card{
+  background:var(--paper); border:1px solid var(--line); border-left:4px solid var(--a1);
+  border-radius:12px; padding:16px 18px; margin-bottom:14px; box-shadow:var(--shadow);
+}
+.card.a2{border-left-color:var(--a2)} .card.a3{border-left-color:var(--a3)}
+.card.a4{border-left-color:var(--a4)} .card.a5{border-left-color:var(--a5)}
+.card.a6{border-left-color:var(--a6)}
+h2{font-family:"Marcellus", Georgia, serif; font-weight:400; font-size:22px; margin:0 0 4px}
+.hint{color:var(--muted); font-size:14px; margin:0 0 14px}
+.meta{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+  font-size:14px; color:var(--muted); font-weight:600; margin-bottom:12px}
+.meta .score{font-variant-numeric:tabular-nums}
+
+/* ---------- buttons ---------- */
+button.btn{
+  font:inherit; font-weight:600; cursor:pointer; border-radius:10px;
+  padding:10px 16px; border:1px solid var(--ink); background:var(--ink); color:#fff;
+}
+button.btn.ghost{background:#fff; color:var(--ink); border-color:var(--line)}
+button.btn:focus-visible, nav button:focus-visible, .opt:focus-visible, input:focus-visible,
+select:focus-visible, .k:focus-visible, .mi:focus-visible, .chip:focus-visible{
+  outline:3px solid #9fc0ef; outline-offset:2px;
+}
+.actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
+.spk{
+  font:inherit; font-size:16px; cursor:pointer; background:#fff; border:1px solid var(--line);
+  border-radius:8px; padding:4px 9px; line-height:1.2;
+}
+.spk:hover{background:var(--line2)}
+
+/* ---------- prompt ---------- */
+.prompt{
+  font-family:"Marcellus", Georgia, serif; font-size:30px; line-height:1.25;
+  margin:6px 0 4px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.tag{font-family:"Source Sans 3",sans-serif; font-size:12px; font-weight:700; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--muted); background:var(--line2);
+  border-radius:99px; padding:3px 10px; display:inline-block; margin-bottom:6px}
+.gen{font-size:13px; color:var(--muted); font-weight:600}
+
+/* ---------- MCQ options ---------- */
+.opts{display:grid; gap:9px; margin-top:14px}
+.opt{
+  font:inherit; font-size:17px; text-align:left; cursor:pointer;
+  background:#fff; border:1px solid var(--line); border-radius:10px;
+  padding:12px 14px; display:flex; gap:10px; align-items:baseline;
+}
+.opt:hover{background:var(--line2)}
+.opt b{color:var(--muted); font-size:14px; min-width:18px}
+.opt.right{background:var(--okbg); border-color:var(--ok); color:var(--ok)}
+.opt.wrong{background:var(--nobg); border-color:var(--no); color:var(--no)}
+.opt[disabled]{cursor:default}
+
+/* ---------- inputs ---------- */
+input[type=text]{
+  font:inherit; font-size:19px; width:100%; padding:11px 13px;
+  border:1px solid var(--line); border-radius:10px; background:#fff; color:var(--ink);
+}
+.keys{display:flex; flex-wrap:wrap; gap:6px; margin-top:9px}
+.k{
+  font:inherit; font-size:17px; cursor:pointer; background:#fff; border:1px solid var(--line);
+  border-radius:8px; padding:6px 11px; min-width:40px;
+}
+.k:hover{background:var(--line2)}
+.keylabel{font-size:13px; color:var(--muted); width:100%; margin-bottom:-2px}
+
+/* ---------- feedback ---------- */
+.fb{margin-top:12px; padding:11px 13px; border-radius:10px; font-size:16px; font-weight:600; display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--okbg); color:var(--ok)}
+.fb.warn{background:var(--warnbg); color:var(--warn)}
+.fb.no{background:var(--nobg); color:var(--no)}
+.fb small{display:block; font-weight:400; font-size:14px; margin-top:3px; opacity:.85}
+
+/* ---------- dots ---------- */
+.dots{display:flex; gap:5px; flex-wrap:wrap}
+.dots i{width:9px; height:9px; border-radius:50%; background:var(--line); display:block}
+.dots i.ok{background:var(--ok)} .dots i.no{background:var(--no)} .dots i.now{background:var(--ink)}
+
+/* ---------- match ---------- */
+.chips{display:flex; gap:7px; flex-wrap:wrap; margin-bottom:14px}
+.chip{font:inherit; font-size:14px; font-weight:600; cursor:pointer; background:#fff;
+  border:1px solid var(--line); border-radius:99px; padding:6px 13px}
+.chip.active{background:var(--a5); color:#fff; border-color:var(--a5)}
+.chip.solved{border-color:var(--ok); color:var(--ok)}
+.mcols{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.mcol h3{font-size:13px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted);
+  margin:0 0 8px; font-weight:700}
+.mi{
+  font:inherit; font-size:16px; text-align:left; width:100%; cursor:pointer;
+  background:#fff; border:1px solid var(--line); border-radius:10px;
+  padding:10px 11px; margin-bottom:8px; display:flex; gap:8px; align-items:baseline;
+}
+.mi b{color:var(--muted); font-size:13px; min-width:16px}
+.mi:hover{background:var(--line2)}
+.mi.sel{border-color:var(--a5); background:#f3effb; box-shadow:0 0 0 2px #e0d6f7}
+.mi.paired{background:var(--okbg); border-color:var(--ok); color:var(--ok); cursor:default}
+.mi.shake{animation:sh .3s}
+@keyframes sh{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* ---------- vocab list ---------- */
+table{width:100%; border-collapse:collapse; font-size:16px}
+th{text-align:left; font-size:12px; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--muted); border-bottom:1px solid var(--line); padding:7px 8px 7px 0}
+td{border-bottom:1px solid var(--line2); padding:9px 8px 9px 0; vertical-align:middle}
+td.fr{font-weight:600}
+.tablewrap{overflow-x:auto}
+#search{font-size:16px; margin-bottom:12px}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+@media (max-width:480px){
+  h1{font-size:25px} .prompt{font-size:25px}
+  .mcols{grid-template-columns:1fr}
+  .wrap{padding:0 14px 48px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Cahier de Mots</h1>
+    <p class="sub">30 mots &mdash; journey &rarr; sentence &middot; ChineseFrench, Chennai</p>
+    <div class="bar"><i id="progBar"></i></div>
+    <div class="barrow">
+      <span id="progTxt">0 / 5 activit&eacute;s</span>
+      <span id="streakTxt"></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="voicebar">
+    <div class="row">
+      <label for="frVoiceSel">&#9881; Voix fran&ccedil;aise</label>
+      <select id="frVoiceSel"></select>
+      <button class="spk" id="frTest" type="button">&#128266; Test</button>
+    </div>
+    <div class="row">
+      <label for="enVoiceSel">&#9881; Voix anglaise</label>
+      <select id="enVoiceSel"></select>
+      <button class="spk" id="enTest" type="button">&#128266; Test</button>
+    </div>
+    <div id="voiceNote"></div>
+  </div>
+
+  <nav>
+    <button data-t="tList" class="active">Liste</button>
+    <button data-t="tQcm">QCM</button>
+    <button data-t="tF2e">FR &rarr; EN</button>
+    <button data-t="tE2f">EN &rarr; FR</button>
+    <button data-t="tMatch">Associer</button>
+    <button data-t="tDic">Dict&eacute;e</button>
+  </nav>
+
+  <!-- ============ LISTE ============ -->
+  <section id="tList" class="on">
+    <div class="card">
+      <h2>Les 30 mots</h2>
+      <p class="hint">Tapez &#128266; pour entendre le mot fran&ccedil;ais. <em>m</em> = masculin, <em>f</em> = f&eacute;minin.</p>
+      <input type="text" id="search" placeholder="Chercher un mot (anglais ou fran&ccedil;ais)&hellip;">
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th style="width:38%">English</th><th>Fran&ccedil;ais</th><th style="width:56px"></th></tr></thead>
+          <tbody id="vocabBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QCM ============ -->
+  <section id="tQcm">
+    <div class="card a1">
+      <h2>QCM &mdash; 10 questions</h2>
+      <p class="hint">Choisissez la bonne r&eacute;ponse. Les deux sens sont m&eacute;lang&eacute;s.</p>
+      <div class="meta"><div class="dots" id="qcmDots"></div><span class="score" id="qcmScore">0 / 0</span></div>
+      <div id="qcmBody"></div>
+      <div class="actions"><button class="btn ghost" id="qcmRestart" type="button">Recommencer</button></div>
+    </div>
+  </section>
+
+  <!-- ============ FR -> EN ============ -->
+  <section id="tF2e">
+    <div class="card a3">
+      <h2>Fran&ccedil;ais &rarr; anglais</h2>
+      <p class="hint">Lisez (ou &eacute;coutez) le mot fran&ccedil;ais et tapez l'anglais.</p>
+      <div class="meta"><div class="dots" id="f2eDots"></div><span class="score" id="f2eScore">0 / 0</span></div>
+      <div id="f2eBody"></div>
+      <div class="actions"><button class="btn ghost" id="f2eRestart" type="button">Recommencer</button></div>
+    </div>
+  </section>
+
+  <!-- ============ EN -> FR ============ -->
+  <section id="tE2f">
+    <div class="card a2">
+      <h2>Anglais &rarr; fran&ccedil;ais</h2>
+      <p class="hint">Tapez le mot fran&ccedil;ais. L'article n'est pas obligatoire. Utilisez les touches d'accents ci-dessous.</p>
+      <div class="meta"><div class="dots" id="e2fDots"></div><span class="score" id="e2fScore">0 / 0</span></div>
+      <div id="e2fBody"></div>
+      <div class="actions"><button class="btn ghost" id="e2fRestart" type="button">Recommencer</button></div>
+    </div>
+  </section>
+
+  <!-- ============ ASSOCIER ============ -->
+  <section id="tMatch">
+    <div class="card a5">
+      <h2>Associer &mdash; 5 mots par s&eacute;rie</h2>
+      <p class="hint">Tapez un num&eacute;ro &agrave; gauche, puis sa traduction &agrave; droite.</p>
+      <div class="chips" id="matchChips"></div>
+      <div class="mcols">
+        <div class="mcol"><h3>Fran&ccedil;ais</h3><div id="matchLeft"></div></div>
+        <div class="mcol"><h3>English</h3><div id="matchRight"></div></div>
+      </div>
+      <div class="fb" id="matchFb"></div>
+    </div>
+  </section>
+
+  <!-- ============ DICTEE ============ -->
+  <section id="tDic">
+    <div class="card a4">
+      <h2>Dict&eacute;e &mdash; &eacute;coutez l'anglais, &eacute;crivez le fran&ccedil;ais</h2>
+      <p class="hint">Le mot anglais est prononc&eacute;, pas &eacute;crit. &Eacute;coutez, puis tapez le fran&ccedil;ais.</p>
+      <div class="meta"><div class="dots" id="dicDots"></div><span class="score" id="dicScore">0 / 0</span></div>
+      <div id="dicBody"></div>
+      <div class="actions"><button class="btn ghost" id="dicRestart" type="button">Recommencer</button></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* =========================================================
+   1. STATE  (every mutable let is declared here, first)
+   ========================================================= */
+let allVoices = [], frVoice = null, enVoice = null;
+let qcmQs = [], qcmI = 0, qcmOk = 0, qcmLock = false;
+let f2eQs = [], f2eI = 0, f2eOk = 0, f2eLock = false;
+let e2fQs = [], e2fI = 0, e2fOk = 0, e2fLock = false;
+let dicQs = [], dicI = 0, dicOk = 0, dicLock = false;
+let matchRound = 0, matchPick = null, matchLeftOrder = [], matchRightOrder = [], matchSolved = {};
+
+/* =========================================================
+   2. DATA
+   ========================================================= */
+const WORDS = [
+  {en:"journey",        fr:"voyage",           g:"m",   enAlt:["trip"]},
+  {en:"joy",            fr:"joie",             g:"f",   enAlt:["happiness"]},
+  {en:"key",            fr:"clé",              g:"f",   frAlt:["clef"]},
+  {en:"king",           fr:"roi",              g:"m"},
+  {en:"kitchen",        fr:"cuisine",          g:"f"},
+  {en:"knife",          fr:"couteau",          g:"m"},
+  {en:"lace",           fr:"dentelle",         g:"f"},
+  {en:"leaf",           fr:"feuille",          g:"f"},
+  {en:"library",        fr:"bibliothèque",     g:"f"},
+  {en:"maid",           fr:"femme de chambre", g:"f",   enAlt:["chambermaid","housemaid"]},
+  {en:"meal",           fr:"repas",            g:"m"},
+  {en:"meat",           fr:"viande",           g:"f"},
+  {en:"midnight",       fr:"minuit",           g:"m", noArt:1},
+  {en:"milk",           fr:"lait",             g:"m"},
+  {en:"money",          fr:"argent",           g:"m"},
+  {en:"mother-in-law",  fr:"belle-mère",       g:"f"},
+  {en:"mountain",       fr:"montagne",         g:"f"},
+  {en:"needle",         fr:"aiguille",         g:"f"},
+  {en:"newspaper",      fr:"journal",          g:"m"},
+  {en:"owner",          fr:"propriétaire",     g:"m/f", enAlt:["proprietor"]},
+  {en:"package",        fr:"colis",            g:"m",   enAlt:["parcel"]},
+  {en:"peach",          fr:"pêche",            g:"f"},
+  {en:"plate",          fr:"assiette",         g:"f"},
+  {en:"policeman",      fr:"policier",         g:"m",   enAlt:["police officer","policewoman"], frAlt:["agent de police"]},
+  {en:"potato",         fr:"pomme de terre",   g:"f",   frAlt:["patate"]},
+  {en:"queen",          fr:"reine",            g:"f"},
+  {en:"railroad",       fr:"chemin de fer",    g:"m",   enAlt:["railway"]},
+  {en:"rowboat",        fr:"barque",           g:"f",   enAlt:["rowing boat"], frAlt:["canot"]},
+  {en:"salt",           fr:"sel",              g:"m"},
+  {en:"sentence",       fr:"phrase",           g:"f"}
+];
+
+const ACCENTS = ["à","â","ç","é","è","ê","ë","î","ï","ô","ù","û","ü","œ","-","’"];
+const ROUND_SIZE = 5;
+const N_Q = 10;
+const MILESTONES = ["qcm","f2e","e2f","match","dic"];
+
+const STORE = (function(){ try { return JSON.parse(localStorage.getItem("cdm") || "{}"); } catch(e){ return {}; } })();
+
+/* =========================================================
+   3. HELPERS
+   ========================================================= */
+function save(){ try { localStorage.setItem("cdm", JSON.stringify(STORE)); } catch(e){} }
+
+function article(w){
+  if (w.noArt) return "";                               /* minuit : pas d'article */
+  if (/^[aeiouâêîôûéèëïüy]/i.test(w.fr)) return "l'";   /* élision devant une voyelle */
+  if (w.g === "m") return "le ";
+  if (w.g === "f") return "la ";
+  return "le/la ";
+}
+function withArticle(w){ return article(w) + w.fr; }
+
+function shuffle(a){
+  const r = a.slice();
+  for (let i = r.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = r[i]; r[i] = r[j]; r[j] = t;
+  }
+  return r;
+}
+function pickSome(n, exceptIdx, key){
+  const out = [], used = {};
+  used[exceptIdx] = 1;
+  while (out.length < n){
+    const j = Math.floor(Math.random() * WORDS.length);
+    if (used[j]) continue;
+    if (WORDS[j][key] === WORDS[exceptIdx][key]) continue;
+    used[j] = 1; out.push(j);
+  }
+  return out;
+}
+
+function strip(s){
+  return (s || "").toString().toLowerCase().trim()
+    .replace(/[.!?,;:"]/g, "")
+    .replace(/[’‘`]/g, "'")
+    .replace(/\s+/g, " ");
+}
+function deacc(s){
+  return strip(s).normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/œ/g, "oe").replace(/æ/g, "ae");
+}
+function loose(s){ return deacc(s).replace(/[-']/g, " ").replace(/\s+/g, " ").trim(); }
+function dropArticle(s){
+  return strip(s).replace(/^(le |la |les |l'|un |une |des |the |a |an )/, "").trim();
+}
+
+/* answers: "ok" exact, "accent" right letters but wrong accents, "no" wrong */
+function judge(given, word, dir){
+  const list = dir === "fr"
+    ? [word.fr].concat(word.frAlt || [])
+    : [word.en].concat(word.enAlt || []);
+  const g  = dropArticle(given);
+  const gL = loose(dropArticle(given));
+  if (!g) return "no";
+  for (let i = 0; i < list.length; i++){
+    if (strip(list[i]) === g) return "ok";
+  }
+  for (let i = 0; i < list.length; i++){
+    if (loose(list[i]) === gL) return dir === "fr" ? "accent" : "ok";
+  }
+  return "no";
+}
+
+/* =========================================================
+   4. AUDIO
+   ========================================================= */
+function loadV(){
+  if (!("speechSynthesis" in window)) {
+    const n = document.getElementById("voiceNote");
+    if (n) n.textContent = "Ce navigateur ne lit pas l'audio. Essayez Chrome, Edge ou Safari.";
+    return;
+  }
+  allVoices = speechSynthesis.getVoices() || [];
+  const fr = allVoices.filter(v => /^fr|fr[-_]|french|français/i.test(v.lang + " " + v.name));
+  const en = allVoices.filter(v => /^en|en[-_]|english/i.test(v.lang + " " + v.name));
+  fillSel("frVoiceSel", fr, "cdm_fr", function(v){ frVoice = v; }, "Bonjour !", "fr-FR");
+  fillSel("enVoiceSel", en, "cdm_en", function(v){ enVoice = v; }, "Hello!", "en-US");
+  const n = document.getElementById("voiceNote");
+  if (n){
+    const bits = [];
+    bits.push(fr.length ? "✓ français : " + (frVoice ? frVoice.name : "") : "⚠ aucune voix française installée");
+    bits.push(en.length ? "✓ anglais : " + (enVoice ? enVoice.name : "") : "⚠ aucune voix anglaise installée");
+    n.textContent = bits.join("  ·  ");
+  }
+}
+function fillSel(id, list, storeKey, setter, demo, lang){
+  const sel = document.getElementById(id);
+  if (!sel) return;
+  const pool = list.length ? list : allVoices;
+  sel.innerHTML = pool.length
+    ? pool.map(function(v){ return '<option value="' + allVoices.indexOf(v) + '">' + v.name + " (" + v.lang + ")</option>"; }).join("")
+    : '<option value="-1">(aucune voix)</option>';
+  let saved = NaN;
+  try { saved = parseInt(localStorage.getItem(storeKey), 10); } catch(e){}
+  let idx = (!isNaN(saved) && allVoices[saved]) ? saved : (pool.length ? allVoices.indexOf(pool[0]) : -1);
+  if (idx >= 0){ setter(allVoices[idx]); sel.value = idx; } else { setter(null); }
+  if (!sel._wired){
+    sel._wired = 1;
+    sel.addEventListener("change", function(){
+      const i = parseInt(sel.value, 10);
+      setter(i >= 0 ? allVoices[i] : null);
+      try { localStorage.setItem(storeKey, i); } catch(e){}
+      speak(demo, lang, 0.9);
+    });
+  }
+}
+function speak(text, lang, rate){
+  if (!("speechSynthesis" in window) || !text) return;
+  try { speechSynthesis.cancel(); } catch(e){}
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang || "fr-FR";
+  const v = (lang && lang.indexOf("en") === 0) ? enVoice : frVoice;
+  if (v) u.voice = v;
+  u.rate = rate || 0.9;
+  try { speechSynthesis.speak(u); } catch(e){}
+}
+function sayFr(t, rate){ speak(t, "fr-FR", rate || 0.88); }
+function sayEn(t, rate){ speak(t, "en-US", rate || 0.85); }
+
+/* =========================================================
+   5. PROGRESS
+   ========================================================= */
+function markDone(id){
+  STORE.done = STORE.done || {};
+  if (!STORE.done[id]){ STORE.done[id] = 1; save(); }
+  renderProg();
+}
+function renderProg(){
+  STORE.done = STORE.done || {};
+  let n = 0;
+  MILESTONES.forEach(function(m){ if (STORE.done[m]) n++; });
+  const pct = Math.round(n / MILESTONES.length * 100);
+  const bar = document.getElementById("progBar");
+  if (bar) bar.style.width = pct + "%";
+  const txt = document.getElementById("progTxt");
+  if (txt){
+    txt.textContent = n + " / " + MILESTONES.length + " activités"
+      + (n === MILESTONES.length ? " — tout fini, bravo ! 🌿" : "");
+  }
+  const st = document.getElementById("streakTxt");
+  if (st){
+    const d = STORE.streak || 1;
+    st.textContent = d > 1 ? "🔥 " + d + " jours de suite" : "🌱 premier jour";
+  }
+}
+
+/* =========================================================
+   6. ACCENT KEYPAD
+   ========================================================= */
+function keypad(inputId){
+  const wrap = document.createElement("div");
+  wrap.className = "keys";
+  const lab = document.createElement("span");
+  lab.className = "keylabel";
+  lab.textContent = "Accents :";
+  wrap.appendChild(lab);
+  ACCENTS.forEach(function(ch){
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "k"; b.textContent = ch;
+    b.addEventListener("click", function(){ insertChar(inputId, ch); });
+    wrap.appendChild(b);
+  });
+  return wrap;
+}
+function insertChar(inputId, ch){
+  const el = document.getElementById(inputId);
+  if (!el) return;
+  const s = el.selectionStart == null ? el.value.length : el.selectionStart;
+  const e = el.selectionEnd == null ? el.value.length : el.selectionEnd;
+  el.value = el.value.slice(0, s) + ch + el.value.slice(e);
+  el.focus();
+  const p = s + ch.length;
+  try { el.setSelectionRange(p, p); } catch(err){}
+}
+
+/* =========================================================
+   7. DOTS + FEEDBACK
+   ========================================================= */
+function drawDots(id, marks, now, total){
+  const box = document.getElementById(id);
+  if (!box) return;
+  box.innerHTML = "";
+  for (let i = 0; i < total; i++){
+    const d = document.createElement("i");
+    if (marks[i] === 1) d.className = "ok";
+    else if (marks[i] === 0) d.className = "no";
+    else if (i === now) d.className = "now";
+    box.appendChild(d);
+  }
+}
+function fbBox(kind, main, sub){
+  const d = document.createElement("div");
+  d.className = "fb show " + kind;
+  d.textContent = main;
+  if (sub){
+    const s = document.createElement("small");
+    s.textContent = sub;
+    d.appendChild(s);
+  }
+  return d;
+}
+
+/* =========================================================
+   8. VOCAB LIST
+   ========================================================= */
+function renderVocab(){
+  const body = document.getElementById("vocabBody");
+  if (!body) return;
+  const q = strip((document.getElementById("search") || {}).value || "");
+  body.innerHTML = "";
+  WORDS.forEach(function(w){
+    if (q && loose(w.en).indexOf(loose(q)) < 0 && loose(w.fr).indexOf(loose(q)) < 0) return;
+    const tr = document.createElement("tr");
+    const td1 = document.createElement("td");
+    td1.textContent = w.en;
+    const td2 = document.createElement("td");
+    td2.className = "fr";
+    td2.textContent = withArticle(w) + " ";
+    const g = document.createElement("span");
+    g.className = "gen";
+    g.textContent = "(" + w.g + ")";
+    td2.appendChild(g);
+    const td3 = document.createElement("td");
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "spk";
+    b.innerHTML = "&#128266;";
+    b.setAttribute("aria-label", "Écouter " + w.fr);
+    b.addEventListener("click", function(){ sayFr(withArticle(w)); });
+    td3.appendChild(b);
+    tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3);
+    body.appendChild(tr);
+  });
+  if (!body.children.length){
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 3; td.style.color = "#6a7180";
+    td.textContent = "Aucun mot trouvé.";
+    tr.appendChild(td); body.appendChild(tr);
+  }
+}
+
+/* =========================================================
+   9. QCM
+   ========================================================= */
+function qcmStart(){
+  const order = shuffle(WORDS.map(function(_, i){ return i; })).slice(0, N_Q);
+  qcmQs = order.map(function(idx, k){
+    const dir = (k % 2 === 0) ? "en2fr" : "fr2en";
+    const key = dir === "en2fr" ? "fr" : "en";
+    const wrongs = pickSome(3, idx, key);
+    const opts = shuffle([idx].concat(wrongs));
+    return {idx: idx, dir: dir, opts: opts, mark: null};
+  });
+  qcmI = 0; qcmOk = 0; qcmLock = false;
+  qcmRender();
+}
+function qcmRender(){
+  const body = document.getElementById("qcmBody");
+  if (!body) return;
+  body.innerHTML = "";
+  const sc = document.getElementById("qcmScore");
+  if (sc) sc.textContent = qcmOk + " / " + qcmQs.length;
+  drawDots("qcmDots", qcmQs.map(function(q){ return q.mark; }), qcmI, qcmQs.length);
+
+  if (qcmI >= qcmQs.length){
+    body.appendChild(fbBox("ok", "Série terminée : " + qcmOk + " / " + qcmQs.length,
+      qcmOk >= 8 ? "Très bien ! 🌿" : "Refaites la série, les mots restent."));
+    markDone("qcm");
+    return;
+  }
+  const q = qcmQs[qcmI];
+  const w = WORDS[q.idx];
+
+  const tag = document.createElement("div");
+  tag.className = "tag";
+  tag.textContent = q.dir === "en2fr" ? "anglais → français" : "français → anglais";
+  body.appendChild(tag);
+
+  const p = document.createElement("div");
+  p.className = "prompt";
+  p.appendChild(document.createTextNode(q.dir === "en2fr" ? w.en : withArticle(w)));
+  if (q.dir === "fr2en"){
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "spk"; b.innerHTML = "&#128266;";
+    b.setAttribute("aria-label", "Écouter");
+    b.addEventListener("click", function(){ sayFr(withArticle(w)); });
+    p.appendChild(b);
+  }
+  body.appendChild(p);
+
+  const opts = document.createElement("div");
+  opts.className = "opts";
+  const letters = ["A", "B", "C", "D"];
+  q.opts.forEach(function(oi, n){
+    const ow = WORDS[oi];
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "opt";
+    const lb = document.createElement("b");
+    lb.textContent = letters[n];
+    b.appendChild(lb);
+    b.appendChild(document.createTextNode(q.dir === "en2fr" ? withArticle(ow) : ow.en));
+    b.addEventListener("click", function(){ qcmAnswer(oi, b, opts); });
+    opts.appendChild(b);
+  });
+  body.appendChild(opts);
+}
+function qcmAnswer(chosen, btn, opts){
+  if (qcmLock) return;
+  qcmLock = true;
+  const q = qcmQs[qcmI];
+  const w = WORDS[q.idx];
+  const right = chosen === q.idx;
+  q.mark = right ? 1 : 0;
+  if (right) qcmOk++;
+
+  Array.prototype.forEach.call(opts.children, function(b, n){
+    b.disabled = true;
+    if (q.opts[n] === q.idx) b.classList.add("right");
+  });
+  if (!right) btn.classList.add("wrong");
+
+  const body = document.getElementById("qcmBody");
+  body.appendChild(right
+    ? fbBox("ok", "Bravo ! 🌿", withArticle(w) + " = " + w.en)
+    : fbBox("no", "Pas tout à fait.", withArticle(w) + " = " + w.en));
+  if (q.dir === "en2fr") sayFr(withArticle(w));
+
+  const sc = document.getElementById("qcmScore");
+  if (sc) sc.textContent = qcmOk + " / " + qcmQs.length;
+
+  setTimeout(function(){ qcmI++; qcmLock = false; qcmRender(); }, 1300);
+}
+
+/* =========================================================
+   10. TYPING ENGINE  (FR->EN, EN->FR, dictée)
+   ========================================================= */
+function typingStart(cfg){
+  const order = shuffle(WORDS.map(function(_, i){ return i; })).slice(0, N_Q);
+  return order.map(function(idx){ return {idx: idx, mark: null}; });
+}
+function typingRender(cfg){
+  const body = document.getElementById(cfg.bodyId);
+  if (!body) return;
+  body.innerHTML = "";
+  const qs = cfg.get();
+  const i = cfg.getI();
+  const sc = document.getElementById(cfg.scoreId);
+  if (sc) sc.textContent = cfg.getOk() + " / " + qs.length;
+  drawDots(cfg.dotsId, qs.map(function(q){ return q.mark; }), i, qs.length);
+
+  if (i >= qs.length){
+    body.appendChild(fbBox("ok", "Série terminée : " + cfg.getOk() + " / " + qs.length,
+      cfg.getOk() >= 8 ? "Excellent ! 🌿" : "Encore une série et ça rentre."));
+    markDone(cfg.milestone);
+    return;
+  }
+  const w = WORDS[qs[i].idx];
+
+  const tag = document.createElement("div");
+  tag.className = "tag";
+  tag.textContent = cfg.tag;
+  body.appendChild(tag);
+
+  const p = document.createElement("div");
+  p.className = "prompt";
+  if (cfg.mode === "dic"){
+    p.appendChild(document.createTextNode("• • •"));
+    const b1 = document.createElement("button");
+    b1.type = "button"; b1.className = "spk"; b1.innerHTML = "&#128266; &Eacute;couter";
+    b1.addEventListener("click", function(){ sayEn(w.en, 0.85); });
+    const b2 = document.createElement("button");
+    b2.type = "button"; b2.className = "spk"; b2.innerHTML = "&#128034; Lentement";
+    b2.addEventListener("click", function(){ sayEn(w.en, 0.55); });
+    p.appendChild(b1); p.appendChild(b2);
+  } else if (cfg.mode === "fr2en"){
+    p.appendChild(document.createTextNode(withArticle(w)));
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "spk"; b.innerHTML = "&#128266;";
+    b.setAttribute("aria-label", "Écouter");
+    b.addEventListener("click", function(){ sayFr(withArticle(w)); });
+    p.appendChild(b);
+  } else {
+    p.appendChild(document.createTextNode(w.en));
+  }
+  body.appendChild(p);
+
+  const inp = document.createElement("input");
+  inp.type = "text"; inp.id = cfg.inputId;
+  inp.autocomplete = "off"; inp.spellcheck = false;
+  inp.setAttribute("autocapitalize", "none");
+  inp.placeholder = cfg.dir === "fr" ? "votre réponse en français…" : "your answer in English…";
+  inp.addEventListener("keydown", function(ev){
+    if (ev.key === "Enter"){ ev.preventDefault(); typingCheck(cfg); }
+  });
+  body.appendChild(inp);
+
+  if (cfg.dir === "fr") body.appendChild(keypad(cfg.inputId));
+
+  const act = document.createElement("div");
+  act.className = "actions";
+  const ok = document.createElement("button");
+  ok.type = "button"; ok.className = "btn"; ok.textContent = "Vérifier";
+  ok.addEventListener("click", function(){ typingCheck(cfg); });
+  const sh = document.createElement("button");
+  sh.type = "button"; sh.className = "btn ghost"; sh.textContent = "Montrer la réponse";
+  sh.addEventListener("click", function(){ typingReveal(cfg); });
+  act.appendChild(ok); act.appendChild(sh);
+  body.appendChild(act);
+
+  if (cfg.mode === "dic") setTimeout(function(){ sayEn(w.en, 0.85); }, 250);
+}
+function typingCheck(cfg){
+  if (cfg.getLock()) return;
+  const qs = cfg.get(), i = cfg.getI();
+  if (i >= qs.length) return;
+  const w = WORDS[qs[i].idx];
+  const el = document.getElementById(cfg.inputId);
+  if (!el) return;
+  const verdict = judge(el.value, w, cfg.dir);
+  const body = document.getElementById(cfg.bodyId);
+
+  if (verdict === "no" && !strip(el.value)) return;
+
+  if (verdict === "accent"){
+    body.appendChild(fbBox("warn", "Presque ! Attention aux accents.",
+      "Écrivez : " + w.fr + "  —  corrigez et vérifiez encore."));
+    el.focus();
+    return;
+  }
+  cfg.setLock(true);
+  qs[i].mark = (verdict === "ok") ? 1 : 0;
+  if (verdict === "ok") cfg.addOk();
+
+  const answer = cfg.dir === "fr" ? withArticle(w) + " (" + w.g + ")" : w.en;
+  body.appendChild(verdict === "ok"
+    ? fbBox("ok", "Bravo ! 🌿", answer)
+    : fbBox("no", "Pas tout à fait.", "La réponse : " + answer));
+  el.disabled = true;
+  if (cfg.dir === "fr" || cfg.mode === "dic") sayFr(withArticle(w));
+
+  const sc = document.getElementById(cfg.scoreId);
+  if (sc) sc.textContent = cfg.getOk() + " / " + qs.length;
+
+  setTimeout(function(){ cfg.nextI(); cfg.setLock(false); typingRender(cfg); }, 1500);
+}
+function typingReveal(cfg){
+  if (cfg.getLock()) return;
+  const qs = cfg.get(), i = cfg.getI();
+  if (i >= qs.length) return;
+  cfg.setLock(true);
+  const w = WORDS[qs[i].idx];
+  qs[i].mark = 0;
+  const body = document.getElementById(cfg.bodyId);
+  body.appendChild(fbBox("warn", "La réponse :",
+    cfg.dir === "fr" ? withArticle(w) + " (" + w.g + ")  —  " + w.en : w.en + "  —  " + withArticle(w)));
+  const el = document.getElementById(cfg.inputId);
+  if (el) el.disabled = true;
+  sayFr(withArticle(w));
+  setTimeout(function(){ cfg.nextI(); cfg.setLock(false); typingRender(cfg); }, 1800);
+}
+
+const F2E = {
+  mode:"fr2en", dir:"en", tag:"français → anglais", milestone:"f2e",
+  bodyId:"f2eBody", inputId:"f2eInput", dotsId:"f2eDots", scoreId:"f2eScore",
+  get:function(){ return f2eQs; }, getI:function(){ return f2eI; }, nextI:function(){ f2eI++; },
+  getOk:function(){ return f2eOk; }, addOk:function(){ f2eOk++; },
+  getLock:function(){ return f2eLock; }, setLock:function(v){ f2eLock = v; }
+};
+const E2F = {
+  mode:"en2fr", dir:"fr", tag:"anglais → français", milestone:"e2f",
+  bodyId:"e2fBody", inputId:"e2fInput", dotsId:"e2fDots", scoreId:"e2fScore",
+  get:function(){ return e2fQs; }, getI:function(){ return e2fI; }, nextI:function(){ e2fI++; },
+  getOk:function(){ return e2fOk; }, addOk:function(){ e2fOk++; },
+  getLock:function(){ return e2fLock; }, setLock:function(v){ e2fLock = v; }
+};
+const DIC = {
+  mode:"dic", dir:"fr", tag:"écoute → français", milestone:"dic",
+  bodyId:"dicBody", inputId:"dicInput", dotsId:"dicDots", scoreId:"dicScore",
+  get:function(){ return dicQs; }, getI:function(){ return dicI; }, nextI:function(){ dicI++; },
+  getOk:function(){ return dicOk; }, addOk:function(){ dicOk++; },
+  getLock:function(){ return dicLock; }, setLock:function(v){ dicLock = v; }
+};
+
+/* =========================================================
+   11. ASSOCIER (match 5)
+   ========================================================= */
+function matchRounds(){ return Math.ceil(WORDS.length / ROUND_SIZE); }
+function matchChips(){
+  const box = document.getElementById("matchChips");
+  if (!box) return;
+  box.innerHTML = "";
+  for (let r = 0; r < matchRounds(); r++){
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip" + (r === matchRound ? " active" : "") + (matchSolved[r] ? " solved" : "");
+    b.textContent = "Série " + (r + 1) + (matchSolved[r] ? " ✓" : "");
+    (function(rr){ b.addEventListener("click", function(){ matchRound = rr; matchStart(); }); })(r);
+    box.appendChild(b);
+  }
+}
+function matchStart(){
+  matchPick = null;
+  const base = [];
+  for (let i = 0; i < ROUND_SIZE; i++){
+    const k = matchRound * ROUND_SIZE + i;
+    if (k < WORDS.length) base.push(k);
+  }
+  matchLeftOrder = base.slice();
+  matchRightOrder = shuffle(base);
+  const fb = document.getElementById("matchFb");
+  if (fb){ fb.className = "fb"; fb.textContent = ""; }
+  matchChips();
+  matchRender();
+}
+function matchRender(){
+  const L = document.getElementById("matchLeft"), R = document.getElementById("matchRight");
+  if (!L || !R) return;
+  L.innerHTML = ""; R.innerHTML = "";
+  const letters = ["A","B","C","D","E"];
+  matchLeftOrder.forEach(function(idx, n){
+    const w = WORDS[idx];
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "mi";
+    b.dataset.idx = idx; b.dataset.side = "L";
+    const lb = document.createElement("b"); lb.textContent = (n + 1) + ".";
+    b.appendChild(lb);
+    b.appendChild(document.createTextNode(withArticle(w)));
+    b.addEventListener("click", function(){ matchTap(b); });
+    L.appendChild(b);
+  });
+  matchRightOrder.forEach(function(idx, n){
+    const w = WORDS[idx];
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "mi";
+    b.dataset.idx = idx; b.dataset.side = "R";
+    const lb = document.createElement("b"); lb.textContent = letters[n] + ".";
+    b.appendChild(lb);
+    b.appendChild(document.createTextNode(w.en));
+    b.addEventListener("click", function(){ matchTap(b); });
+    R.appendChild(b);
+  });
+}
+function matchTap(btn){
+  if (btn.classList.contains("paired")) return;
+  if (!matchPick){
+    matchPick = btn;
+    btn.classList.add("sel");
+    if (btn.dataset.side === "L") sayFr(WORDS[+btn.dataset.idx].fr);
+    return;
+  }
+  if (matchPick === btn){ btn.classList.remove("sel"); matchPick = null; return; }
+  if (matchPick.dataset.side === btn.dataset.side){
+    matchPick.classList.remove("sel");
+    matchPick = btn; btn.classList.add("sel");
+    return;
+  }
+  const a = matchPick, b = btn;
+  a.classList.remove("sel");
+  matchPick = null;
+  const fb = document.getElementById("matchFb");
+  if (a.dataset.idx === b.dataset.idx){
+    a.classList.add("paired"); b.classList.add("paired");
+    const w = WORDS[+a.dataset.idx];
+    sayFr(withArticle(w));
+    if (fb){ fb.className = "fb show ok"; fb.textContent = "Exact ! " + withArticle(w) + " = " + w.en; }
+    const left = document.querySelectorAll("#matchLeft .mi:not(.paired)").length;
+    if (left === 0){
+      matchSolved[matchRound] = 1;
+      markDone("match");
+      matchChips();
+      if (fb){
+        fb.className = "fb show ok";
+        fb.textContent = "Série " + (matchRound + 1) + " terminée ! 🌿"
+          + (matchRound + 1 < matchRounds() ? " Passez à la série " + (matchRound + 2) + "." : " Les 30 mots sont faits.");
+      }
+    }
+  } else {
+    b.classList.add("shake");
+    setTimeout(function(){ b.classList.remove("shake"); }, 320);
+    if (fb){ fb.className = "fb show warn"; fb.textContent = "Pas cette paire — essayez encore."; }
+  }
+}
+
+/* =========================================================
+   12. NAV
+   ========================================================= */
+function wireNav(){
+  const btns = document.querySelectorAll("nav button");
+  Array.prototype.forEach.call(btns, function(b){
+    b.addEventListener("click", function(){
+      Array.prototype.forEach.call(btns, function(x){ x.classList.remove("active"); });
+      b.classList.add("active");
+      const secs = document.querySelectorAll("section");
+      Array.prototype.forEach.call(secs, function(s){ s.classList.remove("on"); });
+      const t = document.getElementById(b.dataset.t);
+      if (t) t.classList.add("on");
+      if ("speechSynthesis" in window){ try { speechSynthesis.cancel(); } catch(e){} }
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+  });
+}
+
+/* =========================================================
+   13. INIT  (everything is defined above this point)
+   ========================================================= */
+(function init(){
+  /* streak */
+  const today = new Date().toISOString().slice(0, 10);
+  if (STORE.last !== today){
+    const y = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+    STORE.streak = (STORE.last === y) ? ((STORE.streak || 0) + 1) : 1;
+    STORE.last = today;
+    STORE.done = {};
+    save();
+  }
+
+  wireNav();
+
+  const s = document.getElementById("search");
+  if (s) s.addEventListener("input", renderVocab);
+  renderVocab();
+
+  qcmStart();
+  f2eQs = typingStart(F2E); f2eI = 0; f2eOk = 0; typingRender(F2E);
+  e2fQs = typingStart(E2F); e2fI = 0; e2fOk = 0; typingRender(E2F);
+  dicQs = typingStart(DIC); dicI = 0; dicOk = 0; typingRender(DIC);
+  matchStart();
+
+  const qr = document.getElementById("qcmRestart");
+  if (qr) qr.addEventListener("click", qcmStart);
+  const fr = document.getElementById("f2eRestart");
+  if (fr) fr.addEventListener("click", function(){ f2eQs = typingStart(F2E); f2eI = 0; f2eOk = 0; f2eLock = false; typingRender(F2E); });
+  const er = document.getElementById("e2fRestart");
+  if (er) er.addEventListener("click", function(){ e2fQs = typingStart(E2F); e2fI = 0; e2fOk = 0; e2fLock = false; typingRender(E2F); });
+  const dr = document.getElementById("dicRestart");
+  if (dr) dr.addEventListener("click", function(){ dicQs = typingStart(DIC); dicI = 0; dicOk = 0; dicLock = false; typingRender(DIC); });
+
+  const ft = document.getElementById("frTest");
+  if (ft) ft.addEventListener("click", function(){ sayFr("Bonjour, voici la clé de la cuisine."); });
+  const et = document.getElementById("enTest");
+  if (et) et.addEventListener("click", function(){ sayEn("Hello, this is the English voice."); });
+
+  if ("speechSynthesis" in window){
+    speechSynthesis.onvoiceschanged = loadV;
+    loadV();
+    setTimeout(loadV, 600);
+  } else {
+    loadV();
+  }
+
+  renderProg();
+})();
+</script>
+</body>
+</html>
