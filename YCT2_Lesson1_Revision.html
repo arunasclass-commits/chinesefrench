@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YCT 2 Lesson 1 Revision</title>
+<style>
+:root{
+  --bg:#fff8ec; --card:#ffffff; --ink:#2b2b3a; --soft:#6b6b80; --line:#f0e3cc;
+  --red:#e8505b; --green:#2fb36d; --blue:#3b82f6; --yellow:#ffc93c; --purple:#8b5cf6; --orange:#ff8a3d;
+  --cn:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC","Noto Sans SC",sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito","Segoe UI","Trebuchet MS",system-ui,sans-serif;font-size:17px}
+button{font:inherit;cursor:pointer;border:none}
+.cn{font-family:var(--cn)}
+.py{color:var(--red);font-weight:700}
+header{background:linear-gradient(90deg,#ff8a3d,#ffc93c);padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 3px 0 #e6a92a}
+header h1{margin:0;font-size:22px;color:#fff;text-shadow:0 2px 0 #c96a1a}
+header h1 .cn{font-size:24px}
+.me{margin-left:auto;background:#fff;border-radius:30px;padding:5px 14px;display:flex;align-items:center;gap:8px;font-weight:800}
+.me .av{font-size:26px}
+.me .stars{color:#e0a100}
+nav{display:flex;gap:8px;flex-wrap:wrap;padding:12px 16px 0}
+nav button{background:#fff;border:3px solid var(--line);border-radius:16px;padding:8px 14px;font-weight:800;color:var(--soft)}
+nav button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+nav button .ok{color:var(--green)}
+nav button.on .ok{color:#fff}
+main{display:grid;grid-template-columns:1fr 260px;gap:16px;padding:14px 16px 30px;max-width:1200px;margin:0 auto}
+@media (max-width:860px){main{grid-template-columns:1fr}}
+.panel{background:var(--card);border-radius:22px;padding:18px;border:3px solid var(--line)}
+.panel h2{margin:0 0 4px;font-size:24px}
+.panel h2 .cn{color:var(--purple)}
+.hint{color:var(--soft);margin:0 0 14px}
+.hidden{display:none!important}
+
+/* name board */
+.nb-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.nb-row input{font:inherit;padding:10px 14px;border-radius:14px;border:3px solid var(--line);min-width:200px;flex:1}
+.avs{display:flex;gap:6px;flex-wrap:wrap}
+.avs button{font-size:30px;background:#fff;border:3px solid var(--line);border-radius:14px;width:54px;height:54px}
+.avs button.sel{border-color:var(--orange);background:#fff3e6}
+.big{background:var(--green);color:#fff;font-weight:800;border-radius:16px;padding:12px 20px;font-size:18px;box-shadow:0 4px 0 #1f8a52}
+.big:active{transform:translateY(3px);box-shadow:0 1px 0 #1f8a52}
+.big.blue{background:var(--blue);box-shadow:0 4px 0 #2563c9}
+.big.purple{background:var(--purple);box-shadow:0 4px 0 #6d3fd6}
+.big.grey{background:#b9b9c6;box-shadow:0 4px 0 #8f8fa0}
+.players{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:10px}
+.pl{background:#fff;border:3px solid var(--line);border-radius:18px;padding:10px;text-align:center}
+.pl .av{font-size:38px}
+.pl b{display:block;font-size:18px}
+.pl.cur{border-color:var(--green);background:#eefbf3}
+.pl .row{display:flex;gap:6px;justify-content:center;margin-top:6px}
+.pl .row button{font-size:13px;padding:5px 9px;border-radius:10px;background:#eef2ff;color:var(--blue);font-weight:800}
+.pl .row button.del{background:#ffecec;color:var(--red)}
+
+/* scoreboard */
+aside .panel{position:sticky;top:12px}
+.sb h3{margin:0 0 8px;font-size:20px}
+.sbr{display:flex;align-items:center;gap:8px;padding:7px 6px;border-bottom:2px dashed var(--line)}
+.sbr .av{font-size:24px}
+.sbr .nm{flex:1;font-weight:800}
+.sbr .st{font-weight:900;color:#e0a100}
+.sbr.cur{background:#eefbf3;border-radius:12px}
+.medal{width:22px;text-align:center}
+.bar{height:10px;background:#f3ead9;border-radius:6px;overflow:hidden;margin-top:3px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#ffc93c,#ff8a3d)}
+
+/* learn cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.fc{perspective:800px;height:190px}
+.fc .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.fc.flip .in{transform:rotateY(180deg)}
+.fc .f,.fc .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;border:3px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;text-align:center}
+.fc .f{background:#fff}
+.fc .b{background:#eef6ff;transform:rotateY(180deg)}
+.fc .emo{font-size:58px;line-height:1.1}
+.fc .w{font-size:34px;font-weight:700}
+.fc .b .w{font-size:30px}
+.fc .e{font-size:18px;font-weight:800;color:var(--blue)}
+.say{background:#fff3e6;border-radius:50%;width:38px;height:38px;font-size:18px;margin-top:6px}
+.keys{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+@media (max-width:600px){.keys{grid-template-columns:1fr}}
+.key{background:#fff;border:3px solid var(--line);border-radius:20px;padding:12px 14px;display:flex;gap:12px;align-items:center}
+.key .emo{font-size:46px}
+.key .cn{font-size:24px}
+.key small{display:block;color:var(--soft)}
+
+/* radicals */
+.rads{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:18px}
+.rad{background:#fff;border:3px solid var(--line);border-radius:20px;padding:12px;text-align:center}
+.rad .emo{font-size:48px}
+.rad .r{font-size:46px;color:var(--purple);font-weight:700;line-height:1.1}
+.rad .nm{font-weight:900;font-size:18px}
+.rad .ex{font-size:26px;margin:6px 0}
+.rad .ex span{display:inline-block;background:#f5f0ff;border-radius:10px;padding:0 8px;margin:2px}
+.rad p{margin:4px 0 0;color:var(--soft);font-size:15px}
+.story{background:#fff7d6;border:3px dashed var(--yellow);border-radius:20px;padding:12px 16px;display:flex;gap:14px;align-items:center;margin-bottom:18px}
+.story .emo{font-size:44px}
+.story .cn{font-size:30px}
+
+/* questions */
+.q{background:#fff;border:3px solid var(--line);border-radius:20px;padding:14px;margin-bottom:12px}
+.q .qt{font-weight:800;font-size:18px;margin-bottom:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.q .num{background:var(--purple);color:#fff;border-radius:50%;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;font-size:15px;flex:none}
+.q .pic{font-size:44px}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.opt{background:#f4f6ff;border:3px solid #dfe5ff;border-radius:16px;padding:10px 16px;font-size:18px;font-weight:700;text-align:center;min-width:120px}
+.opt .cn{font-size:24px;display:block}
+.opt small{display:block;color:var(--red);font-size:14px}
+.opt:hover{border-color:var(--blue)}
+.opt.right{background:#dff7e9;border-color:var(--green)}
+.opt.wrong{background:#ffe3e3;border-color:var(--red)}
+.opt[disabled]{cursor:default;opacity:1;color:var(--ink)}
+.fb{margin-top:8px;font-weight:800;min-height:22px}
+.fb.ok{color:var(--green)} .fb.no{color:var(--red)}
+.tf .opt{min-width:150px;font-size:20px}
+.tf .opt.dui{background:#e8fbf0;border-color:#bfeccf}
+.tf .opt.cuo{background:#fff0f0;border-color:#ffd0d0}
+.claim{font-size:20px}
+.claim .cn{font-size:30px;font-weight:700}
+
+/* match */
+.match{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.col{display:flex;flex-direction:column;gap:10px}
+.mi{background:#fff;border:3px solid var(--line);border-radius:18px;padding:10px;text-align:center;font-weight:800;min-height:84px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.mi .cn{font-size:30px}
+.mi .emo{font-size:46px}
+.mi.sel{border-color:var(--blue);background:#eef4ff}
+.mi.done{border-color:var(--green);background:#dff7e9;cursor:default}
+.mi.shake{animation:sh .4s}
+@keyframes sh{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.line-tag{font-size:13px;color:var(--green)}
+
+.done-box{background:#eefbf3;border:3px solid var(--green);border-radius:18px;padding:12px 16px;margin-top:10px;font-weight:800;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+
+/* review board */
+.rb-top{text-align:center;padding:10px}
+.rb-top .av{font-size:70px}
+.rb-top .score{font-size:44px;font-weight:900;color:#e0a100}
+.starsrow{font-size:34px;letter-spacing:4px}
+.rbt{width:100%;border-collapse:collapse;margin:12px 0}
+.rbt td,.rbt th{padding:9px;border-bottom:2px dashed var(--line);text-align:left}
+.rbt th{color:var(--soft)}
+.miss{background:#fff5f5;border:2px solid #ffd6d6;border-radius:14px;padding:8px 12px;margin:6px 0}
+.miss .cn{font-size:22px}
+.cert{border:6px double var(--orange);border-radius:24px;padding:14px;text-align:center;background:#fffdf6;margin-top:12px}
+.cert h3{margin:0;font-size:26px;color:var(--orange)}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:50}
+.confetti i{position:absolute;top:-20px;width:10px;height:14px;border-radius:3px;animation:fall 2.6s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#2b2b3a;color:#fff;padding:10px 18px;border-radius:30px;font-weight:800;z-index:60;opacity:0;transition:opacity .3s}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <h1>🐼 YCT 2 · Lesson 1 · <span class="cn">我可以坐这儿吗？</span></h1>
+  <div class="me" id="me"><span class="av">👋</span><span id="meName">Choose your name</span><span class="stars" id="meStars"></span></div>
+</header>
+<nav id="nav"></nav>
+<main>
+  <section id="view"></section>
+  <aside><div class="panel sb"><h3>🏆 Scoreboard</h3><div id="board"></div><p class="hint" style="margin-top:10px;font-size:14px">16 stars to win: 4 sections × 4 questions.</p></div></aside>
+</main>
+<div class="toast" id="toast"></div>
+<div class="confetti" id="conf"></div>
+
+<script>
+// ---------------- DATA (YCT 2 Standard Course, Lesson 1) ----------------
+const WORDS = [
+  {h:"可以", p:"kěyǐ", e:"may; can", emo:"👍"},
+  {h:"坐", p:"zuò", e:"sit", emo:"🪑"},
+  {h:"请", p:"qǐng", e:"please", emo:"🙏"},
+  {h:"不客气", p:"bú kèqi", e:"You're welcome.", emo:"😊"},
+  {h:"不要", p:"bú yào", e:"don't", emo:"🙅"},
+  {h:"说话", p:"shuōhuà", e:"to talk; to speak", emo:"🗣️"},
+  {h:"对不起", p:"duìbuqǐ", e:"I'm sorry.", emo:"😔"},
+  {h:"没关系", p:"méi guānxi", e:"Never mind.", emo:"👌"}
+];
+const KEYS = [
+  {h:"我可以坐这儿吗？", p:"Wǒ kěyǐ zuò zhèr ma?", e:"May I sit here?", emo:"🪑"},
+  {h:"请不要说话。", p:"Qǐng bú yào shuōhuà.", e:"Please be quiet.", emo:"🤫"}
+];
+const RADS = [
+  {r:"讠", p:"yán", nm:"speech", emo:"💬", ex:["说","话","请"], note:"Words with 讠 are about talking."},
+  {r:"宀", p:"mián", nm:"roof", emo:"🏠", ex:["客"], note:"客 = a guest under your roof (不客气)."},
+  {r:"氵", p:"shuǐ", nm:"water", emo:"💧", ex:["没"], note:"没 first meant ‘sink under water’ (没关系)."},
+  {r:"走", p:"zǒu", nm:"walk", emo:"🚶", ex:["起"], note:"起 = get up and go (对不起)."}
+];
+const SECTIONS = [
+  {id:"rad", icon:"🧩", name:"Radicals", cn:"偏旁"},
+  {id:"match", icon:"🔗", name:"Match", cn:"连一连"},
+  {id:"choose", icon:"👆", name:"Choose", cn:"选一选"},
+  {id:"tf", icon:"✅", name:"对 or 错", cn:"对不对"}
+];
+const QS = {
+  rad: [
+    {pic:"💬", q:"Which part is in <span class='cn'>说</span> (talk)?", opts:[["讠","yán"],["宀","mián"],["氵","shuǐ"]], a:0},
+    {pic:"🏠", q:"<span class='cn'>客</span> (guest) has a roof on top. Which part is the roof?", opts:[["氵","shuǐ"],["宀","mián"],["走","zǒu"]], a:1},
+    {pic:"💧", q:"Which part is in <span class='cn'>没</span>?", opts:[["走","zǒu"],["讠","yán"],["氵","shuǐ"]], a:2},
+    {pic:"🚶", q:"<span class='cn'>起</span> has the part <span class='cn'>走</span>. What does <span class='cn'>走</span> mean?", opts:[["🚶","walk"],["💧","water"],["💬","talk"]], a:0}
+  ],
+  choose: [
+    {pic:"🪑", q:"You want to sit next to a friend. You ask:", opts:[["我可以坐这儿吗？","Wǒ kěyǐ zuò zhèr ma?"],["没关系。","Méi guānxi."],["不客气。","Bú kèqi."]], a:0},
+    {pic:"🙏", q:"Your friend says <span class='cn'>谢谢！</span> You say:", opts:[["对不起。","Duìbuqǐ."],["不客气。","Bú kèqi."],["不要。","Bú yào."]], a:1},
+    {pic:"😔", q:"Your friend says <span class='cn'>对不起。</span> You say:", opts:[["没关系。","Méi guānxi."],["请坐。","Qǐng zuò."],["可以。","Kěyǐ."]], a:0},
+    {pic:"📚🤫", q:"In the library, the teacher says:", opts:[["请说话。","Qǐng shuōhuà."],["请不要说话。","Qǐng bú yào shuōhuà."],["不客气。","Bú kèqi."]], a:1}
+  ],
+  tf: [
+    {h:"坐", p:"zuò", claim:"sit", pic:"🪑", a:true, right:"sit"},
+    {h:"不客气", p:"bú kèqi", claim:"I'm sorry", pic:"😊", a:false, right:"You're welcome."},
+    {h:"说话", p:"shuōhuà", claim:"to talk; to speak", pic:"🗣️", a:true, right:"to talk; to speak"},
+    {h:"没关系", p:"méi guānxi", claim:"please", pic:"👌", a:false, right:"Never mind."}
+  ]
+};
+const MATCH = [ {h:"坐",p:"zuò",emo:"🪑"}, {h:"说话",p:"shuōhuà",emo:"🗣️"}, {h:"对不起",p:"duìbuqǐ",emo:"😔"}, {h:"不要",p:"bú yào",emo:"🙅"} ];
+const AVATARS = ["🐼","🐯","🐰","🦊","🐨","🐸","🦁","🐵","🐱","🐶"];
+
+// ---------------- STATE ----------------
+const KEY = "yct2-lesson1-revision";
+let S = {players:[], cur:null};
+try { const raw = localStorage.getItem(KEY); if (raw) S = JSON.parse(raw) || S; } catch(e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} }
+function cur(){ return S.players.find(p => p.id === S.cur) || null; }
+function newRes(){ return {rad:null, match:null, choose:null, tf:null}; }   // each: {score, miss:[...]}
+function stars(p){ return SECTIONS.reduce((t,s) => t + (p.res[s.id] ? p.res[s.id].score : 0), 0); }
+let tab = "names";
+let pickedAv = AVATARS[0];
+
+// ---------------- SOUND & SPEECH ----------------
+let AC = null;
+function beep(ok){
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    const notes = ok ? [660, 880] : [300, 220];
+    notes.forEach((f,i) => {
+      const o = AC.createOscillator(), g = AC.createGain();
+      o.frequency.value = f; o.type = ok ? "triangle" : "sawtooth";
+      g.gain.setValueAtTime(0.12, AC.currentTime + i*0.12);
+      g.gain.exponentialRampToValueAtTime(0.001, AC.currentTime + i*0.12 + 0.18);
+      o.connect(g); g.connect(AC.destination); o.start(AC.currentTime + i*0.12); o.stop(AC.currentTime + i*0.12 + 0.2);
+    });
+  } catch(e) {}
+}
+function say(t){
+  try {
+    if (!window.speechSynthesis) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(t); u.lang = "zh-CN"; u.rate = 0.8;
+    const v = speechSynthesis.getVoices().find(v => /zh[-_]CN/i.test(v.lang));
+    if (v) u.voice = v;
+    speechSynthesis.speak(u);
+  } catch(e) {}
+}
+function toast(t){ const el = document.getElementById("toast"); el.textContent = t; el.classList.add("show"); setTimeout(() => el.classList.remove("show"), 1600); }
+function confetti(){
+  const c = document.getElementById("conf"); const cols = ["#ff8a3d","#ffc93c","#2fb36d","#3b82f6","#8b5cf6","#e8505b"];
+  for (let i=0;i<70;i++){ const s = document.createElement("i"); s.style.left = Math.random()*100+"vw"; s.style.background = cols[i%cols.length]; s.style.animationDelay = Math.random()*0.8+"s"; c.appendChild(s); setTimeout(() => s.remove(), 3600); }
+}
+const $ = s => document.querySelector(s);
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// ---------------- HEADER, NAV, BOARD ----------------
+function renderTop(){
+  const p = cur();
+  $("#me .av").textContent = p ? p.av : "👋";
+  $("#meName").textContent = p ? p.name : "Choose your name";
+  $("#meStars").textContent = p ? "⭐ " + stars(p) + " / 16" : "";
+  const tabs = [{id:"names", icon:"📛", name:"Name board"}, {id:"learn", icon:"📖", name:"Learn"}]
+    .concat(SECTIONS).concat([{id:"review", icon:"🏅", name:"Review board"}]);
+  $("#nav").innerHTML = tabs.map(t => {
+    const done = p && p.res && p.res[t.id] ? " <span class='ok'>✔</span>" : "";
+    return `<button class="${tab===t.id?'on':''}" data-t="${t.id}">${t.icon} ${t.name}${done}</button>`;
+  }).join("");
+  document.querySelectorAll("#nav button").forEach(b => b.onclick = () => go(b.dataset.t));
+  const list = [...S.players].sort((a,b) => stars(b) - stars(a));
+  const med = ["🥇","🥈","🥉"];
+  $("#board").innerHTML = list.length ? list.map((p,i) => `
+    <div class="sbr ${p.id===S.cur?'cur':''}"><span class="medal">${stars(p) ? (med[i]||"") : ""}</span><span class="av">${p.av}</span>
+    <span class="nm">${esc(p.name)}<div class="bar"><i style="width:${stars(p)/16*100}%"></i></div></span><span class="st">⭐${stars(p)}</span></div>`).join("")
+    : `<p class="hint">No players yet. Add your name on the Name board.</p>`;
+}
+function go(t){
+  if (t !== "names" && t !== "learn" && !cur()) { toast("First, add your name! 📛"); t = "names"; }
+  tab = t; renderTop(); render(); window.scrollTo({top:0, behavior:"smooth"});
+}
+function finishSection(id, score, miss){
+  const p = cur(); if (!p) return;
+  p.res[id] = {score, miss}; save(); renderTop();
+  if (score === 4) { confetti(); toast("Perfect! 4 stars! 🌟"); } else toast(`You got ${score} star${score===1?'':'s'}! ⭐`);
+}
+function doneBox(id){
+  const p = cur(); const r = p && p.res[id];
+  if (!r) return "";
+  const idx = SECTIONS.findIndex(s => s.id === id);
+  const next = SECTIONS[idx+1] ? SECTIONS[idx+1].id : "review";
+  return `<div class="done-box">⭐ ${r.score} / 4 stars
+    <button class="big blue" onclick="redo('${id}')">🔄 Try again</button>
+    <button class="big" onclick="go('${next}')">Next ➜</button></div>`;
+}
+function redo(id){ const p = cur(); if (p) { p.res[id] = null; save(); } render(); renderTop(); }
+
+// ---------------- VIEWS ----------------
+function render(){
+  const v = $("#view");
+  if (tab === "names") v.innerHTML = viewNames();
+  if (tab === "learn") v.innerHTML = viewLearn();
+  if (tab === "rad") v.innerHTML = viewRad();
+  if (tab === "match") { v.innerHTML = viewMatch(); bindMatch(); }
+  if (tab === "choose") v.innerHTML = viewChoose();
+  if (tab === "tf") v.innerHTML = viewTF();
+  if (tab === "review") v.innerHTML = viewReview();
+  bindAfter();
+}
+
+function viewNames(){
+  return `<div class="panel"><h2>📛 Name board · <span class="cn">名字</span></h2>
+  <p class="hint">Type your name, pick an animal, then press “Add me”. Tap “Play” to start.</p>
+  <div class="nb-row"><input id="nmIn" maxlength="16" placeholder="Your name"><button class="big" id="addBtn">➕ Add me</button></div>
+  <div class="avs" id="avs">${AVATARS.map(a => `<button class="${a===pickedAv?'sel':''}" data-a="${a}">${a}</button>`).join("")}</div>
+  <div class="players">${S.players.map(p => `
+    <div class="pl ${p.id===S.cur?'cur':''}"><div class="av">${p.av}</div><b>${esc(p.name)}</b><span>⭐ ${stars(p)} / 16</span>
+    <div class="row"><button data-play="${p.id}">▶ Play</button><button class="del" data-del="${p.id}">✖</button></div></div>`).join("")}</div>
+  ${cur() ? `<p style="margin-top:16px"><button class="big blue" onclick="go('learn')">📖 Start with Learn ➜</button></p>` : ""}
+  </div>`;
+}
+function viewLearn(){
+  return `<div class="panel"><h2>📖 Learn · <span class="cn">学一学</span></h2>
+  <p class="hint">Tap a card to turn it over. Tap 🔊 to hear it.</p>
+  <div class="cards">${WORDS.map((w,i) => `
+    <div class="fc" data-fc="${i}"><div class="in">
+      <div class="f"><div class="emo">${w.emo}</div><div class="w cn">${w.h}</div><div class="py">${w.p}</div></div>
+      <div class="b"><div class="w cn">${w.h}</div><div class="py">${w.p}</div><div class="e">${esc(w.e)}</div><button class="say" data-say="${w.h}">🔊</button></div>
+    </div></div>`).join("")}</div>
+  <h2 style="margin-top:20px;font-size:20px">⭐ Key sentences</h2>
+  <div class="keys">${KEYS.map(k => `<div class="key"><div class="emo">${k.emo}</div><div><div class="cn">${k.h}</div><span class="py">${k.p}</span><small>${esc(k.e)}</small></div><button class="say" data-say="${k.h}">🔊</button></div>`).join("")}</div>
+  <p style="margin-top:16px"><button class="big" onclick="go('rad')">Ready? Go to Radicals ➜</button></p></div>`;
+}
+function viewRad(){
+  return `<div class="panel"><h2>🧩 Radicals · <span class="cn">偏旁</span></h2>
+  <p class="hint">A radical is a small part of a character. It gives a clue to the meaning.</p>
+  <div class="rads">${RADS.map(r => `<div class="rad"><div class="emo">${r.emo}</div><div class="r cn">${r.r}</div>
+    <div class="py">${r.p}</div><div class="nm">${r.nm}</div><div class="ex cn">${r.ex.map(c => `<span>${c}</span>`).join("")}</div><p>${esc(r.note)}</p></div>`).join("")}</div>
+  <div class="story"><div class="emo">🧍🧍</div><div><div class="cn">坐 = 人 + 人 + 土</div><span>Two people sitting on the ground (土). That is <b class="cn">坐</b> <span class="py">zuò</span> – sit!</span></div></div>
+  ${quiz("rad")}</div>`;
+}
+function quiz(id){
+  const p = cur(); const r = p && p.res[id];
+  return `<h2 style="font-size:20px">✏️ Quiz · 4 questions</h2>` + QS[id].map((q,i) => `
+    <div class="q" data-q="${id}-${i}"><div class="qt"><span class="num">${i+1}</span><span class="pic">${q.pic}</span><span>${q.q}</span></div>
+    <div class="opts">${q.opts.map((o,j) => `<button class="opt" data-o="${j}" ${r?'disabled':''}><span class="cn">${o[0]}</span><small>${q.eng ? '' : ''}${esc(o[1])}</small></button>`).join("")}</div>
+    <div class="fb"></div></div>`).join("") + doneBox(id);
+}
+function viewChoose(){
+  return `<div class="panel"><h2>👆 Choose · <span class="cn">选一选</span></h2>
+  <p class="hint">Read the picture. Choose what to say.</p>${quiz("choose")}</div>`;
+}
+function viewTF(){
+  const p = cur(); const r = p && p.res.tf;
+  return `<div class="panel"><h2>✅ 对 or 错 · <span class="cn">对不对？</span></h2>
+  <p class="hint">Is the meaning right? Press <b class="cn">对</b> (true) or <b class="cn">错</b> (false).</p>` +
+  QS.tf.map((q,i) => `<div class="q tf" data-q="tf-${i}"><div class="qt"><span class="num">${i+1}</span><span class="pic">${q.pic}</span>
+    <span class="claim"><span class="cn">${q.h}</span> <span class="py">${q.p}</span> means “${esc(q.claim)}”.</span>
+    <button class="say" data-say="${q.h}">🔊</button></div>
+    <div class="opts"><button class="opt dui" data-o="1" ${r?'disabled':''}><span class="cn">对 ✔</span><small>duì · true</small></button>
+    <button class="opt cuo" data-o="0" ${r?'disabled':''}><span class="cn">错 ✘</span><small>cuò · false</small></button></div><div class="fb"></div></div>`).join("") + doneBox("tf") + `</div>`;
+}
+let M = null;
+function viewMatch(){
+  const p = cur(); const r = p && p.res.match;
+  const pics = [2,0,3,1];   // shuffled order for the pictures
+  return `<div class="panel"><h2>🔗 Match · <span class="cn">连一连</span></h2>
+  <p class="hint">Tap a word, then tap its picture. Get it right the first time for a star!</p>
+  <div class="match"><div class="col">${MATCH.map((m,i) => `<div class="mi ${r?'done':''}" data-mw="${i}"><span class="cn">${m.h}</span><span class="py">${m.p}</span></div>`).join("")}</div>
+  <div class="col">${pics.map(i => `<div class="mi ${r?'done':''}" data-mp="${i}"><span class="emo">${MATCH[i].emo}</span></div>`).join("")}</div></div>${doneBox("match")}</div>`;
+}
+function bindMatch(){
+  const p = cur(); if (p && p.res.match) return;
+  M = {sel:null, done:new Set(), first:{}, miss:[]};
+  document.querySelectorAll("[data-mw]").forEach(el => el.onclick = () => {
+    const i = +el.dataset.mw; if (M.done.has(i)) return;
+    document.querySelectorAll("[data-mw]").forEach(x => x.classList.remove("sel"));
+    el.classList.add("sel"); M.sel = i; say(MATCH[i].h);
+  });
+  document.querySelectorAll("[data-mp]").forEach(el => el.onclick = () => {
+    const i = +el.dataset.mp; if (M.sel === null || M.done.has(i)) return;
+    const w = document.querySelector(`[data-mw="${M.sel}"]`);
+    if (i === M.sel) {
+      beep(true); M.done.add(i); w.classList.remove("sel"); w.classList.add("done"); el.classList.add("done");
+      el.insertAdjacentHTML("beforeend", `<span class="line-tag cn">${MATCH[i].h} ✔</span>`);
+      if (!(i in M.first)) M.first[i] = true;
+      M.sel = null;
+      if (M.done.size === 4) {
+        const score = Object.values(M.first).filter(Boolean).length;
+        finishSection("match", score, M.miss); setTimeout(render, 900);
+      }
+    } else {
+      beep(false); el.classList.add("shake"); setTimeout(() => el.classList.remove("shake"), 400);
+      if (!(M.sel in M.first)) { M.first[M.sel] = false; M.miss.push({q:`Match ${MATCH[M.sel].h}`, h:MATCH[M.sel].h, p:MATCH[M.sel].p, ans:MATCH[M.sel].emo}); }
+    }
+  });
+}
+// answers for quiz sections
+const ANS = {};
+function bindAfter(){
+  document.querySelectorAll(".fc").forEach(el => el.onclick = e => { if (e.target.closest("[data-say]")) return; el.classList.toggle("flip"); });
+  document.querySelectorAll("[data-say]").forEach(b => b.onclick = e => { e.stopPropagation(); say(b.dataset.say); });
+  if (tab === "names") {
+    document.querySelectorAll("#avs button").forEach(b => b.onclick = () => { pickedAv = b.dataset.a; render(); });
+    const add = () => {
+      const n = $("#nmIn").value.trim(); if (!n) { toast("Type your name first ✏️"); return; }
+      const p = {id: Date.now().toString(36), name: n, av: pickedAv, res: newRes()};
+      S.players.push(p); S.cur = p.id; save(); renderTop(); render(); toast(`Hello, ${n}! ${pickedAv}`);
+    };
+    $("#addBtn").onclick = add; $("#nmIn").onkeydown = e => { if (e.key === "Enter") add(); };
+    document.querySelectorAll("[data-play]").forEach(b => b.onclick = () => { S.cur = b.dataset.play; save(); go("learn"); });
+    document.querySelectorAll("[data-del]").forEach(b => b.onclick = () => {
+      S.players = S.players.filter(p => p.id !== b.dataset.del); if (S.cur === b.dataset.del) S.cur = null; save(); renderTop(); render();
+    });
+  }
+  ["rad","choose","tf"].forEach(id => {
+    if (tab !== id) return;
+    const p = cur(); if (p && p.res[id]) { showSaved(id); return; }
+    ANS[id] = {};
+    document.querySelectorAll(`[data-q^="${id}-"]`).forEach(box => {
+      const i = +box.dataset.q.split("-")[1]; const q = QS[id][i];
+      box.querySelectorAll(".opt").forEach(b => b.onclick = () => {
+        if (ANS[id][i] !== undefined) return;
+        const pick = +b.dataset.o;
+        const ok = id === "tf" ? (pick === 1) === q.a : pick === q.a;
+        ANS[id][i] = ok;
+        box.querySelectorAll(".opt").forEach(x => x.disabled = true);
+        b.classList.add(ok ? "right" : "wrong");
+        if (!ok) { const rightIdx = id === "tf" ? (q.a ? 1 : 0) : q.a; box.querySelector(`.opt[data-o="${rightIdx}"]`).classList.add("right"); }
+        const fb = box.querySelector(".fb");
+        if (id === "tf") fb.innerHTML = ok ? "✔ Great! " + (q.a ? "It is true." : `It means “${esc(q.right)}”.`) : `✘ Oops! <span class="cn">${q.h}</span> means “${esc(q.right)}”.`;
+        else fb.innerHTML = ok ? "✔ Great job!" : `✘ The answer is <span class="cn">${q.opts[q.a][0]}</span>`;
+        fb.className = "fb " + (ok ? "ok" : "no");
+        beep(ok); if (ok && id !== "rad") say(id === "tf" ? q.h : q.opts[q.a][0]);
+        if (Object.keys(ANS[id]).length === 4) {
+          const score = Object.values(ANS[id]).filter(Boolean).length;
+          const miss = Object.entries(ANS[id]).filter(([k,v]) => !v).map(([k]) => {
+            const qq = QS[id][k];
+            return id === "tf" ? {q:`${qq.h} means “${qq.claim}”?`, h:qq.h, p:qq.p, ans:`${qq.a ? '对 (true)' : '错 (false)'} – it means “${qq.right}”`}
+                               : {q:qq.q.replace(/<[^>]+>/g,""), h:qq.opts[qq.a][0], p:qq.opts[qq.a][1], ans:""};
+          });
+          finishSection(id, score, miss); setTimeout(render, 1200);
+        }
+      });
+    });
+  });
+}
+function showSaved(id){
+  document.querySelectorAll(`[data-q^="${id}-"]`).forEach(box => {
+    const i = +box.dataset.q.split("-")[1]; const q = QS[id][i];
+    const rightIdx = id === "tf" ? (q.a ? 1 : 0) : q.a;
+    box.querySelector(`.opt[data-o="${rightIdx}"]`).classList.add("right");
+  });
+}
+function viewReview(){
+  const p = cur(); if (!p) return "";
+  const total = stars(p); const all = SECTIONS.every(s => p.res[s.id]);
+  const st = Math.round(total/16*5);
+  const msg = total === 16 ? "Amazing! You know all of Lesson 1! 🎉" : total >= 12 ? "Great work! Just a few to practise. 💪" : total >= 8 ? "Good try! Practise the red ones again. 🙂" : "Keep going! Learn the cards again, then try. 🌱";
+  const misses = SECTIONS.flatMap(s => (p.res[s.id] && p.res[s.id].miss || []).map(m => ({...m, sec:s.name})));
+  if (all && total === 16) setTimeout(confetti, 200);
+  return `<div class="panel"><h2>🏅 Review board · <span class="cn">复习板</span></h2>
+  <div class="rb-top"><div class="av">${p.av}</div><b style="font-size:24px">${esc(p.name)}</b>
+  <div class="score">⭐ ${total} / 16</div><div class="starsrow">${"⭐".repeat(st)}${"☆".repeat(5-st)}</div><p><b>${msg}</b></p></div>
+  <table class="rbt"><tr><th>Section</th><th>Stars</th><th></th></tr>
+  ${SECTIONS.map(s => { const r = p.res[s.id]; return `<tr><td>${s.icon} ${s.name} <span class="cn">${s.cn}</span></td>
+    <td>${r ? "⭐".repeat(r.score) + "☆".repeat(4-r.score) : "<i>not done yet</i>"}</td>
+    <td><button class="big ${r?'grey':'blue'}" style="padding:6px 12px;font-size:14px" onclick="${r?`redo('${s.id}');go('${s.id}')`:`go('${s.id}')`}">${r?'Try again':'Play'}</button></td></tr>`; }).join("")}</table>
+  <h3>📝 Words to practise</h3>
+  ${misses.length ? misses.map(m => `<div class="miss"><b>${m.sec}:</b> ${esc(m.q)}<br>Answer: <span class="cn">${m.h}</span> <span class="py">${m.p}</span> ${m.ans ? esc(m.ans) : ""} <button class="say" data-say="${m.h}">🔊</button></div>`).join("")
+    : (all ? "<p>No mistakes! 🌟</p>" : "<p class='hint'>Finish all four sections to see your words to practise.</p>")}
+  ${all ? `<div class="cert"><h3>🏆 Certificate · <span class="cn">奖状</span></h3><p style="font-size:20px"><b>${esc(p.name)}</b> finished YCT 2 Lesson 1 <span class="cn">我可以坐这儿吗？</span></p><p class="starsrow">⭐ ${total} / 16</p></div>` : ""}
+  <p style="margin-top:14px"><button class="big purple" onclick="go('names')">👫 Next player</button></p></div>`;
+}
+
+renderTop(); render();
+if (window.speechSynthesis) speechSynthesis.onvoiceschanged = () => {};
+</script>
+</body>
+</html>
