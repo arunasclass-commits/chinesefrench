@@ -200,6 +200,91 @@ button,.btn{font-family:inherit;cursor:pointer}
 
 .wrap{padding-bottom:12px}
 
+
+/* === pinyin ruby + readable instruction chips === */
+.rw{display:inline-flex;flex-direction:column;align-items:center;justify-content:flex-end;vertical-align:bottom;margin:0 .14em .2em;text-align:center;line-height:1.05;max-width:100%}
+.rw .rp{font-size:13px;font-weight:800;line-height:1.15;white-space:nowrap;letter-spacing:0;padding:0 1px}
+.rw .rz{font-size:22px;font-weight:800;line-height:1.25;color:var(--ink)}
+.rw.punct{margin:0 .02em .2em}
+.rw.punct .rz{font-size:20px;font-weight:800}
+.rw.blank{min-width:3em;padding:0 .15em}
+.rw.blank .rz, .rw.blank .blank-slot{display:inline-block;min-width:2.6em;height:1.25em;border-bottom:2px solid var(--ink);color:transparent;font-size:22px;line-height:1.25}
+.rline{display:inline;line-height:1.95}
+.prompt,.stem,.zh-line{line-height:2.05;font-weight:800}
+.prompt-box{line-height:2.05}
+.choices:not(.pics) .choice{align-items:flex-start;padding-top:8px;padding-bottom:8px}
+.choices:not(.pics) .choice .letter{margin-top:16px}
+.bank-text .bt{align-items:flex-start}
+.opt-zh,.opt-zh.zh{font-size:inherit}
+.glyph-box .py{font-size:14px}
+
+/* white chips: instruction pinyin readable on red / teal / orange / green */
+.hero .gw,
+.part-h .gw,
+.sec-nav button .gw,
+.score-card .gw,
+.results-hero .gw,
+.btn-primary .gw{
+  background:#fff;
+  border-radius:10px;
+  padding:5px 8px 6px;
+  margin:3px 3px 5px;
+  box-shadow:0 1px 2px rgba(0,0,0,.14);
+}
+.hero .gw .zh,
+.part-h .gw .zh,
+.sec-nav button .gw .zh,
+.score-card .gw .zh,
+.results-hero .gw .zh,
+.btn-primary .gw .zh{
+  color:var(--ink) !important;
+  font-size:16px;
+  font-weight:800;
+}
+.hero .gw .py,
+.part-h .gw .py,
+.sec-nav button .gw .py,
+.score-card .gw .py,
+.results-hero .gw .py,
+.btn-primary .gw .py{
+  font-size:13px !important;
+  font-weight:800;
+  text-shadow:none !important;
+  letter-spacing:.01em;
+}
+.hero .gw .en,
+.part-h .gw .en,
+.sec-nav button .gw .en,
+.score-card .gw .en,
+.results-hero .gw .en,
+.btn-primary .gw .en{
+  color:var(--muted) !important;
+  font-size:11px !important;
+  font-style:italic;
+  font-weight:700;
+  text-shadow:none !important;
+}
+.part-h .instr-en{
+  color:#fff !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.5);
+  font-weight:700;
+  margin-top:6px;
+}
+.part-h .gloss-line{gap:4px 6px}
+
+@media (max-width:720px){
+  .rw .rp{font-size:12px}
+  .rw .rz{font-size:19px}
+  .rw.punct .rz{font-size:18px}
+  .hero .gw .zh,
+  .part-h .gw .zh,
+  .sec-nav button .gw .zh{font-size:15px}
+  .hero .gw .py,
+  .part-h .gw .py,
+  .sec-nav button .gw .py{font-size:12px !important}
+  .choices:not(.pics) .choice .letter{margin-top:14px}
+}
+
 </style>
 </head>
 <body>
@@ -288,6 +373,151 @@ function colorPy(py){
     return splitSylToken(tok).map(s => `<span class="t${toneOf(s)}">${esc(s)}</span>`).join('');
   }).join('');
 }
+
+const PY_VOWELS = /[aeiouvüAEIOUVÜāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒŪÚǓÙǕǗǙǛ]/;
+const PY_TONED = new Set("āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒŪÚǓÙǕǗǙǛ");
+const PY_LETTER = /[aeiouvüAEIOUVÜāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒŪÚǓÙǕǗǙǛA-Za-z]/;
+const HAN_RE = /[\u3400-\u9FFF\uF900-\uFAFF]/;
+function isHan(ch){ return HAN_RE.test(ch); }
+function zhBlankAt(s, i){
+  const m = String(s).slice(i).match(/^[（(][　\s]*[)）]/);
+  return m ? m[0] : null;
+}
+function splitPySyllables(word){
+  const parts = [];
+  String(word).split(/[-'’]/).forEach(chunk => {
+    if (chunk) parts.push(...splitPySyllablesPlain(chunk));
+  });
+  return parts.length ? parts : [word];
+}
+function splitPySyllablesPlain(word){
+  const parts = [];
+  let i = 0;
+  const n = word.length;
+  while (i < n){
+    let v = i;
+    while (v < n && !PY_VOWELS.test(word[v])) v++;
+    if (v >= n){
+      if (i < n) parts.push(word.slice(i));
+      break;
+    }
+    let j = v;
+    let seenTone = false;
+    while (j < n && PY_VOWELS.test(word[j])){
+      if (PY_TONED.has(word[j])){
+        if (seenTone) break;
+        seenTone = true;
+      }
+      j++;
+    }
+    const rest = word.slice(j).toLowerCase();
+    if (rest.startsWith('ng')) j += 2;
+    else if (rest.startsWith('n')) j += 1;
+    if (j < n && /r/i.test(word[j]) && (j+1===n || !PY_VOWELS.test(word[j+1]))) j++;
+    parts.push(word.slice(i,j));
+    i = j;
+  }
+  return parts;
+}
+function tokenizePy(py){
+  const tokens = [];
+  const s = String(py || '');
+  let i = 0;
+  while (i < s.length){
+    if (/\s/.test(s[i])){ i++; continue; }
+    if (s[i] === '('){
+      const close = s.indexOf(')', i);
+      if (close > i){
+        tokens.push({type:'blank', py:s.slice(i+1, close).trim()});
+        i = close + 1;
+        continue;
+      }
+    }
+    if (PY_LETTER.test(s[i])){
+      let j = i+1;
+      while (j < s.length && (PY_LETTER.test(s[j]) || s[j]==="'" || s[j]==="’" || s[j]==="-")) j++;
+      tokens.push({type:'word', py:s.slice(i,j)});
+      i = j;
+      continue;
+    }
+    tokens.push({type:'punct', py:s[i]});
+    i++;
+  }
+  return tokens;
+}
+function rubyZh(zh, py){
+  if (!zh) return '';
+  if (!py) return `<span class="rz zh">${esc(zh)}</span>`;
+  const tokens = tokenizePy(py);
+  let i = 0;
+  const bits = [];
+  const skipSpace = () => { while (i<zh.length && /\s/.test(zh[i])) i++; };
+  const emitPunct = ch => { bits.push(`<span class="rw punct"><span class="rz">${esc(ch)}</span></span>`); };
+  const emitWord = (chars, p) => {
+    bits.push(`<span class="rw"><span class="rp py">${colorPy(p)}</span><span class="rz zh">${esc(chars)}</span></span>`);
+  };
+  const emitBlank = p => {
+    const clue = p ? `<span class="rp py">${colorPy(p)}</span>` : `<span class="rp py">&nbsp;</span>`;
+    bits.push(`<span class="rw blank">${clue}<span class="blank-slot" aria-hidden="true">（　）</span></span>`);
+  };
+  const flushPunct = () => {
+    skipSpace();
+    while (i<zh.length && !isHan(zh[i]) && !zhBlankAt(zh,i)){
+      emitPunct(zh[i++]);
+      skipSpace();
+    }
+  };
+  for (const t of tokens){
+    skipSpace();
+    if (t.type==='blank'){
+      flushPunct();
+      const b = zhBlankAt(zh,i);
+      if (b) i += b.length;
+      emitBlank(t.py);
+      continue;
+    }
+    if (t.type==='punct'){
+      skipSpace();
+      if (i<zh.length && !isHan(zh[i]) && !zhBlankAt(zh,i)){
+        emitPunct(zh[i++]);
+      }
+      continue;
+    }
+    flushPunct();
+    const pre = zhBlankAt(zh,i);
+    if (pre){ emitBlank(''); i += pre.length; flushPunct(); }
+    const syls = splitPySyllables(t.py);
+    let take = syls.length;
+    const last = syls[syls.length-1] || '';
+    const lastErhua = /r$/i.test(last) && !/^[ēéěèeĒÉĚÈE]r$/i.test(last);
+    const hanIdx = [];
+    let k = i;
+    while (k<zh.length && hanIdx.length < take+1){
+      if (zhBlankAt(zh,k)) break;
+      if (isHan(zh[k])) hanIdx.push(k);
+      else if (/\s/.test(zh[k])){ k++; continue; }
+      else break;
+      k++;
+    }
+    if (lastErhua && hanIdx.length >= take+1 && zh[hanIdx[take]]==='儿') take++;
+    let chars = '';
+    let got = 0;
+    while (i<zh.length && got < take){
+      if (/\s/.test(zh[i])){ i++; continue; }
+      if (isHan(zh[i])){ chars += zh[i++]; got++; continue; }
+      break;
+    }
+    if (chars) emitWord(chars, t.py);
+    else emitWord(t.py, t.py);
+  }
+  flushPunct();
+  if (i < zh.length){
+    const rest = zh.slice(i);
+    if (rest.trim()) bits.push(`<span class="rz zh">${esc(rest)}</span>`);
+  }
+  return `<span class="rline">${bits.join('')}</span>`;
+}
+
 function gw(zh, py, en){
   return `<span class="gw"><span class="zh">${esc(zh)}</span><span class="py">${colorPy(py)}</span><span class="en">${esc(en)}</span></span>`;
 }
@@ -455,10 +685,11 @@ function letterClass(q, letter){
 }
 
 function optLabel(opt, showGloss){
+  const rub = `<span class="opt-zh">${rubyZh(opt.zh, opt.py)}</span>`;
   if (showGloss){
-    return `<span class="opt-zh zh">${esc(opt.zh)}</span><span class="opt-py py" style="margin-left:8px">${colorPy(opt.py)}</span><span class="en" style="margin-left:8px;color:var(--muted);font-size:13px">${esc(opt.en)}</span>`;
+    return `${rub}<span class="en" style="margin-left:8px;color:var(--muted);font-size:13px">${esc(opt.en||'')}</span>`;
   }
-  return `<span class="opt-zh zh">${esc(opt.zh)}</span>`;
+  return rub;
 }
 function reviewBox(q){
   const ok = isCorrect(q, state.answers[q.id]);
@@ -466,22 +697,21 @@ function reviewBox(q){
   let script = '';
   if (q.dialogue){
     script = q.dialogue.map(d =>
-      `<div class="zh-line zh">${esc(d.zh)}</div><div class="py-line py">${colorPy(d.py)}</div><div style="color:var(--muted);margin-bottom:6px">${esc(d.en)}</div>`
+      `<div class="zh-line">${rubyZh(d.zh, d.py)}</div><div style="color:var(--muted);margin-bottom:6px">${esc(d.en)}</div>`
     ).join('');
   } else if (q.stem){
-    script = `<div class="zh-line zh">${esc(q.stem)}</div><div class="py-line py">${colorPy(q.stemPy)}</div><div style="color:var(--muted)">${esc(q.stemEn)}</div>
-      <div class="zh-line zh" style="margin-top:6px">问：${esc(q.ask)}</div>
-      <div class="py-line py">${colorPy('Wèn: ' + q.askPy)}</div>
+    script = `<div class="zh-line">${rubyZh(q.stem, q.stemPy)}</div><div style="color:var(--muted)">${esc(q.stemEn)}</div>
+      <div class="zh-line" style="margin-top:6px">${rubyZh('问：'+q.ask, 'Wèn: ' + q.askPy)}</div>
       <div style="color:var(--muted)">${esc(q.askEn)}</div>`;
   } else if (q.audio){
-    script = `<div class="zh-line zh">${esc(q.audio)}</div><div class="py-line py">${colorPy(q.audioPy)}</div><div style="color:var(--muted)">${esc(q.audioEn)}</div>`;
+    script = `<div class="zh-line">${rubyZh(q.audio, q.audioPy)}</div><div style="color:var(--muted)">${esc(q.audioEn)}</div>`;
   } else if (q.text){
-    script = `<div class="zh-line zh">${esc(q.text)}</div><div class="py-line py">${colorPy(q.textPy)}</div><div style="color:var(--muted)">${esc(q.textEn)}</div>`;
+    script = `<div class="zh-line">${rubyZh(q.text, q.textPy)}</div><div style="color:var(--muted)">${esc(q.textEn||'')}</div>`;
   }
   let key = '';
   if (q.choices){
     const right = q.choices['ABC'.indexOf(q.answer)];
-    key = `<div style="margin-top:6px"><strong>Correct:</strong> ${esc(q.answer)} · <span class="zh">${esc(right.zh)}</span> <span class="py">${colorPy(right.py)}</span> — ${esc(right.en)}</div>`;
+    key = `<div style="margin-top:6px"><strong>Correct:</strong> ${esc(q.answer)} · ${rubyZh(right.zh, right.py)} — ${esc(right.en)}</div>`;
   } else if (q.pics){
     const names = {teacher:'a teacher',student:'a student',family4:'a family of four',one_child:'one child',two_children:'two children',dumplings:'jiaozi / dumplings',noodles:'noodles',laptop:'a computer',dishes:'Chinese dishes',cal_sunday:'Sunday (星期日)',cal_thu:'Thursday (星期四)',cal_8:'the 8th (8号)'};
     key = `<div style="margin-top:6px"><strong>Correct picture:</strong> ${esc(q.answer)} — ${esc(names[q.pics['ABC'.indexOf(q.answer)]]||q.pics['ABC'.indexOf(q.answer)])}</div>`;
@@ -492,7 +722,7 @@ function reviewBox(q){
       key = `<div style="margin-top:6px"><strong>Correct picture:</strong> ${esc(q.answer)} — ${esc(names[q.answer]||q.answer)}</div>`;
     } else {
       const it = b.items[q.answer];
-      key = `<div style="margin-top:6px"><strong>Correct:</strong> ${esc(q.answer)} · <span class="zh">${esc(it.zh)}</span> <span class="py">${colorPy(it.py)}</span> — ${esc(it.en)}</div>`;
+      key = `<div style="margin-top:6px"><strong>Correct:</strong> ${esc(q.answer)} · ${rubyZh(it.zh, it.py)} — ${esc(it.en)}</div>`;
     }
   }
   return `<div class="review">
@@ -531,8 +761,8 @@ function renderBankText(bank){
   return `<div class="bank"><div class="bank-h">A–F</div><div class="bank-text">${b.keys.map(k => {
     const it = b.items[k];
     const body = state.submitted
-      ? `<span class="zh">${esc(it.zh)}</span> <span class="py">${colorPy(it.py)}</span> <span style="color:var(--muted);font-size:12px">${esc(it.en)}</span>`
-      : `<span class="zh" style="font-size:18px;font-weight:800">${esc(it.zh)}</span>`;
+      ? `${rubyZh(it.zh, it.py)} <span style="color:var(--muted);font-size:12px">${esc(it.en)}</span>`
+      : rubyZh(it.zh, it.py);
     return `<div class="bt"><span class="letter" style="display:inline-block;width:24px;height:24px;border-radius:50%;background:#1565c0;color:#fff;font-weight:800;line-height:24px;text-align:center;flex:none">${k}</span>${body}</div>`;
   }).join('')}</div></div>`;
 }
@@ -605,7 +835,7 @@ function renderReading(){
           [['看','kàn','look at'],['句子','jùzi','sentence'],['选择','xuǎnzé','choose'],['匹配','pǐpèi','matching'],['图片','túpiàn','picture']]),
         true
       )}
-      <div class="part-body">${renderBankPics('R1')}${p1.map(q => `<div class="q ${state.submitted?'reviewed':''} ${state.submitted && !isCorrect(q,state.answers[q.id])?'wrong':''}" id="q${q.id}">${qHead(q, `<div class="prompt zh">${esc(q.text)}</div>`)}${letterPicker(q)}${state.submitted?reviewBox(q):''}</div>`).join('')}</div>
+      <div class="part-body">${renderBankPics('R1')}${p1.map(q => `<div class="q ${state.submitted?'reviewed':''} ${state.submitted && !isCorrect(q,state.answers[q.id])?'wrong':''}" id="q${q.id}">${qHead(q, `<div class="prompt">${rubyZh(q.text, q.textPy)}</div>`)}${letterPicker(q)}${state.submitted?reviewBox(q):''}</div>`).join('')}</div>
     </div>
     <div class="part r" id="part-R2">
       ${partHeader(
@@ -614,7 +844,7 @@ function renderReading(){
           [['看','kàn','look at'],['问题','wèntí','question'],['选择','xuǎnzé','choose'],['正确','zhèngquè','correct'],['回答','huídá','reply']]),
         true
       )}
-      <div class="part-body">${renderBankText('R2')}${p2.map(q => `<div class="q ${state.submitted?'reviewed':''} ${state.submitted && !isCorrect(q,state.answers[q.id])?'wrong':''}" id="q${q.id}">${qHead(q, `<div class="prompt zh">${esc(q.text)}</div>`)}${letterPicker(q)}${state.submitted?reviewBox(q):''}</div>`).join('')}</div>
+      <div class="part-body">${renderBankText('R2')}${p2.map(q => `<div class="q ${state.submitted?'reviewed':''} ${state.submitted && !isCorrect(q,state.answers[q.id])?'wrong':''}" id="q${q.id}">${qHead(q, `<div class="prompt">${rubyZh(q.text, q.textPy)}</div>`)}${letterPicker(q)}${state.submitted?reviewBox(q):''}</div>`).join('')}</div>
     </div>
     <div class="part r" id="part-R3">
       ${partHeader(
@@ -623,7 +853,7 @@ function renderReading(){
           [['选择','xuǎnzé','choose'],['正确','zhèngquè','correct'],['词语','cíyǔ','word'],['填空','tiánkòng','fill the blank']]),
         true
       )}
-      <div class="part-body">${renderBankText('R3')}${p3.map(q => `<div class="q ${state.submitted?'reviewed':''} ${state.submitted && !isCorrect(q,state.answers[q.id])?'wrong':''}" id="q${q.id}">${qHead(q, `<div class="prompt zh">${esc(q.text)}</div>`)}${letterPicker(q)}${state.submitted?reviewBox(q):''}</div>`).join('')}</div>
+      <div class="part-body">${renderBankText('R3')}${p3.map(q => `<div class="q ${state.submitted?'reviewed':''} ${state.submitted && !isCorrect(q,state.answers[q.id])?'wrong':''}" id="q${q.id}">${qHead(q, `<div class="prompt">${rubyZh(q.text, q.textPy)}</div>`)}${letterPicker(q)}${state.submitted?reviewBox(q):''}</div>`).join('')}</div>
     </div>
     <div class="part r" id="part-R4">
       ${partHeader(
@@ -633,8 +863,8 @@ function renderReading(){
         true
       )}
       <div class="part-body">${p4.map(q => `<div class="q ${state.submitted?'reviewed':''} ${state.submitted && !isCorrect(q,state.answers[q.id])?'wrong':''}" id="q${q.id}">${qHead(q)}
-        <div class="prompt-box"><div class="stem zh">${esc(q.text)}</div>
-          <div class="stem zh" style="margin-top:8px">★ ${esc(q.ask)}</div>
+        <div class="prompt-box"><div class="stem">${rubyZh(q.text, q.textPy)}</div>
+          <div class="stem" style="margin-top:8px"><span class="rw punct"><span class="rz">★</span></span> ${rubyZh(q.ask, q.askPy)}</div>
         </div>
         ${renderTextChoices(q)}${state.submitted?reviewBox(q):''}</div>`).join('')}</div>
     </div>
