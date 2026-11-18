@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HSK 1 Mock Test · Lessons 1–5 · Aruna's classes</title>
+<style>
+:root{
+  --paper:#fffdf8;--ink:#263238;--muted:#546e7a;--soft:#eceff1;
+  --teal:#26a69a;--teal-d:#00796b;--teal-l:#e0f2f1;
+  --orange:#fb8c00;--orange-d:#e65100;--orange-l:#fff3e0;
+  --purple:#7e57c2;--purple-d:#4527a0;--purple-l:#ede7f6;
+  --red:#e53935;--red-l:#ffebee;--green:#43a047;--green-l:#e8f5e9;
+  --blue:#1e88e5;--blue-l:#e3f2fd;--gold:#ffca28;--pink:#ec407a;
+  --card:#fff;--line:#ffe0b2;--shadow:0 8px 24px rgba(38,50,56,.08);
+  --t1:#e53935;--t2:#f57c00;--t3:#2e9e44;--t4:#1e7fd8;--t5:#8d8d8d;
+  --header-h:58px;--footer-h:36px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Nunito","Segoe UI","Noto Sans",system-ui,sans-serif;
+  background:var(--paper);color:var(--ink);line-height:1.45;
+  min-height:100vh;padding-bottom:calc(var(--footer-h) + 8px);
+}
+.zh{font-family:"Noto Sans CJK SC","Noto Sans SC","Source Han Sans SC","Microsoft YaHei","PingFang SC","Heiti SC",sans-serif}
+.py{font-family:"Noto Sans","Segoe UI",system-ui,sans-serif;font-weight:700}
+.t1{color:var(--t1)}.t2{color:var(--t2)}.t3{color:var(--t3)}.t4{color:var(--t4)}.t5{color:var(--t5)}
+
+/* glossed Chinese word */
+.gw{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .18em .15em;line-height:1.1;text-align:center}
+.gw .zh{font-size:1.15em;font-weight:700}
+.gw .py{font-size:.72em}
+.gw .en{font-size:.62em;color:var(--muted);font-weight:600;font-style:italic;max-width:7em}
+.gloss-line{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:flex-end;margin:0 0 6px}
+.instr-en{font-weight:600;color:var(--ink)}
+.sec-nav .gw .en,.score-card .gw .en,.results-hero .gw .en,.part-h .gw .en{color:rgba(255,255,255,.95);font-style:normal}
+.sec-nav .gw .zh{color:#fff}
+.score-card .gw .zh{color:#fff}
+.choices:not(.pics) .choice{display:flex;align-items:center;gap:10px;text-align:left;padding:8px 12px}
+.choices:not(.pics) .choice .letter{margin:0;flex:none}
+.choices:not(.pics) .choice .opt-zh{display:inline;font-size:20px}
+.choices:not(.pics) .choice .opt-py{display:inline;margin-left:6px}
+.gw-row{display:inline;line-height:1.2}
+
+/* header / footer */
+.app-header{position:sticky;top:0;z-index:40;background:#fff;border-bottom:3px solid #ffe082;box-shadow:0 2px 10px rgba(0,0,0,.05);min-height:var(--header-h)}
+.header-in{max-width:1100px;margin:0 auto;padding:8px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#ef5350,#ffa726);color:#fff;font-weight:800;display:grid;place-items:center;font-size:15px;flex:none}
+.brand h1{margin:0;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{margin:0;font-size:11px;color:var(--muted)}
+.header-tools{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pill{background:var(--soft);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700;color:var(--muted)}
+.pill.timer{background:#fff8e1;color:#e65100}
+.pill.timer.warn{background:#ffebee;color:#c62828}
+.progress-mini{font-size:12px;font-weight:800;color:var(--teal-d)}
+.app-footer{position:fixed;left:0;right:0;bottom:0;z-index:40;height:var(--footer-h);background:#4e342e;color:#ffe0b2;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;letter-spacing:.3px}
+
+/* buttons */
+button, .btn{font-family:inherit;cursor:pointer}
+.btn{border:0;border-radius:12px;padding:10px 18px;font-weight:800;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s,box-shadow .12s,background .12s}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn-teal{background:var(--teal);color:#fff;box-shadow:0 4px 0 #00796b}
+.btn-teal:hover{background:#2bbbad}
+.btn-orange{background:var(--orange);color:#fff;box-shadow:0 4px 0 #e65100}
+.btn-purple{background:var(--purple);color:#fff;box-shadow:0 4px 0 #4527a0}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 4px 0 #b71c1c}
+.btn-ghost{background:#fff;color:var(--ink);border:2px solid #cfd8dc;box-shadow:none}
+.btn-gold{background:var(--gold);color:#4e342e;box-shadow:0 4px 0 #f9a825}
+.btn-sm{padding:6px 12px;font-size:13px;border-radius:10px}
+
+/* layout */
+.wrap{max-width:1100px;margin:0 auto;padding:18px 16px 40px}
+.hero{background:linear-gradient(180deg,#fff3e0 0%,#ffe0b2 55%,#ffccbc 100%);border-radius:24px;padding:28px 24px 24px;border:4px solid #fff;box-shadow:var(--shadow);text-align:center;margin-bottom:18px}
+.series{font-weight:800;letter-spacing:2px;color:var(--teal-d);font-size:12px;text-transform:uppercase}
+.hero-badge{display:inline-block;margin:10px 0 4px;background:#e53935;color:#fff;padding:5px 16px;border-radius:30px;font-weight:800}
+.hero-zh{font-size:clamp(28px,6vw,48px);font-weight:900;color:#c62828;letter-spacing:2px;margin:4px 0 0;text-shadow:3px 3px 0 #ffca28;line-height:1.15}
+.hero-py{font-size:clamp(16px,3vw,24px);font-weight:800;margin-top:2px}
+.hero-en{font-family:inherit;font-size:clamp(18px,3.2vw,26px);font-weight:800;color:#00695c;margin-top:2px}
+.cast{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0 6px}
+.castc{background:#fff;border:3px solid #ffe0b2;border-radius:16px;padding:8px 6px;text-align:center}
+.castc svg{width:86px;height:86px;display:block;margin:0 auto}
+.castc .cz{font-weight:800;font-size:15px;margin-top:2px}
+.castc .cen{font-weight:700;font-size:12px;color:#00695c}
+.castc .cd{font-size:11px;color:var(--muted)}
+.card{background:var(--card);border-radius:18px;padding:16px 18px;box-shadow:var(--shadow);border:2px solid #fff3e0;margin-bottom:14px}
+.card h2{margin:0 0 8px;font-size:18px}
+.muted{color:var(--muted)}
+.note{background:#fff8e1;border:2px dashed #ffb300;border-radius:14px;padding:10px 14px;font-size:14px;margin:10px 0}
+.warn{background:#fff3e0;border:2px solid #ef6c00;border-radius:14px;padding:10px 14px;color:#e65100;font-weight:700;margin:10px 0;display:none}
+.warn.show{display:block}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.score-card{text-align:center;border-radius:16px;padding:14px 8px;color:#fff}
+.score-card b{display:block;font-size:28px;line-height:1.1}
+.score-card span{font-size:12px;opacity:.95}
+.sc-l{background:var(--teal)}.sc-r{background:var(--orange)}.sc-w{background:var(--purple)}
+.checks{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin:12px 0}
+.checks label{display:flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:6px 12px;font-weight:700;font-size:14px;border:2px solid #ffe0b2}
+input[type=text],input[type=text]:focus{font:inherit}
+.name-in{padding:8px 12px;border:2px solid #ffcc80;border-radius:10px;min-width:200px;font-weight:700}
+.start-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:8px}
+
+/* exam nav */
+.sec-nav{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px;position:sticky;top:calc(var(--header-h) + 2px);z-index:30;background:var(--paper);padding:6px 0}
+.sec-nav button{flex:1;min-width:110px;border:0;border-radius:12px;padding:10px 8px;font-weight:800;color:#fff;font-size:13px;cursor:pointer}
+.sec-nav .n-l{background:#80cbc4}.sec-nav .n-l.on{background:var(--teal)}
+.sec-nav .n-r{background:#ffcc80}.sec-nav .n-r.on{background:var(--orange)}
+.sec-nav .n-w{background:#b39ddb}.sec-nav .n-w.on{background:var(--purple)}
+.sec-nav small{display:block;font-weight:700;opacity:.9;font-size:10px}
+
+/* part headers */
+.part{margin-bottom:22px}
+.part-h{display:flex;align-items:center;gap:12px;margin:0 0 10px;padding:8px 14px 8px 8px;border-radius:14px;color:#fff}
+.part-h .ph-zh{background:#fff;border-radius:10px;padding:2px 10px;font-weight:800;font-size:20px;line-height:1.35}
+.part-h.teal{background:var(--teal)}.part-h.teal .ph-zh{color:var(--teal-d)}
+.part-h.orange{background:var(--orange)}.part-h.orange .ph-zh{color:var(--orange-d)}
+.part-h.purple{background:var(--purple)}.part-h.purple .ph-zh{color:var(--purple-d)}
+.part-h.blue{background:var(--blue)}.part-h.blue .ph-zh{color:#1565c0}
+.part-sub{font-size:13px;line-height:1.25}
+.instr{background:#fff;border-radius:12px;padding:10px 12px;margin:0 0 12px;border-left:5px solid var(--gold);font-size:14px}
+
+/* questions */
+.q{background:#fff;border:2px solid #eceff1;border-radius:16px;padding:12px 12px 14px;margin:0 0 12px;transition:border-color .15s}
+.q.answered{border-color:#80cbc4}
+.q.correct{border-color:var(--green);background:#f1f8e9}
+.q.wrong{border-color:var(--red);background:#fff8f8}
+.q-hd{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.qnum{width:32px;height:32px;border-radius:16px;background:#ffca28;color:#4e342e;font-weight:800;display:grid;place-items:center;flex:none}
+.play{border:0;background:var(--teal);color:#fff;border-radius:999px;padding:8px 14px;font-weight:800;display:inline-flex;align-items:center;gap:6px;cursor:pointer;box-shadow:0 3px 0 #00796b}
+.play:hover{background:#2bbbad}
+.play:disabled{background:#90a4ae;box-shadow:none;cursor:not-allowed}
+.play svg{width:16px;height:16px;fill:currentColor}
+.play-count{font-size:12px;font-weight:800;color:var(--muted)}
+.stem{font-size:15px}
+.stem .zh-line{font-size:22px;font-weight:700;line-height:1.35}
+.stem .py-line{font-size:14px;font-weight:700}
+.prompt{margin:6px 0;padding:6px 10px;background:#e3f2fd;border-radius:10px;font-weight:700}
+
+/* choices */
+.choices{display:grid;gap:8px;margin-top:8px}
+.choices.pics{grid-template-columns:repeat(3,1fr)}
+.choice{border:3px solid #cfd8dc;background:#fff;border-radius:14px;padding:8px;cursor:pointer;text-align:center;font-weight:700;color:var(--ink);transition:border-color .12s,background .12s}
+.choice:hover{border-color:#ffb74d}
+.choice.on{border-color:var(--teal);background:var(--teal-l);box-shadow:0 0 0 3px rgba(38,166,154,.2)}
+.choice.ok{border-color:var(--green);background:var(--green-l)}
+.choice.bad{border-color:var(--red);background:var(--red-l)}
+.choice .letter{display:inline-block;width:24px;height:24px;border-radius:12px;background:#eceff1;font-weight:800;line-height:24px;margin-bottom:4px}
+.choice.on .letter{background:var(--teal);color:#fff}
+.choice.ok .letter{background:var(--green);color:#fff}
+.choice.bad .letter{background:var(--red);color:#fff}
+.choice svg{width:100%;height:auto;max-height:140px;display:block;margin:0 auto 4px}
+.choice .opt-zh{font-size:18px;font-weight:800;display:block}
+.choice .opt-py{font-size:12px}
+
+/* picture banks */
+.bank-pics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 14px}
+.bank-card{background:#fff;border:2px solid #ffe0b2;border-radius:14px;padding:6px;text-align:center}
+.bank-card svg{width:100%;height:auto;max-height:130px}
+.bank-card .letter{display:inline-block;background:var(--orange);color:#fff;font-weight:800;border-radius:8px;padding:1px 8px;margin-top:2px}
+.word-bank{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
+.word-chip{background:var(--purple-l);border:2px solid #b39ddb;border-radius:12px;padding:6px 10px;font-weight:800}
+.word-chip .letter{background:var(--purple);color:#fff;border-radius:8px;padding:0 6px;margin-right:4px}
+
+/* letter picker */
+.letters{display:flex;flex-wrap:wrap;gap:6px}
+.letters button{width:40px;height:40px;border-radius:10px;border:2px solid #cfd8dc;background:#fff;font-weight:800;font-size:16px;cursor:pointer}
+.letters button.on{background:var(--teal);color:#fff;border-color:var(--teal-d)}
+.letters button.used{opacity:.4}
+.letters button.ok{background:var(--green);color:#fff;border-color:#2e7d32}
+.letters button.bad{background:var(--red);color:#fff;border-color:#b71c1c}
+
+/* word order */
+.order-built{min-height:52px;border:2px dashed #b39ddb;border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;background:#faf8ff;margin-bottom:8px}
+.order-built .tok{background:var(--purple);color:#fff;border:0;border-radius:10px;padding:6px 10px;font-weight:800;cursor:pointer}
+.order-bank{display:flex;flex-wrap:wrap;gap:6px}
+.order-bank .tok{background:#fff;border:2px solid #b39ddb;border-radius:10px;padding:6px 10px;font-weight:800;cursor:pointer;color:var(--purple-d)}
+.order-bank .tok.off{visibility:hidden}
+.tok .tp{display:block;font-size:11px;font-weight:700}
+
+/* review */
+.review{margin-top:8px;padding:10px 12px;background:#e8f5e9;border-radius:12px;font-size:14px;display:none}
+.q.reviewed .review{display:block}
+.q.wrong .review{background:#ffebee}
+.review .zh-line{font-size:18px;font-weight:800}
+.badge{display:inline-block;border-radius:8px;padding:1px 8px;font-weight:800;font-size:12px;margin-right:4px}
+.badge.ok{background:var(--green);color:#fff}
+.badge.no{background:var(--red);color:#fff}
+
+/* results */
+.results-hero{text-align:center;padding:22px 12px;border-radius:24px;margin-bottom:16px;color:#fff}
+.results-hero.pass{background:linear-gradient(135deg,#43a047,#26a69a)}
+.results-hero.fail{background:linear-gradient(135deg,#ef5350,#fb8c00)}
+.big-score{font-size:clamp(48px,10vw,80px);font-weight:900;line-height:1}
+.results-hero h2{margin:0 0 4px}
+.pass-line{opacity:.95;font-weight:700}
+.bars{display:grid;gap:8px;margin:12px 0}
+.bar-row{display:grid;grid-template-columns:90px 1fr 70px;align-items:center;gap:8px;font-weight:700}
+.bar{height:16px;background:#eceff1;border-radius:8px;overflow:hidden}
+.bar > i{display:block;height:100%;border-radius:8px}
+.legend-tones{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;font-size:13px;font-weight:700;margin:8px 0}
+.hidden{display:none!important}
+
+@media (max-width:720px){
+  .cast{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:1fr}
+  .choices.pics{grid-template-columns:1fr}
+  .bank-pics{grid-template-columns:repeat(2,1fr)}
+  .hero{padding:18px 12px}
+  .header-in{padding:8px 10px}
+  .brand h1{font-size:13px}
+  .qnum{width:28px;height:28px}
+  .choice .opt-zh{font-size:16px}
+  .bar-row{grid-template-columns:70px 1fr 58px;font-size:13px}
+}
+@media (min-width:721px) and (max-width:900px){
+  .choices.pics{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="header-in">
+    <div class="brand">
+      <div class="brand-mark zh">阿</div>
+      <div>
+        <h1>HSK 1 Mock Test · Lessons 1–5</h1>
+        <p>Aruna's classes · chinesefrench.in</p>
+      </div>
+    </div>
+    <div class="header-tools" id="headerTools"></div>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<footer class="app-footer">Aruna's classes · chinesefrench.in</footer>
+<script>
+
+window.__errors = [];
+window.addEventListener('error', function(e){
+  window.__errors.push((e.message||'error') + ' @ ' + (e.filename||'') + ':' + (e.lineno||0));
+});
+window.addEventListener('unhandledrejection', function(e){
+  window.__errors.push('rejection: ' + ((e.reason && e.reason.message) || e.reason || 'unknown'));
+});
+/* ===== helpers ===== */
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const TONE_CH = {
+  'ā':1,'á':2,'ǎ':3,'à':4,'ē':1,'é':2,'ě':3,'è':4,
+  'ī':1,'í':2,'ǐ':3,'ì':4,'ō':1,'ó':2,'ǒ':3,'ò':4,
+  'ū':1,'ú':2,'ǔ':3,'ù':4,'ǖ':1,'ǘ':2,'ǚ':3,'ǜ':4,
+  'Ā':1,'Á':2,'Ǎ':3,'À':4,'Ē':1,'É':2,'Ě':3,'È':4,
+  'Ī':1,'Í':2,'Ǐ':3,'Ì':4,'Ō':1,'Ó':2,'Ǒ':3,'Ò':4,
+  'Ū':1,'Ú':2,'Ǔ':3,'Ù':4,'Ǖ':1,'Ǘ':2,'Ǚ':3,'Ǜ':4,'ü':5
+};
+function toneOf(syl){
+  for (const ch of syl){ if (TONE_CH[ch] && TONE_CH[ch]<5) return TONE_CH[ch]; }
+  return 5;
+}
+const VOWEL_RE = /[aeiouvüāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/i;
+function splitSylToken(tok){
+  const toneIdx=[];
+  for (let i=0;i<tok.length;i++) if (TONE_CH[tok[i]] && TONE_CH[tok[i]]<5) toneIdx.push(i);
+  if (toneIdx.length<=1) return [tok];
+  const cuts=[0];
+  for (let k=1;k<toneIdx.length;k++){
+    let s=toneIdx[k];
+    while (s>0 && VOWEL_RE.test(tok[s-1])) s--;
+    if (s>=2 && /^(zh|ch|sh)$/i.test(tok.slice(s-2,s))) s-=2;
+    else if (s>0 && /[bpmfdtnlgkhjqxzcsryw]/i.test(tok[s-1])) s--;
+    if (s>cuts[cuts.length-1]) cuts.push(s);
+  }
+  cuts.push(tok.length);
+  return cuts.slice(0,-1).map((c,i)=>tok.slice(c,cuts[i+1])).filter(Boolean);
+}
+function colorPy(py){
+  return String(py).split(/(\s+|['’\-])/).map(tok => {
+    if (!tok) return '';
+    if (/^(\s+|['’\-])$/.test(tok)) return esc(tok);
+    return splitSylToken(tok).map(s => `<span class="t${toneOf(s)}">${esc(s)}</span>`).join('');
+  }).join('');
+}
+function gw(zh, py, en){
+  return `<span class="gw"><span class="zh">${esc(zh)}</span><span class="py">${colorPy(py)}</span><span class="en">${esc(en)}</span></span>`;
+}
+function instrLine(en, pairs){
+  return `<div class="gloss-line">${pairs.map(p=>gw(p[0],p[1],p[2])).join('')}</div><div class="instr-en">${en}</div>`;
+}
+function pyLine(py){ return `<div class="py-line py">${colorPy(py)}</div>`; }
+function zhLine(zh){ return `<div class="zh-line zh">${esc(zh)}</div>`; }
+function rubyWords(items){ // [{zh,py}] no meaning (for test items)
+  return `<div class="zh-line zh" style="display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center">${items.map(it =>
+    `<span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1"><span>${esc(it.zh)}</span><span class="py" style="font-size:12px">${colorPy(it.py)}</span></span>`
+  ).join('')}</div>`;
+}
+
+/* ===== figures / pictures ===== */
+function svg(inner, bg='#FFF3E0'){
+  return `<svg viewBox="0 0 160 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="160" height="140" rx="16" fill="${bg}"/>${inner}</svg>`;
+}
+function figure(o){
+  const {x=80,y=58,skin='#FFCC80',hair='#4E342E',style='short',shirt='#42A5F5',bottom=null,glasses=false,arm='down',scale=1,flip=false} = o;
+  const t = `translate(${x} ${y}) scale(${flip?-scale:scale} ${scale})`;
+  const hairCol = style==='gray' ? '#90A4AE' : hair;
+  const backHair = (style==='long')
+    ? `<path d="M-14,2 C-22,12 -24,44 -15,58 Q0,66 15,58 C24,44 22,12 14,2" fill="${hairCol}"/>`
+    : '';
+  let arms = '';
+  if (arm==='down') arms = `<path d="M-12,22 L-20,48" stroke="${shirt}" stroke-width="6" stroke-linecap="round"/><path d="M12,22 L20,48" stroke="${shirt}" stroke-width="6" stroke-linecap="round"/>`;
+  if (arm==='waveR') arms = `<path d="M-12,22 L-20,48" stroke="${shirt}" stroke-width="6" stroke-linecap="round"/><path d="M12,20 L26,-2" stroke="${shirt}" stroke-width="6" stroke-linecap="round"/><circle cx="28" cy="-6" r="5" fill="${skin}"/>`;
+  if (arm==='waveL') arms = `<path d="M12,22 L20,48" stroke="${shirt}" stroke-width="6" stroke-linecap="round"/><path d="M-12,20 L-26,-2" stroke="${shirt}" stroke-width="6" stroke-linecap="round"/><circle cx="-28" cy="-6" r="5" fill="${skin}"/>`;
+  if (arm==='bow' || arm==='give') arms = `<path d="M-12,22 L-4,40" stroke="${shirt}" stroke-width="6" stroke-linecap="round"/><path d="M12,22 L4,40" stroke="${shirt}" stroke-width="6" stroke-linecap="round"/><circle cx="0" cy="42" r="5" fill="${skin}"/>`;
+  if (arm==='book') arms = `<path d="M-12,22 L-6,40" stroke="${shirt}" stroke-width="6" stroke-linecap="round"/><path d="M12,22 L8,38" stroke="${shirt}" stroke-width="6" stroke-linecap="round"/><g transform="translate(-11 36)"><rect width="22" height="14" rx="2" fill="#FFF8E1" stroke="#E65100" stroke-width="1.4"/><path d="M11,0 V14" stroke="#E65100" stroke-width="1"/></g>`;
+  const body = bottom
+    ? `<path d="M-13,18 Q0,13 13,18 L15,44 L-15,44 Z" fill="${shirt}"/><path d="M-15,43 L-17,80 L17,80 L15,43 Z" fill="${bottom}"/>`
+    : `<path d="M-13,18 Q0,13 13,18 L16,80 L-16,80 Z" fill="${shirt}"/>`;
+  const shoes = `<ellipse cx="-8" cy="82" rx="8" ry="3.5" fill="#5D4037"/><ellipse cx="8" cy="82" rx="8" ry="3.5" fill="#5D4037"/>`;
+  const cap = `<path d="M-15,-3 C-16,-20 -8,-23 0,-23 C8,-23 16,-20 15,-3 C7,-9 -7,-9 -15,-3 Z" fill="${hairCol}"/>`;
+  let hairExtra = '';
+  if (style==='long'){
+    hairExtra = `<path d="M-15,-1 C-18,10 -17,22 -13,28 L-11,6 C-13,1 -14,-1 -15,-1 Z" fill="${hairCol}"/>
+                 <path d="M15,-1 C18,10 17,22 13,28 L11,6 C13,1 14,-1 15,-1 Z" fill="${hairCol}"/>`;
+  }
+  if (style==='bun'){
+    hairExtra = `<circle cx="0" cy="-22" r="7" fill="${hairCol}"/><circle cx="0" cy="-22" r="4" fill="#3E2723" opacity=".2"/>`;
+  }
+  const glassesG = glasses ? `<g fill="none" stroke="#5D4037" stroke-width="1.6"><circle cx="-6" cy="1" r="5"/><circle cx="6" cy="1" r="5"/><path d="M-1,1 H1"/><path d="M-11,1 H-16"/><path d="M11,1 H16"/></g>` : '';
+  const face = `<circle cx="-5" cy="1.5" r="1.8" fill="#4E342E"/>
+    <circle cx="5" cy="1.5" r="1.8" fill="#4E342E"/>
+    <circle cx="-7" cy="5" r="2.2" fill="#FFAB91" opacity=".7"/>
+    <circle cx="7" cy="5" r="2.2" fill="#FFAB91" opacity=".7"/>
+    <path d="M-4,8.5 Q0,12.5 4,8.5" fill="none" stroke="#E64A19" stroke-width="1.6" stroke-linecap="round"/>`;
+  return `<g transform="${t}">
+    ${backHair}${arms}${body}${shoes}
+    <circle cx="0" cy="0" r="16.5" fill="${skin}"/>
+    ${cap}${hairExtra}${face}${glassesG}
+  </g>`;
+}
+const PRIYA = {style:'long', shirt:'#26A69A', bottom:'#004D40', hair:'#3E2723'};
+const WANG  = {style:'short', shirt:'#FB8C00', hair:'#4E342E'};
+const RAO   = {style:'gray',  shirt:'#7E57C2', glasses:true, hair:'#90A4AE'};
+const MOM   = {style:'bun',   shirt:'#EC407A', bottom:'#AD1457', hair:'#4E342E'};
+const DAD   = {style:'short', shirt:'#1E88E5', hair:'#4E342E'};
+const SIS   = {style:'long',  shirt:'#AB47BC', bottom:'#6A1B9A', hair:'#4E342E'};
+const BOY   = {style:'short', shirt:'#42A5F5', hair:'#5D4037', scale:.78};
+const GIRL  = {style:'long',  shirt:'#EF5350', bottom:'#C62828', hair:'#5D4037', scale:.78};
+
+function flagCN(x,y,s=1){
+  return `<g transform="translate(${x} ${y}) scale(${s})">
+    <rect width="36" height="24" rx="2" fill="#E53935"/>
+    <polygon points="8,5 9.5,9.5 14,9.5 10.4,12.2 11.8,16.6 8,14 4.2,16.6 5.6,12.2 2,9.5 6.5,9.5" fill="#FFD54F"/>
+  </g>`;
+}
+function flagIN(x,y,s=1){
+  return `<g transform="translate(${x} ${y}) scale(${s})">
+    <rect width="36" height="8" fill="#FF9933"/><rect y="8" width="36" height="8" fill="#fff"/><rect y="16" width="36" height="8" fill="#138808"/>
+    <circle cx="18" cy="12" r="3.2" fill="none" stroke="#0D47A1" stroke-width="1"/>
+  </g>`;
+}
+
+const PICS = {
+  hello: () => svg(
+    figure({...WANG,x:44,y:62,arm:'waveL'}) + figure({...PRIYA,x:116,y:62,arm:'waveR'}),
+    '#E0F2F1'),
+  sorry: () => svg(
+    figure({...PRIYA,x:52,y:64,arm:'bow'}) + figure({...WANG,x:118,y:62,arm:'waveL'}) +
+    `<text x="36" y="28" font-size="18">😅</text>`,
+    '#FFEBEE'),
+  thanks: () => svg(
+    figure({...WANG,x:48,y:62,arm:'give'}) + figure({...PRIYA,x:118,y:62,arm:'down'}) +
+    `<g transform="translate(68 78)"><rect width="22" height="16" rx="3" fill="#E53935"/><rect x="8" y="-6" width="6" height="14" fill="#FFD54F"/><rect x="1" y="2" width="20" height="5" fill="#FFD54F"/></g>`,
+    '#FFF8E1'),
+  bye: () => svg(
+    `<path d="M6,24 Q6,16 16,16 H34 V124 H6 Z" fill="#A1887F"/><path d="M16,16 V124" stroke="#6D4C41" stroke-width="3"/><rect x="20" y="22" width="10" height="18" rx="1" fill="#BBDEFB"/><circle cx="30" cy="76" r="3" fill="#FFD54F"/>` +
+    figure({...PRIYA,x:62,y:62,arm:'waveR'}) + figure({...WANG,x:122,y:62,arm:'waveL'}),
+    '#E3F2FD'),
+  teacher: () => svg(
+    `<rect x="18" y="18" width="70" height="48" rx="4" fill="#455A64"/>
+     <text x="53" y="48" text-anchor="middle" fill="#FFECB3" font-size="16" font-family="Noto Sans CJK SC,Microsoft YaHei,sans-serif" font-weight="700">汉语</text>` +
+    figure({...MOM,x:118,y:70,arm:'book'}),
+    '#EDE7F6'),
+  student: () => svg(
+    figure({...PRIYA,x:92,y:62,arm:'book'}) +
+    `<g transform="translate(22 70)">
+      <rect x="4" y="8" width="28" height="32" rx="6" fill="#6D4C41"/>
+      <rect x="8" y="14" width="20" height="14" rx="3" fill="#A1887F"/>
+      <path d="M8,8 C8,0 28,0 28,8" fill="none" stroke="#4E342E" stroke-width="3"/>
+    </g>`,
+    '#E0F2F1'),
+  china: () => svg(figure({...WANG,x:86,y:70,arm:'down'}) + flagCN(14,16,1.6), '#FFEBEE'),
+  india: () => svg(figure({...PRIYA,x:86,y:70,arm:'down'}) + flagIN(14,16,1.6), '#E8F5E9'),
+  family4: () => svg(
+    figure({...DAD,x:28,y:68,scale:.9}) + figure({...MOM,x:62,y:68,scale:.9}) +
+    figure({...SIS,x:98,y:68,scale:.85}) + figure({...WANG,x:132,y:70,scale:.8}),
+    '#FFF8E1'),
+  onePerson: () => svg(figure({...WANG,x:80,y:70}), '#ECEFF1'),
+  twoPeople: () => svg(figure({...WANG,x:50,y:68}) + figure({...PRIYA,x:110,y:68}), '#E3F2FD'),
+  momDaughter: () => svg(figure({...MOM,x:58,y:64}) + figure({...GIRL,x:112,y:78}), '#FCE4EC'),
+  dadSon: () => svg(figure({...RAO,x:54,y:64}) + figure({...BOY,x:112,y:78,shirt:'#7E57C2'}), '#E8EAF6'),
+  friends: () => svg(
+    figure({...PRIYA,x:55,y:66,arm:'down'}) + figure({...WANG,x:108,y:66,arm:'down'}) +
+    `<text x="80" y="36" text-anchor="middle" font-size="22">♡</text>`,
+    '#F3E5F5'),
+  classmates: () => svg(
+    `<rect x="20" y="100" width="120" height="10" rx="2" fill="#8D6E63"/>` +
+    figure({...PRIYA,x:55,y:64,arm:'book'}) + figure({...WANG,x:110,y:64,arm:'book'}),
+    '#E0F2F1'),
+  politeHello: () => svg(
+    figure({...PRIYA,x:50,y:66,arm:'waveR',scale:.9}) + figure({...RAO,x:118,y:62,arm:'down'}),
+    '#EDE7F6'),
+  numbers: () => svg(
+    `<text x="80" y="86" text-anchor="middle" font-size="42" font-weight="800" fill="#E65100" font-family="Segoe UI,sans-serif">1 2 3 4 5</text>
+     <text x="80" y="36" text-anchor="middle" font-size="22">✋</text>`,
+    '#FFF8E1'),
+  age20: () => svg(
+    `<ellipse cx="80" cy="88" rx="36" ry="16" fill="#F8BBD0"/>
+     <rect x="50" y="50" width="60" height="38" rx="6" fill="#F48FB1"/>
+     <rect x="56" y="40" width="48" height="16" rx="4" fill="#FCE4EC"/>
+     <text x="80" y="76" text-anchor="middle" font-size="20" font-weight="800" fill="#AD1457">20</text>
+     <text x="80" y="32" text-anchor="middle" font-size="20">🎂</text>`,
+    '#FCE4EC'),
+  teacherMan: () => svg(
+    `<rect x="18" y="18" width="70" height="48" rx="4" fill="#455A64"/>
+     <text x="53" y="48" text-anchor="middle" fill="#FFECB3" font-size="16" font-family="Noto Sans CJK SC,Microsoft YaHei,sans-serif" font-weight="700">老师</text>` +
+    figure({...RAO,x:118,y:70,arm:'book'}),
+    '#ECEFF1'),
+  threePeople: () => svg(
+    figure({...DAD,x:36,y:70,scale:.88}) + figure({...MOM,x:80,y:70,scale:.88}) + figure({...WANG,x:124,y:72,scale:.8}),
+    '#FFF3E0'),
+  fivePeople: () => svg(
+    figure({...DAD,x:20,y:70,scale:.72}) + figure({...MOM,x:50,y:70,scale:.72}) +
+    figure({...SIS,x:80,y:70,scale:.7}) + figure({...WANG,x:110,y:72,scale:.68}) +
+    figure({...GIRL,x:140,y:78,scale:.7, shirt:'#26A69A', bottom:'#00796B'}),
+    '#FFF3E0'),
+};
+
+/* ===== exam data ===== */
+const MARK = 4; // 50 × 4 = 200
+const PASS = 120;
+
+// speaker-labelled dialogue: {spk, text, gender}
+const L = []; // filled below as question objects {id, part, section, type, audio, audioLines, pics, options, bank, answer, review}
+
+function opt(zh, py, en){ return {zh, py, en}; }
+
+const QUESTIONS = [
+  /* ---- Listening Part 1: choose picture A/B/C ---- */
+  {id:1, section:'listening', part:1, type:'pic3',
+    audio:'你好！', audioPy:'Nǐ hǎo!', audioEn:'Hello!',
+    pics:['hello','sorry','bye'], answer:'A',
+    reviewEn:'Two people are saying hello.'},
+  {id:2, section:'listening', part:1, type:'pic3',
+    audio:'对不起！', audioPy:'Duìbuqǐ!', audioEn:'Sorry!',
+    pics:['thanks','sorry','hello'], answer:'B',
+    reviewEn:'Someone is saying sorry.'},
+  {id:3, section:'listening', part:1, type:'pic3',
+    audio:'谢谢你！', audioPy:'Xièxie nǐ!', audioEn:'Thank you!',
+    pics:['bye','numbers','thanks'], answer:'C',
+    reviewEn:'Someone is saying thank you and giving a gift.'},
+  {id:4, section:'listening', part:1, type:'pic3',
+    audio:'她是老师。', audioPy:'Tā shì lǎoshī.', audioEn:'She is a teacher.',
+    pics:['teacher','student','family4'], answer:'A',
+    reviewEn:'The woman is a teacher (at the blackboard).'},
+  {id:5, section:'listening', part:1, type:'pic3',
+    audio:'我家有四口人。', audioPy:'Wǒ jiā yǒu sì kǒu rén.', audioEn:'There are four people in my family.',
+    pics:['onePerson','twoPeople','family4'], answer:'C',
+    reviewEn:'The family has four people.'},
+
+  /* ---- Listening Part 2: choose the best reply ---- */
+  {id:6, section:'listening', part:2, type:'choice3',
+    audio:'你好！', audioPy:'Nǐ hǎo!', audioEn:'Hello!',
+    options:[
+      opt('没关系！','Méi guānxi!','That’s OK!'),
+      opt('你好！','Nǐ hǎo!','Hello!'),
+      opt('五岁。','Wǔ suì.','Five years old.')
+    ], answer:'B'},
+  {id:7, section:'listening', part:2, type:'choice3',
+    audio:'谢谢你！', audioPy:'Xièxie nǐ!', audioEn:'Thank you!',
+    options:[
+      opt('不客气！','Bú kèqi!','You’re welcome!'),
+      opt('对不起！','Duìbuqǐ!','Sorry!'),
+      opt('再见！','Zàijiàn!','Goodbye!')
+    ], answer:'A'},
+  {id:8, section:'listening', part:2, type:'choice3',
+    audio:'你叫什么名字？', audioPy:'Nǐ jiào shénme míngzi?', audioEn:'What’s your name?',
+    options:[
+      opt('我是学生。','Wǒ shì xuésheng.','I am a student.'),
+      opt('我叫王林。','Wǒ jiào Wáng Lín.','My name is Wang Lin.'),
+      opt('我十岁了。','Wǒ shí suì le.','I am ten now.')
+    ], answer:'B'},
+  {id:9, section:'listening', part:2, type:'choice3',
+    audio:'你是哪国人？', audioPy:'Nǐ shì nǎ guó rén?', audioEn:'Where are you from?',
+    options:[
+      opt('我是印度人。','Wǒ shì Yìndù rén.','I am Indian.'),
+      opt('我有一个儿子。','Wǒ yǒu yí gè érzi.','I have a son.'),
+      opt('她是老师。','Tā shì lǎoshī.','She is a teacher.')
+    ], answer:'A'},
+  {id:10, section:'listening', part:2, type:'choice3',
+    audio:'你多大了？', audioPy:'Nǐ duō dà le?', audioEn:'How old are you?',
+    options:[
+      opt('我是学生。','Wǒ shì xuésheng.','I am a student.'),
+      opt('我家有四口人。','Wǒ jiā yǒu sì kǒu rén.','There are four people in my family.'),
+      opt('我十二岁了。','Wǒ shí’èr suì le.','I am twelve now.')
+    ], answer:'C'},
+
+  /* ---- Listening Part 3a: dialogues match pictures A–F ---- */
+  {id:11, section:'listening', part:3, type:'matchPic', bank:'L3',
+    audioLines:[
+      {spk:'王林', gender:'m', text:'对不起！'},
+      {spk:'普丽雅', gender:'f', text:'没关系！'}
+    ],
+    audioPy:'Wáng Lín: Duìbuqǐ!   Pǔlìyǎ: Méi guānxi!',
+    audioEn:'Wang Lin: Sorry!   Priya: That’s OK!',
+    answer:'E'},
+  {id:12, section:'listening', part:3, type:'matchPic', bank:'L3',
+    audioLines:[
+      {spk:'普丽雅', gender:'f', text:'王林，再见！'},
+      {spk:'王林', gender:'m', text:'再见！明天见！'}
+    ],
+    audioPy:'Pǔlìyǎ: Wáng Lín, zàijiàn!   Wáng Lín: Zàijiàn! Míngtiān jiàn!',
+    audioEn:'Priya: Goodbye, Wang Lin!   Wang Lin: Bye! See you tomorrow!',
+    answer:'A'},
+  {id:13, section:'listening', part:3, type:'matchPic', bank:'L3',
+    audioLines:[
+      {spk:'饶先生', gender:'m', text:'她是谁？'},
+      {spk:'普丽雅', gender:'f', text:'她是我的汉语老师。'}
+    ],
+    audioPy:'Ráo xiānsheng: Tā shì shéi?   Pǔlìyǎ: Tā shì wǒ de Hànyǔ lǎoshī.',
+    audioEn:'Mr. Rao: Who is she?   Priya: She is my Chinese teacher.',
+    answer:'D'},
+  {id:14, section:'listening', part:3, type:'matchPic', bank:'L3',
+    audioLines:[
+      {spk:'普丽雅', gender:'f', text:'你家有几口人？'},
+      {spk:'王林', gender:'m', text:'我家有四口人。'}
+    ],
+    audioPy:'Pǔlìyǎ: Nǐ jiā yǒu jǐ kǒu rén?   Wáng Lín: Wǒ jiā yǒu sì kǒu rén.',
+    audioEn:'Priya: How many people are in your family?   Wang Lin: There are four people in my family.',
+    answer:'C'},
+  {id:15, section:'listening', part:3, type:'matchPic', bank:'L3',
+    audioLines:[
+      {spk:'饶先生', gender:'m', text:'她是你的同学吗？'},
+      {spk:'王林', gender:'m', text:'是，她是我的同学，也是我的朋友。'}
+    ],
+    audioPy:'Ráo xiānsheng: Tā shì nǐ de tóngxué ma?   Wáng Lín: Shì, tā shì wǒ de tóngxué, yě shì wǒ de péngyou.',
+    audioEn:'Mr. Rao: Is she your classmate?   Wang Lin: Yes, she is my classmate, and also my friend.',
+    answer:'F'},
+
+  /* ---- Listening Part 3b: sentence + question, choose A/B/C ---- */
+  {id:16, section:'listening', part:3, type:'choice3',
+    audio:'我叫普丽雅。我是印度人。', audioPy:'Wǒ jiào Pǔlìyǎ. Wǒ shì Yìndù rén.', audioEn:'My name is Priya. I am Indian.',
+    question:{zh:'她是哪国人？', py:'Tā shì nǎ guó rén?', en:'Where is she from?'},
+    options:[
+      opt('中国人','Zhōngguó rén','a Chinese person'),
+      opt('印度人','Yìndù rén','an Indian person'),
+      opt('老师','lǎoshī','teacher')
+    ], answer:'B'},
+  {id:17, section:'listening', part:3, type:'choice3',
+    audio:'饶先生是学生，不是老师。', audioPy:'Ráo xiānsheng shì xuésheng, bú shì lǎoshī.', audioEn:'Mr. Rao is a student, not a teacher.',
+    question:{zh:'饶先生是老师吗？', py:'Ráo xiānsheng shì lǎoshī ma?', en:'Is Mr. Rao a teacher?'},
+    options:[
+      opt('是，他是老师。','Shì, tā shì lǎoshī.','Yes, he is a teacher.'),
+      opt('不是，他是学生。','Bú shì, tā shì xuésheng.','No, he is a student.'),
+      opt('他是王林的爸爸。','Tā shì Wáng Lín de bàba.','He is Wang Lin’s dad.')
+    ], answer:'B'},
+  {id:18, section:'listening', part:3, type:'choice3',
+    audio:'王林的妈妈是汉语老师。', audioPy:'Wáng Lín de māma shì Hànyǔ lǎoshī.', audioEn:'Wang Lin’s mom is a Chinese teacher.',
+    question:{zh:'她是谁？', py:'Tā shì shéi?', en:'Who is she?'},
+    options:[
+      opt('她是学生。','Tā shì xuésheng.','She is a student.'),
+      opt('她是王林的同学。','Tā shì Wáng Lín de tóngxué.','She is Wang Lin’s classmate.'),
+      opt('她是王林的妈妈。','Tā shì Wáng Lín de māma.','She is Wang Lin’s mom.')
+    ], answer:'C'},
+  {id:19, section:'listening', part:3, type:'choice3',
+    audio:'饶先生有一个儿子、一个女儿。他六十岁了。', audioPy:'Ráo xiānsheng yǒu yí gè érzi, yí gè nǚ’ér. Tā liùshí suì le.', audioEn:'Mr. Rao has a son and a daughter. He is sixty now.',
+    question:{zh:'饶先生多大了？', py:'Ráo xiānsheng duō dà le?', en:'How old is Mr. Rao?'},
+    options:[
+      opt('三十五岁','sānshíwǔ suì','thirty-five years old'),
+      opt('六十岁','liùshí suì','sixty years old'),
+      opt('二十岁','èrshí suì','twenty years old')
+    ], answer:'B'},
+  {id:20, section:'listening', part:3, type:'choice3',
+    audio:'普丽雅是王林的同学，也是他的朋友。', audioPy:'Pǔlìyǎ shì Wáng Lín de tóngxué, yě shì tā de péngyou.', audioEn:'Priya is Wang Lin’s classmate, and also his friend.',
+    question:{zh:'普丽雅是王林的什么人？', py:'Pǔlìyǎ shì Wáng Lín de shénme rén?', en:'Who is Priya to Wang Lin?'},
+    options:[
+      opt('她是王林的老师。','Tā shì Wáng Lín de lǎoshī.','She is Wang Lin’s teacher.'),
+      opt('她是王林的女儿。','Tā shì Wáng Lín de nǚ’ér.','She is Wang Lin’s daughter.'),
+      opt('她是王林的同学，也是他的朋友。','Tā shì Wáng Lín de tóngxué, yě shì tā de péngyou.','She is Wang Lin’s classmate, and also his friend.')
+    ], answer:'C'},
+
+  /* ---- Reading Part 1: match sentence to picture A–F ---- */
+  {id:21, section:'reading', part:1, type:'matchPic', bank:'R1',
+    stem:{zh:'你好！', py:'Nǐ hǎo!', en:'Hello!'}, answer:'A'},
+  {id:22, section:'reading', part:1, type:'matchPic', bank:'R1',
+    stem:{zh:'我是学生。', py:'Wǒ shì xuésheng.', en:'I am a student.'}, answer:'B'},
+  {id:23, section:'reading', part:1, type:'matchPic', bank:'R1',
+    stem:{zh:'他是中国人。', py:'Tā shì Zhōngguó rén.', en:'He is Chinese.'}, answer:'C'},
+  {id:24, section:'reading', part:1, type:'matchPic', bank:'R1',
+    stem:{zh:'她有一个女儿。', py:'Tā yǒu yí gè nǚ’ér.', en:'She has a daughter.'}, answer:'D'},
+  {id:25, section:'reading', part:1, type:'matchPic', bank:'R1',
+    stem:{zh:'我有一个儿子。', py:'Wǒ yǒu yí gè érzi.', en:'I have a son.'}, answer:'E'},
+
+  /* ---- Reading Part 2: match question to answer A–F ---- */
+  {id:26, section:'reading', part:2, type:'matchText', bank:'R2',
+    stem:{zh:'你叫什么名字？', py:'Nǐ jiào shénme míngzi?', en:'What’s your name?'}, answer:'B'},
+  {id:27, section:'reading', part:2, type:'matchText', bank:'R2',
+    stem:{zh:'谢谢你！', py:'Xièxie nǐ!', en:'Thank you!'}, answer:'A'},
+  {id:28, section:'reading', part:2, type:'matchText', bank:'R2',
+    stem:{zh:'她是谁？', py:'Tā shì shéi?', en:'Who is she?'}, answer:'D'},
+  {id:29, section:'reading', part:2, type:'matchText', bank:'R2',
+    stem:{zh:'你是哪国人？', py:'Nǐ shì nǎ guó rén?', en:'Where are you from?'}, answer:'C'},
+  {id:30, section:'reading', part:2, type:'matchText', bank:'R2',
+    stem:{zh:'你多大了？', py:'Nǐ duō dà le?', en:'How old are you?'}, answer:'E'},
+
+  /* ---- Reading Part 3: fill in the blank A–F ---- */
+  {id:31, section:'reading', part:3, type:'fill', bank:'R3',
+    before:{zh:'你', py:'Nǐ'}, after:{zh:'什么名字？', py:'shénme míngzi?'},
+    en:'What’s your name?', answer:'A'},
+  {id:32, section:'reading', part:3, type:'fill', bank:'R3',
+    before:{zh:'她是我', py:'Tā shì wǒ'}, after:{zh:'老师。', py:'lǎoshī.'},
+    en:'She is my teacher.', answer:'B'},
+  {id:33, section:'reading', part:3, type:'fill', bank:'R3',
+    before:{zh:'你是学生', py:'Nǐ shì xuésheng'}, after:{zh:'？', py:'?'},
+    en:'Are you a student?', answer:'C'},
+  {id:34, section:'reading', part:3, type:'fill', bank:'R3',
+    before:{zh:'王林十二', py:'Wáng Lín shí’èr'}, after:{zh:'了。', py:'le.'},
+    en:'Wang Lin is twelve now.', answer:'D'},
+  {id:35, section:'reading', part:3, type:'fill', bank:'R3',
+    before:{zh:'我家', py:'Wǒ jiā'}, after:{zh:'四口人。', py:'sì kǒu rén.'},
+    en:'There are four people in my family.', answer:'E'},
+
+  /* ---- Reading Part 4: short text + question ---- */
+  {id:36, section:'reading', part:4, type:'choice3',
+    passage:{zh:'我叫王林。我是中国人。我是学生。', py:'Wǒ jiào Wáng Lín. Wǒ shì Zhōngguó rén. Wǒ shì xuésheng.', en:'My name is Wang Lin. I am Chinese. I am a student.'},
+    question:{zh:'王林是哪国人？', py:'Wáng Lín shì nǎ guó rén?', en:'Where is Wang Lin from?'},
+    options:[
+      opt('印度人','Yìndù rén','an Indian person'),
+      opt('中国人','Zhōngguó rén','a Chinese person'),
+      opt('老师','lǎoshī','teacher')
+    ], answer:'B'},
+  {id:37, section:'reading', part:4, type:'choice3',
+    passage:{zh:'普丽雅是印度人。她是王林的同学，也是他的朋友。', py:'Pǔlìyǎ shì Yìndù rén. Tā shì Wáng Lín de tóngxué, yě shì tā de péngyou.', en:'Priya is Indian. She is Wang Lin’s classmate, and also his friend.'},
+    question:{zh:'普丽雅是王林的什么人？', py:'Pǔlìyǎ shì Wáng Lín de shénme rén?', en:'Who is Priya to Wang Lin?'},
+    options:[
+      opt('她是王林的老师。','Tā shì Wáng Lín de lǎoshī.','She is Wang Lin’s teacher.'),
+      opt('她是王林的妈妈。','Tā shì Wáng Lín de māma.','She is Wang Lin’s mom.'),
+      opt('她是王林的同学。','Tā shì Wáng Lín de tóngxué.','She is Wang Lin’s classmate.')
+    ], answer:'C'},
+  {id:38, section:'reading', part:4, type:'choice3',
+    passage:{zh:'饶先生，您好！您是老师吗？不是，我是学生。', py:'Ráo xiānsheng, nín hǎo! Nín shì lǎoshī ma? Bú shì, wǒ shì xuésheng.', en:'Hello, Mr. Rao! Are you a teacher? No, I am a student.'},
+    question:{zh:'饶先生是老师吗？', py:'Ráo xiānsheng shì lǎoshī ma?', en:'Is Mr. Rao a teacher?'},
+    options:[
+      opt('是，他是老师。','Shì, tā shì lǎoshī.','Yes, he is a teacher.'),
+      opt('不是，他是学生。','Bú shì, tā shì xuésheng.','No, he is a student.'),
+      opt('他是汉语老师。','Tā shì Hànyǔ lǎoshī.','He is a Chinese teacher.')
+    ], answer:'B'},
+  {id:39, section:'reading', part:4, type:'choice3',
+    passage:{zh:'王林的家有四口人：爸爸、妈妈、姐姐、王林。姐姐二十岁了。', py:'Wáng Lín de jiā yǒu sì kǒu rén: bàba, māma, jiějie, Wáng Lín. Jiějie èrshí suì le.', en:'Wang Lin’s family has four people: dad, mom, big sister, and Wang Lin. Big sister is twenty now.'},
+    question:{zh:'王林家有几口人？', py:'Wáng Lín jiā yǒu jǐ kǒu rén?', en:'How many people are in Wang Lin’s family?'},
+    options:[
+      opt('三口人','sān kǒu rén','three people'),
+      opt('四口人','sì kǒu rén','four people'),
+      opt('五口人','wǔ kǒu rén','five people')
+    ], answer:'B'},
+  {id:40, section:'reading', part:4, type:'choice3',
+    passage:{zh:'王林的妈妈是老师。她是普丽雅的汉语老师，也是饶先生的汉语老师。', py:'Wáng Lín de māma shì lǎoshī. Tā shì Pǔlìyǎ de Hànyǔ lǎoshī, yě shì Ráo xiānsheng de Hànyǔ lǎoshī.', en:'Wang Lin’s mom is a teacher. She is Priya’s Chinese teacher, and also Mr. Rao’s Chinese teacher.'},
+    question:{zh:'她是谁的汉语老师？', py:'Tā shì shéi de Hànyǔ lǎoshī?', en:'Whose Chinese teacher is she?'},
+    options:[
+      opt('她是王林的汉语老师。','Tā shì Wáng Lín de Hànyǔ lǎoshī.','She is Wang Lin’s Chinese teacher.'),
+      opt('她是普丽雅的汉语老师，也是饶先生的汉语老师。','Tā shì Pǔlìyǎ de Hànyǔ lǎoshī, yě shì Ráo xiānsheng de Hànyǔ lǎoshī.','She is Priya’s Chinese teacher, and also Mr. Rao’s Chinese teacher.'),
+      opt('她是王林的姐姐。','Tā shì Wáng Lín de jiějie.','She is Wang Lin’s older sister.')
+    ], answer:'B'},
+
+  /* ---- Writing Part 1: choose the character for the pinyin ---- */
+  {id:41, section:'writing', part:1, type:'charPick',
+    before:{zh:'', py:''}, blank:{py:'nǐ', en:'you'}, after:{zh:'好！', py:'hǎo!'},
+    en:'Hello!',
+    options:[
+      opt('你','nǐ','you'),
+      opt('好','hǎo','good'),
+      opt('十','shí','ten')
+    ], answer:'A'},
+  {id:42, section:'writing', part:1, type:'charPick',
+    before:{zh:'我', py:'Wǒ'}, blank:{py:'jiào', en:'am called'}, after:{zh:'王林。', py:'Wáng Lín.'},
+    en:'My name is Wang Lin.',
+    options:[
+      opt('是','shì','to be'),
+      opt('叫','jiào','to be called'),
+      opt('家','jiā','home; family')
+    ], answer:'B'},
+  {id:43, section:'writing', part:1, type:'charPick',
+    before:{zh:'她是我', py:'Tā shì wǒ'}, blank:{py:'de', en:'’s / of'}, after:{zh:'老师。', py:'lǎoshī.'},
+    en:'She is my teacher.',
+    options:[
+      opt('的','de','’s / of'),
+      opt('呢','ne','and…?'),
+      opt('了','le','(change / now)')
+    ], answer:'A'},
+  {id:44, section:'writing', part:1, type:'charPick',
+    before:{zh:'我', py:'Wǒ'}, blank:{py:'yǒu', en:'to have'}, after:{zh:'一个女儿。', py:'yí gè nǚ’ér.'},
+    en:'I have a daughter.',
+    options:[
+      opt('有','yǒu','to have'),
+      opt('友','yǒu','(the 友 in 朋友, friend)'),
+      opt('是','shì','to be')
+    ], answer:'A'},
+  {id:45, section:'writing', part:1, type:'charPick',
+    before:{zh:'他十', py:'Tā shí'}, blank:{py:'suì', en:'years old'}, after:{zh:'了。', py:'le.'},
+    en:'He is ten now.',
+    options:[
+      opt('岁','suì','years old'),
+      opt('多','duō','many; how (old)'),
+      opt('大','dà','big; old (age)')
+    ], answer:'A'},
+
+  /* ---- Writing Part 2: order the words ---- */
+  {id:46, section:'writing', part:2, type:'order',
+    tokens:[
+      {zh:'叫', py:'jiào'}, {zh:'我', py:'wǒ'}, {zh:'普丽雅', py:'Pǔlìyǎ'}
+    ],
+    answer:['我','叫','普丽雅'],
+    full:{zh:'我叫普丽雅。', py:'Wǒ jiào Pǔlìyǎ.', en:'My name is Priya.'}},
+  {id:47, section:'writing', part:2, type:'order',
+    tokens:[
+      {zh:'是', py:'shì'}, {zh:'吗', py:'ma'}, {zh:'你', py:'nǐ'}, {zh:'学生', py:'xuésheng'}
+    ],
+    answer:['你','是','学生','吗'],
+    full:{zh:'你是学生吗？', py:'Nǐ shì xuésheng ma?', en:'Are you a student?'}},
+  {id:48, section:'writing', part:2, type:'order',
+    tokens:[
+      {zh:'印度人', py:'Yìndù rén'}, {zh:'我', py:'wǒ'}, {zh:'是', py:'shì'}
+    ],
+    answer:['我','是','印度人'],
+    full:{zh:'我是印度人。', py:'Wǒ shì Yìndù rén.', en:'I am Indian.'}},
+  {id:49, section:'writing', part:2, type:'order',
+    tokens:[
+      {zh:'谁', py:'shéi'}, {zh:'是', py:'shì'}, {zh:'她', py:'tā'}
+    ],
+    answer:['她','是','谁'],
+    full:{zh:'她是谁？', py:'Tā shì shéi?', en:'Who is she?'}},
+  {id:50, section:'writing', part:2, type:'order',
+    tokens:[
+      {zh:'四口人', py:'sì kǒu rén'}, {zh:'有', py:'yǒu'}, {zh:'我家', py:'wǒ jiā'}
+    ],
+    answer:['我家','有','四口人'],
+    full:{zh:'我家有四口人。', py:'Wǒ jiā yǒu sì kǒu rén.', en:'There are four people in my family.'}}
+];
+
+const BANKS = {
+  L3: {
+    keys:['A','B','C','D','E','F'],
+    pics:{A:'bye', B:'politeHello', C:'family4', D:'teacher', E:'sorry', F:'friends'},
+    labels:{A:'goodbye', B:'polite hello', C:'family of four', D:'Chinese teacher', E:'sorry / that’s OK', F:'classmates and friends'}
+  },
+  R1: {
+    keys:['A','B','C','D','E','F'],
+    pics:{A:'hello', B:'student', C:'china', D:'momDaughter', E:'dadSon', F:'bye'},
+    labels:{A:'hello', B:'student', C:'Chinese person', D:'mom and daughter', E:'dad and son', F:'goodbye'}
+  },
+  R2: {
+    keys:['A','B','C','D','E','F'],
+    items:[
+      {k:'A', zh:'不客气。', py:'Bú kèqi.', en:'You’re welcome.'},
+      {k:'B', zh:'我叫普丽雅。', py:'Wǒ jiào Pǔlìyǎ.', en:'My name is Priya.'},
+      {k:'C', zh:'我是印度人。', py:'Wǒ shì Yìndù rén.', en:'I am Indian.'},
+      {k:'D', zh:'她是我的汉语老师。', py:'Tā shì wǒ de Hànyǔ lǎoshī.', en:'She is my Chinese teacher.'},
+      {k:'E', zh:'我十岁了。', py:'Wǒ shí suì le.', en:'I am ten now.'},
+      {k:'F', zh:'我家有三口人。', py:'Wǒ jiā yǒu sān kǒu rén.', en:'There are three people in my family.'}
+    ]
+  },
+  R3: {
+    keys:['A','B','C','D','E','F'],
+    items:[
+      {k:'A', zh:'叫', py:'jiào', en:'to be called'},
+      {k:'B', zh:'的', py:'de', en:'’s / of'},
+      {k:'C', zh:'吗', py:'ma', en:'(question word)'},
+      {k:'D', zh:'岁', py:'suì', en:'years old'},
+      {k:'E', zh:'有', py:'yǒu', en:'to have'},
+      {k:'F', zh:'呢', py:'ne', en:'and…?'}
+    ]
+  }
+};
+
+const QMAP = Object.fromEntries(QUESTIONS.map(q => [q.id, q]));
+
+/* ===== state ===== */
+const state = {
+  screen:'start', // start | exam | results
+  section:'listening',
+  answers:{},      // id -> 'A' or string[] for order
+  plays:{},        // id -> count
+  submitted:false,
+  name:'',
+  useTimer:false,
+  secondsLeft:50*60,
+  timerId:null,
+  zhVoice:null,
+  zhVoiceM:null,
+  zhVoiceF:null,
+  noZhVoice:false,
+  voicesReady:false
+};
+
+function answeredCount(){
+  return QUESTIONS.filter(q => {
+    const a = state.answers[q.id];
+    if (q.type==='order') return Array.isArray(a) && a.length === q.answer.length;
+    return a === 'A' || a === 'B' || a === 'C' || a === 'D' || a === 'E' || a === 'F';
+  }).length;
+}
+
+/* ===== speech ===== */
+function pickVoices(){
+  const voices = speechSynthesis.getVoices() || [];
+  const zh = voices.filter(v =>
+    /^zh\b/i.test(v.lang) || /chinese|mandarin|huayu|中文|普通话|汉语/i.test(v.name+' '+v.lang)
+  );
+  state.zhVoice = zh.find(v => /CN|zh-CN|China|Chinese \(China\)|普通话/i.test(v.lang+' '+v.name)) || zh[0] || null;
+  const femaleRe = /female|woman|ting|xiaoxiao|xiaoyi|huihui|yaoyao|lili|female/i;
+  const maleRe = /male|man|kangkang|yunyang|yunjian|male|kefu/i;
+  state.zhVoiceF = zh.find(v => femaleRe.test(v.name)) || state.zhVoice;
+  state.zhVoiceM = zh.find(v => maleRe.test(v.name)) || state.zhVoice;
+  state.voicesReady = true;
+  state.noZhVoice = !state.zhVoice;
+  const w = $('#voiceWarn');
+  if (w) w.classList.toggle('show', state.noZhVoice && state.screen==='exam');
+}
+if (typeof speechSynthesis !== 'undefined'){
+  pickVoices();
+  speechSynthesis.onvoiceschanged = pickVoices;
+}
+
+function utter(text, gender, onend){
+  if (!window.speechSynthesis){ onend && onend(); return; }
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'zh-CN';
+  u.rate = 0.82;
+  u.pitch = gender==='f' ? 1.15 : gender==='m' ? 0.9 : 1;
+  const voice = gender==='f' ? (state.zhVoiceF||state.zhVoice) : gender==='m' ? (state.zhVoiceM||state.zhVoice) : state.zhVoice;
+  if (voice) u.voice = voice;
+  u.onend = () => onend && onend();
+  u.onerror = () => onend && onend();
+  speechSynthesis.speak(u);
+}
+
+let playToken = 0;
+function speakSequence(parts, ondone){
+  // parts: [{text, gender}]
+  const my = ++playToken;
+  speechSynthesis.cancel();
+  let i = 0;
+  const next = () => {
+    if (my !== playToken) return;
+    if (i >= parts.length){ ondone && ondone(); return; }
+    const p = parts[i++];
+    if (p.pause){ setTimeout(next, p.pause); return; }
+    utter(p.text, p.gender, next);
+  };
+  next();
+}
+
+function audioParts(q){
+  if (q.audioLines){
+    const parts = [];
+    q.audioLines.forEach((ln, i) => {
+      if (i) parts.push({pause:420});
+      parts.push({text: ln.spk + '。' + ln.text, gender: ln.gender});
+    });
+    return parts;
+  }
+  const parts = [{text:q.audio, gender:null}];
+  if (q.question){
+    parts.push({pause:600});
+    parts.push({text:'问。' + q.question.zh, gender:null});
+  }
+  return parts;
+}
+
+function playQuestion(id, ev){
+  if (ev) ev.preventDefault();
+  if (state.submitted){ // unlimited in review
+    speakSequence(audioParts(QMAP[id]));
+    return;
+  }
+  const n = state.plays[id] || 0;
+  if (n >= 2) return;
+  state.plays[id] = n+1;
+  const btn = ev && ev.currentTarget;
+  if (btn) btn.disabled = true;
+  speakSequence(audioParts(QMAP[id]), () => {
+    renderHeader();
+    const b = document.querySelector(`.play[data-qid="${id}"]`);
+    if (b){
+      const c = state.plays[id]||0;
+      b.disabled = !state.submitted && c>=2;
+      const lab = b.querySelector('.play-lab');
+      if (lab) lab.textContent = c>=2 ? 'Played 2/2' : `Play ${c+1}/2`;
+    }
+    const cnt = document.querySelector(`.play-count[data-qid="${id}"]`);
+    if (cnt) cnt.textContent = `${state.plays[id]||0}/2`;
+  });
+  // optimistic label
+  const b = document.querySelector(`.play[data-qid="${id}"]`);
+  if (b){
+    const c = state.plays[id]||0;
+    const lab = b.querySelector('.play-lab');
+    if (lab) lab.textContent = c>=2 ? 'Playing… 2/2' : `Playing…`;
+  }
+  const cnt = document.querySelector(`.play-count[data-qid="${id}"]`);
+  if (cnt) cnt.textContent = `${state.plays[id]||0}/2`;
+}
+
+/* ===== scoring ===== */
+function isCorrect(q, ans){
+  if (q.type==='order'){
+    return Array.isArray(ans) && ans.length===q.answer.length && ans.every((w,i)=>w===q.answer[i]);
+  }
+  return ans === q.answer;
+}
+function sectionOf(q){ return q.section; }
+function scoreBreakdown(){
+  const out = {listening:0, reading:0, writing:0, total:0, maxL:80, maxR:80, maxW:40, correct:{}, detail:[]};
+  QUESTIONS.forEach(q => {
+    const ok = isCorrect(q, state.answers[q.id]);
+    out.correct[q.id] = ok;
+    if (ok){
+      out[q.section] += MARK;
+      out.total += MARK;
+    }
+    out.detail.push({id:q.id, ok, ans:state.answers[q.id], right:q.answer});
+  });
+  return out;
+}
+
+/* ===== render helpers ===== */
+function speakerIcon(){
+  return `<svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 4V6L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM16 3.2v2.1A7.8 7.8 0 0 1 21 12a7.8 7.8 0 0 1-5 6.7v2.1A9.9 9.9 0 0 0 23 12 9.9 9.9 0 0 0 16 3.2z"/></svg>`;
+}
+function playBtn(q){
+  const c = state.plays[q.id]||0;
+  const done = !state.submitted && c>=2;
+  const lab = state.submitted ? 'Play again' : (done ? 'Played 2/2' : `Play ${c+1}/2`);
+  return `<button class="play" data-qid="${q.id}" ${done?'disabled':''} onclick="playQuestion(${q.id},event)">${speakerIcon()}<span class="play-lab">${lab}</span></button>
+    <span class="play-count" data-qid="${q.id}">${c}/2</span>`;
+}
+function lettersOf(bankKey){
+  return BANKS[bankKey].keys;
+}
+function letterPicker(q){
+  const keys = lettersOf(q.bank);
+  const sel = state.answers[q.id];
+  const used = new Set(QUESTIONS.filter(x => x.bank===q.bank && x.id!==q.id && state.answers[x.id]).map(x => state.answers[x.id]));
+  return `<div class="letters" role="group" aria-label="Choose a letter">${keys.map(k=>{
+    let cls = sel===k ? 'on' : (used.has(k) && !state.submitted ? 'used' : '');
+    if (state.submitted){
+      if (k===q.answer) cls = 'ok';
+      else if (sel===k && k!==q.answer) cls = 'bad';
+    }
+    return `<button type="button" class="${cls}" onclick="pickLetter(${q.id},'${k}')">${k}</button>`;
+  }).join('')}</div>`;
+}
+function pickLetter(id, k){
+  if (state.submitted) return;
+  const q = QMAP[id];
+  // if this letter is used by another item in the same bank, clear the other
+  QUESTIONS.forEach(x => {
+    if (x.bank===q.bank && x.id!==id && state.answers[x.id]===k) delete state.answers[x.id];
+  });
+  if (state.answers[id]===k) delete state.answers[id];
+  else state.answers[id]=k;
+  // rerender just this part's questions would be nicer; full section is fine
+  paintExamKeepScroll();
+}
+function pickChoice(id, k){
+  if (state.submitted) return;
+  if (state.answers[id]===k) delete state.answers[id];
+  else state.answers[id]=k;
+  paintExamKeepScroll();
+}
+function paintExamKeepScroll(){
+  const y = window.scrollY;
+  const sec = state.section;
+  renderExam();
+  state.section = sec;
+  showSection(sec, true);
+  window.scrollTo(0,y);
+  renderHeader();
+}
+
+function choiceClass(q, k){
+  const sel = state.answers[q.id];
+  if (state.submitted){
+    if (k===q.answer) return 'ok';
+    if (sel===k && k!==q.answer) return 'bad';
+    return '';
+  }
+  return sel===k ? 'on' : '';
+}
+
+function reviewBox(q){
+  if (!state.submitted) return '';
+  const ok = isCorrect(q, state.answers[q.id]);
+  const badge = ok ? `<span class="badge ok">Correct · +${MARK}</span>` : `<span class="badge no">Incorrect · 0</span>`;
+  let body = '';
+  if (q.audio || q.audioLines){
+    body += `<div class="zh-line zh">${esc(q.audioLines ? q.audioLines.map(l=>l.spk+'：'+l.text).join('　') : q.audio)}</div>
+      <div class="py">${colorPy(q.audioPy||'')}</div>
+      <div class="muted">${esc(q.audioEn||'')}</div>`;
+  }
+  if (q.question){
+    body += `<div style="margin-top:4px"><b>问 ${gw('问','wèn','ask')}：</b> <span class="zh">${esc(q.question.zh)}</span> · <span class="py">${colorPy(q.question.py)}</span> · ${esc(q.question.en)}</div>`;
+  }
+  if (q.stem){
+    body += `<div class="zh-line zh">${esc(q.stem.zh)}</div><div class="py">${colorPy(q.stem.py)}</div><div class="muted">${esc(q.stem.en)}</div>`;
+  }
+  if (q.passage){
+    body += `<div class="muted">${esc(q.passage.en)}</div>`;
+  }
+  if (q.full){
+    body += `<div class="zh-line zh">${esc(q.full.zh)}</div><div class="py">${colorPy(q.full.py)}</div><div class="muted">${esc(q.full.en)}</div>`;
+  }
+  if (q.en && (q.type==='fill' || q.type==='charPick')){
+    body += `<div class="muted">${esc(q.en)}</div>`;
+  }
+  if (q.reviewEn) body += `<div class="muted">${esc(q.reviewEn)}</div>`;
+  // correct option meaning
+  if (q.options){
+    const idx = q.answer.charCodeAt(0)-65;
+    const o = q.options[idx];
+    body += `<div style="margin-top:6px"><b>Answer ${q.answer}:</b> <span class="zh">${esc(o.zh)}</span> · <span class="py">${colorPy(o.py)}</span> · ${esc(o.en)}</div>`;
+  } else if (q.bank && BANKS[q.bank]){
+    const b = BANKS[q.bank];
+    if (b.items){
+      const it = b.items.find(i=>i.k===q.answer);
+      if (it) body += `<div style="margin-top:6px"><b>Answer ${q.answer}:</b> <span class="zh">${esc(it.zh)}</span> · <span class="py">${colorPy(it.py)}</span> · ${esc(it.en)}</div>`;
+    } else if (b.labels){
+      body += `<div style="margin-top:6px"><b>Answer ${q.answer}:</b> Picture ${q.answer} — ${esc(b.labels[q.answer])}</div>`;
+    }
+  }
+  if (q.type==='order' && !ok){
+    const yours = Array.isArray(state.answers[q.id]) ? state.answers[q.id].join(' ') : '—';
+    body += `<div>Your order: <span class="zh">${esc(yours)}</span></div>`;
+  }
+  if (q.type==='fill' && q.before){
+    const it = BANKS.R3.items.find(i=>i.k===q.answer);
+    body += `<div style="margin-top:4px" class="zh">${esc(q.before.zh)}（${it?it.zh:q.answer}）${esc(q.after.zh)}</div>`;
+  }
+  return `<div class="review">${badge}${body}</div>`;
+}
+
+function qHead(q, extra=''){
+  return `<div class="q-hd"><span class="qnum">${q.id}</span>${extra}</div>`;
+}
+
+function renderPicChoices(q){
+  const letters=['A','B','C'];
+  return `<div class="choices pics">${q.pics.map((p,i)=>{
+    const k=letters[i];
+    return `<button type="button" class="choice ${choiceClass(q,k)}" onclick="pickChoice(${q.id},'${k}')">
+      <span class="letter">${k}</span>${PICS[p]()}
+    </button>`;
+  }).join('')}</div>`;
+}
+function renderTextChoices(q){
+  const letters=['A','B','C'];
+  return `<div class="choices">${q.options.map((o,i)=>{
+    const k=letters[i];
+    return `<button type="button" class="choice ${choiceClass(q,k)}" onclick="pickChoice(${q.id},'${k}')" style="text-align:left;padding:10px 12px">
+      <span class="letter">${k}</span>
+      <span class="opt-zh zh">${esc(o.zh)}</span>
+      <span class="opt-py py">${colorPy(o.py)}</span>
+    </button>`;
+  }).join('')}</div>`;
+}
+
+function renderOrder(q){
+  const built = Array.isArray(state.answers[q.id]) ? state.answers[q.id].slice() : [];
+  const used = new Set(built);
+  // tokens displayed in original (shuffled) order
+  const bank = q.tokens.map((t,i) => {
+    const off = used.has(t.zh) ? 'off' : '';
+    return `<button type="button" class="tok ${off}" ${state.submitted?'disabled':''} onclick="orderAdd(${q.id},${i})"><span class="zh">${esc(t.zh)}</span><span class="tp py">${colorPy(t.py)}</span></button>`;
+  }).join('');
+  const builtHtml = built.map((zh,i) => {
+    const t = q.tokens.find(x=>x.zh===zh) || {zh, py:''};
+    return `<button type="button" class="tok" ${state.submitted?'disabled':''} onclick="orderRemove(${q.id},${i})"><span class="zh">${esc(t.zh)}</span><span class="tp py">${colorPy(t.py)}</span></button>`;
+  }).join('') || `<span class="muted">Tap the words below to build the sentence.</span>`;
+  return `<div class="order-built" aria-label="Your sentence">${builtHtml}</div>
+    <div class="order-bank">${bank}</div>
+    ${state.submitted?'':`<button class="btn btn-ghost btn-sm" style="margin-top:6px" type="button" onclick="orderClear(${q.id})">Clear</button>`}`;
+}
+function orderAdd(id, idx){
+  if (state.submitted) return;
+  const q = QMAP[id];
+  const zh = q.tokens[idx].zh;
+  const cur = Array.isArray(state.answers[id]) ? state.answers[id].slice() : [];
+  if (cur.includes(zh)) return;
+  cur.push(zh);
+  state.answers[id]=cur;
+  paintExamKeepScroll();
+}
+function orderRemove(id, i){
+  if (state.submitted) return;
+  const cur = (state.answers[id]||[]).slice();
+  cur.splice(i,1);
+  if (cur.length) state.answers[id]=cur; else delete state.answers[id];
+  paintExamKeepScroll();
+}
+function orderClear(id){
+  if (state.submitted) return;
+  delete state.answers[id];
+  paintExamKeepScroll();
+}
+
+function renderBankPics(bankKey){
+  const b = BANKS[bankKey];
+  return `<div class="bank-pics">${b.keys.map(k=>`
+    <div class="bank-card">${PICS[b.pics[k]]()}<div class="letter">${k}</div></div>`).join('')}</div>`;
+}
+function renderBankText(bankKey){
+  const b = BANKS[bankKey];
+  return `<div class="word-bank">${b.items.map(it=>`
+    <div class="word-chip"><span class="letter">${it.k}</span><span class="zh">${esc(it.zh)}</span>
+    <span class="py" style="margin-left:6px">${colorPy(it.py)}</span></div>`).join('')}</div>`;
+}
+
+function renderQuestion(q){
+  let inner = '';
+  if (q.type==='pic3'){
+    inner = qHead(q, playBtn(q)) + renderPicChoices(q);
+  } else if (q.type==='choice3' && q.section==='listening'){
+    inner = qHead(q, playBtn(q));
+    if (q.question && state.submitted){
+      inner += `<div class="prompt zh">${esc(q.question.zh)} <span class="py">${colorPy(q.question.py)}</span></div>`;
+    } else if (q.question){
+      inner += `<div class="prompt">★ ${gw('问','wèn','ask')} — listen to the question in the audio.</div>`;
+    }
+    inner += renderTextChoices(q);
+  } else if (q.type==='matchPic' && q.section==='listening'){
+    inner = qHead(q, playBtn(q)) + letterPicker(q);
+  } else if (q.type==='matchPic' && q.section==='reading'){
+    inner = qHead(q, `<div class="stem">${zhLine(q.stem.zh)}${pyLine(q.stem.py)}</div>`) + letterPicker(q);
+  } else if (q.type==='matchText'){
+    inner = qHead(q, `<div class="stem">${zhLine(q.stem.zh)}${pyLine(q.stem.py)}</div>`) + letterPicker(q);
+  } else if (q.type==='fill'){
+    inner = qHead(q, `<div class="stem"><div class="zh-line zh">${esc(q.before.zh)}（&nbsp;&nbsp;&nbsp;）${esc(q.after.zh)}</div>
+      <div class="py">${colorPy(q.before.py)}  ___  ${colorPy(q.after.py)}</div></div>`) + letterPicker(q);
+  } else if (q.type==='choice3' && q.section==='reading'){
+    inner = qHead(q, '') +
+      `<div class="stem" style="background:#fff8e1;border-radius:12px;padding:10px 12px;margin-bottom:8px">${zhLine(q.passage.zh)}${pyLine(q.passage.py)}</div>
+       <div class="prompt">★ <span class="zh">${esc(q.question.zh)}</span> · <span class="py">${colorPy(q.question.py)}</span></div>` +
+      renderTextChoices(q);
+  } else if (q.type==='charPick'){
+    inner = qHead(q, `<div class="stem"><div class="zh-line zh">${esc(q.before.zh)}（ <span class="py">${colorPy(q.blank.py)}</span> ）${esc(q.after.zh)}</div>
+      <div class="py">${colorPy(q.before.py)}  ${colorPy(q.blank.py)}  ${colorPy(q.after.py)}</div></div>`) + renderTextChoices(q);
+  } else if (q.type==='order'){
+    inner = qHead(q, `<div class="muted">Put the words in the right order.</div>`) + renderOrder(q);
+  }
+  const cls = ['q'];
+  if (state.answers[q.id] && !state.submitted) cls.push('answered');
+  if (state.submitted){
+    cls.push('reviewed');
+    cls.push(isCorrect(q, state.answers[q.id]) ? 'correct' : 'wrong');
+  }
+  return `<div class="${cls.join(' ')}" id="q${q.id}">${inner}${reviewBox(q)}</div>`;
+}
+
+function partHeader(color, zh, py, en, numRange, instrHtml){
+  return `<div class="part-h ${color}"><span class="ph-zh zh">${esc(zh)}</span>
+    <div class="part-sub"><div class="py" style="background:#fff;border-radius:6px;padding:0 6px;display:inline-block">${colorPy(py)}</div>
+    <div style="font-weight:700;margin-top:2px">${esc(en)} · Questions ${numRange}</div></div></div>
+    <div class="instr">${instrHtml}</div>`;
+}
+
+function renderListening(){
+  const p1 = QUESTIONS.filter(q=>q.section==='listening'&&q.part===1);
+  const p2 = QUESTIONS.filter(q=>q.section==='listening'&&q.part===2);
+  const p3match = QUESTIONS.filter(q=>q.section==='listening'&&q.part===3&&q.type==='matchPic');
+  const p3q = QUESTIONS.filter(q=>q.section==='listening'&&q.part===3&&q.type==='choice3');
+  return `<div class="part">${partHeader('teal','第一部分','dì yī bùfen','Part 1', '1–5',
+      instrLine('Listen to the recording. Choose the matching picture (A / B / C). Each item can be played twice.',
+        [['听','tīng','listen'],['录音','lùyīn','recording'],['选','xuǎn','choose'],['图片','túpiàn','picture']]))}
+      ${p1.map(renderQuestion).join('')}</div>
+    <div class="part">${partHeader('teal','第二部分','dì èr bùfen','Part 2', '6–10',
+      instrLine('Listen to the question. Choose the best reply (A / B / C).',
+        [['听','tīng','listen'],['问句','wènjù','question'],['选','xuǎn','choose'],['回答','huídá','reply']]))}
+      ${p2.map(renderQuestion).join('')}</div>
+    <div class="part">${partHeader('teal','第三部分','dì sān bùfen','Part 3', '11–20',
+      instrLine('Questions 11–15: listen to a short dialogue and choose the matching picture (A–F). Use each picture once. Questions 16–20: listen to a sentence and a question, then choose the correct answer.',
+        [['听','tīng','listen'],['对话','duìhuà','dialogue'],['选','xuǎn','choose'],['图片','túpiàn','picture'],['句子','jùzi','sentence'],['问题','wèntí','question'],['答案','dá’àn','answer']]))}
+      ${renderBankPics('L3')}
+      ${p3match.map(renderQuestion).join('')}
+      ${p3q.map(renderQuestion).join('')}</div>`;
+}
+
+
+function renderReading(){
+  const p1 = QUESTIONS.filter(q=>q.section==='reading'&&q.part===1);
+  const p2 = QUESTIONS.filter(q=>q.section==='reading'&&q.part===2);
+  const p3 = QUESTIONS.filter(q=>q.section==='reading'&&q.part===3);
+  const p4 = QUESTIONS.filter(q=>q.section==='reading'&&q.part===4);
+  return `<div class="part">${partHeader('orange','第一部分','dì yī bùfen','Part 1','21–25',
+      instrLine('Look at each sentence. Choose the matching picture (A–F). Use each picture once.',
+        [['看','kàn','look at'],['句子','jùzi','sentence'],['选','xuǎn','choose'],['图片','túpiàn','picture']]))}
+      ${renderBankPics('R1')}
+      ${p1.map(renderQuestion).join('')}</div>
+    <div class="part">${partHeader('orange','第二部分','dì èr bùfen','Part 2','26–30',
+      instrLine('Look at each question. Choose the matching reply (A–F). Use each answer once.',
+        [['看','kàn','look at'],['问句','wènjù','question'],['选','xuǎn','choose'],['回答','huídá','reply']]))}
+      ${renderBankText('R2')}
+      ${p2.map(renderQuestion).join('')}</div>
+    <div class="part">${partHeader('orange','第三部分','dì sān bùfen','Part 3','31–35',
+      instrLine('Choose a word to fill the blank (A–F). Use each word once.',
+        [['选词填空','xuǎn cí tiánkòng','fill in the blank'],['选','xuǎn','choose'],['词','cí','word']]))}
+      ${renderBankText('R3')}
+      ${p3.map(renderQuestion).join('')}</div>
+    <div class="part">${partHeader('orange','第四部分','dì sì bùfen','Part 4','36–40',
+      instrLine('Read the sentence. Then choose the correct answer to the ★ question.',
+        [['读','dú','read'],['句子','jùzi','sentence'],['选','xuǎn','choose'],['答案','dá’àn','answer'],['问题','wèntí','question']]))}
+      ${p4.map(renderQuestion).join('')}</div>`;
+}
+
+function renderWriting(){
+  const p1 = QUESTIONS.filter(q=>q.section==='writing'&&q.part===1);
+  const p2 = QUESTIONS.filter(q=>q.section==='writing'&&q.part===2);
+  return `<div class="note">${instrLine('Please note: official New HSK 1 has listening and reading only. This short writing practice follows the spirit of HSK 2 writing and the HSK 1 handwriting syllabus, using only words from Lessons 1–5.',
+        [['注意','zhùyì','please note'],['汉语水平考试','Hànyǔ Shuǐpíng Kǎoshì','HSK'],['听力','tīnglì','listening'],['阅读','yuèdú','reading'],['书写','shūxiě','writing']])}</div>
+    <div class="part">${partHeader('purple','第一部分','dì yī bùfen','Part 1','41–45',
+      instrLine('Look at the pinyin in the brackets. Choose the correct Chinese character.',
+        [['看','kàn','look at'],['拼音','pīnyīn','pinyin'],['选','xuǎn','choose'],['汉字','Hànzì','Chinese character']]))}
+      ${p1.map(renderQuestion).join('')}</div>
+    <div class="part">${partHeader('purple','第二部分','dì èr bùfen','Part 2','46–50',
+      instrLine('Join the words to make a sentence. Tap the words in the right order. Tap a word in your sentence to remove it.',
+        [['连词成句','lián cí chéng jù','make a sentence']]))}
+      ${p2.map(renderQuestion).join('')}</div>`;
+}
+
+function showSection(name, keep){
+  state.section = name;
+  $$('.exam-sec').forEach(el => el.classList.toggle('hidden', el.dataset.sec!==name));
+  $$('.sec-nav button').forEach(b => b.classList.toggle('on', b.dataset.sec===name));
+  if (!keep){
+    const top = $('.sec-nav');
+    if (top) window.scrollTo({top: Math.max(0, top.getBoundingClientRect().top + window.scrollY - 70), behavior:'smooth'});
+  }
+}
+
+function renderExam(){
+  const app = $('#app');
+  app.innerHTML = `
+    <div id="voiceWarn" class="warn ${state.noZhVoice?'show':''}">No Chinese (zh-CN) voice was found on this device. You can still take the test: ask someone to read the listening scripts (they appear after you submit), or try Chrome / Edge on a computer with a Chinese voice installed.</div>
+    <nav class="sec-nav">
+      <button class="n-l ${state.section==='listening'?'on':''}" data-sec="listening" onclick="showSection('listening')">${gw('听力','tīnglì','listening')}<small>20 questions · 80 marks</small></button>
+      <button class="n-r ${state.section==='reading'?'on':''}" data-sec="reading" onclick="showSection('reading')">${gw('阅读','yuèdú','reading')}<small>20 questions · 80 marks</small></button>
+      <button class="n-w ${state.section==='writing'?'on':''}" data-sec="writing" onclick="showSection('writing')">${gw('书写','shūxiě','writing')}<small>10 questions · 40 marks</small></button>
+    </nav>
+    <div class="exam-sec" data-sec="listening">${renderListening()}</div>
+    <div class="exam-sec ${state.section==='listening'?'':'hidden'}" data-sec="reading">${renderReading()}</div>
+    <div class="exam-sec ${state.section==='listening'?'':'hidden'}" data-sec="writing">${renderWriting()}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:18px 0 8px">
+      ${state.submitted?'':`<button class="btn btn-gold" onclick="confirmSubmit()">Submit · ${gw('交卷','jiāo juàn','hand in the paper')}</button>`}
+      <button class="btn btn-ghost" onclick="confirmReset()">Reset · ${gw('重做','chóng zuò','do it again')}</button>
+    </div>`;
+  // fix hidden flags (first section should follow state)
+  $$('.exam-sec').forEach(el => el.classList.toggle('hidden', el.dataset.sec!==state.section));
+  renderHeader();
+  stampTestInfo();
+}
+
+function formatTime(s){
+  s = Math.max(0, s|0);
+  const m = Math.floor(s/60), r = s%60;
+  return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`;
+}
+function renderHeader(){
+  const tools = $('#headerTools');
+  if (!tools) return;
+  if (state.screen==='start'){ tools.innerHTML = ''; return; }
+  const sc = state.submitted ? scoreBreakdown() : null;
+  let html = `<span class="progress-mini">${state.submitted? 'Score '+sc.total+'/200' : answeredCount()+'/50 answered'}</span>`;
+  if (state.useTimer && state.screen==='exam' && !state.submitted){
+    const warn = state.secondsLeft<=5*60 ? ' warn' : '';
+    html += `<span class="pill timer${warn}" id="timerPill">${formatTime(state.secondsLeft)}</span>`;
+  }
+  if (state.screen==='exam' && !state.submitted){
+    html += `<button class="btn btn-gold btn-sm" onclick="confirmSubmit()">Submit</button>`;
+  }
+  tools.innerHTML = html;
+}
+
+function startTimer(){
+  stopTimer();
+  if (!state.useTimer) return;
+  state.timerId = setInterval(() => {
+    state.secondsLeft--;
+    const pill = $('#timerPill');
+    if (pill){
+      pill.textContent = formatTime(state.secondsLeft);
+      pill.classList.toggle('warn', state.secondsLeft<=5*60);
+    }
+    if (state.secondsLeft<=0){
+      stopTimer();
+      doSubmit();
+    }
+  }, 1000);
+}
+function stopTimer(){ if (state.timerId){ clearInterval(state.timerId); state.timerId=null; } }
+
+function renderStart(){
+  state.screen='start';
+  stopTimer();
+  renderHeader();
+  $('#app').innerHTML = `
+    <section class="hero">
+      <div class="series">Aruna's classes · chinesefrench.in</div>
+      <div class="hero-badge">Lessons 1–5 · New HSK 1 style</div>
+      <div class="hero-zh zh">模拟考试</div>
+      <div class="hero-py py">${colorPy('Mónǐ kǎoshì')}</div>
+      <div class="hero-en">HSK 1 Mock Test</div>
+      <div class="legend-tones">
+        <span>Tone colours: <span class="t1">1st ā</span></span>
+        <span class="t2">2nd á</span>
+        <span class="t3">3rd ǎ</span>
+        <span class="t4">4th à</span>
+        <span class="t5">neutral a</span>
+      </div>
+      <div class="cast">
+        <div class="castc">${svg(figure({...PRIYA,x:80,y:70}),'#E0F2F1')}<div class="cz zh">普丽雅</div><div class="py">${colorPy('Pǔlìyǎ')}</div><div class="cen">Priya</div><div class="cd">Indian student</div></div>
+        <div class="castc">${svg(figure({...WANG,x:80,y:70}),'#FFF3E0')}<div class="cz zh">王林</div><div class="py">${colorPy('Wáng Lín')}</div><div class="cen">Wang Lin</div><div class="cd">Chinese student</div></div>
+        <div class="castc">${svg(figure({...MOM,x:80,y:70}),'#FCE4EC')}<div class="cz zh">王林的妈妈</div><div class="py">${colorPy('Wáng Lín de māma')}</div><div class="cen">Wang Lin’s mom</div><div class="cd">Chinese teacher</div></div>
+        <div class="castc">${svg(figure({...RAO,x:80,y:70}),'#EDE7F6')}<div class="cz zh">饶先生</div><div class="py">${colorPy('Ráo xiānsheng')}</div><div class="cen">Mr. Rao</div><div class="cd">Indian student, 60</div></div>
+      </div>
+    </section>
+    <section class="card">
+      <h2>About this paper</h2>
+      <p>This practice test covers <b>only Lessons 1–5</b> of Aruna’s HSK 1 book: greetings, numbers 1–10, names, family and age, plus ${gw('是','shì','to be')} ${gw('吗','ma','(question)')} ${gw('的','de','’s / of')} ${gw('呢','ne','and…?')}.</p>
+      <div class="gloss-line" style="margin:8px 0">${gw('听力','tīnglì','listening')} ${gw('阅读','yuèdú','reading')} ${gw('书写','shūxiě','writing')} ${gw('汉语水平考试','Hànyǔ Shuǐpíng Kǎoshì','HSK')}</div>
+      <p><b>Listening</b> and <b>reading</b> follow the <b>New HSK 1 (HSK 3.0)</b> official sample paper question types (Chinese Testing International / Hànkǎo Guójì, 2025 syllabus, in use from July 2026). Official HSK 1 has <b>four</b> listening parts; here the last two official types are grouped as <b>Listening Part 3</b>, so this paper has the three listening sections you asked for, with all four official task types.</p>
+      <p>Official HSK 1 has <b>no writing section</b> (writing starts at HSK 2). A short writing practice is included anyway, in the same spirit: choose the character for a given pinyin, and arrange words into a sentence.</p>
+      <div class="grid-3" style="margin-top:12px">
+        <div class="score-card sc-l"><b>80</b><span>${gw('听力','tīnglì','listening')}<br>20 questions · 3 parts</span></div>
+        <div class="score-card sc-r"><b>80</b><span>${gw('阅读','yuèdú','reading')}<br>20 questions · 4 parts</span></div>
+        <div class="score-card sc-w"><b>40</b><span>${gw('书写','shūxiě','writing')}<br>10 questions · 2 parts</span></div>
+      </div>
+      <p style="text-align:center;font-weight:800;margin:12px 0 0">Total 200 marks · Pass mark 120 · 50 questions · about 50 minutes</p>
+    </section>
+    <section class="card">
+      <h2>How to take it</h2>
+      <ul>
+        <li>${gw('听力','tīnglì','listening')}: tap ${gw('播放','bōfàng','play')} on each question. Like the real exam, each item can be played <b>twice</b>. A slightly slow Chinese voice is used (browser ${gw('语音','yǔyīn','speech')}).</li>
+        <li>Works offline in a browser — no account needed. Best with headphones.</li>
+        <li>On the test itself, Chinese is shown with ${gw('拼音','pīnyīn','pinyin')} only, so the English meaning does not give the answer away. After you ${gw('交卷','jiāo juàn','submit')}, the review shows the correct answers with pinyin and English.</li>
+        <li>Every Chinese word in the titles and instructions has tone-coloured pinyin and an English meaning.</li>
+      </ul>
+      <div class="checks">
+        <label>Your name (optional) <input class="name-in" id="nameIn" type="text" placeholder="Student name" value="${esc(state.name)}"></label>
+        <label><input type="checkbox" id="timerIn" ${state.useTimer?'checked':''}> Use a 50-minute timer</label>
+      </div>
+      <div class="start-actions">
+        <button class="btn btn-teal" onclick="startExam()">Start the test · ${gw('开始','kāishǐ','start')}</button>
+      </div>
+    </section>`;
+  stampTestInfo();
+}
+
+function startExam(){
+  if (typeof speechSynthesis !== 'undefined') pickVoices();
+  state.name = ($('#nameIn') && $('#nameIn').value.trim()) || state.name;
+  state.useTimer = !!( $('#timerIn') && $('#timerIn').checked );
+  state.screen='exam';
+  state.submitted=false;
+  state.section='listening';
+  state.answers={};
+  state.plays={};
+  state.secondsLeft=50*60;
+  if (window.speechSynthesis) speechSynthesis.cancel();
+  renderExam();
+  startTimer();
+  window.scrollTo({top:0});
+}
+
+function confirmSubmit(){
+  const n = answeredCount();
+  const left = 50-n;
+  const msg = left>0
+    ? `You have answered ${n} of 50 questions (${left} still blank). Submit anyway?`
+    : `You have answered all 50 questions. Submit and see your score?`;
+  if (window.confirm(msg)) doSubmit();
+}
+function doSubmit(){
+  stopTimer();
+  if (window.speechSynthesis) speechSynthesis.cancel();
+  state.submitted=true;
+  state.screen='results';
+  renderResults();
+  window.scrollTo({top:0});
+}
+
+function confirmReset(){
+  if (window.confirm('Clear all answers and return to the start page?')){
+    resetAll();
+  }
+}
+function resetAll(){
+  stopTimer();
+  if (window.speechSynthesis) speechSynthesis.cancel();
+  state.screen='start';
+  state.submitted=false;
+  state.answers={};
+  state.plays={};
+  state.section='listening';
+  state.secondsLeft=50*60;
+  renderStart();
+  window.scrollTo({top:0});
+}
+
+function renderResults(){
+  const sc = scoreBreakdown();
+  const pass = sc.total>=PASS;
+  const who = state.name ? esc(state.name)+' · ' : '';
+  $('#app').innerHTML = `
+    <section class="results-hero ${pass?'pass':'fail'}" id="scoreReport">
+      <div style="font-weight:800;opacity:.9">${who}Aruna's classes · HSK 1 Mock (Lessons 1–5)</div>
+      <h2>${pass? ('Passed · 合格 ' + colorPy('hé gé')) : ('Not yet passed · 未合格 ' + colorPy('wèi hé gé'))}</h2>
+      <div class="big-score" id="score-total" data-score="${sc.total}">${sc.total}<span style="font-size:.4em">/200</span></div>
+      <div class="pass-line">Pass mark 120 &nbsp;·&nbsp; ${pass? 'Well done!':'Keep practising Lessons 1–5 and try again.'}</div>
+    </section>
+    <section class="card">
+      <h2>Section scores</h2>
+      <div class="bars">
+        <div class="bar-row"><span>${gw('听力','tīnglì','listening')}</span><div class="bar"><i style="width:${sc.listening/80*100}%;background:var(--teal)"></i></div><span id="score-L" data-score="${sc.listening}">${sc.listening}/80</span></div>
+        <div class="bar-row"><span>${gw('阅读','yuèdú','reading')}</span><div class="bar"><i style="width:${sc.reading/80*100}%;background:var(--orange)"></i></div><span id="score-R" data-score="${sc.reading}">${sc.reading}/80</span></div>
+        <div class="bar-row"><span>${gw('书写','shūxiě','writing')}</span><div class="bar"><i style="width:${sc.writing/40*100}%;background:var(--purple)"></i></div><span id="score-W" data-score="${sc.writing}">${sc.writing}/40</span></div>
+      </div>
+      <div class="start-actions">
+        <button class="btn btn-teal" onclick="reviewSection('listening')">Review answers</button>
+        <button class="btn btn-ghost" onclick="resetAll()">Reset · try again</button>
+      </div>
+    </section>
+    <p class="muted" style="text-align:center">Scroll the paper below. Green = correct, red = incorrect. Every item now shows the script or sentence with pinyin and English.</p>
+    <div id="reviewPaper"></div>`;
+  // render full paper in review mode
+  state.screen='exam'; // reuse exam renderer flags: submitted is true
+  const hold = $('#reviewPaper');
+  // temporarily use exam render into a temp then move
+  const tmpSec = state.section;
+  state.section='listening';
+  // We'll inject the three sections always visible in review
+  hold.innerHTML = `
+    <nav class="sec-nav">
+      <button class="n-l on" data-sec="listening" onclick="document.getElementById('rev-listening').scrollIntoView({behavior:'smooth',block:'start'})">${gw('听力','tīnglì','listening')}<small>${sc.listening}/80</small></button>
+      <button class="n-r" data-sec="reading" onclick="document.getElementById('rev-reading').scrollIntoView({behavior:'smooth',block:'start'})">${gw('阅读','yuèdú','reading')}<small>${sc.reading}/80</small></button>
+      <button class="n-w" data-sec="writing" onclick="document.getElementById('rev-writing').scrollIntoView({behavior:'smooth',block:'start'})">${gw('书写','shūxiě','writing')}<small>${sc.writing}/40</small></button>
+    </nav>
+    <h2 id="rev-listening" class="zh" style="color:var(--teal-d)">听力 · Listening review</h2>
+    ${renderListening()}
+    <h2 id="rev-reading" class="zh" style="color:var(--orange-d)">阅读 · Reading review</h2>
+    ${renderReading()}
+    <h2 id="rev-writing" class="zh" style="color:var(--purple-d)">书写 · Writing review</h2>
+    ${renderWriting()}
+    <div style="display:flex;gap:10px;justify-content:center;margin:16px 0"><button class="btn btn-ghost" onclick="resetAll()">Reset · try again</button></div>`;
+  state.section = tmpSec;
+  state.screen='results';
+  renderHeader();
+  stampTestInfo();
+}
+function reviewSection(name){
+  const el = document.getElementById('rev-'+name);
+  if (el) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ===== test hooks (used by headless Chrome) ===== */
+function fillAllCorrect(){
+  QUESTIONS.forEach(q => {
+    state.answers[q.id] = q.type==='order' ? q.answer.slice() : q.answer;
+  });
+}
+function fillAllWrong(){
+  QUESTIONS.forEach(q => {
+    if (q.type==='order'){
+      state.answers[q.id] = q.answer.slice().reverse();
+      if (isCorrect(q, state.answers[q.id])) state.answers[q.id] = q.answer.slice().concat(['x']).slice(1);
+    } else {
+      const opts = q.options ? ['A','B','C'] : (q.bank ? BANKS[q.bank].keys : ['A','B','C']);
+      state.answers[q.id] = opts.find(k => k!==q.answer) || 'Z';
+    }
+  });
+}
+
+
+function stampTestInfo(){
+  let el = document.getElementById('test-out');
+  if (!el){
+    el = document.createElement('div');
+    el.id = 'test-out';
+    el.style.cssText = 'position:fixed;left:0;bottom:36px;z-index:99;background:#111;color:#0f0;font:12px monospace;padding:4px 8px;max-width:100%;overflow:auto;display:none';
+    document.body.appendChild(el);
+  }
+  const sc = state.submitted ? scoreBreakdown() : {total:'-',listening:'-',reading:'-',writing:'-'};
+  el.dataset.score = String(sc.total);
+  el.dataset.errors = String((window.__errors||[]).length);
+  el.dataset.screen = state.screen;
+  el.textContent = JSON.stringify({score:sc.total,L:sc.listening,R:sc.reading,W:sc.writing,errors:window.__errors||[],answered:answeredCount(),screen:state.screen});
+  if ((window.__errors||[]).length) el.style.display = 'block';
+}
+
+function boot(){
+  const params = new URLSearchParams(location.search);
+  const screen = params.get('screen') || params.get('mode');
+  if (params.get('name')) state.name = params.get('name');
+  if (screen==='exam'){
+    startExam();
+    if (params.get('sec')) showSection(params.get('sec'), true);
+    return;
+  }
+  if (screen==='results' || screen==='allcorrect' || params.get('autotest')==='1'){
+    startExam();
+    fillAllCorrect();
+    doSubmit();
+    return;
+  }
+  if (screen==='allwrong'){
+    startExam();
+    fillAllWrong();
+    doSubmit();
+    return;
+  }
+  renderStart();
+}
+
+// expose for tests / inline handlers
+window.playQuestion = playQuestion;
+window.pickLetter = pickLetter;
+window.pickChoice = pickChoice;
+window.orderAdd = orderAdd;
+window.orderRemove = orderRemove;
+window.orderClear = orderClear;
+window.showSection = showSection;
+window.startExam = startExam;
+window.confirmSubmit = confirmSubmit;
+window.doSubmit = doSubmit;
+window.confirmReset = confirmReset;
+window.resetAll = resetAll;
+window.reviewSection = reviewSection;
+window.fillAllCorrect = fillAllCorrect;
+window.fillAllWrong = fillAllWrong;
+window.scoreBreakdown = scoreBreakdown;
+window.startExamFromTest = startExam;
+
+if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
+else boot();
+</script>
+</body>
+</html>
